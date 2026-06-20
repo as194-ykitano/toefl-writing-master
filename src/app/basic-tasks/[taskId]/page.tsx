@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter, useParams } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Clock, Target, ArrowLeft, FileText, CheckCircle, Edit3, Bell } from "lucide-react";
+import { Target, ArrowLeft, FileText, CheckCircle, Edit3, Bell } from "lucide-react";
 import { BasicTask, BasicEssay } from "@/lib/types";
 import { saveBasicEssay, updateBasicEssayFeedback } from "@/lib/firebase";
 import Link from "next/link";
-import Timer from "@/components/timer";
-import TextAreaWithControls from "@/components/textarea-with-controls";
 import SubmissionComplete from "@/components/SubmissionComplete";
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -56,8 +53,6 @@ type Phase = "ready" | "writing" | "completed" | "submission-complete";
 export default function BasicTaskPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const params = useParams();
-  const taskId = params?.taskId as string;
   const { showFeedbackNotification } = useNotification();
   
   const [task, setTask] = useState<BasicTask | null>(null);
@@ -65,9 +60,8 @@ export default function BasicTaskPage() {
   const [essayText, setEssayText] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [timeSpent, setTimeSpent] = useState(0);
-  const [startTime, setStartTime] = useState<Date | null>(null);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [submittedEssay, setSubmittedEssay] = useState<BasicEssay | null>(null);
+  const [submittedEssay] = useState<BasicEssay | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedEssayData, setSubmittedEssayData] = useState<{
     essayId: string;
@@ -75,6 +69,8 @@ export default function BasicTaskPage() {
     wordCount: number;
     timeSpent: number;
   } | null>(null);
+
+  void sampleTasks;
 
   useEffect(() => {
     if (!loading && !user) {
@@ -94,7 +90,7 @@ export default function BasicTaskPage() {
       };
       setTask(defaultTask);
     }
-  }, [user, loading, task]);
+  }, [user, loading, task, router]);
 
   // 経過時間の更新（制限時間なし）
   useEffect(() => {
@@ -126,7 +122,6 @@ export default function BasicTaskPage() {
 
   const startWriting = () => {
     setPhase("writing");
-    setStartTime(new Date());
     setIsTimerRunning(true);
   };
 
@@ -134,6 +129,8 @@ export default function BasicTaskPage() {
     setTimeSpent(seconds);
     // 制限時間なしなので何もしない
   };
+
+  void handleTimerUpdate;
 
   const handleSubmit = async () => {
     if (!user || !task || !essayText.trim()) return;
@@ -238,6 +235,9 @@ export default function BasicTaskPage() {
         return difficulty;
     }
   };
+
+  void getDifficultyColor;
+  void getDifficultyLabel;
 
   if (phase === "ready") {
     return (
@@ -468,15 +468,15 @@ export default function BasicTaskPage() {
                               <div className="flex-shrink-0 w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
                               <div className="flex-1">
                                 <div className="text-sm text-gray-600 mb-1">原文:</div>
-                                <div className="text-gray-800 font-medium mb-1">"{correction.original}"</div>
+                                <div className="text-gray-800 font-medium mb-1">&quot;{correction.original}&quot;</div>
                                 <div className="text-sm text-gray-600 mb-1">修正後:</div>
-                                <div className="text-green-800 font-medium mb-1">"{correction.corrected}"</div>
+                                <div className="text-green-800 font-medium mb-1">&quot;{correction.corrected}&quot;</div>
                                 <div className="text-sm text-gray-600 mb-1">説明:</div>
                                 <div className="text-gray-700">{correction.explanation}</div>
                                 {correction.context && (
                                   <>
                                     <div className="text-sm text-gray-600 mb-1">文脈:</div>
-                                    <div className="text-gray-700 italic">"{correction.context}"</div>
+                                    <div className="text-gray-700 italic">&quot;{correction.context}&quot;</div>
                                   </>
                                 )}
                               </div>

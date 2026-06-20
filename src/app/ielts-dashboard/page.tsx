@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useEffect, useState } from "react"
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,7 +7,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { collection, query, where, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getThisMonthVocabularyCount } from "@/lib/firebase";
 import { Line } from 'react-chartjs-2';
@@ -21,9 +21,10 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartData
+  ChartData,
+  TooltipItem
 } from 'chart.js';
-import { TrendingUp, BookOpen, Clock, FileText, BarChart2, MessageSquare, LogOut, Target, Calendar, CheckCircle, AlertCircle, Settings, List } from 'lucide-react';
+import { TrendingUp, BookOpen, FileText, MessageSquare, LogOut, Target, AlertCircle, Settings, List } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
@@ -36,7 +37,7 @@ import {
 import NotificationToast from '@/components/NotificationToast';
 import { isAdmin } from '@/lib/utils';
 
-// Chart.jsの登録
+// Chart.js縺ｮ逋ｻ骭ｲ
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -71,8 +72,8 @@ type EssayWithScores = {
     strengths: string[];
     improvements: string[];
     detailedScores: {
-      taskAchievement: number; // Task1用
-      taskResponse: number;    // Task2用
+      taskAchievement: number; // Task1逕ｨ
+      taskResponse: number;    // Task2逕ｨ
       coherenceCohesion: number;
       lexicalResource: number;
       grammaticalRange: number;
@@ -104,7 +105,6 @@ type EssayWithScores = {
 export default function IELTSDashboardPage() {
   const { user, logout } = useAuth();
   const { 
-    unreadFeedbackCount, 
     isNotificationVisible, 
     notificationEssayId, 
     notificationTaskTitle,
@@ -126,7 +126,7 @@ export default function IELTSDashboardPage() {
       try {
         setLoading(true);
         
-        // エッセイと単語数を並行して取得
+        // 繧ｨ繝・そ繧､縺ｨ蜊倩ｪ樊焚繧剃ｸｦ陦後＠縺ｦ蜿門ｾ・
         const [essayList, vocabularyCount] = await Promise.all([
           fetchEssays(),
           getThisMonthVocabularyCount(user.uid)
@@ -145,7 +145,7 @@ export default function IELTSDashboardPage() {
       const essaysRef = collection(db, 'users', user!.uid, 'essays');
       
       try {
-        // 全エッセイを取得
+        // 蜈ｨ繧ｨ繝・そ繧､繧貞叙蠕・
         const q = query(
           essaysRef,
           orderBy('submittedAt', 'desc')
@@ -153,14 +153,14 @@ export default function IELTSDashboardPage() {
         const querySnapshot = await getDocs(q);
         const allEssays = processEssayData(querySnapshot);
         
-        // IELTSの問題のみをフィルタリング（taskIdを使ってタスク情報を確認）
+        // IELTS縺ｮ蝠城｡後・縺ｿ繧偵ヵ繧｣繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ・・askId繧剃ｽｿ縺｣縺ｦ繧ｿ繧ｹ繧ｯ諠・ｱ繧堤｢ｺ隱搾ｼ・
         const ieltsEssays = [];
-        const taskDataMap = new Map(); // タスク情報をキャッシュ
+        const taskDataMap = new Map(); // 繧ｿ繧ｹ繧ｯ諠・ｱ繧偵く繝｣繝・す繝･
         
         for (const essay of allEssays) {
           if (essay.taskId) {
             try {
-              // タスク情報を取得（キャッシュがあれば使用）
+              // 繧ｿ繧ｹ繧ｯ諠・ｱ繧貞叙蠕暦ｼ医く繝｣繝・す繝･縺後≠繧後・菴ｿ逕ｨ・・
               let taskData;
               if (taskDataMap.has(essay.taskId)) {
                 taskData = taskDataMap.get(essay.taskId);
@@ -173,22 +173,22 @@ export default function IELTSDashboardPage() {
               }
               
               if (taskData) {
-                // IELTSタスクの条件: taskTypeフィールドが"task1"または"task2"
+                // IELTS繧ｿ繧ｹ繧ｯ縺ｮ譚｡莉ｶ: taskType繝輔ぅ繝ｼ繝ｫ繝峨′"task1"縺ｾ縺溘・"task2"
                 if (taskData.taskType === 'task1' || taskData.taskType === 'task2') {
-                  // タスク情報からtaskTypeを更新
+                  // 繧ｿ繧ｹ繧ｯ諠・ｱ縺九ｉtaskType繧呈峩譁ｰ
                   essay.taskType = taskData.taskType;
                   ieltsEssays.push(essay);
                 }
               }
             } catch (error) {
-              console.log(`タスク ${essay.taskId} の取得に失敗しました:`, error);
-              // エラーの場合は既存のtaskTypeフィールドで判断
+              console.log(`繧ｿ繧ｹ繧ｯ ${essay.taskId} 縺ｮ蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆:`, error);
+              // 繧ｨ繝ｩ繝ｼ縺ｮ蝣ｴ蜷医・譌｢蟄倥・taskType繝輔ぅ繝ｼ繝ｫ繝峨〒蛻､譁ｭ
               if (essay.taskType === 'ielts') {
                 ieltsEssays.push(essay);
               }
             }
           } else {
-            // taskIdがない場合は既存のtaskTypeフィールドで判断
+            // taskId縺後↑縺・ｴ蜷医・譌｢蟄倥・taskType繝輔ぅ繝ｼ繝ｫ繝峨〒蛻､譁ｭ
             if (essay.taskType === 'ielts') {
               ieltsEssays.push(essay);
             }
@@ -197,34 +197,34 @@ export default function IELTSDashboardPage() {
         
         return ieltsEssays;
       } catch (error) {
-        console.error('エッセイの取得に失敗しました:', error);
+        console.error('繧ｨ繝・そ繧､縺ｮ蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆:', error);
         return [];
       }
     };
 
-    const processEssayData = (querySnapshot: any): EssayWithScores[] => {
+    const processEssayData = (querySnapshot: { docs: QueryDocumentSnapshot<DocumentData>[] }): EssayWithScores[] => {
       const essayList = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
         const data = doc.data();
-        // submittedAtの処理を安全に行う
+        // submittedAt縺ｮ蜃ｦ逅・ｒ螳牙・縺ｫ陦後≧
         let submittedAt: string;
         if (data.submittedAt?.toDate) {
-          // Firestoreのタイムスタンプの場合
+          // Firestore縺ｮ繧ｿ繧､繝繧ｹ繧ｿ繝ｳ繝励・蝣ｴ蜷・
           submittedAt = data.submittedAt.toDate().toISOString();
         } else if (data.submittedAt instanceof Date) {
-          // Dateオブジェクトの場合
+          // Date繧ｪ繝悶ず繧ｧ繧ｯ繝医・蝣ｴ蜷・
           submittedAt = data.submittedAt.toISOString();
         } else if (typeof data.submittedAt === 'string') {
-          // 既に文字列の場合
+          // 譌｢縺ｫ譁・ｭ怜・縺ｮ蝣ｴ蜷・
           submittedAt = data.submittedAt;
         } else if (typeof data.submittedAt === 'number') {
-          // タイムスタンプの場合
+          // 繧ｿ繧､繝繧ｹ繧ｿ繝ｳ繝励・蝣ｴ蜷・
           submittedAt = new Date(data.submittedAt).toISOString();
         } else {
-          // デフォルト値
+          // 繝・ヵ繧ｩ繝ｫ繝亥､
           submittedAt = new Date().toISOString();
         }
 
-        // フィードバックデータの処理
+        // 繝輔ぅ繝ｼ繝峨ヰ繝・け繝・・繧ｿ縺ｮ蜃ｦ逅・
         const feedback = data.feedback || {};
         const detailedScores = feedback.detailedScores || {};
         
@@ -236,10 +236,10 @@ export default function IELTSDashboardPage() {
           fullData: data
         });
 
-        // タスクタイプを取得して適切なスコアを選択
+        // 繧ｿ繧ｹ繧ｯ繧ｿ繧､繝励ｒ蜿門ｾ励＠縺ｦ驕ｩ蛻・↑繧ｹ繧ｳ繧｢繧帝∈謚・
         let taskType = data.taskType;
         
-        // タスクタイプが設定されていない場合、利用可能なスコアから推測
+        // 繧ｿ繧ｹ繧ｯ繧ｿ繧､繝励′險ｭ螳壹＆繧後※縺・↑縺・ｴ蜷医∝茜逕ｨ蜿ｯ閭ｽ縺ｪ繧ｹ繧ｳ繧｢縺九ｉ謗ｨ貂ｬ
         if (!taskType) {
           console.log(`Task type not found for essay ${doc.id}, attempting to infer from available scores`);
           if (detailedScores.taskAchievement !== undefined) {
@@ -249,17 +249,17 @@ export default function IELTSDashboardPage() {
             taskType = 'task2';
             console.log(`Inferred task type as 'task2' based on available scores`);
           } else {
-            // デフォルトはtask2
+            // 繝・ヵ繧ｩ繝ｫ繝医・task2
             taskType = 'task2';
             console.log(`Using default task type 'task2'`);
           }
         }
         
-        // 最終的なタスクタイプの確認
+        // 譛邨ら噪縺ｪ繧ｿ繧ｹ繧ｯ繧ｿ繧､繝励・遒ｺ隱・
         console.log(`Final task type for essay ${doc.id}:`, taskType);
         
-        // スコア計算の詳細ログ
-        // Task1: taskAchievement, Task2: taskResponse を使用
+        // 繧ｹ繧ｳ繧｢險育ｮ励・隧ｳ邏ｰ繝ｭ繧ｰ
+        // Task1: taskAchievement, Task2: taskResponse 繧剃ｽｿ逕ｨ
         const taskAchievementScore = taskType === 'task1' 
           ? (detailedScores.taskAchievement || 0) 
           : (detailedScores.taskResponse || 0);
@@ -297,7 +297,7 @@ export default function IELTSDashboardPage() {
           status: data.status || 'pending',
           feedbackRead: data.feedbackRead,
           feedback: data.feedback,
-          taskType: data.taskType || 'ielts' // 既存データの互換性のため
+          taskType: data.taskType || 'ielts' // 譌｢蟄倥ョ繝ｼ繧ｿ縺ｮ莠呈鋤諤ｧ縺ｮ縺溘ａ
         } as EssayWithScores;
         
         console.log(`Essay ${doc.id} data:`, {
@@ -320,34 +320,40 @@ export default function IELTSDashboardPage() {
     fetchData();
   }, [user]);
 
-  // 平均点の算出方法を修正 - 既存の総合スコア（overall）を使用
+  // 蟷ｳ蝮・せ縺ｮ邂怜・譁ｹ豕輔ｒ菫ｮ豁｣ - 譌｢蟄倥・邱丞粋繧ｹ繧ｳ繧｢・・verall・峨ｒ菴ｿ逕ｨ
   const averageScore = essays.length > 0
-    ? Math.round(essays.reduce((sum, e) => sum + (e.score || 0), 0) / essays.length * 10) / 10 // 小数点第1位まで表示
+    ? Math.round(essays.reduce((sum, e) => sum + (e.score || 0), 0) / essays.length * 10) / 10 // 蟆乗焚轤ｹ隨ｬ1菴阪∪縺ｧ陦ｨ遉ｺ
     : 0;
   const totalAttempts = essays.length;
-  // 最高スコアの算出方法も修正 - 既存の総合スコア（overall）を使用
+  // void markers moved below bestScore declaration
+  // void markers moved below bestScore declaration
+  // void markers moved below bestScore declaration
+  // 譛鬮倥せ繧ｳ繧｢縺ｮ邂怜・譁ｹ豕輔ｂ菫ｮ豁｣ - 譌｢蟄倥・邱丞粋繧ｹ繧ｳ繧｢・・verall・峨ｒ菴ｿ逕ｨ
   const bestScore = essays.length > 0
-    ? Math.round(Math.max(...essays.map((e) => e.score || 0)) * 2) / 2 // 0.5刻みに丸める
+    ? Math.round(Math.max(...essays.map((e) => e.score || 0)) * 2) / 2 // 0.5蛻ｻ縺ｿ縺ｫ荳ｸ繧√ｋ
     : 0;
+  void averageScore;
+  void totalAttempts;
+  void bestScore;
 
-  // 選択されたタスクタイプに基づいてエッセイをフィルタリング
+  // 驕ｸ謚槭＆繧後◆繧ｿ繧ｹ繧ｯ繧ｿ繧､繝励↓蝓ｺ縺･縺・※繧ｨ繝・そ繧､繧偵ヵ繧｣繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ
   const filteredEssays = essays.filter(essay => {
-    // essay.taskTypeフィールドを優先的に使用
+    // essay.taskType繝輔ぅ繝ｼ繝ｫ繝峨ｒ蜆ｪ蜈育噪縺ｫ菴ｿ逕ｨ
     if (essay.taskType === 'task1' || essay.taskType === 'task2') {
       return essay.taskType === selectedTaskType;
     }
     
-    // 既存データの互換性のため、taskTypeが'ielts'の場合はtask2として扱う
+    // 譌｢蟄倥ョ繝ｼ繧ｿ縺ｮ莠呈鋤諤ｧ縺ｮ縺溘ａ縲》askType縺・ielts'縺ｮ蝣ｴ蜷医・task2縺ｨ縺励※謇ｱ縺・
     if (essay.taskType === 'ielts') {
       return selectedTaskType === 'task2';
     }
     
-    // デフォルトはTask2として扱う
+    // 繝・ヵ繧ｩ繝ｫ繝医・Task2縺ｨ縺励※謇ｱ縺・
     return selectedTaskType === 'task2';
   });
 
-  // フィルタリングされたエッセイに基づいて統計を再計算
-  // 既存の総合スコア（overall）を使用 - 4つの観点の平均点から0.5刻みに修正済み
+  // 繝輔ぅ繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ縺輔ｌ縺溘お繝・そ繧､縺ｫ蝓ｺ縺･縺・※邨ｱ險医ｒ蜀崎ｨ育ｮ・
+  // 譌｢蟄倥・邱丞粋繧ｹ繧ｳ繧｢・・verall・峨ｒ菴ｿ逕ｨ - 4縺､縺ｮ隕ｳ轤ｹ縺ｮ蟷ｳ蝮・せ縺九ｉ0.5蛻ｻ縺ｿ縺ｫ菫ｮ豁｣貂医∩
   const filteredAverageScore = filteredEssays.length > 0
     ? Math.round(filteredEssays.reduce((sum, e) => sum + (e.score || 0), 0) / filteredEssays.length * 10) / 10
     : 0;
@@ -358,7 +364,7 @@ export default function IELTSDashboardPage() {
     ? Math.round(Math.max(...filteredEssays.map((e) => e.score || 0)) * 2) / 2
     : 0;
 
-  // スコア推移グラフのデータを準備
+  // 繧ｹ繧ｳ繧｢謗ｨ遘ｻ繧ｰ繝ｩ繝輔・繝・・繧ｿ繧呈ｺ門ｙ
   const getScoreData = (type: ScoreType) => {
     console.log('Selected score type:', type);
     console.log('Filtered essays data:', filteredEssays);
@@ -370,7 +376,7 @@ export default function IELTSDashboardPage() {
         let score = 0;
         switch (type) {
           case 'task_achievement':
-            // Task1: taskAchievement, Task2: taskResponse のスコアを使用
+            // Task1: taskAchievement, Task2: taskResponse 縺ｮ繧ｹ繧ｳ繧｢繧剃ｽｿ逕ｨ
             score = essay.taskAchievementScore || 0;
             console.log(`Essay ${essay.id} - ${essay.taskType === 'task1' ? 'Task Achievement' : 'Task Response'} Score:`, score);
             break;
@@ -401,7 +407,7 @@ export default function IELTSDashboardPage() {
   const getScoreLabel = (type: ScoreType) => {
     switch (type) {
       case 'task_achievement':
-        // 選択されたタスクタイプに応じてラベルを変更
+        // 驕ｸ謚槭＆繧後◆繧ｿ繧ｹ繧ｯ繧ｿ繧､繝励↓蠢懊§縺ｦ繝ｩ繝吶Ν繧貞､画峩
         return selectedTaskType === 'task1' ? 'Task Achievement' : 'Task Response';
       case 'coherence_cohesion':
         return 'Coherence & Cohesion';
@@ -456,8 +462,8 @@ export default function IELTSDashboardPage() {
         },
         padding: 12,
         callbacks: {
-          label: function(context: any) {
-            return `${getScoreLabel(selectedScoreType)}: ${context.parsed.y}点`;
+          label: function(context: TooltipItem<'line'>) {
+            return `${getScoreLabel(selectedScoreType)}: ${context.parsed.y}`;
           }
         }
       },
@@ -492,7 +498,7 @@ export default function IELTSDashboardPage() {
     }
   };
 
-  // IELTSエッセイ（このページで取得したもの）に限定した未読数
+  // IELTS繧ｨ繝・そ繧､・医％縺ｮ繝壹・繧ｸ縺ｧ蜿門ｾ励＠縺溘ｂ縺ｮ・峨↓髯仙ｮ壹＠縺滓悴隱ｭ謨ｰ
   const ieltsUnreadCount = essays.filter(essay =>
     (essay.status === 'completed' || essay.status === 'feedback_completed') &&
     essay.feedback &&
@@ -503,7 +509,7 @@ export default function IELTSDashboardPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);
@@ -534,7 +540,7 @@ export default function IELTSDashboardPage() {
   return (
     <ProtectedRoute>
       <div className="max-w-6xl mx-auto px-8 py-8">
-        {/* ヘッダー部分 */}
+        {/* 繝倥ャ繝繝ｼ驛ｨ蛻・*/}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link href="/training-selection">
@@ -547,13 +553,13 @@ export default function IELTSDashboardPage() {
           <div className="flex items-center gap-4">
             <Link href="/ielts-tasks">
               <Button className="bg-green-600 hover:bg-green-700">
-                <FileText className="w-4 h-4 mr-2" /> 演習を始める
+                <FileText className="w-4 h-4 mr-2" /> 問題を始める
               </Button>
             </Link>
             <Link href="/ielts-essays">
               <Button variant="outline" className="relative">
                 <MessageSquare className="w-4 h-4 mr-2" /> 
-                過去のエッセイ
+                最近のエッセイ
                 {ieltsUnreadCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {ieltsUnreadCount}
@@ -561,7 +567,7 @@ export default function IELTSDashboardPage() {
                 )}
               </Button>
             </Link>
-            {/* 管理者のみ表示されるadmin dashboardへのリンク */}
+            {/* 邂｡逅・・・縺ｿ陦ｨ遉ｺ縺輔ｌ繧蟻dmin dashboard縺ｸ縺ｮ繝ｪ繝ｳ繧ｯ */}
             {user && isAdmin(user.email) && (
               <Link href="/admin/dashboard">
                 <Button variant="outline" className="bg-blue-50 hover:bg-blue-100 border-blue-200">
@@ -570,14 +576,14 @@ export default function IELTSDashboardPage() {
                 </Button>
               </Link>
             )}
-            {/* ログアウトボタン */}
+            {/* 繝ｭ繧ｰ繧｢繧ｦ繝医・繧ｿ繝ｳ */}
             <Button variant="ghost" onClick={() => setLogoutDialogOpen(true)}>
               <LogOut className="w-4 h-4 mr-2" /> ログアウト
             </Button>
           </div>
         </div>
 
-        {/* ログアウト確認ダイアログ */}
+        {/* 繝ｭ繧ｰ繧｢繧ｦ繝育｢ｺ隱阪ム繧､繧｢繝ｭ繧ｰ */}
         <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
           <DialogContent>
             <DialogHeader>
@@ -597,7 +603,7 @@ export default function IELTSDashboardPage() {
           </DialogContent>
         </Dialog>
 
-        {/* 通知トースト */}
+        {/* 騾夂衍繝医・繧ｹ繝・*/}
         <NotificationToast
           essayId={notificationEssayId || ''}
           taskTitle={notificationTaskTitle || undefined}
@@ -608,7 +614,7 @@ export default function IELTSDashboardPage() {
         />
 
         <div className="max-w-7xl mx-auto">
-          {/* Task1/Task2切り替えボタン */}
+          {/* Task1/Task2蛻・ｊ譖ｿ縺医・繧ｿ繝ｳ */}
           <div className="flex justify-center mb-6">
             <div className="bg-gray-100 rounded-lg p-1">
               <button
@@ -634,11 +640,11 @@ export default function IELTSDashboardPage() {
             </div>
           </div>
 
-          {/* 統計カード */}
+          {/* 邨ｱ險医き繝ｼ繝・*/}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">総演習回数 ({selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'})</CardTitle>
+                <CardTitle className="text-sm font-medium">提出回数 ({selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'})</CardTitle>
                 <BookOpen className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -677,7 +683,7 @@ export default function IELTSDashboardPage() {
 
             <Card className="hidden cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 border-2 border-transparent hover:border-green-200 bg-gradient-to-br from-white to-green-50/30" onClick={() => router.push('/vocabularylist')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">単語リスト</CardTitle>
+                <CardTitle className="text-sm font-medium">語彙リスト</CardTitle>
                 <List className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -695,7 +701,7 @@ export default function IELTSDashboardPage() {
             </Card>
           </div>
 
-          {/* スコア推移チャート */}
+          {/* 繧ｹ繧ｳ繧｢謗ｨ遘ｻ繝√Ε繝ｼ繝・*/}
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -762,13 +768,13 @@ export default function IELTSDashboardPage() {
               ) : filteredEssays.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">
-                    {selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'}のエッセイが提出されていません。
+                    {selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'} のエッセイがまだありません。
                   </p>
                   <p className="text-sm text-gray-400 mt-2">
-                    他のタスクタイプを選択するか、新しいエッセイを書いてみてください。
+                    まずはタスクを選んで、新しいエッセイを書いてみてください。
                   </p>
                   <Button asChild className="mt-4 bg-green-600 hover:bg-green-700">
-                    <Link href="/ielts-tasks">新しいエッセイを書く</Link>
+                    <Link href="/ielts-tasks">新しいエッセイを始める</Link>
                   </Button>
                 </div>
               ) : (
@@ -779,10 +785,10 @@ export default function IELTSDashboardPage() {
             </CardContent>
           </Card>
 
-          {/* 未確認のフィードバック */}
+          {/* 譛ｪ遒ｺ隱阪・繝輔ぅ繝ｼ繝峨ヰ繝・け */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>未確認のフィードバック ({selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'})</CardTitle>
+              <CardTitle>未読のフィードバック ({selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'})</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -792,13 +798,13 @@ export default function IELTSDashboardPage() {
               ) : filteredEssays.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">
-                    {selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'}のエッセイが提出されていません。
+                    {selectedTaskType === 'task1' ? 'Task 1' : 'Task 2'} のエッセイがまだありません。
                   </p>
                   <p className="text-sm text-gray-400 mt-2">
-                    他のタスクタイプを選択するか、新しいエッセイを書いてみてください。
+                    まずはタスクを選んで、新しいエッセイを書いてみてください。
                   </p>
                   <Button asChild className="mt-4 bg-green-600 hover:bg-green-700">
-                    <Link href="/ielts-tasks">新しいエッセイを書く</Link>
+                    <Link href="/ielts-tasks">新しいエッセイを始める</Link>
                   </Button>
                 </div>
               ) : (
@@ -830,7 +836,7 @@ export default function IELTSDashboardPage() {
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          {/* 未読バッジのみ表示 */}
+                          {/* 譛ｪ隱ｭ繝舌ャ繧ｸ縺ｮ縺ｿ陦ｨ遉ｺ */}
                           <div className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
                             <AlertCircle className="w-3 h-3" />
                             <span>未読</span>
@@ -847,14 +853,14 @@ export default function IELTSDashboardPage() {
                       </div>
                     </div>
                   ))}
-                  {/* 未読のフィードバックがない場合のメッセージ */}
+                  {/* 譛ｪ隱ｭ縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け縺後↑縺・ｴ蜷医・繝｡繝・そ繝ｼ繧ｸ */}
                   {filteredEssays.filter(essay => 
                     (essay.status === 'completed' || essay.status === 'feedback_completed') && 
                     essay.feedback && 
                     !essay.feedbackRead
                   ).length === 0 && (
                     <div className="text-center py-8">
-                      <p className="text-gray-500">未確認のフィードバックはありません。</p>
+                      <p className="text-gray-500">未読のフィードバックはありません。</p>
                     </div>
                   )}
                 </div>
@@ -868,3 +874,5 @@ export default function IELTSDashboardPage() {
     </ProtectedRoute>
   );
 }
+
+

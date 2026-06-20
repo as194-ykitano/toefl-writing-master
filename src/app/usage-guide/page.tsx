@@ -1,7 +1,7 @@
 "use client";
 
-import { GraduationCap, Users, FileText, Video, Play, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { GraduationCap, Users, FileText, Video, Play } from "lucide-react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function UsageGuidePage() {
@@ -78,7 +78,7 @@ export default function UsageGuidePage() {
 
         {/* セクション一覧 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sections.map((section, index) => {
+          {sections.map((section) => {
             const IconComponent = section.icon;
             return (
               <div

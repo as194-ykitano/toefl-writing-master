@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,7 +6,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { collection, query, where, orderBy, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Essay, Task } from "@/lib/types";
 import { LogOut, FileText, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react';
@@ -15,6 +15,26 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { getTasks } from "@/lib/firebase";
 
 type TabType = 'all' | 'unread' | 'read';
+
+type FirestoreTimestampLike = {
+  toDate: () => Date;
+};
+
+const getSubmittedAtTime = (value: unknown): number => {
+  if (value && typeof value === 'object' && 'toDate' in value && typeof (value as FirestoreTimestampLike).toDate === 'function') {
+    return (value as FirestoreTimestampLike).toDate().getTime();
+  }
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+  if (typeof value === 'number') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    return new Date(value).getTime();
+  }
+  return 0;
+};
 
 export default function EssaysPage() {
   const { user, logout } = useAuth();
@@ -30,13 +50,13 @@ export default function EssaysPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
-      alert('ログアウトに失敗しました');
+    } catch {
+      alert('繝ｭ繧ｰ繧｢繧ｦ繝医↓螟ｱ謨励＠縺ｾ縺励◆');
     }
     setLogoutDialogOpen(false);
   };
 
-  // フィルタリングされたエッセイを取得
+  // 繝輔ぅ繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ縺輔ｌ縺溘お繝・そ繧､繧貞叙蠕・
   const getFilteredEssays = () => {
     let filteredEssays: Essay[];
     
@@ -47,38 +67,9 @@ export default function EssaysPage() {
           essay.feedback && 
           !essay.feedbackRead
         );
-        // 未読の場合は古い順にソート
+        // 譛ｪ隱ｭ縺ｮ蝣ｴ蜷医・蜿､縺・・↓繧ｽ繝ｼ繝・
         return filteredEssays.sort((a, b) => {
-          const aDate = a.submittedAt as any;
-          const bDate = b.submittedAt as any;
-          
-          let aTime: number, bTime: number;
-          
-          if (aDate && typeof aDate === 'object' && typeof aDate.toDate === 'function') {
-            aTime = aDate.toDate().getTime();
-          } else if (aDate instanceof Date) {
-            aTime = aDate.getTime();
-          } else if (typeof aDate === 'number') {
-            aTime = aDate;
-          } else if (typeof aDate === 'string') {
-            aTime = new Date(aDate).getTime();
-          } else {
-            aTime = 0;
-          }
-          
-          if (bDate && typeof bDate === 'object' && typeof bDate.toDate === 'function') {
-            bTime = bDate.toDate().getTime();
-          } else if (bDate instanceof Date) {
-            bTime = bDate.getTime();
-          } else if (typeof bDate === 'number') {
-            bTime = bDate;
-          } else if (typeof bDate === 'string') {
-            bTime = new Date(bDate).getTime();
-          } else {
-            bTime = 0;
-          }
-          
-          return aTime - bTime; // 古い順（昇順）
+          return getSubmittedAtTime(a.submittedAt) - getSubmittedAtTime(b.submittedAt);
         });
       case 'read':
         filteredEssays = essays.filter(essay => 
@@ -86,15 +77,15 @@ export default function EssaysPage() {
           essay.feedback && 
           essay.feedbackRead
         );
-        // 既読の場合は新しい順にソート（デフォルト）
+        // 譌｢隱ｭ縺ｮ蝣ｴ蜷医・譁ｰ縺励＞鬆・↓繧ｽ繝ｼ繝茨ｼ医ョ繝輔か繝ｫ繝茨ｼ・
         return filteredEssays;
       default:
-        // Allの場合は新しい順にソート（デフォルト）
+        // All縺ｮ蝣ｴ蜷医・譁ｰ縺励＞鬆・↓繧ｽ繝ｼ繝茨ｼ医ョ繝輔か繝ｫ繝茨ｼ・
         return essays;
     }
   };
 
-  // 各タブのエッセイ数を取得
+  // 蜷・ち繝悶・繧ｨ繝・そ繧､謨ｰ繧貞叙蠕・
   const getTabCounts = () => {
     const allCount = essays.length;
     const unreadCount = essays.filter(essay => 
@@ -130,39 +121,39 @@ export default function EssaysPage() {
           ...doc.data(),
         })) as Essay[];
 
-        // TOEFLのエッセイのみをフィルタリング
+        // TOEFL縺ｮ繧ｨ繝・そ繧､縺ｮ縺ｿ繧偵ヵ繧｣繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ
         const toeflEssays = [];
         
         for (const essay of essayList) {
           if (essay.taskId) {
             try {
-              // タスク情報を取得
+              // 繧ｿ繧ｹ繧ｯ諠・ｱ繧貞叙蠕・
               const taskDoc = await getDoc(doc(db, 'tasks', essay.taskId));
               if (taskDoc.exists()) {
                 const taskData = taskDoc.data() as Task;
-                // TOEFLタスクの条件: typeが"integrated"または"independent"で、IELTS用のtaskTypeフィールドがない
+                // TOEFL繧ｿ繧ｹ繧ｯ縺ｮ譚｡莉ｶ: type縺・integrated"縺ｾ縺溘・"independent"縺ｧ縲！ELTS逕ｨ縺ｮtaskType繝輔ぅ繝ｼ繝ｫ繝峨′縺ｪ縺・
                 if (taskData.type && (taskData.type === 'integrated' || taskData.type === 'independent') && !taskData.taskType) {
                   toeflEssays.push(essay);
                 }
               }
             } catch (error) {
-              console.log(`タスク ${essay.taskId} の取得に失敗しました:`, error);
-              // エラーの場合はデフォルトでTOEFLとして扱う
+              console.log(`繧ｿ繧ｹ繧ｯ ${essay.taskId} 縺ｮ蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆:`, error);
+              // 繧ｨ繝ｩ繝ｼ縺ｮ蝣ｴ蜷医・繝・ヵ繧ｩ繝ｫ繝医〒TOEFL縺ｨ縺励※謇ｱ縺・
               toeflEssays.push(essay);
             }
           } else {
-            // taskIdがない場合はデフォルトでTOEFLとして扱う
+            // taskId縺後↑縺・ｴ蜷医・繝・ヵ繧ｩ繝ｫ繝医〒TOEFL縺ｨ縺励※謇ｱ縺・
             toeflEssays.push(essay);
           }
         }
 
-        // 未読のエッセイを優先的に表示するようにソート
+        // 譛ｪ隱ｭ縺ｮ繧ｨ繝・そ繧､繧貞━蜈育噪縺ｫ陦ｨ遉ｺ縺吶ｋ繧医≧縺ｫ繧ｽ繝ｼ繝・
         const sortedEssays = toeflEssays.sort((a, b) => {
-          // フィードバックが完了しているエッセイのみを対象
+          // 繝輔ぅ繝ｼ繝峨ヰ繝・け縺悟ｮ御ｺ・＠縺ｦ縺・ｋ繧ｨ繝・そ繧､縺ｮ縺ｿ繧貞ｯｾ雎｡
           const aHasFeedback = (a.status === 'completed' || a.status === 'feedback_completed') && a.feedback;
           const bHasFeedback = (b.status === 'completed' || b.status === 'feedback_completed') && b.feedback;
           
-          // 両方ともフィードバックがある場合、未読を優先
+          // 荳｡譁ｹ縺ｨ繧ゅヵ繧｣繝ｼ繝峨ヰ繝・け縺後≠繧句ｴ蜷医∵悴隱ｭ繧貞━蜈・
           if (aHasFeedback && bHasFeedback) {
             const aUnread = !a.feedbackRead;
             const bUnread = !b.feedbackRead;
@@ -170,20 +161,20 @@ export default function EssaysPage() {
             if (!aUnread && bUnread) return 1;
           }
           
-          // それ以外は提出日時順（新しい順）
+          // 縺昴ｌ莉･螟悶・謠仙・譌･譎る・ｼ域眠縺励＞鬆・ｼ・
           return 0;
         });
 
         setEssays(sortedEssays);
         const allTasks = await getTasks();
-        // TOEFLのタスクのみをフィルタリング
+        // TOEFL縺ｮ繧ｿ繧ｹ繧ｯ縺ｮ縺ｿ繧偵ヵ繧｣繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ
         const toeflTasks = allTasks.filter(task => 
           task.type && (task.type === 'integrated' || task.type === 'independent') && !task.taskType
         );
         setTasks(toeflTasks);
-      } catch (error: any) {
+      } catch (error) {
         console.error("Error loading essays:", error);
-        setError("エッセイの読み込み中にエラーが発生しました。");
+        setError("繧ｨ繝・そ繧､縺ｮ隱ｭ縺ｿ霎ｼ縺ｿ荳ｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆縲・");
       } finally {
         setLoading(false);
       }
@@ -201,7 +192,7 @@ export default function EssaysPage() {
   }
 
   const filteredEssays = getFilteredEssays();
-  const { allCount, unreadCount, readCount } = getTabCounts();
+  const { unreadCount } = getTabCounts();
 
   return (
     <ProtectedRoute>
@@ -211,16 +202,16 @@ export default function EssaysPage() {
           <div className="flex items-center gap-4 m-0 p-0">
             <Link href="/tasks">
               <Button>
-                <FileText className="w-4 h-4 mr-2" /> 演習を始める
+                <FileText className="w-4 h-4 mr-2" /> 貍皮ｿ偵ｒ蟋九ａ繧・
               </Button>
             </Link>
             <Link href="/dashboard">
               <Button variant="outline">
-                <MessageSquare className="w-4 h-4 mr-2" /> ダッシュボードを開く
+                <MessageSquare className="w-4 h-4 mr-2" /> 繝繝・す繝･繝懊・繝峨ｒ髢九￥
               </Button>
             </Link>
             <Button variant="ghost" onClick={() => setLogoutDialogOpen(true)}>
-              <LogOut className="w-4 h-4 mr-2" /> ログアウト
+              <LogOut className="w-4 h-4 mr-2" /> 繝ｭ繧ｰ繧｢繧ｦ繝・
             </Button>
           </div>
         </div>
@@ -228,38 +219,38 @@ export default function EssaysPage() {
       <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>ログアウトの確認</DialogTitle>
+            <DialogTitle>繝ｭ繧ｰ繧｢繧ｦ繝医・遒ｺ隱・</DialogTitle>
             <DialogDescription>
-              ログアウトしてもよろしいですか？
+              繝ｭ繧ｰ繧｢繧ｦ繝医＠縺ｦ繧ゅｈ繧阪＠縺・〒縺吶°・・
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setLogoutDialogOpen(false)}>
-              キャンセル
+              繧ｭ繝｣繝ｳ繧ｻ繝ｫ
             </Button>
             <Button variant="destructive" onClick={handleLogout}>
-              ログアウト
+              繝ｭ繧ｰ繧｢繧ｦ繝・
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* タイトルとタブナビゲーション - 同じ行に配置 */}
+          {/* 繧ｿ繧､繝医Ν縺ｨ繧ｿ繝悶リ繝薙ご繝ｼ繧ｷ繝ｧ繝ｳ - 蜷後§陦後↓驟咲ｽｮ */}
           <div className="flex items-center justify-between mb-8">
                       <div className="flex items-center gap-4">
             <Link href="/dashboard">
               <Button variant="outline" className="text-gray-600 hover:text-gray-800">
-                ← TOEFLダッシュボードに戻る
+                竊・TOEFL繝繝・す繝･繝懊・繝峨↓謌ｻ繧・
               </Button>
             </Link>
               <div className="text-left">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">TOEFLエッセイ履歴</h1>
-                <p className="text-gray-600">これまでに提出したエッセイの一覧です</p>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">TOEFL繧ｨ繝・そ繧､螻･豁ｴ</h1>
+                <p className="text-gray-600">縺薙ｌ縺ｾ縺ｧ縺ｫ謠仙・縺励◆繧ｨ繝・そ繧､縺ｮ荳隕ｧ縺ｧ縺・</p>
               </div>
             </div>
             
-            {/* タブナビゲーション - 右上配置 */}
+            {/* 繧ｿ繝悶リ繝薙ご繝ｼ繧ｷ繝ｧ繝ｳ - 蜿ｳ荳企・鄂ｮ */}
             <div className="flex bg-white rounded-lg shadow-sm border border-gray-200 p-1">
               <button
                 onClick={() => setActiveTab('all')}
@@ -280,7 +271,7 @@ export default function EssaysPage() {
                 }`}
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>未読</span>
+                <span>譛ｪ隱ｭ</span>
                 {unreadCount > 0 && (
                   <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs">
                     {unreadCount}
@@ -296,7 +287,7 @@ export default function EssaysPage() {
                 }`}
               >
                 <CheckCircle className="w-4 h-4" />
-                <span>既読</span>
+                <span>譌｢隱ｭ</span>
               </button>
             </div>
           </div>
@@ -312,22 +303,22 @@ export default function EssaysPage() {
               <CardContent className="p-8 text-center">
                 {activeTab === 'all' ? (
                   <>
-                    <p className="text-gray-600 mb-4">まだエッセイを提出していません。</p>
+                    <p className="text-gray-600 mb-4">縺ｾ縺繧ｨ繝・そ繧､繧呈署蜃ｺ縺励※縺・∪縺帙ｓ縲・</p>
                     <Link href="/tasks">
-                      <Button>新しいエッセイを書く</Button>
+                      <Button>譁ｰ縺励＞繧ｨ繝・そ繧､繧呈嶌縺・</Button>
                     </Link>
                   </>
                 ) : activeTab === 'unread' ? (
                   <>
                     <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                    <p className="text-gray-600 mb-4">未読のフィードバックはありません。</p>
-                    <p className="text-sm text-gray-500">すべてのフィードバックを確認済みです。</p>
+                    <p className="text-gray-600 mb-4">譛ｪ隱ｭ縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲・</p>
+                    <p className="text-sm text-gray-500">縺吶∋縺ｦ縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け繧堤｢ｺ隱肴ｸ医∩縺ｧ縺吶・</p>
                   </>
                 ) : (
                   <>
                     <AlertCircle className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-                    <p className="text-gray-600 mb-4">既読のフィードバックはありません。</p>
-                    <p className="text-sm text-gray-500">フィードバックを確認するとここに表示されます。</p>
+                    <p className="text-gray-600 mb-4">譌｢隱ｭ縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲・</p>
+                    <p className="text-sm text-gray-500">繝輔ぅ繝ｼ繝峨ヰ繝・け繧堤｢ｺ隱阪☆繧九→縺薙％縺ｫ陦ｨ遉ｺ縺輔ｌ縺ｾ縺吶・</p>
                   </>
                 )}
               </CardContent>
@@ -356,13 +347,13 @@ export default function EssaysPage() {
                       `}
                     >
                       {essay.score ? `${essay.score}/30` : 
-                       essay.status === 'processing' ? 'AI添削中' :
-                       essay.status === 'error' ? 'エラー' :
-                       '評価中'}
+                       essay.status === 'processing' ? 'AI豺ｻ蜑贋ｸｭ' :
+                       essay.status === 'error' ? '繧ｨ繝ｩ繝ｼ' :
+                       '隧穂ｾ｡荳ｭ'}
                     </span>
                     <CardHeader className="pb-2 flex flex-col items-start justify-between gap-2">
                       <CardTitle className="text-lg font-semibold text-gray-900 truncate w-full mb-1">
-                        {task ? task.title : 'タイトル不明のタスク'}
+                        {task ? task.title : '繧ｿ繧､繝医Ν荳肴・縺ｮ繧ｿ繧ｹ繧ｯ'}
                       </CardTitle>
                       <div className="flex items-center gap-2">
                         <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
@@ -382,10 +373,10 @@ export default function EssaysPage() {
                       <div className="flex items-center justify-between mt-auto">
                         <span className="text-xs text-gray-400">
                           {(() => {
-                            const val = essay.submittedAt as any;
+                            const val = essay.submittedAt as unknown;
                             let dateObj: Date | null = null;
-                            if (val && typeof val === 'object' && typeof val.toDate === 'function') {
-                              dateObj = val.toDate();
+                            if (val && typeof val === 'object' && 'toDate' in val && typeof (val as FirestoreTimestampLike).toDate === 'function') {
+                              dateObj = (val as FirestoreTimestampLike).toDate();
                             } else if (val instanceof Date) {
                               dateObj = val;
                             } else if (typeof val === 'number') {
@@ -402,7 +393,7 @@ export default function EssaysPage() {
                                   hour: '2-digit',
                                   minute: '2-digit'
                                 })
-                              : '不明';
+                              : '荳肴・';
                           })()}
                         </span>
                         <div className="flex items-center gap-2">
@@ -411,19 +402,19 @@ export default function EssaysPage() {
                               {essay.feedbackRead ? (
                                 <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                                   <CheckCircle className="w-3 h-3" />
-                                  <span>既読</span>
+                                  <span>譌｢隱ｭ</span>
                                 </div>
                               ) : (
                                 <div className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
                                   <AlertCircle className="w-3 h-3" />
-                                  <span>未読</span>
+                                  <span>譛ｪ隱ｭ</span>
                                 </div>
                               )}
                             </>
                           )}
                           <Link href={`/dashboard/essays/${essay.id}`}>
                             <Button variant="outline" size="sm" className="group-hover:border-indigo-500 group-hover:text-indigo-700">
-                              詳細を見る
+                              隧ｳ邏ｰ繧定ｦ九ｋ
                             </Button>
                           </Link>
                         </div>
@@ -439,3 +430,5 @@ export default function EssaysPage() {
     </ProtectedRoute>
   );
 } 
+
+

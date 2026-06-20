@@ -7,14 +7,31 @@ import { db } from '@/lib/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Clock, Target, FileText, MessageSquare, CheckCircle, AlertCircle, Lightbulb, BookOpen } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Target, FileText, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react';
 import { Essay, Task } from '@/lib/types';
 import { getTaskById } from '@/lib/firebase';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { markFeedbackAsRead } from '@/lib/getEssays';
 import { getIELTSEssayFeedback } from '@/lib/firebase';
 import IELTSTaskDetailModal from '@/components/IELTSTaskDetailModal';
-import { useNotification } from '@/contexts/NotificationContext';
+
+type IELTSDetailedScores = {
+  taskAchievement?: number;
+  taskResponse?: number;
+  coherenceCohesion?: number;
+  lexicalResource?: number;
+  grammaticalRange?: number;
+};
+
+type SuggestionDetails = {
+  suggestion?: string;
+  title?: string;
+  implementation?: string;
+  whereToInclude?: string;
+  effectiveness?: string;
+  reasoning?: string;
+  example?: string;
+};
 
 type IELTSEssay = Essay & {
   feedback?: {
@@ -61,9 +78,6 @@ export default function IELTSEssayDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isTaskDetailModalOpen, setIsTaskDetailModalOpen] = useState(false);
-
-
-  const { showNotification } = useNotification();
 
   useEffect(() => {
     if (!user) return;
@@ -160,14 +174,14 @@ export default function IELTSEssayDetailPage() {
   };
 
   // IELTSスコアを計算する関数（修正版）
-  const calculateIELTSScore = (detailedScores: any) => {
+  const calculateIELTSScore = (detailedScores: IELTSDetailedScores | undefined) => {
     if (!detailedScores) return 0;
     
     const { taskAchievement, taskResponse, coherenceCohesion, lexicalResource, grammaticalRange } = detailedScores;
     
     // 有効なスコアのみを計算に含める（Task 1とTask 2で異なるフィールド名）
     const validScores = [taskAchievement, taskResponse, coherenceCohesion, lexicalResource, grammaticalRange]
-      .filter(score => score !== undefined && score > 0);
+      .filter((score): score is number => score !== undefined && score > 0);
     
     if (validScores.length === 0) return 0;
     
@@ -506,11 +520,11 @@ export default function IELTSEssayDetailPage() {
                             ? suggestion
                             : suggestion && typeof suggestion === 'object'
                             ? [
-                                (suggestion as any).suggestion || (suggestion as any).title,
-                                (suggestion as any).implementation,
-                                (suggestion as any).whereToInclude,
-                                (suggestion as any).effectiveness || (suggestion as any).reasoning,
-                                (suggestion as any).example,
+                                (suggestion as SuggestionDetails).suggestion || (suggestion as SuggestionDetails).title,
+                                (suggestion as SuggestionDetails).implementation,
+                                (suggestion as SuggestionDetails).whereToInclude,
+                                (suggestion as SuggestionDetails).effectiveness || (suggestion as SuggestionDetails).reasoning,
+                                (suggestion as SuggestionDetails).example,
                               ]
                                 .filter(Boolean)
                                 .join(' / ')

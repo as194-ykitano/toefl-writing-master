@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import React from "react"
 import Layout from "@/components/layout"
 import Timer from "@/components/timer"
-import { Button } from "@/components/ui/button"
 import { getReadingPassageById } from "@/lib/getReadingPassages"
 import { getTaskById } from "@/lib/getTasks"
 import { Task } from "@/lib/types"
@@ -52,7 +51,7 @@ export default function ReadingPage() {
             readingPassage: "No reading passage available. Please check the database."
           });
         }
-      } catch (error) {
+      } catch {
         // エラー処理
       } finally {
         setLoading(false);

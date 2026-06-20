@@ -29,7 +29,6 @@ export default function EditTaskPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [task, setTask] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   
@@ -79,7 +78,6 @@ export default function EditTaskPage() {
       const taskDoc = await getDoc(doc(db, 'tasks', taskId));
       if (taskDoc.exists()) {
         const taskData = taskDoc.data();
-        setTask(taskData);
         setFormData({
           title: taskData.title || "",
           type: taskData.type || "integrated",

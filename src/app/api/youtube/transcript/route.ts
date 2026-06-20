@@ -16,6 +16,12 @@ const CACHE_TTL = 90 * 60 * 1000; // 90分（ミリ秒）
 // ログ設定
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 const ENABLE_METRICS = process.env.ENABLE_METRICS === 'true';
+const LOG_LEVEL_PRIORITY: Record<string, number> = {
+  debug: 10,
+  info: 20,
+  warn: 30,
+  error: 40,
+};
 
 // メトリクス収集
 interface Metrics {
@@ -27,7 +33,7 @@ interface Metrics {
   lastUpdated: string;
 }
 
-let metrics: Metrics = {
+const metrics: Metrics = {
   totalRequests: 0,
   cacheHits: 0,
   cacheMisses: 0,
@@ -37,7 +43,11 @@ let metrics: Metrics = {
 };
 
 // ログ関数
-function log(level: string, message: string, data?: any) {
+function log(level: string, message: string, data?: unknown) {
+  if ((LOG_LEVEL_PRIORITY[level] ?? 20) < (LOG_LEVEL_PRIORITY[LOG_LEVEL] ?? 20)) {
+    return;
+  }
+
   const timestamp = new Date().toISOString();
   const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
   
@@ -89,8 +99,6 @@ function extractTextFromVtt(vttContent: string): string {
   const lines = vttContent.split('\n');
   const textLines: string[] = [];
   
-  let inCue = false;
-  
   for (const line of lines) {
     const trimmedLine = line.trim();
     
@@ -99,14 +107,12 @@ function extractTextFromVtt(vttContent: string): string {
         trimmedLine.startsWith('WEBVTT') ||
         trimmedLine.includes('-->') ||
         /^\d+$/.test(trimmedLine)) {
-      inCue = false;
       continue;
     }
     
     // テキスト行を収集
     if (trimmedLine && !trimmedLine.startsWith('NOTE')) {
       textLines.push(trimmedLine);
-      inCue = true;
     }
   }
   
@@ -141,11 +147,11 @@ function isValidVideoId(videoId: string): boolean {
 async function ensureTempDir(tempDir: string): Promise<void> {
   try {
     await fs.promises.access(tempDir, fs.constants.W_OK);
-  } catch (error) {
+  } catch {
     try {
       await fs.promises.mkdir(tempDir, { recursive: true });
       console.log(`Created temp directory: ${tempDir}`);
-    } catch (mkdirError) {
+    } catch {
       throw new Error(`Cannot create or access temp directory: ${tempDir}`);
     }
   }
@@ -174,8 +180,41 @@ function getCacheFilePath(videoId: string): string {
   return path.join(CACHE_DIR, `${cacheKey}.json`);
 }
 
+interface CachedTranscript {
+  transcript: string;
+  language: string;
+  source: string;
+}
+
+interface ProxyTranscriptResponse extends Partial<CachedTranscript> {
+  success?: boolean;
+}
+
+interface TranscriptItem {
+  text: string;
+}
+
+interface ExecErrorLike {
+  code?: string;
+  message?: string;
+  stderr?: string;
+}
+
+function toExecError(error: unknown): ExecErrorLike {
+  if (error && typeof error === 'object') {
+    const candidate = error as Partial<ExecErrorLike>;
+    return {
+      code: typeof candidate.code === 'string' ? candidate.code : undefined,
+      message: typeof candidate.message === 'string' ? candidate.message : 'Unknown error',
+      stderr: typeof candidate.stderr === 'string' ? candidate.stderr : undefined,
+    };
+  }
+
+  return { message: String(error) };
+}
+
 // キャッシュから字幕を取得する関数
-async function getCachedTranscript(videoId: string): Promise<{ transcript: string; language: string; source: string } | null> {
+async function getCachedTranscript(videoId: string): Promise<CachedTranscript | null> {
   try {
     const cacheFile = getCacheFilePath(videoId);
     const stats = await fs.promises.stat(cacheFile);
@@ -191,7 +230,7 @@ async function getCachedTranscript(videoId: string): Promise<{ transcript: strin
     }
     
     const cachedData = await fs.promises.readFile(cacheFile, 'utf-8');
-    const parsed = JSON.parse(cachedData);
+    const parsed = JSON.parse(cachedData) as CachedTranscript;
     
     console.log(`Cache hit for video ${videoId}`);
     return parsed;
@@ -297,7 +336,7 @@ export async function GET(request: NextRequest) {
     if (externalServiceUrl) {
       try {
         // Try calling with ID token (for private Cloud Run) if available
-        let headers: Record<string, string> = {};
+        const headers: Record<string, string> = {};
         try {
           const target = `${externalServiceUrl.replace(/\/$/, '')}`;
           const tokenRes = await fetch('http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=' + encodeURIComponent(target), {
@@ -310,7 +349,7 @@ export async function GET(request: NextRequest) {
         } catch {}
 
         const proxyRes = await fetch(`${externalServiceUrl.replace(/\/$/, '')}/transcript?videoId=${videoId}`, { method: 'GET', headers });
-        const proxyJson = await proxyRes.json().catch(() => ({}));
+        const proxyJson = await proxyRes.json().catch(() => ({} as ProxyTranscriptResponse));
         if (proxyRes.ok && proxyJson && proxyJson.transcript) {
           await saveTranscriptToCache(videoId, proxyJson.transcript, proxyJson.language || 'auto', proxyJson.source || 'external');
           updateMetrics(Date.now() - startTime, false, false);
@@ -350,8 +389,8 @@ export async function GET(request: NextRequest) {
       const tryFetch = async (opts?: { lang?: string }) => {
         try {
           return await YoutubeTranscript.fetchTranscript(videoId, opts);
-        } catch (e) {
-          return [] as Array<{ text: string }>;
+        } catch {
+          return [] as TranscriptItem[];
         }
       };
 
@@ -383,7 +422,7 @@ export async function GET(request: NextRequest) {
     }
     const isWindows = process.platform === 'win32';
     const tempDir = process.env.YT_DLP_TEMP_DIR || (isWindows ? 'C:\\temp' : '/tmp');
-    const timeout = parseInt(process.env.YT_DLP_TIMEOUT || '30000');
+    const execTimeout = parseInt(process.env.YT_DLP_TIMEOUT || '60000');
     const outputPattern = path.join(tempDir, `${videoId}.%(ext)s`);
 
     // 一時ディレクトリの存在確認
@@ -410,7 +449,6 @@ export async function GET(request: NextRequest) {
 
     try {
       // yt-dlpを実行（Windows環境ではpython -m yt_dlpを使用）
-      const isWindows = process.platform === 'win32';
       const command = isWindows ? 'python' : 'yt-dlp';
       const commandArgs = isWindows ? ['-m', 'yt_dlp', ...args] : args;
       
@@ -418,7 +456,7 @@ export async function GET(request: NextRequest) {
       
       const { stdout, stderr } = await execFileAsync(command, commandArgs, {
         cwd: tempDir,
-        timeout: 60000 // 60秒のタイムアウト（レート制限回避のため延長）
+        timeout: execTimeout
       });
 
       console.log('yt-dlp stdout:', stdout);
@@ -530,10 +568,11 @@ export async function GET(request: NextRequest) {
         cached: false
       });
 
-    } catch (execError: any) {
+    } catch (execError) {
+      const normalizedError = toExecError(execError);
       log('error', 'yt-dlp execution error', { 
         videoId, 
-        error: execError.message,
+        error: normalizedError.message,
         responseTime: Date.now() - startTime 
       });
       
@@ -546,7 +585,7 @@ export async function GET(request: NextRequest) {
       }
       
       // yt-dlpがインストールされていない場合のエラーハンドリング
-      if (execError.code === 'ENOENT') {
+      if (normalizedError.code === 'ENOENT') {
         updateMetrics(Date.now() - startTime, false, true);
         return NextResponse.json({
           success: false,
@@ -558,40 +597,40 @@ export async function GET(request: NextRequest) {
       }
 
       // タイムアウトエラー
-      if (execError.code === 'TIMEOUT') {
+      if (normalizedError.code === 'TIMEOUT') {
         updateMetrics(Date.now() - startTime, false, true);
         return NextResponse.json({
           success: false,
           error: 'Request timeout',
           message: 'The video processing took too long. Please try again.',
-          details: execError.message
+          details: normalizedError.message
         }, { status: 408 });
       }
 
       // 権限エラー
-      if (execError.code === 'EACCES' || execError.code === 'EPERM') {
+      if (normalizedError.code === 'EACCES' || normalizedError.code === 'EPERM') {
         updateMetrics(Date.now() - startTime, false, true);
         return NextResponse.json({
           success: false,
           error: 'Permission denied',
           message: 'Insufficient permissions to execute yt-dlp or access temp directory',
-          details: execError.message
+          details: normalizedError.message
         }, { status: 500 });
       }
 
       // 動画が見つからない場合
-      if (execError.stderr && execError.stderr.includes('Video unavailable')) {
+      if (normalizedError.stderr && normalizedError.stderr.includes('Video unavailable')) {
         updateMetrics(Date.now() - startTime, false, true);
         return NextResponse.json({
           success: false,
           error: 'Video unavailable',
           message: 'The requested video is not available or has been removed',
-          details: execError.stderr
+          details: normalizedError.stderr
         }, { status: 404 });
       }
 
       // フォーマット関連のエラー - フォールバックを試行
-      if (execError.stderr && execError.stderr.includes('Requested format is not available')) {
+      if (normalizedError.stderr && normalizedError.stderr.includes('Requested format is not available')) {
         console.log('Format error detected, attempting fallback...');
         
         try {
@@ -728,7 +767,7 @@ export async function GET(request: NextRequest) {
           success: false,
           error: 'Format not available',
           message: 'The requested video format is not available. This may be due to regional restrictions or video availability.',
-          details: execError.stderr,
+          details: normalizedError.stderr,
           suggestion: 'Try using a different video or check if the video is available in your region'
         }, { status: 400 });
       }
@@ -739,8 +778,8 @@ export async function GET(request: NextRequest) {
         success: false,
         error: 'yt-dlp execution failed',
         message: 'Failed to extract subtitles using yt-dlp',
-        details: execError.message,
-        stderr: execError.stderr
+        details: normalizedError.message,
+        stderr: normalizedError.stderr
       }, { status: 500 });
     }
 

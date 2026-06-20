@@ -6,7 +6,15 @@ const nextConfig = {
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
     NEXT_PUBLIC_FIREBASE_PROJECT_ID: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   },
-  // 静的ファイルの提供設定
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
+    ],
+  },
+  // 髱咏噪繝輔ぃ繧､繝ｫ縺ｮ謠蝉ｾ幄ｨｭ螳・
   async headers() {
     return [
       {
@@ -32,7 +40,7 @@ const nextConfig = {
       },
     ];
   },
-  // 音声ファイルの提供設定を更新
+  // 髻ｳ螢ｰ繝輔ぃ繧､繝ｫ縺ｮ謠蝉ｾ幄ｨｭ螳壹ｒ譖ｴ譁ｰ
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(mp3|wav|ogg)$/,
@@ -49,4 +57,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

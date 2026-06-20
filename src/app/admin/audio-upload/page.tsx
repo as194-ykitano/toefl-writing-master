@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTasks } from "@/lib/firebase";
 import { uploadTaskAudio, updateTaskAudioURLManually } from "@/lib/migrateAudioToStorage";
 import { Task } from "@/lib/types";
-import { FileAudio, Upload, CheckCircle, AlertCircle } from "lucide-react";
+import { FileAudio, CheckCircle, AlertCircle } from "lucide-react";
 
 export default function AudioUploadPage() {
   const [tasks, setTasks] = useState<Task[]>([]);

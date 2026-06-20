@@ -16,7 +16,6 @@ interface NotificationToastProps {
 }
 
 export default function NotificationToast({
-  essayId,
   taskTitle,
   isVisible,
   onClose,

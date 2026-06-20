@@ -1,5 +1,4 @@
 import { getTasks, uploadAudioFile, updateTaskAudioURL } from './firebase';
-import { Task } from './types';
 
 // 既存のローカル音声ファイルをStorageに移行する関数
 export async function migrateAudioToStorage() {

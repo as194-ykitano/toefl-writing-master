@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function VocabularyListPage() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const router = useRouter();
 
@@ -19,7 +19,7 @@ export default function VocabularyListPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

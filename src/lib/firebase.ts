@@ -1,18 +1,17 @@
-// my-app/src/lib/firebase.ts の先頭
+﻿// my-app/src/lib/firebase.ts 縺ｮ蜈磯ｭ
 console.log('FIREBASE_API_KEY:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc, Timestamp, deleteDoc, query, where, setDoc, orderBy } from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut, User, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
-import { Task, ReadingPassage, Essay, EssayFeedback, UserProfile, LearningGoals, VocabularyItem, BasicEssay, YouTuberTask, YouTuberEssay, YouTubeVideo } from './types';
-import { getReadingPassageById } from './getReadingPassages';
+import { Task, Essay, EssayFeedback, UserProfile, LearningGoals, VocabularyItem, BasicEssay, YouTuberTask, YouTuberEssay, YouTubeVideo, TOEFLAcademicDiscussionFeedback } from './types';
 import { getEssayById } from './getEssays';
-// analyzeEssayはAPIルートを使用するため、直接インポートしない
+// analyzeEssay縺ｯAPI繝ｫ繝ｼ繝医ｒ菴ｿ逕ｨ縺吶ｋ縺溘ａ縲∫峩謗･繧､繝ｳ繝昴・繝医＠縺ｪ縺・
 
 
-// 環境変数の値を確認
+// 迺ｰ蠅・､画焚縺ｮ蛟､繧堤｢ｺ隱・
 console.log('Environment variables check:', {
   hasApiKey: !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   hasProjectId: !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -28,7 +27,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// 設定値の検証
+// 險ｭ螳壼､縺ｮ讀懆ｨｼ
 if (!firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.authDomain) {
   console.error('Firebase configuration is incomplete:', firebaseConfig);
   throw new Error('Firebase configuration is incomplete. Please check your environment variables.');
@@ -52,14 +51,48 @@ export const storage = getStorage(app);
 // Initialize Firebase Functions
 export const functions = getFunctions(app);
 
-// デバッグ用：Firebaseの設定を確認
+type StoredTask = Partial<Task> & {
+  taskType?: string;
+  discussionContent?: {
+    professor: string;
+    student1: string;
+    student2: string;
+    question: string;
+    professorName?: string;
+    student1Name?: string;
+    student2Name?: string;
+  };
+  readingPassageId?: string;
+  listeningAudioURL?: string;
+  content?: string;
+  title?: string;
+};
+
+type StoredEssayFeedback = (EssayFeedback | TOEFLAcademicDiscussionFeedback) & {
+  score?: number;
+  modelAnswer?: string;
+};
+
+type EssayWithOptionalStance = Essay & {
+  stance?: 'agree' | 'disagree';
+};
+
+type GrammarCorrectionWithSentence = {
+  fullSentence?: string;
+} & Record<string, unknown>;
+
+type FirebaseAuthError = {
+  code?: string;
+};
+
+// 繝・ヰ繝・げ逕ｨ・哥irebase縺ｮ險ｭ螳壹ｒ遒ｺ隱・
 console.log('Firebase Config:', {
   projectId: firebaseConfig.projectId,
   authDomain: firebaseConfig.authDomain,
-  // 機密情報は表示しない
+  // 讖溷ｯ・ュ蝣ｱ縺ｯ陦ｨ遉ｺ縺励↑縺・
 });
 
-// タスクの取得
+// 繧ｿ繧ｹ繧ｯ縺ｮ蜿門ｾ・
 export async function getTasks(): Promise<Task[]> {
   try {
     const tasksQuery = query(
@@ -72,7 +105,7 @@ export async function getTasks(): Promise<Task[]> {
       ...doc.data()
     })) as Task[];
     
-    // クライアントサイドで作成日時の昇順でソート
+    // 繧ｯ繝ｩ繧､繧｢繝ｳ繝医し繧､繝峨〒菴懈・譌･譎ゅ・譏・・〒繧ｽ繝ｼ繝・
     return tasks.sort((a, b) => {
       const getDate = (date: Date | Timestamp | undefined): Date => {
         if (!date) return new Date(0);
@@ -83,7 +116,7 @@ export async function getTasks(): Promise<Task[]> {
       
       const dateA = getDate(a.createdAt);
       const dateB = getDate(b.createdAt);
-      return dateA.getTime() - dateB.getTime(); // 昇順（古い順）
+      return dateA.getTime() - dateB.getTime(); // 譏・・ｼ亥商縺・・ｼ・
     });
   } catch (error) {
     console.error('Error fetching tasks:', error);
@@ -91,7 +124,7 @@ export async function getTasks(): Promise<Task[]> {
   }
 }
 
-// 特定のタスクの取得
+// 迚ｹ螳壹・繧ｿ繧ｹ繧ｯ縺ｮ蜿門ｾ・
 export async function getTaskById(taskId: string): Promise<Task | null> {
   try {
     const taskRef = doc(db, 'tasks', taskId);
@@ -111,7 +144,7 @@ export async function getTaskById(taskId: string): Promise<Task | null> {
   }
 }
 
-// エッセイの保存
+// 繧ｨ繝・そ繧､縺ｮ菫晏ｭ・
 export async function saveEssay(essay: Omit<Essay, 'id'>, userId: string): Promise<string> {
   try {
     const essayData: Omit<Essay, 'id'> = {
@@ -153,7 +186,7 @@ export async function getUserEssays(userId: string): Promise<Essay[]> {
   }
 }
 
-// エッセイの取得
+// 繧ｨ繝・そ繧､縺ｮ蜿門ｾ・
 export async function getEssays(): Promise<Essay[]> {
   try {
     const querySnapshot = await getDocs(collection(db, 'essays'));
@@ -174,10 +207,10 @@ export async function getEssays(): Promise<Essay[]> {
   }
 }
 
-// エッセイのフィードバックを取得
-export async function getEssayFeedback(essayId: string, userId: string): Promise<EssayFeedback | null> {
+// 繧ｨ繝・そ繧､縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け繧貞叙蠕・
+export async function getEssayFeedback(essayId: string, userId: string): Promise<StoredEssayFeedback | null> {
   try {
-    // 処理開始時にstatusをprocessingに設定
+    // 蜃ｦ逅・幕蟋区凾縺ｫstatus繧恥rocessing縺ｫ險ｭ螳・
     const essayRef = doc(db, 'users', userId, 'essays', essayId);
     await updateDoc(essayRef, {
       status: 'processing'
@@ -188,7 +221,7 @@ export async function getEssayFeedback(essayId: string, userId: string): Promise
       throw new Error('Essay not found');
     }
 
-    // タスクの情報を取得
+    // 繧ｿ繧ｹ繧ｯ縺ｮ諠・ｱ繧貞叙蠕・
     const taskRef = doc(db, 'tasks', essay.taskId);
     const taskSnap = await getDoc(taskRef);
     
@@ -196,29 +229,29 @@ export async function getEssayFeedback(essayId: string, userId: string): Promise
       throw new Error('Task not found');
     }
 
-    const task = taskSnap.data() as any;
+    const task = taskSnap.data() as StoredTask;
     if (!task) {
       throw new Error('Task data is empty');
     }
     const taskType = task.taskType as string | undefined;
 
-    // Academic Discussion の場合は別フロー（openai.ts内の Academic Discussion 分析やサンプル生成を利用）
-    let feedback: any;
+    // Academic Discussion 縺ｮ蝣ｴ蜷医・蛻･繝輔Ο繝ｼ・・penai.ts蜀・・ Academic Discussion 蛻・梵繧・し繝ｳ繝励Ν逕滓・繧貞茜逕ｨ・・
+    let feedback: StoredEssayFeedback;
     if (taskType === 'academic_discussion') {
       if (!task.discussionContent) {
         throw new Error('Task missing discussionContent for academic_discussion');
       }
-      // Academic Discussionの評価
+      // Academic Discussion縺ｮ隧穂ｾ｡
       const { analyzeTOEFLAcademicDiscussion, generateTOEFLAcademicDiscussionModelAnswer } = await import('./openai');
       feedback = await analyzeTOEFLAcademicDiscussion(
         essay.content,
         task.discussionContent
       );
 
-      // stance は現状 Firestore に未保存のため、将来的にessayに保持するならここで参照
-      // 暫定として agree を既定にせず、テンプレに依存するには essay.document 内に stance を保存する必要がある
-      // もし essay.stance を保存した場合はそれを使う（型拡張が必要）
-      const stance: 'agree' | 'disagree' = (essay as any).stance || 'agree';
+      // stance 縺ｯ迴ｾ迥ｶ Firestore 縺ｫ譛ｪ菫晏ｭ倥・縺溘ａ縲∝ｰ・擂逧・↓essay縺ｫ菫晄戟縺吶ｋ縺ｪ繧峨％縺薙〒蜿ら・
+      // 證ｫ螳壹→縺励※ agree 繧呈里螳壹↓縺帙★縲√ユ繝ｳ繝励Ξ縺ｫ萓晏ｭ倥☆繧九↓縺ｯ essay.document 蜀・↓ stance 繧剃ｿ晏ｭ倥☆繧句ｿ・ｦ√′縺ゅｋ
+      // 繧ゅ＠ essay.stance 繧剃ｿ晏ｭ倥＠縺溷ｴ蜷医・縺昴ｌ繧剃ｽｿ縺・ｼ亥梛諡｡蠑ｵ縺悟ｿ・ｦ・ｼ・
+      const stance: 'agree' | 'disagree' = (essay as EssayWithOptionalStance).stance || 'agree';
       const modelAnswer = await generateTOEFLAcademicDiscussionModelAnswer(
         stance,
         essay.content,
@@ -232,7 +265,7 @@ export async function getEssayFeedback(essayId: string, userId: string): Promise
       if (!task.readingPassageId) {
         throw new Error('Task missing readingPassageId for integrated task');
       }
-      // 従来のIntegratedタスク等
+      // 蠕捺擂縺ｮIntegrated繧ｿ繧ｹ繧ｯ遲・
       const readingPassageRef = doc(db, 'readingPassages', task.readingPassageId);
       const readingPassageSnap = await getDoc(readingPassageRef);
       
@@ -249,8 +282,13 @@ export async function getEssayFeedback(essayId: string, userId: string): Promise
       );
     }
 
-    // フィードバックを保存し、statusをfeedback_completedに更新
-    const updatePayload: any = {
+    // 繝輔ぅ繝ｼ繝峨ヰ繝・け繧剃ｿ晏ｭ倥＠縲《tatus繧断eedback_completed縺ｫ譖ｴ譁ｰ
+    const updatePayload: {
+      feedback: StoredEssayFeedback;
+      status: 'feedback_completed';
+      feedbackRead: false;
+      score?: number;
+    } = {
       feedback,
       status: 'feedback_completed',
       feedbackRead: false,
@@ -264,7 +302,7 @@ export async function getEssayFeedback(essayId: string, userId: string): Promise
   } catch (error) {
     console.error('Error in getEssayFeedback:', error);
     
-    // エラーが発生した場合、statusをerrorに更新
+    // 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺溷ｴ蜷医《tatus繧弾rror縺ｫ譖ｴ譁ｰ
     try {
       const essayRef = doc(db, 'users', userId, 'essays', essayId);
       await updateDoc(essayRef, {
@@ -299,7 +337,7 @@ export async function analyzeEssayWithAPI(essayText: string, readingPassage: str
   return response.json();
 }
 
-// 全てのエッセイを削除する関数
+// 蜈ｨ縺ｦ縺ｮ繧ｨ繝・そ繧､繧貞炎髯､縺吶ｋ髢｢謨ｰ
 export async function deleteAllEssays(): Promise<void> {
   try {
     const querySnapshot = await getDocs(collection(db, 'essays'));
@@ -314,7 +352,7 @@ export async function deleteAllEssays(): Promise<void> {
   }
 }
 
-// 文法添削のデータ構造を更新するマイグレーション関数
+// 譁・ｳ墓ｷｻ蜑翫・繝・・繧ｿ讒矩繧呈峩譁ｰ縺吶ｋ繝槭う繧ｰ繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ髢｢謨ｰ
 export async function migrateGrammarCorrections() {
   try {
     const essaysRef = collection(db, 'essays');
@@ -323,15 +361,15 @@ export async function migrateGrammarCorrections() {
     for (const doc of essaysSnapshot.docs) {
       const essay = doc.data();
       if (essay.feedback?.grammarCorrections?.corrections) {
-        const updatedCorrections = essay.feedback.grammarCorrections.corrections.map((correction: any) => {
-          // 5文前後の文脈を保持
+        const updatedCorrections = essay.feedback.grammarCorrections.corrections.map((correction: GrammarCorrectionWithSentence) => {
+          // 5譁・燕蠕後・譁・ц繧剃ｿ晄戟
           return {
             ...correction,
-            fullSentence: correction.fullSentence || '' // fullSentenceが存在しない場合は空文字列を設定
+            fullSentence: correction.fullSentence || '' // fullSentence縺悟ｭ伜惠縺励↑縺・ｴ蜷医・遨ｺ譁・ｭ怜・繧定ｨｭ螳・
           };
         });
 
-        // 更新されたデータを保存
+        // 譖ｴ譁ｰ縺輔ｌ縺溘ョ繝ｼ繧ｿ繧剃ｿ晏ｭ・
         await updateDoc(doc.ref, {
           'feedback.grammarCorrections.corrections': updatedCorrections
         });
@@ -349,16 +387,17 @@ export const signIn = async (email: string, password: string) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential.user;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error signing in:', error);
-    if (error.code === 'auth/user-not-found') {
-      throw new Error('メールアドレスまたはパスワードが正しくありません。');
-    } else if (error.code === 'auth/wrong-password') {
-      throw new Error('メールアドレスまたはパスワードが正しくありません。');
-    } else if (error.code === 'auth/invalid-email') {
-      throw new Error('有効なメールアドレスを入力してください。');
+    const authError = error as FirebaseAuthError;
+    if (authError.code === 'auth/user-not-found') {
+      throw new Error('繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ縺ｾ縺溘・繝代せ繝ｯ繝ｼ繝峨′豁｣縺励￥縺ゅｊ縺ｾ縺帙ｓ縲・');
+    } else if (authError.code === 'auth/wrong-password') {
+      throw new Error('繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ縺ｾ縺溘・繝代せ繝ｯ繝ｼ繝峨′豁｣縺励￥縺ゅｊ縺ｾ縺帙ｓ縲・');
+    } else if (authError.code === 'auth/invalid-email') {
+      throw new Error('譛牙柑縺ｪ繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ繧貞・蜉帙＠縺ｦ縺上□縺輔＞縲・');
     } else {
-      throw new Error('ログイン中にエラーが発生しました。');
+      throw new Error('繝ｭ繧ｰ繧､繝ｳ荳ｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆縲・');
     }
   }
 };
@@ -471,7 +510,7 @@ export async function createUserProfile(user: User) {
   }
 } 
 
-// 音声ファイルをFirebase Storageにアップロード
+// 髻ｳ螢ｰ繝輔ぃ繧､繝ｫ繧巽irebase Storage縺ｫ繧｢繝・・繝ｭ繝ｼ繝・
 export async function uploadAudioFile(file: File, taskId: string): Promise<string> {
   try {
     const audioRef = ref(storage, `audio/${taskId}/${file.name}`);
@@ -484,7 +523,7 @@ export async function uploadAudioFile(file: File, taskId: string): Promise<strin
   }
 }
 
-// 音声ファイルのURLを取得
+// 髻ｳ螢ｰ繝輔ぃ繧､繝ｫ縺ｮURL繧貞叙蠕・
 export async function getAudioURL(taskId: string, fileName: string): Promise<string> {
   try {
     const audioRef = ref(storage, `audio/${taskId}/${fileName}`);
@@ -496,7 +535,7 @@ export async function getAudioURL(taskId: string, fileName: string): Promise<str
   }
 }
 
-// タスクの音声URLを更新
+// 繧ｿ繧ｹ繧ｯ縺ｮ髻ｳ螢ｰURL繧呈峩譁ｰ
 export async function updateTaskAudioURL(taskId: string, audioURL: string): Promise<void> {
   try {
     const taskRef = doc(db, 'tasks', taskId);
@@ -510,7 +549,7 @@ export async function updateTaskAudioURL(taskId: string, audioURL: string): Prom
   }
 }
 
-// 単語・フレーズを保存
+// 蜊倩ｪ槭・繝輔Ξ繝ｼ繧ｺ繧剃ｿ晏ｭ・
 export async function saveVocabularyItem(
   userId: string, 
   vocabularyItem: Omit<VocabularyItem, 'id' | 'userId' | 'createdAt'>
@@ -531,7 +570,7 @@ export async function saveVocabularyItem(
   }
 }
 
-// ユーザーの単語・フレーズ一覧を取得
+// 繝ｦ繝ｼ繧ｶ繝ｼ縺ｮ蜊倩ｪ槭・繝輔Ξ繝ｼ繧ｺ荳隕ｧ繧貞叙蠕・
 export async function getUserVocabulary(userId: string): Promise<VocabularyItem[]> {
   try {
     const userDocRef = doc(db, 'users', userId);
@@ -561,7 +600,7 @@ export async function getUserVocabulary(userId: string): Promise<VocabularyItem[
   }
 }
 
-// 単語・フレーズを削除
+// 蜊倩ｪ槭・繝輔Ξ繝ｼ繧ｺ繧貞炎髯､
 export async function deleteVocabularyItem(userId: string, itemId: string): Promise<void> {
   try {
     const itemRef = doc(db, 'users', userId, 'vocabulary', itemId);
@@ -572,7 +611,7 @@ export async function deleteVocabularyItem(userId: string, itemId: string): Prom
   }
 }
 
-// 単語・フレーズを更新
+// 蜊倩ｪ槭・繝輔Ξ繝ｼ繧ｺ繧呈峩譁ｰ
 export async function updateVocabularyItem(
   userId: string, 
   itemId: string, 
@@ -590,21 +629,21 @@ export async function updateVocabularyItem(
   }
 }
 
-// 今月の単語数を取得
+// 莉頑怦縺ｮ蜊倩ｪ樊焚繧貞叙蠕・
 export async function getThisMonthVocabularyCount(userId: string): Promise<number> {
   try {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
     
-    // 今月の開始日と終了日
+    // 莉頑怦縺ｮ髢句ｧ区律縺ｨ邨ゆｺ・律
     const thisMonthStart = new Date(currentYear, currentMonth, 1);
     const thisMonthEnd = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59, 999);
     
     const userDocRef = doc(db, 'users', userId);
     const vocabularyCollectionRef = collection(userDocRef, 'vocabulary');
     
-    // 今月作成された単語をフィルタリング
+    // 莉頑怦菴懈・縺輔ｌ縺溷腰隱槭ｒ繝輔ぅ繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ
     const q = query(
       vocabularyCollectionRef,
       where('createdAt', '>=', thisMonthStart),
@@ -619,7 +658,7 @@ export async function getThisMonthVocabularyCount(userId: string): Promise<numbe
   }
 } 
 
-// IELTSエッセイの保存
+// IELTS繧ｨ繝・そ繧､縺ｮ菫晏ｭ・
 export async function saveIELTSEssay(essay: Omit<Essay, 'id'>, userId: string): Promise<string> {
   try {
     const essayData: Omit<Essay, 'id'> = {
@@ -630,7 +669,7 @@ export async function saveIELTSEssay(essay: Omit<Essay, 'id'>, userId: string): 
 
     const docRef = await addDoc(collection(db, 'users', userId, 'essays'), essayData);
     
-    // 保存したエッセイのIDを返す
+    // 菫晏ｭ倥＠縺溘お繝・そ繧､縺ｮID繧定ｿ斐☆
     return docRef.id;
   } catch (error) {
     console.error('Error saving IELTS essay:', error);
@@ -638,10 +677,10 @@ export async function saveIELTSEssay(essay: Omit<Essay, 'id'>, userId: string): 
   }
 }
 
-// IELTSエッセイのフィードバックを取得
+// IELTS繧ｨ繝・そ繧､縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け繧貞叙蠕・
 export async function getIELTSEssayFeedback(essayId: string, userId: string): Promise<EssayFeedback | null> {
   try {
-    // 処理開始時にstatusをprocessingに設定
+    // 蜃ｦ逅・幕蟋区凾縺ｫstatus繧恥rocessing縺ｫ險ｭ螳・
     const essayRef = doc(db, 'users', userId, 'essays', essayId);
     await updateDoc(essayRef, {
       status: 'processing'
@@ -652,7 +691,7 @@ export async function getIELTSEssayFeedback(essayId: string, userId: string): Pr
       throw new Error('Essay not found');
     }
 
-    // タスクの情報を取得
+    // 繧ｿ繧ｹ繧ｯ縺ｮ諠・ｱ繧貞叙蠕・
     const taskRef = doc(db, 'tasks', essay.taskId);
     const taskSnap = await getDoc(taskRef);
     
@@ -662,7 +701,7 @@ export async function getIELTSEssayFeedback(essayId: string, userId: string): Pr
 
     const task = taskSnap.data() as Task;
 
-    // IELTS用のフィードバックを生成
+    // IELTS逕ｨ縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け繧堤函謌・
     const ieltsTaskType: 'task1' | 'task2' = (task.taskType === 'task1' || task.taskType === 'task2') ? task.taskType : 'task2';
     const feedback = await analyzeIELTSEssayWithAPI(
       essay.content,
@@ -671,19 +710,19 @@ export async function getIELTSEssayFeedback(essayId: string, userId: string): Pr
       task.imageUrl
     );
 
-    // フィードバックを保存し、statusをfeedback_completedに更新
+    // 繝輔ぅ繝ｼ繝峨ヰ繝・け繧剃ｿ晏ｭ倥＠縲《tatus繧断eedback_completed縺ｫ譖ｴ譁ｰ
     await updateDoc(essayRef, {
       feedback,
       status: 'feedback_completed',
-      feedbackRead: false, // フィードバック未読として初期化
-      score: feedback.score // 30点満点のスコアを保存
+      feedbackRead: false, // 繝輔ぅ繝ｼ繝峨ヰ繝・け譛ｪ隱ｭ縺ｨ縺励※蛻晄悄蛹・
+      score: feedback.score // 30轤ｹ貅轤ｹ縺ｮ繧ｹ繧ｳ繧｢繧剃ｿ晏ｭ・
     });
 
     return feedback;
   } catch (error) {
     console.error('Error in getIELTSEssayFeedback:', error);
     
-    // エラーが発生した場合、statusをerrorに更新
+    // 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺溷ｴ蜷医《tatus繧弾rror縺ｫ譖ｴ譁ｰ
     try {
       const essayRef = doc(db, 'users', userId, 'essays', essayId);
       await updateDoc(essayRef, {
@@ -697,7 +736,7 @@ export async function getIELTSEssayFeedback(essayId: string, userId: string): Pr
   }
 }
 
-// IELTSエッセイ分析用のAPI呼び出し
+// IELTS繧ｨ繝・そ繧､蛻・梵逕ｨ縺ｮAPI蜻ｼ縺ｳ蜃ｺ縺・
 export async function analyzeIELTSEssayWithAPI(
   essayText: string, 
   taskType: 'task1' | 'task2', 
@@ -724,7 +763,7 @@ export async function analyzeIELTSEssayWithAPI(
   return response.json();
 } 
 
-// Basicトレーニング用の関数
+// Basic繝医Ξ繝ｼ繝九Φ繧ｰ逕ｨ縺ｮ髢｢謨ｰ
 export const saveBasicEssay = async (essay: Omit<BasicEssay, 'id'>): Promise<string> => {
   try {
     const essayRef = await addDoc(collection(db, 'users', essay.userId, 'basicEssays'), {
@@ -765,7 +804,7 @@ export const getBasicEssays = async (userId: string): Promise<BasicEssay[]> => {
   }
 };
 
-export const updateBasicEssayFeedback = async (essayId: string, userId: string, feedback: any): Promise<void> => {
+export const updateBasicEssayFeedback = async (essayId: string, userId: string, feedback: BasicEssay['feedback']): Promise<void> => {
   try {
     console.log('Updating basic essay feedback for:', essayId, 'user:', userId);
     const essayRef = doc(db, 'users', userId, 'basicEssays', essayId);
@@ -782,7 +821,7 @@ export const updateBasicEssayFeedback = async (essayId: string, userId: string, 
   }
 };
 
-// YouTube Learning用の関数
+// YouTube Learning逕ｨ縺ｮ髢｢謨ｰ
 export const saveYouTuberEssay = async (essay: Omit<YouTuberEssay, 'id'>): Promise<string> => {
   try {
     const essayRef = await addDoc(collection(db, 'users', essay.userId, 'youTuberEssays'), {
@@ -823,7 +862,7 @@ export const getYouTuberEssays = async (userId: string): Promise<YouTuberEssay[]
   }
 };
 
-export const updateYouTuberEssayFeedback = async (essayId: string, userId: string, feedback: any): Promise<void> => {
+export const updateYouTuberEssayFeedback = async (essayId: string, userId: string, feedback: YouTuberEssay['feedback']): Promise<void> => {
   try {
     console.log('Updating YouTuber essay feedback for:', essayId, 'user:', userId);
     const essayRef = doc(db, 'users', userId, 'youTuberEssays', essayId);
@@ -920,3 +959,4 @@ export const getYouTubeVideoById = async (videoId: string): Promise<YouTubeVideo
     return null;
   }
 }; 
+

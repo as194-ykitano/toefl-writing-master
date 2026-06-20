@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getUserProfile } from '@/lib/firebase';
-import { UserProfile } from '@/lib/types';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import ProgressDisplay from '@/components/profile/ProgressDisplay';
 import WeaknessAnalysis from '@/components/profile/WeaknessAnalysis';
@@ -14,7 +12,6 @@ import { Button } from '@/components/ui/button';
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,8 +22,6 @@ export default function ProfilePage() {
       try {
         setLoading(true);
         setError(null);
-        const userProfile = await getUserProfile(user.uid);
-        setProfile(userProfile);
       } catch (err) {
         console.error('Error loading profile:', err);
         setError('データの読み込みに失敗しました。');

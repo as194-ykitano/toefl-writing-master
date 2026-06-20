@@ -4,16 +4,15 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotification } from "@/contexts/NotificationContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
-import { Play, Clock, Target, ArrowLeft, Edit3, Bell, FileText, CheckCircle, AlertCircle } from "lucide-react";
+import { Play, Clock, Target, ArrowLeft, Edit3, FileText, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import { YouTubeVideo, YouTuberTask } from "@/lib/types";
-import { getYouTuberTasks, saveYouTubeVideo, saveYouTuberEssay, updateYouTuberEssayFeedback } from "@/lib/firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { YouTubeVideo } from "@/lib/types";
+import { saveYouTubeVideo, saveYouTuberEssay, updateYouTuberEssayFeedback } from "@/lib/firebase";
+import { doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import ManualSubtitleInput from "@/components/ManualSubtitleInput";
 
@@ -36,7 +35,6 @@ export default function YouTuberTasksPage() {
   const [transcript, setTranscript] = useState<string | null>(null);
   const [urlInput, setUrlInput] = useState("");
   const [isUrlSearching, setIsUrlSearching] = useState(false);
-  const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [isVideoSelecting, setIsVideoSelecting] = useState(false);
   const [submittedEssayData, setSubmittedEssayData] = useState<{
     essayId: string;
@@ -44,10 +42,9 @@ export default function YouTuberTasksPage() {
     wordCount: number;
     timeSpent: number;
   } | null>(null);
-  const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<"processing" | "error">("processing");
   const [showManualSubtitleInput, setShowManualSubtitleInput] = useState(false);
-  const [transcriptData, setTranscriptData] = useState<any>(null);
-  const [showHowtoDialog, setShowHowtoDialog] = useState(false);
+  const [transcriptData, setTranscriptData] = useState<{ transcript: string } | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -96,12 +93,60 @@ export default function YouTuberTasksPage() {
                 }
               }
             }, 3000); // 3秒後にダッシュボードに遷移（通知が確実に表示されるように）
+          } else if (data.status === 'error') {
+            setSubmissionStatus('error');
           }
         }
       });
       return () => unsubscribe();
     }
-  }, [phase, submittedEssayData?.essayId, showFeedbackNotification, user]);
+  }, [phase, submittedEssayData?.essayId, submittedEssayData?.taskTitle, showFeedbackNotification, user]);
+
+  const runYouTuberAnalysis = async (essayId: string) => {
+    if (!user || !selectedVideo) return;
+
+    const essayRef = doc(db, 'users', user.uid, 'youTuberEssays', essayId);
+    const requestBody = {
+      essayText,
+      videoTitle: selectedVideo.title,
+      videoDescription: selectedVideo.description,
+      taskType: selectedTaskType,
+      transcript,
+    };
+
+    await updateDoc(essayRef, {
+      status: 'processing',
+      updatedAt: Timestamp.now(),
+    });
+
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      try {
+        const res = await fetch('/api/analyze-youtuber', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to analyze essay: ${res.status}`);
+        }
+
+        const feedback = await res.json();
+        await updateYouTuberEssayFeedback(essayId, user.uid, feedback);
+        return;
+      } catch (error) {
+        console.error(`Background analyze attempt ${attempt} failed:`, error);
+
+        if (attempt === 2) {
+          await updateDoc(essayRef, {
+            status: 'error',
+            updatedAt: Timestamp.now(),
+          });
+          throw error;
+        }
+      }
+    }
+  };
 
   // YouTubeのURLから動画IDを抽出する関数
   const extractVideoId = (url: string): string | null => {
@@ -181,13 +226,13 @@ export default function YouTuberTasksPage() {
     }
   };
 
-  const handleVideoSelect = async (video: YouTubeVideo) => {
+  const handleVideoSelect = (video: YouTubeVideo) => {
     setIsVideoSelecting(true);
     setSelectedVideo(video);
-    setTranscriptLoading(false);
+    const normalizedTranscript = cleanTranscript(video.description || '');
     // 自動取得は行わず、説明文を初期値として手動入力へ誘導
-    setTranscript(video.description || '');
-    setTranscriptData({ transcript: video.description || '' });
+    setTranscript(normalizedTranscript);
+    setTranscriptData({ transcript: normalizedTranscript });
     setShowManualSubtitleInput(true);
     setIsVideoSelecting(false);
     setPhase("video-selected");
@@ -209,11 +254,9 @@ export default function YouTuberTasksPage() {
     setIsSubmitting(true);
     try {
       // 動画をデータベースに保存（まだ保存されていない場合）
-      let videoId = selectedVideo.id;
       try {
-        const savedVideoId = await saveYouTubeVideo(selectedVideo);
-        videoId = savedVideoId;
-      } catch (error) {
+        await saveYouTubeVideo(selectedVideo);
+      } catch {
         console.log('Video already exists or save failed, using existing ID');
       }
 
@@ -239,30 +282,13 @@ export default function YouTuberTasksPage() {
         wordCount,
         timeSpent,
       });
+      setSubmissionStatus("processing");
       setPhase("submission-complete");
 
       // AI分析はバックグラウンドで実行
-      fetch('/api/analyze-youtuber', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          essayText, 
-          videoTitle: selectedVideo.title,
-          videoDescription: selectedVideo.description,
-          taskType: selectedTaskType,
-          transcript
-        }),
-      })
-        .then(async (res) => {
-          if (!res.ok) throw new Error('Failed to analyze essay');
-          const feedback = await res.json();
-          if (user) {
-            await updateYouTuberEssayFeedback(essayId, user.uid, feedback);
-          }
-        })
-        .catch((err) => {
-          console.error('Background analyze failed:', err);
-        });
+      void runYouTuberAnalysis(essayId).catch((error) => {
+        console.error('Background analyze failed after retry:', error);
+      });
     } catch (error) {
       console.error('Error submitting essay:', error);
       alert('エッセイの提出に失敗しました。もう一度お試しください。');
@@ -289,12 +315,36 @@ export default function YouTuberTasksPage() {
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <div className="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <FileText className="h-8 w-8 text-green-600" />
+            <div
+              className={`mx-auto h-16 w-16 rounded-full flex items-center justify-center mb-4 ${
+                submissionStatus === "error" ? "bg-red-100" : "bg-green-100"
+              }`}
+            >
+              {submissionStatus === "error" ? (
+                <AlertCircle className="h-8 w-8 text-red-600" />
+              ) : (
+                <FileText className="h-8 w-8 text-green-600" />
+              )}
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">提出完了！</h1>
             <p className="text-gray-600">現在添削中です！しばらくお待ちください。</p>
           </div>
+
+          {submissionStatus === "error" && (
+            <Card className="mb-8 border-red-200 bg-red-50">
+              <CardContent className="pt-6">
+                <div className="flex items-start gap-3 text-red-700">
+                  <AlertCircle className="h-5 w-5 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">フィードバック生成に失敗しました</p>
+                    <p className="text-sm">
+                      この提出は待機中のまま止まりません。管理者画面から再生成してください。
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Card className="mb-8">
             <CardHeader>
@@ -382,9 +432,11 @@ export default function YouTuberTasksPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-start space-x-4">
-                <img 
-                  src={selectedVideo.thumbnailUrl} 
+                <Image
+                  src={selectedVideo.thumbnailUrl}
                   alt={selectedVideo.title}
+                  width={128}
+                  height={96}
                   className="w-32 h-24 object-cover rounded-lg"
                 />
                 <div className="flex-1">
@@ -481,9 +533,11 @@ export default function YouTuberTasksPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-start space-x-4">
-                <img 
-                  src={selectedVideo.thumbnailUrl} 
+                <Image
+                  src={selectedVideo.thumbnailUrl}
                   alt={selectedVideo.title}
+                  width={192}
+                  height={144}
                   className="w-48 h-36 object-cover rounded-lg"
                 />
                 <div className="flex-1">
@@ -647,9 +701,11 @@ export default function YouTuberTasksPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {searchResults.map((video) => (
                   <div key={video.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <img 
-                      src={video.thumbnailUrl} 
+                    <Image
+                      src={video.thumbnailUrl}
                       alt={video.title}
+                      width={320}
+                      height={128}
                       className="w-full h-32 object-cover rounded-lg mb-3"
                     />
                     <h3 className="font-semibold text-sm mb-2 line-clamp-2">{video.title}</h3>

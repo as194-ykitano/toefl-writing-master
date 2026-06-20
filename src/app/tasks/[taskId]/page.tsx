@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button"
 import { getReadingPassageById } from "@/lib/getReadingPassages"
 import { getTaskById } from "@/lib/getTasks"
 import { saveEssay, getEssayFeedback } from "@/lib/firebase"
-import { Task, Essay } from "@/lib/types"
-import { Timestamp } from "firebase/firestore"
+import { Task } from "@/lib/types"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import Link from "next/link"
@@ -19,9 +18,8 @@ import { LogOut, MessageSquare, FileText } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useNotification } from '@/contexts/NotificationContext'
 import SubmissionComplete from '@/components/SubmissionComplete'
-import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { useParams } from 'next/navigation'
 
 type Phase = "ready" | "reading" | "listening" | "writing" | "completed" | "submission-complete"
 
@@ -40,15 +38,12 @@ export default function TaskPage({ params }: { params: Promise<{ taskId: string 
   const [writingTimerRunning, setWritingTimerRunning] = useState(false)
   const [essayText, setEssayText] = useState("")
   const [wordCount, setWordCount] = useState(0)
-  const [startTime, setStartTime] = useState<Date | null>(null)
   const [writingStartTime, setWritingStartTime] = useState<Date | null>(null)
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [loading, setLoading] = useState(true)
-  const [isTestMode, setIsTestMode] = useState(false)
-  const [essay, setEssay] = useState<Essay | null>(null)
+  const [isTestMode] = useState(false)
   const router = useRouter()
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
-  const [submittedEssayId, setSubmittedEssayId] = useState<string | null>(null);
   const [submittedEssayData, setSubmittedEssayData] = useState<{
     essayId: string;
     taskTitle?: string;
@@ -181,7 +176,6 @@ export default function TaskPage({ params }: { params: Promise<{ taskId: string 
           
           if (essayId) {
             console.log('Essay saved successfully with ID:', essayId);
-            setSubmittedEssayId(essayId);
             setSubmittedEssayData({
               essayId,
               taskTitle: taskData?.title,
@@ -245,12 +239,6 @@ export default function TaskPage({ params }: { params: Promise<{ taskId: string 
     setPhase("listening")
   }
 
-  const finishListening = () => {
-    setPhase("writing")
-    setWritingTimerRunning(true)
-    setWritingStartTime(new Date())
-  }
-
   const resetEssay = () => {
     setEssayText("")
     setWordCount(0)
@@ -284,7 +272,7 @@ export default function TaskPage({ params }: { params: Promise<{ taskId: string 
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

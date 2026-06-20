@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Plus, X } from 'lucide-react';
-import { VocabularyItem } from '@/lib/types';
 
 interface TextSelectionMenuProps {
   selectedText: string;
@@ -100,7 +98,7 @@ export default function TextSelectionMenu({
       <div className="mb-3">
         <p className="text-sm text-gray-600 mb-1">テキスト:</p>
         <p className="font-medium text-gray-900 bg-gray-50 p-2 rounded">
-          "{selectedText}"
+          &quot;{selectedText}&quot;
         </p>
       </div>
 

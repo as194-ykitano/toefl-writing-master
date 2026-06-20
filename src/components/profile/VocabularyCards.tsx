@@ -179,6 +179,8 @@ export default function VocabularyCards() {
     }
   };
 
+  void getFilterLabel(filterType);
+
   if (loading) {
     return (
       <Card>

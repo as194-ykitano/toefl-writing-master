@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Play, FileText, Clock, Target, ArrowLeft, CheckCircle, AlertCircle, MessageSquare, LogOut, Settings, TrendingUp } from "lucide-react";
+import { Play, FileText, Clock, Target, MessageSquare, LogOut, Settings, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { YouTuberEssay } from "@/lib/types";
 import { getYouTuberEssays } from "@/lib/firebase";
 import { isAdmin } from "@/lib/utils";
 import { SubmissionCalendar } from "@/components/SubmissionCalendar";
-import { doc, onSnapshot, collection } from 'firebase/firestore';
+import { onSnapshot, collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function YouTuberDashboardPage() {
@@ -22,12 +21,59 @@ export default function YouTuberDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [videoTitles, setVideoTitles] = useState<Record<string, string>>({});
 
+  const toDate = (value: YouTuberEssay["submittedAt"]): Date => {
+    if (value instanceof Date) return value;
+    if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") {
+      return value.toDate();
+    }
+    if (typeof value === "string" || typeof value === "number") {
+      return new Date(value);
+    }
+    return new Date();
+  };
+
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
     }
   }, [user, loading, router]);
 
+
+  const updateVideoTitles = useCallback(async (essays: YouTuberEssay[]) => {
+    const titles: Record<string, string> = {};
+    const uniqueVideoIds = [...new Set(essays.map(essay => essay.videoId))];
+    
+    for (const videoId of uniqueVideoIds) {
+      try {
+        const response = await fetch(`/api/youtube/video-info?videoId=${videoId}`);
+        const data = await response.json();
+        if (response.ok && data.video) {
+          titles[videoId] = data.video.title;
+        }
+      } catch (error) {
+        console.error('Error fetching video title:', error);
+        titles[videoId] = `動画ID: ${videoId}`;
+      }
+    }
+    
+    setVideoTitles(titles);
+  }, []);
+
+  const loadEssays = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const userEssays = await getYouTuberEssays(user.uid);
+      setEssays(userEssays);
+      
+      // 動画タイトルを取得
+      await updateVideoTitles(userEssays);
+    } catch (error) {
+      console.error('Error loading essays:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [updateVideoTitles, user]);
   useEffect(() => {
     if (user) {
       loadEssays();
@@ -60,43 +106,7 @@ export default function YouTuberDashboardPage() {
       
       return () => unsubscribe();
     }
-  }, [user]);
-
-  const updateVideoTitles = async (essays: YouTuberEssay[]) => {
-    const titles: Record<string, string> = {};
-    const uniqueVideoIds = [...new Set(essays.map(essay => essay.videoId))];
-    
-    for (const videoId of uniqueVideoIds) {
-      try {
-        const response = await fetch(`/api/youtube/video-info?videoId=${videoId}`);
-        const data = await response.json();
-        if (response.ok && data.video) {
-          titles[videoId] = data.video.title;
-        }
-      } catch (error) {
-        console.error('Error fetching video title:', error);
-        titles[videoId] = `動画ID: ${videoId}`;
-      }
-    }
-    
-    setVideoTitles(titles);
-  };
-
-  const loadEssays = async () => {
-    if (!user) return;
-    
-    try {
-      const userEssays = await getYouTuberEssays(user.uid);
-      setEssays(userEssays);
-      
-      // 動画タイトルを取得
-      await updateVideoTitles(userEssays);
-    } catch (error) {
-      console.error('Error loading essays:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [user, loadEssays, updateVideoTitles]);
 
   if (loading || isLoading) {
     return (
@@ -116,7 +126,7 @@ export default function YouTuberDashboardPage() {
   const averageTimeSpent = totalEssays > 0 ? Math.round(totalTimeSpent / totalEssays / 60) : 0;
   const allUnreadEssays = essays
     .filter(e => e.status === 'feedback_completed' && !e.feedbackRead)
-    .sort((a, b) => (new Date(a.submittedAt as any).getTime()) - (new Date(b.submittedAt as any).getTime()));
+    .sort((a, b) => toDate(a.submittedAt).getTime() - toDate(b.submittedAt).getTime());
   const unreadEssays = allUnreadEssays.slice(0, 5);
   const unreadCount = allUnreadEssays.length;
   const remainingCount = unreadCount - 5;
@@ -247,7 +257,7 @@ export default function YouTuberDashboardPage() {
                              </span>
                            </div>
                            <p className="text-sm text-gray-500">
-                             {new Date(essay.submittedAt as any).toLocaleDateString('ja-JP')} {new Date(essay.submittedAt as any).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
+                             {toDate(essay.submittedAt).toLocaleDateString('ja-JP')} {toDate(essay.submittedAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
                            </p>
                            <p className="text-sm text-gray-500 mt-1">
                              語数 {essay.wordCount || 0} ・ 所要 {Math.round((essay.timeSpent || 0)/60)}分

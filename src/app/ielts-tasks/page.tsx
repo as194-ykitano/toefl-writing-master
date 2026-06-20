@@ -1,8 +1,7 @@
 "use client"
-import Layout from "@/components/layout"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Headphones, PenTool, ArrowRight, LogOut, MessageSquare, FileText, BarChart3, Edit3 } from "lucide-react"
+import { BookOpen, PenTool, ArrowRight, LogOut, MessageSquare, FileText, BarChart3, Edit3 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getTasks } from "@/lib/firebase"
 import { Task } from "@/lib/types"
@@ -45,6 +44,8 @@ const getTaskTypeLabel = (taskType: string) => {
   }
 }
 
+void getTaskTypeLabel;
+
 const getTaskTypeColor = (taskType: string) => {
   switch (taskType) {
     case "task1":
@@ -68,7 +69,7 @@ export default function IELTSTasksPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);
@@ -107,7 +108,7 @@ export default function IELTSTasksPage() {
       if (!user) return;
       
       try {
-        const { collection, query, getDocs, doc } = await import('firebase/firestore');
+        const { collection, getDocs } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
         
         const essaysRef = collection(db, 'users', user.uid, 'essays');

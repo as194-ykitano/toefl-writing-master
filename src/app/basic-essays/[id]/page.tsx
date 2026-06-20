@@ -20,6 +20,18 @@ export default function BasicEssayDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const toDate = (value: BasicEssay["submittedAt"]): Date | null => {
+    if (value instanceof Date) return value;
+    if (value && typeof value === 'object' && 'toDate' in value && typeof value.toDate === 'function') {
+      return value.toDate();
+    }
+    if (typeof value === 'number' || typeof value === 'string') {
+      const parsed = new Date(value);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    }
+    return null;
+  };
+
   useEffect(() => {
     const loadEssay = async () => {
       if (!user || !id) return;
@@ -38,7 +50,7 @@ export default function BasicEssayDetailPage() {
         if (data.status === 'feedback_completed' && !data.feedbackRead) {
           await markBasicFeedbackAsRead(id as string, user.uid);
         }
-      } catch (e) {
+      } catch {
         setError('エッセイの読み込み中にエラーが発生しました。');
       } finally {
         setLoading(false);
@@ -195,18 +207,7 @@ export default function BasicEssayDetailPage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">エッセイ詳細（Basic）</h1>
               <p className="mt-2 text-gray-600">提出日: {(() => {
-                let dateObj: Date | null = null;
-                const val = essay.submittedAt as any;
-                if (val && typeof val === 'object' && typeof val.toDate === 'function') {
-                  dateObj = val.toDate();
-                } else if (val instanceof Date) {
-                  dateObj = val;
-                } else if (typeof val === 'number') {
-                  dateObj = new Date(val);
-                } else if (typeof val === 'string') {
-                  const parsed = new Date(val);
-                  if (!isNaN(parsed.getTime())) dateObj = parsed;
-                }
+                const dateObj = toDate(essay.submittedAt);
                 return dateObj
                   ? dateObj.toLocaleDateString('ja-JP', {
                       year: 'numeric',

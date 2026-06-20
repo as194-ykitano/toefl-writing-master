@@ -15,6 +15,7 @@ import {
   Tooltip,
   Legend,
   ChartData,
+  TooltipItem,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -110,7 +111,7 @@ export default function ScoreChart() {
         boxPadding: 6,
         usePointStyle: true,
         callbacks: {
-          label: function(context: any) {
+          label: function(context: TooltipItem<'line'>) {
             return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}点`;
           }
         }

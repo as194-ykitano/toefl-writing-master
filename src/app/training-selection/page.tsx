@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { BookOpen, Globe, Target, Play, GraduationCap, Users, FileText, Video, Zap, HelpCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { GraduationCap, Users, FileText, Video, HelpCircle } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { TrainingPermission } from "@/lib/types";
@@ -21,16 +21,7 @@ export default function TrainingSelectionPage() {
   });
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-    if (user && !permissionsLoaded) {
-      fetchUserPermissions();
-    }
-  }, [user, loading, router, permissionsLoaded]);
-
-  const fetchUserPermissions = async () => {
+  const fetchUserPermissions = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -46,7 +37,16 @@ export default function TrainingSelectionPage() {
       console.error("Error fetching user permissions:", error);
       setPermissionsLoaded(true);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+    if (user && !permissionsLoaded) {
+      fetchUserPermissions();
+    }
+  }, [user, loading, router, permissionsLoaded, fetchUserPermissions]);
 
   if (loading) {
     return (

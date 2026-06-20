@@ -1,5 +1,4 @@
 "use client"
-import Layout from "@/components/layout"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { BookOpen, Headphones, PenTool, ArrowRight, LogOut, MessageSquare, FileText } from "lucide-react"
@@ -34,7 +33,7 @@ export default function TasksPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

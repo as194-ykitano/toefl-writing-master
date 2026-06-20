@@ -3,7 +3,7 @@
 import type React from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Menu, X } from "lucide-react"
+import { X } from "lucide-react"
 import { useState } from "react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"

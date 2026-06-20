@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 
+type ErrorWithMessage = { message?: string };
+
 export default function ResetPasswordForm() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -20,8 +22,8 @@ export default function ResetPasswordForm() {
     try {
       await resetPassword(email);
       setSuccess(true);
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as ErrorWithMessage).message || 'リセットメールの送信に失敗しました');
     } finally {
       setLoading(false);
     }
