@@ -4,7 +4,6 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import NotificationToastWrapper from "@/components/NotificationToastWrapper";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });

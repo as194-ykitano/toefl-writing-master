@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { collection, query, orderBy, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { FileText, ArrowLeft, Clock, Target, MessageSquare, LogOut, AlertCircle, CheckCircle } from "lucide-react";
+import { FileText, Clock, Target, MessageSquare, LogOut, AlertCircle, CheckCircle } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
@@ -39,6 +39,13 @@ type Essay = {
 
 type TabType = 'all' | 'unread' | 'read';
 
+type IELTSEssayTask = {
+  id: string;
+  title?: string;
+  content?: string;
+  taskType?: 'task1' | 'task2';
+};
+
 export default function IELTSEssaysPage() {
   const { user, logout } = useAuth();
   const router = useRouter();
@@ -47,7 +54,7 @@ export default function IELTSEssaysPage() {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [selectedTaskType, setSelectedTaskType] = useState<'task1' | 'task2'>('task1');
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<IELTSEssayTask[]>([]);
 
   useEffect(() => {
     const fetchEssays = async () => {
@@ -143,13 +150,13 @@ export default function IELTSEssaysPage() {
         setEssays(ieltsEssays);
         
         // タスク情報を取得
-        const allTasks: any[] = [];
+        const allTasks: IELTSEssayTask[] = [];
         for (const essay of ieltsEssays) {
           if (essay.taskId) {
             try {
               const taskDoc = await getDoc(doc(db, 'tasks', essay.taskId));
               if (taskDoc.exists()) {
-                const taskData: any = { id: essay.taskId, ...taskDoc.data() };
+                const taskData = { id: essay.taskId, ...taskDoc.data() } as IELTSEssayTask;
                 allTasks.push(taskData);
                 // デバッグ用: タスク情報をコンソールに出力
                 console.log(`Task ${essay.taskId}:`, {
@@ -363,7 +370,7 @@ export default function IELTSEssaysPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

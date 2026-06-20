@@ -30,10 +30,14 @@ export function getDefaultTrainingPermissions() {
   };
 }
 
+type TrainingType = 'toefl' | 'toeflAcademicDiscussion' | 'ielts' | 'basic' | 'youtuber';
+
+type TrainingPermissionMap = Partial<Record<TrainingType, boolean>>;
+
 /**
  * ユーザーのトレーニング権限をチェック
  */
-export function checkTrainingPermission(userPermissions: any, trainingType: 'toefl' | 'toeflAcademicDiscussion' | 'ielts' | 'basic' | 'youtuber'): boolean {
+export function checkTrainingPermission(userPermissions: TrainingPermissionMap | null | undefined, trainingType: TrainingType): boolean {
   if (!userPermissions) {
     return trainingType === 'toefl' || trainingType === 'toeflAcademicDiscussion' || trainingType === 'ielts'; // デフォルト値
   }

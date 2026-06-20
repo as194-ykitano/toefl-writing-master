@@ -1,19 +1,15 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotification } from '@/contexts/NotificationContext';
 import { getTaskById } from '@/lib/getTasks';
 import { getReadingPassageById } from '@/lib/getReadingPassages';
 import { saveEssay, getEssayFeedback } from '@/lib/firebase';
-import { Button } from '@/components/ui/button';
-import { FileText, MessageSquare, LogOut, Play, Pause, Square } from 'lucide-react';
-import Link from 'next/link';
 import Layout from '@/components/layout';
 import Timer from '@/components/timer';
 import TextAreaWithControls from '@/components/textarea-with-controls';
-import { Task, Essay } from "@/lib/types"
+import { Task } from "@/lib/types"
 import SubmissionComplete from '@/components/SubmissionComplete';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -32,7 +28,6 @@ export default function WritingPage({ params }: { params: Promise<{ taskId: stri
   const [writingStartTime, setWritingStartTime] = useState<Date | null>(new Date())
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [loading, setLoading] = useState(true)
-  const [essay, setEssay] = useState<Essay | null>(null)
   const [submittedEssayData, setSubmittedEssayData] = useState<{
     essayId: string;
     taskTitle?: string;
@@ -42,7 +37,6 @@ export default function WritingPage({ params }: { params: Promise<{ taskId: stri
   const [showSubmissionComplete, setShowSubmissionComplete] = useState(false);
   const { user } = useAuth();
   const { showFeedbackNotification } = useNotification();
-  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,7 +65,7 @@ export default function WritingPage({ params }: { params: Promise<{ taskId: stri
             readingPassage: "No reading passage available. Please check the database."
           });
         }
-      } catch (error) {
+      } catch {
         // エラー処理
       } finally {
         setLoading(false);
@@ -157,7 +151,7 @@ export default function WritingPage({ params }: { params: Promise<{ taskId: stri
             });
           });
       }
-    } catch (error) {
+    } catch {
       alert('エッセイの保存に失敗しました。もう一度お試しください。');
     }
   }

@@ -18,6 +18,17 @@ export default function BasicEssaysPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('all');
 
+  const toDate = (value: BasicEssay["submittedAt"]): Date => {
+    if (value instanceof Date) return value;
+    if (value && typeof value === 'object' && 'toDate' in value && typeof value.toDate === 'function') {
+      return value.toDate();
+    }
+    if (typeof value === 'string' || typeof value === 'number') {
+      return new Date(value);
+    }
+    return new Date();
+  };
+
   useEffect(() => {
     const fetchEssays = async () => {
       if (!user) return;
@@ -253,7 +264,7 @@ export default function BasicEssaysPage() {
                     </div>
                     <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                       <span>
-                        {(essay.submittedAt instanceof Date ? essay.submittedAt : new Date(essay.submittedAt as any)).toLocaleDateString('ja-JP', {
+                        {toDate(essay.submittedAt).toLocaleDateString('ja-JP', {
                           year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                         })}
                       </span>

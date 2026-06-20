@@ -15,11 +15,10 @@ interface TaskWithPassage extends Omit<Task, 'listeningAudioURL'> {
 
 export default function ListeningPage({ params }: { params: Promise<{ taskId: string }> }) {
   const { taskId } = React.use(params);
+  const router = useRouter();
   const [taskData, setTaskData] = useState<TaskWithPassage | null>(null)
   const [loading, setLoading] = useState(true)
-  const [isTestMode, setIsTestMode] = useState(false)
-  const router = useRouter()
-
+  const [isTestMode] = useState(false)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // 読み込み開始
@@ -41,8 +40,8 @@ export default function ListeningPage({ params }: { params: Promise<{ taskId: st
   }, [taskId]);
 
   const finishListening = () => {
-    router.push(`/tasks/${taskId}/writing`)
-  }
+    router.push(`/tasks/${taskId}/writing`);
+  };
 
   if (loading || !taskData || !taskData.listeningAudioURL) {
     return (

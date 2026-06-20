@@ -7,7 +7,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { collection, query, where, orderBy, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getThisMonthVocabularyCount } from "@/lib/firebase";
 import { Line } from 'react-chartjs-2';
@@ -21,9 +21,10 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartData
+  ChartData,
+  TooltipItem
 } from 'chart.js';
-import { TrendingUp, BookOpen, Clock, FileText, BarChart2, MessageSquare, LogOut, Target, Calendar, CheckCircle, AlertCircle, Settings, List } from 'lucide-react';
+import { TrendingUp, BookOpen, FileText, MessageSquare, LogOut, Target, AlertCircle, Settings, List } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
@@ -103,7 +104,6 @@ type EssayWithScores = {
 export default function DashboardPage() {
   const { user, logout } = useAuth();
   const { 
-    unreadFeedbackCount, 
     isNotificationVisible, 
     notificationEssayId, 
     notificationTaskTitle,
@@ -188,8 +188,8 @@ export default function DashboardPage() {
       }
     };
 
-    const processEssayData = (querySnapshot: any): EssayWithScores[] => {
-      const essayList = querySnapshot.docs.map((doc: any) => {
+    const processEssayData = (querySnapshot: { docs: QueryDocumentSnapshot<DocumentData>[] }): EssayWithScores[] => {
+      const essayList = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         // submittedAtの処理を安全に行う
         let submittedAt: string;
@@ -333,7 +333,7 @@ export default function DashboardPage() {
         },
         padding: 12,
         callbacks: {
-          label: function(context: any) {
+          label: function(context: TooltipItem<'line'>) {
             return `${getScoreLabel(selectedScoreType)}: ${context.parsed.y}点`;
           }
         }
@@ -380,7 +380,7 @@ export default function DashboardPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

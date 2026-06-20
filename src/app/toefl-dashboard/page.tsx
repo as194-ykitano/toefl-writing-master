@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useEffect, useState } from "react"
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,7 +7,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { collection, query, where, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getThisMonthVocabularyCount } from "@/lib/firebase";
 import { Line } from 'react-chartjs-2';
@@ -21,9 +21,10 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartData
+  ChartData,
+  TooltipItem
 } from 'chart.js';
-import { TrendingUp, BookOpen, Clock, FileText, MessageCircle, MessageSquare, LogOut, Target, Calendar, CheckCircle, AlertCircle, Settings, List } from 'lucide-react';
+import { TrendingUp, BookOpen, FileText, MessageSquare, LogOut, Target, AlertCircle, Settings, List } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
@@ -36,7 +37,7 @@ import {
 import NotificationToast from '@/components/NotificationToast';
 import { isAdmin } from '@/lib/utils';
 
-// Chart.jsの登録
+// Chart.js縺ｮ逋ｻ骭ｲ
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -111,7 +112,6 @@ type EssayWithScores = {
 export default function TOEFLDashboardPage() {
   const { user, logout } = useAuth();
   const { 
-    unreadFeedbackCount, 
     isNotificationVisible, 
     notificationEssayId, 
     notificationTaskTitle,
@@ -132,7 +132,7 @@ export default function TOEFLDashboardPage() {
       try {
         setLoading(true);
         
-        // エッセイと単語数を並行して取得
+        // 繧ｨ繝・そ繧､縺ｨ蜊倩ｪ樊焚繧剃ｸｦ陦後＠縺ｦ蜿門ｾ・
         const [essayList, vocabularyCount] = await Promise.all([
           fetchEssays(),
           getThisMonthVocabularyCount(user.uid)
@@ -151,7 +151,7 @@ export default function TOEFLDashboardPage() {
       const essaysRef = collection(db, 'users', user!.uid, 'essays');
       
       try {
-        // 全エッセイを取得
+        // 蜈ｨ繧ｨ繝・そ繧､繧貞叙蠕・
         const q = query(
           essaysRef,
           orderBy('submittedAt', 'desc')
@@ -159,14 +159,14 @@ export default function TOEFLDashboardPage() {
         const querySnapshot = await getDocs(q);
         const allEssays = processEssayData(querySnapshot);
         
-        // TOEFL Academic Discussionの問題のみをフィルタリング
+        // TOEFL Academic Discussion縺ｮ蝠城｡後・縺ｿ繧偵ヵ繧｣繝ｫ繧ｿ繝ｪ繝ｳ繧ｰ
         const toeflEssays = [];
-        const taskDataMap = new Map(); // タスク情報をキャッシュ
+        const taskDataMap = new Map(); // 繧ｿ繧ｹ繧ｯ諠・ｱ繧偵く繝｣繝・す繝･
         
         for (const essay of allEssays) {
           if (essay.taskId) {
             try {
-              // タスク情報を取得（キャッシュがあれば使用）
+              // 繧ｿ繧ｹ繧ｯ諠・ｱ繧貞叙蠕暦ｼ医く繝｣繝・す繝･縺後≠繧後・菴ｿ逕ｨ・・
               let taskData;
               if (taskDataMap.has(essay.taskId)) {
                 taskData = taskDataMap.get(essay.taskId);
@@ -179,51 +179,51 @@ export default function TOEFLDashboardPage() {
               }
               
               if (taskData) {
-                // TOEFL Academic Discussionタスクの条件: taskTypeフィールドが"academic_discussion"
+                // TOEFL Academic Discussion繧ｿ繧ｹ繧ｯ縺ｮ譚｡莉ｶ: taskType繝輔ぅ繝ｼ繝ｫ繝峨′"academic_discussion"
                 if (taskData.taskType === 'academic_discussion') {
                   toeflEssays.push(essay);
                 }
               }
             } catch (error) {
-              console.log(`タスク ${essay.taskId} の取得に失敗しました:`, error);
+              console.log(`繧ｿ繧ｹ繧ｯ ${essay.taskId} 縺ｮ蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆:`, error);
             }
           }
         }
         
         return toeflEssays;
       } catch (error) {
-        console.error('エッセイの取得に失敗しました:', error);
+        console.error('繧ｨ繝・そ繧､縺ｮ蜿門ｾ励↓螟ｱ謨励＠縺ｾ縺励◆:', error);
         return [];
       }
     };
 
-    const processEssayData = (querySnapshot: any): EssayWithScores[] => {
+    const processEssayData = (querySnapshot: { docs: QueryDocumentSnapshot<DocumentData>[] }): EssayWithScores[] => {
       const essayList = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
         const data = doc.data();
-        // submittedAtの処理を安全に行う
+        // submittedAt縺ｮ蜃ｦ逅・ｒ螳牙・縺ｫ陦後≧
         let submittedAt: string;
         if (data.submittedAt?.toDate) {
-          // Firestoreのタイムスタンプの場合
+          // Firestore縺ｮ繧ｿ繧､繝繧ｹ繧ｿ繝ｳ繝励・蝣ｴ蜷・
           submittedAt = data.submittedAt.toDate().toISOString();
         } else if (data.submittedAt instanceof Date) {
-          // Dateオブジェクトの場合
+          // Date繧ｪ繝悶ず繧ｧ繧ｯ繝医・蝣ｴ蜷・
           submittedAt = data.submittedAt.toISOString();
         } else if (typeof data.submittedAt === 'string') {
-          // 既に文字列の場合
+          // 譌｢縺ｫ譁・ｭ怜・縺ｮ蝣ｴ蜷・
           submittedAt = data.submittedAt;
         } else if (typeof data.submittedAt === 'number') {
-          // タイムスタンプの場合
+          // 繧ｿ繧､繝繧ｹ繧ｿ繝ｳ繝励・蝣ｴ蜷・
           submittedAt = new Date(data.submittedAt).toISOString();
         } else {
-          // デフォルト値
+          // 繝・ヵ繧ｩ繝ｫ繝亥､
           submittedAt = new Date().toISOString();
         }
 
-        // フィードバックデータの処理
+        // 繝輔ぅ繝ｼ繝峨ヰ繝・け繝・・繧ｿ縺ｮ蜃ｦ逅・
         const feedback = data.feedback || {};
         const detailedScores = feedback.detailedScores || {};
         
-        // TOEFL Academic Discussion用のスコア計算
+        // TOEFL Academic Discussion逕ｨ縺ｮ繧ｹ繧ｳ繧｢險育ｮ・
         const topicDevelopmentScore = detailedScores.topicDevelopment || 0;
         const languageUseScore = detailedScores.languageUse || 0;
         const organizationScore = detailedScores.organization || 0;
@@ -257,7 +257,7 @@ export default function TOEFLDashboardPage() {
     fetchData();
   }, [user]);
 
-  // 平均点の算出
+  // 蟷ｳ蝮・せ縺ｮ邂怜・
   const averageScore = essays.length > 0
     ? Math.round(essays.reduce((sum, e) => sum + (e.score || 0), 0) / essays.length * 10) / 10
     : 0;
@@ -266,7 +266,7 @@ export default function TOEFLDashboardPage() {
     ? Math.round(Math.max(...essays.map((e) => e.score || 0)) * 2) / 2
     : 0;
 
-  // スコア推移グラフのデータを準備
+  // 繧ｹ繧ｳ繧｢謗ｨ遘ｻ繧ｰ繝ｩ繝輔・繝・・繧ｿ繧呈ｺ門ｙ
   const getScoreData = (type: ScoreType) => {
     const scoreData = essays
       .slice()
@@ -307,7 +307,7 @@ export default function TOEFLDashboardPage() {
       case 'development':
         return 'Development';
       default:
-        return '総合スコア';
+        return '邱丞粋繧ｹ繧ｳ繧｢';
     }
   };
 
@@ -353,8 +353,8 @@ export default function TOEFLDashboardPage() {
         },
         padding: 12,
         callbacks: {
-          label: function(context: any) {
-            return `${getScoreLabel(selectedScoreType)}: ${context.parsed.y}点`;
+          label: function(context: TooltipItem<'line'>) {
+            return `${getScoreLabel(selectedScoreType)}: ${context.parsed.y}轤ｹ`;
           }
         }
       },
@@ -389,7 +389,7 @@ export default function TOEFLDashboardPage() {
     }
   };
 
-  // Academic Discussion（このページで取得したもの）に限定した未読数
+  // Academic Discussion・医％縺ｮ繝壹・繧ｸ縺ｧ蜿門ｾ励＠縺溘ｂ縺ｮ・峨↓髯仙ｮ壹＠縺滓悴隱ｭ謨ｰ
   const toeflUnreadCount = essays.filter(essay =>
     (essay.status === 'completed' || essay.status === 'feedback_completed') &&
     essay.feedback &&
@@ -400,8 +400,8 @@ export default function TOEFLDashboardPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
-      alert('ログアウトに失敗しました');
+    } catch {
+      alert('繝ｭ繧ｰ繧｢繧ｦ繝医↓螟ｱ謨励＠縺ｾ縺励◆');
     }
     setLogoutDialogOpen(false);
   };
@@ -419,8 +419,8 @@ export default function TOEFLDashboardPage() {
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">データを読み込み中...</h1>
-              <p className="text-gray-600">しばらくお待ちください。</p>
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">繝・・繧ｿ繧定ｪｭ縺ｿ霎ｼ縺ｿ荳ｭ...</h1>
+              <p className="text-gray-600">縺励・繧峨￥縺雁ｾ・■縺上□縺輔＞縲・</p>
             </div>
           </div>
         </div>
@@ -431,12 +431,12 @@ export default function TOEFLDashboardPage() {
   return (
     <ProtectedRoute>
       <div className="max-w-6xl mx-auto px-8 py-8">
-        {/* ヘッダー部分 */}
+        {/* 繝倥ャ繝繝ｼ驛ｨ蛻・*/}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link href="/training-selection">
               <Button variant="outline" className="text-gray-600 hover:text-gray-800">
-                ← トレーニング選択に戻る
+                竊・繝医Ξ繝ｼ繝九Φ繧ｰ驕ｸ謚槭↓謌ｻ繧・
               </Button>
             </Link>
             <h1 className="text-2xl font-bold text-gray-900">Academic Discussion</h1>
@@ -444,13 +444,13 @@ export default function TOEFLDashboardPage() {
           <div className="flex items-center gap-4">
             <Link href="/toefl-tasks">
               <Button className="bg-blue-600 hover:bg-blue-700">
-                <FileText className="w-4 h-4 mr-2" /> 演習を始める
+                <FileText className="w-4 h-4 mr-2" /> 貍皮ｿ偵ｒ蟋九ａ繧・
               </Button>
             </Link>
             <Link href="/toefl-essays">
               <Button variant="outline" className="relative">
                 <MessageSquare className="w-4 h-4 mr-2" /> 
-                過去のエッセイ
+                驕主悉縺ｮ繧ｨ繝・そ繧､
                 {toeflUnreadCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {toeflUnreadCount}
@@ -458,43 +458,43 @@ export default function TOEFLDashboardPage() {
                 )}
               </Button>
             </Link>
-            {/* 管理者のみ表示されるadmin dashboardへのリンク */}
+            {/* 邂｡逅・・・縺ｿ陦ｨ遉ｺ縺輔ｌ繧蟻dmin dashboard縺ｸ縺ｮ繝ｪ繝ｳ繧ｯ */}
             {user && isAdmin(user.email) && (
               <Link href="/admin/dashboard">
                 <Button variant="outline" className="bg-blue-50 hover:bg-blue-100 border-blue-200">
                   <Settings className="w-4 h-4 mr-2" />
-                  管理者ダッシュボード
+                  邂｡逅・・ム繝・す繝･繝懊・繝・
                 </Button>
               </Link>
             )}
-            {/* ログアウトボタン */}
+            {/* 繝ｭ繧ｰ繧｢繧ｦ繝医・繧ｿ繝ｳ */}
             <Button variant="ghost" onClick={() => setLogoutDialogOpen(true)}>
-              <LogOut className="w-4 h-4 mr-2" /> ログアウト
+              <LogOut className="w-4 h-4 mr-2" /> 繝ｭ繧ｰ繧｢繧ｦ繝・
             </Button>
           </div>
         </div>
 
-        {/* ログアウト確認ダイアログ */}
+        {/* 繝ｭ繧ｰ繧｢繧ｦ繝育｢ｺ隱阪ム繧､繧｢繝ｭ繧ｰ */}
         <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>ログアウトの確認</DialogTitle>
+              <DialogTitle>繝ｭ繧ｰ繧｢繧ｦ繝医・遒ｺ隱・</DialogTitle>
               <DialogDescription>
-                ログアウトしてもよろしいですか？
+                繝ｭ繧ｰ繧｢繧ｦ繝医＠縺ｦ繧ゅｈ繧阪＠縺・〒縺吶°・・
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <Button variant="outline" onClick={() => setLogoutDialogOpen(false)}>
-                キャンセル
+                繧ｭ繝｣繝ｳ繧ｻ繝ｫ
               </Button>
               <Button variant="destructive" onClick={handleLogout}>
-                ログアウト
+                繝ｭ繧ｰ繧｢繧ｦ繝・
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
-        {/* 通知トースト */}
+        {/* 騾夂衍繝医・繧ｹ繝・*/}
         <NotificationToast
           essayId={notificationEssayId || ''}
           taskTitle={notificationTaskTitle || undefined}
@@ -505,59 +505,59 @@ export default function TOEFLDashboardPage() {
         />
 
         <div className="max-w-7xl mx-auto">
-          {/* 統計カード */}
+          {/* 邨ｱ險医き繝ｼ繝・*/}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">総演習回数</CardTitle>
+                <CardTitle className="text-sm font-medium">邱乗ｼ皮ｿ貞屓謨ｰ</CardTitle>
                 <BookOpen className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{totalAttempts}</div>
                 <p className="text-xs text-muted-foreground">
-                  これまでに提出したエッセイの数
+                  縺薙ｌ縺ｾ縺ｧ縺ｫ謠仙・縺励◆繧ｨ繝・そ繧､縺ｮ謨ｰ
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">平均スコア</CardTitle>
+                <CardTitle className="text-sm font-medium">蟷ｳ蝮・せ繧ｳ繧｢</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{averageScore}</div>
                 <p className="text-xs text-muted-foreground">
-                  Academic Discussionエッセイの平均スコア
+                  Academic Discussion繧ｨ繝・そ繧､縺ｮ蟷ｳ蝮・せ繧ｳ繧｢
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">最高スコア</CardTitle>
+                <CardTitle className="text-sm font-medium">譛鬮倥せ繧ｳ繧｢</CardTitle>
                 <Target className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{bestScore}</div>
                 <p className="text-xs text-muted-foreground">
-                  これまでの最高スコア
+                  縺薙ｌ縺ｾ縺ｧ縺ｮ譛鬮倥せ繧ｳ繧｢
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hidden cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 border-2 border-transparent hover:border-blue-200 bg-gradient-to-br from-white to-blue-50/30" onClick={() => router.push('/vocabularylist')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">単語リスト</CardTitle>
+                <CardTitle className="text-sm font-medium">蜊倩ｪ槭Μ繧ｹ繝・</CardTitle>
                 <List className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{thisMonthVocabularyCount}</div>
                 <p className="text-xs text-muted-foreground">
-                  今月追加された単語・フレーズ
+                  莉頑怦霑ｽ蜉縺輔ｌ縺溷腰隱槭・繝輔Ξ繝ｼ繧ｺ
                 </p>
                 <div className="mt-2 flex items-center gap-1 text-xs text-blue-600">
-                  <span>詳細を見る</span>
+                  <span>隧ｳ邏ｰ繧定ｦ九ｋ</span>
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -566,11 +566,11 @@ export default function TOEFLDashboardPage() {
             </Card>
           </div>
 
-          {/* スコア推移チャート */}
+          {/* 繧ｹ繧ｳ繧｢謗ｨ遘ｻ繝√Ε繝ｼ繝・*/}
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>スコア推移</CardTitle>
+                <CardTitle>繧ｹ繧ｳ繧｢謗ｨ遘ｻ</CardTitle>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setSelectedScoreType('total')}
@@ -580,7 +580,7 @@ export default function TOEFLDashboardPage() {
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    総合
+                    邱丞粋
                   </button>
                   <button
                     onClick={() => setSelectedScoreType('topic_development')}
@@ -633,13 +633,13 @@ export default function TOEFLDashboardPage() {
               ) : essays.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">
-                    Academic Discussionのエッセイが提出されていません。
+                    Academic Discussion縺ｮ繧ｨ繝・そ繧､縺梧署蜃ｺ縺輔ｌ縺ｦ縺・∪縺帙ｓ縲・
                   </p>
                   <p className="text-sm text-gray-400 mt-2">
-                    新しいエッセイを書いてみてください。
+                    譁ｰ縺励＞繧ｨ繝・そ繧､繧呈嶌縺・※縺ｿ縺ｦ縺上□縺輔＞縲・
                   </p>
                   <Button asChild className="mt-4 bg-blue-600 hover:bg-blue-700">
-                    <Link href="/toefl-tasks">新しいエッセイを書く</Link>
+                    <Link href="/toefl-tasks">譁ｰ縺励＞繧ｨ繝・そ繧､繧呈嶌縺・</Link>
                   </Button>
                 </div>
               ) : (
@@ -650,10 +650,10 @@ export default function TOEFLDashboardPage() {
             </CardContent>
           </Card>
 
-          {/* 未確認のフィードバック */}
+          {/* 譛ｪ遒ｺ隱阪・繝輔ぅ繝ｼ繝峨ヰ繝・け */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>未確認のフィードバック</CardTitle>
+              <CardTitle>譛ｪ遒ｺ隱阪・繝輔ぅ繝ｼ繝峨ヰ繝・け</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -663,13 +663,13 @@ export default function TOEFLDashboardPage() {
               ) : essays.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">
-                    Academic Discussionのエッセイが提出されていません。
+                    Academic Discussion縺ｮ繧ｨ繝・そ繧､縺梧署蜃ｺ縺輔ｌ縺ｦ縺・∪縺帙ｓ縲・
                   </p>
                   <p className="text-sm text-gray-400 mt-2">
-                    新しいエッセイを書いてみてください。
+                    譁ｰ縺励＞繧ｨ繝・そ繧､繧呈嶌縺・※縺ｿ縺ｦ縺上□縺輔＞縲・
                   </p>
                   <Button asChild className="mt-4 bg-blue-600 hover:bg-blue-700">
-                    <Link href="/toefl-tasks">新しいエッセイを書く</Link>
+                    <Link href="/toefl-tasks">譁ｰ縺励＞繧ｨ繝・そ繧､繧呈嶌縺・</Link>
                   </Button>
                 </div>
               ) : (
@@ -693,21 +693,21 @@ export default function TOEFLDashboardPage() {
                             {new Date(essay.submittedAt).toLocaleDateString('ja-JP')} {new Date(essay.submittedAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
                           </h3>
                           <p className="text-sm text-gray-500 mt-1">
-                            スコア: {essay.score !== undefined && essay.score !== null ? 
+                            繧ｹ繧ｳ繧｢: {essay.score !== undefined && essay.score !== null ? 
                               essay.score.toFixed(1) : 
-                              essay.status === 'processing' ? 'AI添削中' :
-                              essay.status === 'error' ? 'エラー' :
-                              '評価中'}
+                              essay.status === 'processing' ? 'AI豺ｻ蜑贋ｸｭ' :
+                              essay.status === 'error' ? '繧ｨ繝ｩ繝ｼ' :
+                              '隧穂ｾ｡荳ｭ'}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          {/* 未読バッジのみ表示 */}
+                          {/* 譛ｪ隱ｭ繝舌ャ繧ｸ縺ｮ縺ｿ陦ｨ遉ｺ */}
                           <div className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
                             <AlertCircle className="w-3 h-3" />
-                            <span>未読</span>
+                            <span>譛ｪ隱ｭ</span>
                           </div>
                           <Button asChild variant="outline" size="sm">
-                            <Link href={`/dashboard/essays/${essay.id}`}>詳細を見る</Link>
+                            <Link href={`/dashboard/essays/${essay.id}`}>隧ｳ邏ｰ繧定ｦ九ｋ</Link>
                           </Button>
                         </div>
                       </div>
@@ -718,14 +718,14 @@ export default function TOEFLDashboardPage() {
                       </div>
                     </div>
                   ))}
-                  {/* 未読のフィードバックがない場合のメッセージ */}
+                  {/* 譛ｪ隱ｭ縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け縺後↑縺・ｴ蜷医・繝｡繝・そ繝ｼ繧ｸ */}
                   {essays.filter(essay => 
                     (essay.status === 'completed' || essay.status === 'feedback_completed') && 
                     essay.feedback && 
                     !essay.feedbackRead
                   ).length === 0 && (
                     <div className="text-center py-8">
-                      <p className="text-gray-500">未確認のフィードバックはありません。</p>
+                      <p className="text-gray-500">譛ｪ遒ｺ隱阪・繝輔ぅ繝ｼ繝峨ヰ繝・け縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲・</p>
                     </div>
                   )}
                 </div>
@@ -737,3 +737,4 @@ export default function TOEFLDashboardPage() {
     </ProtectedRoute>
   );
 }
+

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotification } from "@/contexts/NotificationContext";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, FileText, Target, TrendingUp, Bell, Eye, MessageSquare, LogOut, Settings } from "lucide-react";
+import { Clock, FileText, Target, TrendingUp, MessageSquare, LogOut, Settings } from "lucide-react";
 import { getBasicEssays } from "@/lib/firebase";
 import { BasicEssay } from "@/lib/types";
 import Link from "next/link";
@@ -33,16 +33,18 @@ export default function BasicDashboardPage() {
   const [viewEssayId, setViewEssayId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
+  const toDate = (value: BasicEssay["submittedAt"]): Date => {
+    if (value instanceof Date) return value;
+    if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") {
+      return value.toDate();
     }
-    if (user && loadingEssays) {
-      fetchEssays();
+    if (typeof value === "string" || typeof value === "number") {
+      return new Date(value);
     }
-  }, [user, loading, router, loadingEssays]);
+    return new Date();
+  };
 
-  const fetchEssays = async () => {
+  const fetchEssays = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -53,7 +55,16 @@ export default function BasicDashboardPage() {
     } finally {
       setLoadingEssays(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+    if (user && loadingEssays) {
+      fetchEssays();
+    }
+  }, [user, loading, router, loadingEssays, fetchEssays]);
 
   // Handle view query param to open modal
   useEffect(() => {
@@ -97,7 +108,7 @@ export default function BasicDashboardPage() {
     .filter(e => (
       e.status === 'feedback_completed' && !e.feedbackRead
     ))
-    .sort((a, b) => (new Date(a.submittedAt as any).getTime()) - (new Date(b.submittedAt as any).getTime()))
+    .sort((a, b) => toDate(a.submittedAt).getTime() - toDate(b.submittedAt).getTime())
     .slice(0, 5);
   const unreadCount = essays.filter(e => (
     e.status === 'feedback_completed' && !e.feedbackRead
@@ -227,7 +238,7 @@ export default function BasicDashboardPage() {
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-medium">
-                            {new Date(essay.submittedAt as any).toLocaleDateString('ja-JP')} {new Date(essay.submittedAt as any).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
+                            {toDate(essay.submittedAt).toLocaleDateString('ja-JP')} {toDate(essay.submittedAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
                           </h3>
                           <p className="text-sm text-gray-500 mt-1">
                             語数 {essay.wordCount || 0} ・ 所要 {Math.round((essay.timeSpent || 0)/60)}分
@@ -293,9 +304,9 @@ export default function BasicDashboardPage() {
                         {essay.feedback.grammarCorrections.corrections.map((c, i) => (
                           <div key={i} className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
                             <div className="text-sm text-gray-600 mb-1">原文:</div>
-                            <div className="text-gray-800 font-medium mb-1">"{c.original}"</div>
+                            <div className="text-gray-800 font-medium mb-1">&quot;{c.original}&quot;</div>
                             <div className="text-sm text-gray-600 mb-1">修正後:</div>
-                            <div className="text-green-800 font-medium mb-1">"{c.corrected}"</div>
+                            <div className="text-green-800 font-medium mb-1">&quot;{c.corrected}&quot;</div>
                             <div className="text-sm text-gray-600 mb-1">説明:</div>
                             <div className="text-gray-700">{c.explanation}</div>
                           </div>

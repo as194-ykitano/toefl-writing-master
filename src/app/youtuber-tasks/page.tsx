@@ -4,15 +4,14 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotification } from "@/contexts/NotificationContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
-import { Play, Clock, Target, ArrowLeft, Edit3, Bell, FileText, CheckCircle, AlertCircle } from "lucide-react";
+import { Play, Clock, Target, ArrowLeft, Edit3, FileText, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import { YouTubeVideo, YouTuberTask } from "@/lib/types";
-import { getYouTuberTasks, saveYouTubeVideo, saveYouTuberEssay, updateYouTuberEssayFeedback } from "@/lib/firebase";
+import { YouTubeVideo } from "@/lib/types";
+import { saveYouTubeVideo, saveYouTuberEssay, updateYouTuberEssayFeedback } from "@/lib/firebase";
 import { doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import ManualSubtitleInput from "@/components/ManualSubtitleInput";
@@ -36,7 +35,6 @@ export default function YouTuberTasksPage() {
   const [transcript, setTranscript] = useState<string | null>(null);
   const [urlInput, setUrlInput] = useState("");
   const [isUrlSearching, setIsUrlSearching] = useState(false);
-  const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [isVideoSelecting, setIsVideoSelecting] = useState(false);
   const [submittedEssayData, setSubmittedEssayData] = useState<{
     essayId: string;
@@ -45,10 +43,8 @@ export default function YouTuberTasksPage() {
     timeSpent: number;
   } | null>(null);
   const [submissionStatus, setSubmissionStatus] = useState<"processing" | "error">("processing");
-  const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
   const [showManualSubtitleInput, setShowManualSubtitleInput] = useState(false);
-  const [transcriptData, setTranscriptData] = useState<any>(null);
-  const [showHowtoDialog, setShowHowtoDialog] = useState(false);
+  const [transcriptData, setTranscriptData] = useState<{ transcript: string } | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -104,7 +100,7 @@ export default function YouTuberTasksPage() {
       });
       return () => unsubscribe();
     }
-  }, [phase, submittedEssayData?.essayId, showFeedbackNotification, user]);
+  }, [phase, submittedEssayData?.essayId, submittedEssayData?.taskTitle, showFeedbackNotification, user]);
 
   const runYouTuberAnalysis = async (essayId: string) => {
     if (!user || !selectedVideo) return;
@@ -230,13 +226,13 @@ export default function YouTuberTasksPage() {
     }
   };
 
-  const handleVideoSelect = async (video: YouTubeVideo) => {
+  const handleVideoSelect = (video: YouTubeVideo) => {
     setIsVideoSelecting(true);
     setSelectedVideo(video);
-    setTranscriptLoading(false);
+    const normalizedTranscript = cleanTranscript(video.description || '');
     // 自動取得は行わず、説明文を初期値として手動入力へ誘導
-    setTranscript(video.description || '');
-    setTranscriptData({ transcript: video.description || '' });
+    setTranscript(normalizedTranscript);
+    setTranscriptData({ transcript: normalizedTranscript });
     setShowManualSubtitleInput(true);
     setIsVideoSelecting(false);
     setPhase("video-selected");
@@ -258,11 +254,9 @@ export default function YouTuberTasksPage() {
     setIsSubmitting(true);
     try {
       // 動画をデータベースに保存（まだ保存されていない場合）
-      let videoId = selectedVideo.id;
       try {
-        const savedVideoId = await saveYouTubeVideo(selectedVideo);
-        videoId = savedVideoId;
-      } catch (error) {
+        await saveYouTubeVideo(selectedVideo);
+      } catch {
         console.log('Video already exists or save failed, using existing ID');
       }
 
@@ -438,9 +432,11 @@ export default function YouTuberTasksPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-start space-x-4">
-                <img 
-                  src={selectedVideo.thumbnailUrl} 
+                <Image
+                  src={selectedVideo.thumbnailUrl}
                   alt={selectedVideo.title}
+                  width={128}
+                  height={96}
                   className="w-32 h-24 object-cover rounded-lg"
                 />
                 <div className="flex-1">
@@ -537,9 +533,11 @@ export default function YouTuberTasksPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-start space-x-4">
-                <img 
-                  src={selectedVideo.thumbnailUrl} 
+                <Image
+                  src={selectedVideo.thumbnailUrl}
                   alt={selectedVideo.title}
+                  width={192}
+                  height={144}
                   className="w-48 h-36 object-cover rounded-lg"
                 />
                 <div className="flex-1">
@@ -703,9 +701,11 @@ export default function YouTuberTasksPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {searchResults.map((video) => (
                   <div key={video.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <img 
-                      src={video.thumbnailUrl} 
+                    <Image
+                      src={video.thumbnailUrl}
                       alt={video.title}
+                      width={320}
+                      height={128}
                       className="w-full h-32 object-cover rounded-lg mb-3"
                     />
                     <h3 className="font-semibold text-sm mb-2 line-clamp-2">{video.title}</h3>

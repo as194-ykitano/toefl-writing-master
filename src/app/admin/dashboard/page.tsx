@@ -5,14 +5,18 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy, where } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
-import { Plus, Edit, Trash2, Eye, EyeOff, Settings, Users, FileText, BarChart3, AlertTriangle, LogOut, ImageIcon, UserCheck, UserX, Play } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, EyeOff, Users, FileText, BarChart3, AlertTriangle, LogOut, ImageIcon, Play } from "lucide-react";
 import { isAdmin } from '@/lib/utils';
 import { AdminUser, TrainingPermission } from '@/lib/types';
+
+interface TimestampLike {
+  toDate?: () => Date;
+}
 
 interface Task {
   id: string;
@@ -21,7 +25,7 @@ interface Task {
   difficulty: string;
   category: string;
   status: string;
-  createdAt: any;
+  createdAt?: TimestampLike | null;
   timeLimit: number;
   imageUrl?: string; // 画像URLフィールドを追加
   taskType?: string; // IELTSタスクタイプ（task1, task2）
@@ -183,12 +187,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const openPermissionDialog = (user: AdminUser) => {
-    setSelectedUser(user);
-    setUserPermissions(user.trainingPermissions);
-    setPermissionDialogOpen(true);
-  };
-
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'easy': return 'bg-green-100 text-green-800';
@@ -210,7 +208,7 @@ export default function AdminDashboard() {
     try {
       await auth.signOut();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

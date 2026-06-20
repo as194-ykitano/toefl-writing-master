@@ -3,10 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, BookOpen, BarChart3, Target } from "lucide-react"
-import TaskDisplay from '../components/TaskDisplay'
 import { isAdmin } from '@/lib/utils';
 
 export default function HomePage() {

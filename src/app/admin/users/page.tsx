@@ -10,9 +10,9 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { collection, getDocs, doc, updateDoc, query, orderBy, deleteDoc, where } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, query, orderBy, deleteDoc } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
-import { ArrowLeft, Settings, UserCheck, UserX, Users, FileText, Trash2, Eye, AlertTriangle, Play, Edit, Key, UserMinus, GraduationCap, Video } from "lucide-react";
+import { ArrowLeft, Settings, Users, FileText, Trash2, Eye, AlertTriangle, Play, Edit, Key, UserMinus, GraduationCap, Video } from "lucide-react";
 import { isAdmin } from '@/lib/utils';
 import { AdminUser, TrainingPermission, Essay } from '@/lib/types';
 
@@ -21,6 +21,28 @@ interface ExtendedEssay extends Essay {
   collection?: string;
   taskType?: string;
   type?: string;
+  videoTitle?: string;
+  videoDescription?: string;
+  transcript?: string;
+  taskContent?: string;
+  imageUrl?: string;
+  discussionContent?: Record<string, unknown>;
+  readingPassage?: string;
+  listeningPassage?: string;
+}
+
+interface FeedbackRequestBody {
+  essayText: string;
+  prompt?: string;
+  taskType?: string;
+  videoTitle?: string;
+  videoDescription?: string;
+  transcript?: string;
+  taskContent?: string;
+  imageUrl?: string;
+  discussionContent?: Record<string, unknown>;
+  readingPassage?: string;
+  listeningPassage?: string;
 }
 
 export default function AdminUsersPage() {
@@ -260,7 +282,7 @@ export default function AdminUsersPage() {
 
       // トレーニングタイプに応じて適切なAPIを呼び出し
       let apiEndpoint = '';
-      let requestBody: any = {
+      const requestBody: FeedbackRequestBody = {
         essayText: essay.content
       };
 
@@ -270,22 +292,22 @@ export default function AdminUsersPage() {
       } else if (essay.collection === 'youTuberEssays') {
         apiEndpoint = '/api/analyze-youtuber';
         requestBody.taskType = essay.taskType || 'summary';
-        requestBody.videoTitle = (essay as any).videoTitle || '';
-        requestBody.videoDescription = (essay as any).videoDescription || '';
-        requestBody.transcript = (essay as any).transcript || '';
+        requestBody.videoTitle = essay.videoTitle || '';
+        requestBody.videoDescription = essay.videoDescription || '';
+        requestBody.transcript = essay.transcript || '';
       } else if (essay.taskType === 'task1' || essay.taskType === 'task2') {
         apiEndpoint = '/api/analyze-ielts';
         requestBody.taskType = essay.taskType;
-        requestBody.taskContent = (essay as any).taskContent || '';
-        requestBody.imageUrl = (essay as any).imageUrl || '';
+        requestBody.taskContent = essay.taskContent || '';
+        requestBody.imageUrl = essay.imageUrl || '';
       } else if (essay.taskType === 'academic_discussion') {
         apiEndpoint = '/api/analyze-toefl-academic-discussion';
-        requestBody.discussionContent = (essay as any).discussionContent || {};
+        requestBody.discussionContent = essay.discussionContent || {};
       } else {
         // TOEFL Integrated Task
         apiEndpoint = '/api/analyze-toefl';
-        requestBody.readingPassage = (essay as any).readingPassage || '';
-        requestBody.listeningPassage = (essay as any).listeningPassage || '';
+        requestBody.readingPassage = essay.readingPassage || '';
+        requestBody.listeningPassage = essay.listeningPassage || '';
       }
 
       const response = await fetch(apiEndpoint, {

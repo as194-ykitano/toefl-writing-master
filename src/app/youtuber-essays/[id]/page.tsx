@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,21 +23,26 @@ export default function YouTuberEssayPage() {
   const [essay, setEssay] = useState<YouTuberEssay | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const toDate = (value: YouTuberEssay["submittedAt"]): Date => {
+    if (value instanceof Date) return value;
+    if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") {
+      return value.toDate();
+    }
+    if (typeof value === "string" || typeof value === "number") {
+      return new Date(value);
+    }
+    return new Date();
+  };
+
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
     }
   }, [user, loading, router]);
 
-  useEffect(() => {
-    if (user && essayId) {
-      loadEssay();
-    }
-  }, [user, essayId]);
-
-  const loadEssay = () => {
+  const loadEssay = useCallback(() => {
     if (!user || !essayId) return;
-    
+
     const essayRef = doc(db, 'users', user.uid, 'youTuberEssays', essayId);
     const unsubscribe = onSnapshot(essayRef, (snap) => {
       if (snap.exists()) {
@@ -48,8 +53,7 @@ export default function YouTuberEssayPage() {
           submittedAt: data.submittedAt instanceof Date ? data.submittedAt : data.submittedAt.toDate()
         };
         setEssay(essayData);
-        
-        // フィードバックが完了していて、まだ読まれていない場合は既読にマーク
+
         if (essayData.status === 'feedback_completed' && essayData.feedback && !essayData.feedbackRead) {
           markYouTuberFeedbackAsRead(essayId, user.uid);
         }
@@ -61,7 +65,12 @@ export default function YouTuberEssayPage() {
     });
 
     return () => unsubscribe();
-  };
+  }, [essayId, router, user]);
+
+  useEffect(() => {
+    if (!user || !essayId) return;
+    return loadEssay();
+  }, [user, essayId, loadEssay]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -77,6 +86,7 @@ export default function YouTuberEssayPage() {
         return 'bg-gray-100 text-gray-800';
     }
   };
+
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -108,8 +118,8 @@ export default function YouTuberEssayPage() {
     }
   };
 
-  const formatDate = (date: Date | any) => {
-    const dateObj = date instanceof Date ? date : (date?.toDate ? date.toDate() : new Date(date));
+  const formatDate = (date: YouTuberEssay["submittedAt"]) => {
+    const dateObj = toDate(date);
     return dateObj.toLocaleDateString('ja-JP', {
       year: 'numeric',
       month: 'long',
@@ -377,9 +387,6 @@ export default function YouTuberEssayPage() {
                         }
                         const c = corrections[span.corrIndex];
                         const highlightedText = text.slice(span.start, span.end);
-                        const isLengthMatch = highlightedText.length === (c.original || '').length;
-                        const isFirstCharMatch = highlightedText.charAt(0) === (c.original || '').charAt(0);
-
                         elements.push(
                           <Tooltip key={`corr-${span.corrIndex}-${span.start}`}>
                             <TooltipTrigger asChild>
@@ -547,7 +554,7 @@ export default function YouTuberEssayPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {resolvedForList.spans.map((span, index) => {
+                    {resolvedForList.spans.map((span) => {
                       const correction = resolvedForList.corrections[span.corrIndex];
                       const originalFromEssay = resolvedForList.text.slice(span.start, span.end);
                       return (

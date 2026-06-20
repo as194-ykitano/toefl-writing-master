@@ -4,11 +4,11 @@ import { useEffect, useState } from "react"
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotification } from '@/contexts/NotificationContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { collection, query, where, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, doc, getDoc, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { ArrowLeft, MessageSquare, FileText, MessageCircle, LogOut, Eye, Clock, BookOpen } from "lucide-react";
 import { useRouter } from 'next/navigation';
@@ -38,13 +38,22 @@ type EssayWithScores = {
   status: 'pending' | 'processing' | 'completed' | 'feedback_completed' | 'error';
   feedbackRead?: boolean;
   taskType?: string;
-  feedback?: any;
+  feedback?: {
+    overall?: string;
+    strengths?: string[];
+    improvements?: string[];
+    detailedScores?: {
+      topicDevelopment?: number;
+      languageUse?: number;
+      organization?: number;
+      development?: number;
+    };
+  };
 };
 
 export default function TOEFLEssaysPage() {
   const { user, logout } = useAuth();
   const { 
-    unreadFeedbackCount, 
     isNotificationVisible, 
     notificationEssayId, 
     notificationTaskTitle,
@@ -127,7 +136,7 @@ export default function TOEFLEssaysPage() {
       }
     };
 
-    const processEssayData = (querySnapshot: any): EssayWithScores[] => {
+    const processEssayData = (querySnapshot: { docs: QueryDocumentSnapshot<DocumentData>[] }): EssayWithScores[] => {
       const essayList = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
         const data = doc.data();
         // submittedAtの処理を安全に行う
@@ -186,7 +195,7 @@ export default function TOEFLEssaysPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);

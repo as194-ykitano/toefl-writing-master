@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Loader2, Save, AlertCircle, Play, Chrome, Copy, Globe, CheckCircle, AlertTriangle, Video } from 'lucide-react';
+import { Loader2, Save, AlertCircle, Play, Chrome, AlertTriangle, Video } from 'lucide-react';
 
 interface ManualSubtitleInputProps {
   videoId: string;
@@ -14,11 +14,8 @@ interface ManualSubtitleInputProps {
   onTranscriptSaved: (transcript: string) => void;
 }
 
-export default function ManualSubtitleInput({ 
-  videoId, 
-  fallbackTranscript, 
-  onTranscriptSaved 
-}: ManualSubtitleInputProps) {
+export default function ManualSubtitleInput(props: ManualSubtitleInputProps) {
+  const { videoId, onTranscriptSaved } = props;
   const [manualTranscript, setManualTranscript] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -58,7 +55,7 @@ export default function ManualSubtitleInput({
         setMessage(data.error || '字幕の保存に失敗しました。');
         setMessageType('error');
       }
-    } catch (error) {
+    } catch {
       setMessage('字幕の保存中にエラーが発生しました。');
       setMessageType('error');
     } finally {
@@ -131,10 +128,6 @@ export default function ManualSubtitleInput({
                   <iframe 
                     src="https://www.loom.com/embed/a83499a8fb85485b9d1670f2033d7e4a?sid=035a70c5-5e83-4b9b-bad5-a6cb47347b5c" 
                     frameBorder="0" 
-                    {...({
-                      webkitallowfullscreen: "true",
-                      mozallowfullscreen: "true"
-                    } as any)}
                     allowFullScreen 
                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                     onLoad={() => setIsVideoLoading(false)}

@@ -1,8 +1,7 @@
 "use client"
-import Layout from "@/components/layout"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Clock, FileText, ArrowRight, LogOut, MessageSquare, Users, MessageCircle } from "lucide-react"
+import { BookOpen, Clock, FileText, ArrowRight, LogOut, MessageSquare, MessageCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getTasks } from "@/lib/firebase"
 import { Task } from "@/lib/types"
@@ -24,6 +23,8 @@ const getDifficultyStyle = (difficulty: string) => {
   }
 }
 
+void getDifficultyStyle;
+
 export default function TOEFLTasksPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -36,7 +37,7 @@ export default function TOEFLTasksPage() {
     try {
       await logout();
       router.push('/login');
-    } catch (e) {
+    } catch {
       alert('ログアウトに失敗しました');
     }
     setLogoutDialogOpen(false);
@@ -75,7 +76,7 @@ export default function TOEFLTasksPage() {
       if (!user) return;
       
       try {
-        const { collection, query, getDocs, doc } = await import('firebase/firestore');
+        const { collection, getDocs } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
         
         const essaysRef = collection(db, 'users', user.uid, 'essays');
