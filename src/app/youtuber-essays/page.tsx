@@ -311,9 +311,16 @@ export default function YouTuberEssaysPage() {
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         essay.status === 'feedback_completed' ? 'bg-green-100 text-green-700' :
                         essay.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                        essay.status === 'error' ? 'bg-red-100 text-red-700' :
                         'bg-gray-100 text-gray-700'
                       }`}>
-                        {essay.status === 'feedback_completed' ? '完了' : essay.status === 'processing' ? '処理中' : '待機中'}
+                        {essay.status === 'feedback_completed'
+                          ? '完了'
+                          : essay.status === 'processing'
+                            ? '処理中'
+                            : essay.status === 'error'
+                              ? 'エラー'
+                              : '待機中'}
                       </span>
                       <div className="flex items-center gap-2">
                         {(essay.status === 'completed' || essay.status === 'feedback_completed') && essay.feedback && (

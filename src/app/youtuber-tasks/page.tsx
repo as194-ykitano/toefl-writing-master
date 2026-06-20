@@ -13,7 +13,7 @@ import { Play, Clock, Target, ArrowLeft, Edit3, Bell, FileText, CheckCircle, Ale
 import Link from "next/link";
 import { YouTubeVideo, YouTuberTask } from "@/lib/types";
 import { getYouTuberTasks, saveYouTubeVideo, saveYouTuberEssay, updateYouTuberEssayFeedback } from "@/lib/firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import ManualSubtitleInput from "@/components/ManualSubtitleInput";
 
@@ -44,6 +44,7 @@ export default function YouTuberTasksPage() {
     wordCount: number;
     timeSpent: number;
   } | null>(null);
+  const [submissionStatus, setSubmissionStatus] = useState<"processing" | "error">("processing");
   const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
   const [showManualSubtitleInput, setShowManualSubtitleInput] = useState(false);
   const [transcriptData, setTranscriptData] = useState<any>(null);
@@ -96,12 +97,60 @@ export default function YouTuberTasksPage() {
                 }
               }
             }, 3000); // 3秒後にダッシュボードに遷移（通知が確実に表示されるように）
+          } else if (data.status === 'error') {
+            setSubmissionStatus('error');
           }
         }
       });
       return () => unsubscribe();
     }
   }, [phase, submittedEssayData?.essayId, showFeedbackNotification, user]);
+
+  const runYouTuberAnalysis = async (essayId: string) => {
+    if (!user || !selectedVideo) return;
+
+    const essayRef = doc(db, 'users', user.uid, 'youTuberEssays', essayId);
+    const requestBody = {
+      essayText,
+      videoTitle: selectedVideo.title,
+      videoDescription: selectedVideo.description,
+      taskType: selectedTaskType,
+      transcript,
+    };
+
+    await updateDoc(essayRef, {
+      status: 'processing',
+      updatedAt: Timestamp.now(),
+    });
+
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      try {
+        const res = await fetch('/api/analyze-youtuber', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to analyze essay: ${res.status}`);
+        }
+
+        const feedback = await res.json();
+        await updateYouTuberEssayFeedback(essayId, user.uid, feedback);
+        return;
+      } catch (error) {
+        console.error(`Background analyze attempt ${attempt} failed:`, error);
+
+        if (attempt === 2) {
+          await updateDoc(essayRef, {
+            status: 'error',
+            updatedAt: Timestamp.now(),
+          });
+          throw error;
+        }
+      }
+    }
+  };
 
   // YouTubeのURLから動画IDを抽出する関数
   const extractVideoId = (url: string): string | null => {
@@ -239,30 +288,13 @@ export default function YouTuberTasksPage() {
         wordCount,
         timeSpent,
       });
+      setSubmissionStatus("processing");
       setPhase("submission-complete");
 
       // AI分析はバックグラウンドで実行
-      fetch('/api/analyze-youtuber', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          essayText, 
-          videoTitle: selectedVideo.title,
-          videoDescription: selectedVideo.description,
-          taskType: selectedTaskType,
-          transcript
-        }),
-      })
-        .then(async (res) => {
-          if (!res.ok) throw new Error('Failed to analyze essay');
-          const feedback = await res.json();
-          if (user) {
-            await updateYouTuberEssayFeedback(essayId, user.uid, feedback);
-          }
-        })
-        .catch((err) => {
-          console.error('Background analyze failed:', err);
-        });
+      void runYouTuberAnalysis(essayId).catch((error) => {
+        console.error('Background analyze failed after retry:', error);
+      });
     } catch (error) {
       console.error('Error submitting essay:', error);
       alert('エッセイの提出に失敗しました。もう一度お試しください。');
@@ -289,12 +321,36 @@ export default function YouTuberTasksPage() {
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <div className="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <FileText className="h-8 w-8 text-green-600" />
+            <div
+              className={`mx-auto h-16 w-16 rounded-full flex items-center justify-center mb-4 ${
+                submissionStatus === "error" ? "bg-red-100" : "bg-green-100"
+              }`}
+            >
+              {submissionStatus === "error" ? (
+                <AlertCircle className="h-8 w-8 text-red-600" />
+              ) : (
+                <FileText className="h-8 w-8 text-green-600" />
+              )}
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">提出完了！</h1>
             <p className="text-gray-600">現在添削中です！しばらくお待ちください。</p>
           </div>
+
+          {submissionStatus === "error" && (
+            <Card className="mb-8 border-red-200 bg-red-50">
+              <CardContent className="pt-6">
+                <div className="flex items-start gap-3 text-red-700">
+                  <AlertCircle className="h-5 w-5 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">フィードバック生成に失敗しました</p>
+                    <p className="text-sm">
+                      この提出は待機中のまま止まりません。管理者画面から再生成してください。
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Card className="mb-8">
             <CardHeader>
