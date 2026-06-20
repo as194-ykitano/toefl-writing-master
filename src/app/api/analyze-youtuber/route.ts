@@ -1,9 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { getGrammarCorrectionsV2 } from '@/lib/openai';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+function normalizeYouTuberFeedback(taskType: 'summary' | 'opinion', raw: unknown) {
+  const feedback = (raw && typeof raw === 'object') ? raw as Record<string, unknown> : {};
+  const grammarCorrectionsRaw = feedback.grammarCorrections;
+
+  const grammarCorrections = Array.isArray(grammarCorrectionsRaw)
+    ? { corrections: grammarCorrectionsRaw }
+    : (
+        grammarCorrectionsRaw &&
+        typeof grammarCorrectionsRaw === 'object' &&
+        'corrections' in grammarCorrectionsRaw &&
+        Array.isArray((grammarCorrectionsRaw as { corrections?: unknown }).corrections)
+      )
+      ? grammarCorrectionsRaw
+      : { corrections: [] };
+
+  return {
+    ...(taskType === 'summary'
+      ? {
+          summaryQuality: feedback.summaryQuality ?? {
+            goodPoints: [],
+            improvements: [],
+            suggestions: [],
+          },
+        }
+      : {
+          opinionQuality: feedback.opinionQuality ?? {
+            goodPoints: [],
+            improvements: [],
+            suggestions: [],
+          },
+        }),
+    grammarCorrections,
+    sampleAnswer: typeof feedback.sampleAnswer === 'string' ? feedback.sampleAnswer : '',
+  };
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -163,7 +200,25 @@ ${essayText}
 
     // JSONレスポンスをパースして検証
     try {
-      const feedback = JSON.parse(responseText);
+      const parsedFeedback = JSON.parse(responseText);
+      const feedback = normalizeYouTuberFeedback(taskType, parsedFeedback);
+
+      try {
+        const grammarCorrections = await getGrammarCorrectionsV2(essayText);
+        feedback.grammarCorrections = {
+          corrections: grammarCorrections?.corrections.map((correction) => ({
+            original: correction.original,
+            corrected: correction.corrected,
+            explanation: correction.explanation,
+            context: correction.context,
+            startIndex: correction.startIndex,
+            endIndex: correction.endIndex,
+          })) || [],
+        };
+      } catch (grammarError) {
+        console.error('Error generating grammar corrections for YouTuber essay:', grammarError);
+      }
+
       return NextResponse.json(feedback);
     } catch (parseError) {
       console.error('JSON parse error:', parseError);

@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { isAdmin } from '@/lib/utils';
 
+type ErrorWithMessage = { message?: string };
+
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,8 +38,8 @@ export default function LoginForm() {
           }
         }
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as ErrorWithMessage).message || 'ログインに失敗しました');
     } finally {
       setLoading(false);
     }

@@ -2,9 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { doc, collection, onSnapshot, query, where } from 'firebase/firestore';
+import { doc, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Essay } from '@/lib/types';
+
+type EssayNotificationDoc = Pick<Essay, 'status' | 'feedbackRead'> & {
+  taskType?: string;
+};
 
 interface NotificationContextType {
   unreadFeedbackCount: number;
@@ -131,7 +135,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       }
       snap.docChanges().forEach((change) => {
         if (change.type === 'modified' || change.type === 'added') {
-          const data = change.doc.data() as any;
+          const data = change.doc.data() as EssayNotificationDoc;
           if (data?.status === 'feedback_completed' && !data?.feedbackRead) {
             // TOEFLエッセイかIELTSエッセイかを判定
             const essayType = data?.taskType === 'ielts' ? 'ielts' : 'toefl';
@@ -148,7 +152,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       }
       snap.docChanges().forEach((change) => {
         if (change.type === 'modified' || change.type === 'added') {
-          const data = change.doc.data() as any;
+          const data = change.doc.data() as EssayNotificationDoc;
           if (data?.status === 'feedback_completed' && !data?.feedbackRead) {
             showFeedbackNotification(change.doc.id, undefined, 'basic');
           }
@@ -163,7 +167,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       }
       snap.docChanges().forEach((change) => {
         if (change.type === 'modified' || change.type === 'added') {
-          const data = change.doc.data() as any;
+          const data = change.doc.data() as EssayNotificationDoc;
           if (data?.status === 'feedback_completed' && !data?.feedbackRead) {
             showFeedbackNotification(change.doc.id, undefined, 'youtuber');
           }

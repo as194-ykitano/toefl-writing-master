@@ -105,6 +105,8 @@ export default function TaskDisplay() {
     return response.json();
   };
 
+  void analyzeEssay;
+
   return (
     <div className="max-w-6xl mx-auto px-8 py-16">
       {/* タスクセクション */}

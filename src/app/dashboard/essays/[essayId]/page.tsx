@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Clock, Target, FileText, MessageSquare, CheckCircle, AlertCircle, Lightbulb, BookOpen } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Target, FileText, CheckCircle, AlertCircle, Lightbulb, BookOpen } from 'lucide-react';
 import { Essay, Task } from '@/lib/types';
 import { getTaskById } from '@/lib/firebase';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -17,6 +17,20 @@ import TaskDetailModal from '@/components/TaskDetailModal';
 import TextSelectionMenu from '@/components/TextSelectionMenu';
 import { saveVocabularyItem } from '@/lib/firebase';
 import { useNotification } from '@/contexts/NotificationContext';
+
+type FirestoreTimestampLike = {
+  toDate: () => Date;
+};
+
+type SuggestionDetails = {
+  suggestion?: string;
+  title?: string;
+  implementation?: string;
+  whereToInclude?: string;
+  effectiveness?: string;
+  reasoning?: string;
+  example?: string;
+};
 
 export default function EssayDetailPage() {
   const { essayId } = useParams();
@@ -33,7 +47,6 @@ export default function EssayDetailPage() {
   } | null>(null);
   const { showNotification } = useNotification();
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
-  const [isLongPressing, setIsLongPressing] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
@@ -165,7 +178,6 @@ export default function EssayDetailPage() {
     const essayContainer = document.getElementById('essay-container');
     
     let containerRect: DOMRect | null = null;
-    let isInTaskDetailModal = false;
     
     if (taskDetailModal && isTaskDetailModalOpen) {
       const modalRect = taskDetailModal.getBoundingClientRect();
@@ -199,9 +211,7 @@ export default function EssayDetailPage() {
 
   // 長押し開始
   const handleMouseDown = () => {
-    setIsLongPressing(false);
     const timer = setTimeout(() => {
-      setIsLongPressing(true);
       handleTextSelection();
     }, 500); // 500ms長押しでメニューを開く
     setLongPressTimer(timer);
@@ -213,7 +223,6 @@ export default function EssayDetailPage() {
       clearTimeout(longPressTimer);
       setLongPressTimer(null);
     }
-    setIsLongPressing(false);
   };
 
   // マウス移動で長押しをキャンセル
@@ -222,7 +231,6 @@ export default function EssayDetailPage() {
       clearTimeout(longPressTimer);
       setLongPressTimer(null);
     }
-    setIsLongPressing(false);
   };
 
   // 単語・フレーズに追加
@@ -335,8 +343,13 @@ export default function EssayDetailPage() {
               <Calendar className="h-4 w-4 mr-1" />
               {(() => {
                 let dateObj: Date | null = null;
-                const val = essay.submittedAt as any;
-                if (val && typeof val === 'object' && typeof val.toDate === 'function') {
+                const val = essay.submittedAt as Date | FirestoreTimestampLike | string | number | null | undefined;
+                if (
+                  val &&
+                  typeof val === 'object' &&
+                  'toDate' in val &&
+                  typeof val.toDate === 'function'
+                ) {
                   dateObj = val.toDate();
                 } else if (val instanceof Date) {
                   dateObj = val;
@@ -687,11 +700,11 @@ export default function EssayDetailPage() {
                         ? suggestion
                         : suggestion && typeof suggestion === 'object'
                         ? [
-                            (suggestion as any).suggestion || (suggestion as any).title,
-                            (suggestion as any).implementation,
-                            (suggestion as any).whereToInclude,
-                            (suggestion as any).effectiveness || (suggestion as any).reasoning,
-                            (suggestion as any).example,
+                            (suggestion as SuggestionDetails).suggestion || (suggestion as SuggestionDetails).title,
+                            (suggestion as SuggestionDetails).implementation,
+                            (suggestion as SuggestionDetails).whereToInclude,
+                            (suggestion as SuggestionDetails).effectiveness || (suggestion as SuggestionDetails).reasoning,
+                            (suggestion as SuggestionDetails).example,
                           ]
                             .filter(Boolean)
                             .join(' / ')

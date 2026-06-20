@@ -1,13 +1,15 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { BasicEssay, YouTuberEssay } from "@/lib/types";
 import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addDays, subDays } from "date-fns";
 import { ja } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
-import Link from "next/link";
 import { useState, useEffect } from "react";
+
+type FirestoreTimestampLike = {
+  toDate: () => Date;
+};
 
 interface SubmissionCalendarProps {
   essays: (BasicEssay | YouTuberEssay)[];
@@ -53,7 +55,7 @@ export function SubmissionCalendar({ essays }: SubmissionCalendarProps) {
   }, [essays]);
 
   // 日付変換のヘルパー関数
-  const parseDate = (dateValue: any): Date | null => {
+  const parseDate = (dateValue: Date | FirestoreTimestampLike | string | number | null | undefined): Date | null => {
     if (!dateValue) return null;
     
     let date: Date;
@@ -61,7 +63,7 @@ export function SubmissionCalendar({ essays }: SubmissionCalendarProps) {
       date = dateValue;
     } else if (dateValue && typeof dateValue === 'object' && 'toDate' in dateValue) {
       // Firebase Timestamp
-      date = (dateValue as any).toDate();
+      date = (dateValue as FirestoreTimestampLike).toDate();
     } else {
       date = new Date(dateValue);
     }
@@ -84,6 +86,8 @@ export function SubmissionCalendar({ essays }: SubmissionCalendarProps) {
       })
       .filter(Boolean)
   );
+
+  void submissionDates;
 
   // 各日付のエッセイ情報を取得
   const getEssaysForDate = (date: Date) => {
@@ -236,17 +240,18 @@ export function SubmissionCalendar({ essays }: SubmissionCalendarProps) {
                 const endDate = addDays(monthEnd, 6 - getDay(monthEnd));
                 const days = eachDayOfInterval({ start: startDate, end: endDate });
                 
-                return days.map((day, index) => {
+                return days.map((day) => {
                   const dayEssays = getEssaysForDate(day);
                   const hasSubmissions = dayEssays.length > 0;
                   const hasUnreadFeedback = dayEssays.some(essay => 
                     essay.status === 'feedback_completed' && !essay.feedbackRead
                   );
+                  void hasUnreadFeedback;
                   const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
                   const isToday = isSameDay(day, new Date());
                   const isWeekend = getDay(day) === 0 || getDay(day) === 6;
                   
-                                                                                 let dayClasses = [
+                                                                                 const dayClasses = [
                          'aspect-square p-0.5 border-r border-b border-gray-200 last:border-r-0 cursor-pointer transition-colors relative',
                          'hover:bg-gray-50'
                        ];

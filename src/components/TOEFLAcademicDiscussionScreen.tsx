@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, User, GraduationCap, Clock, Eye, EyeOff } from "lucide-react";
+import { User, GraduationCap, Clock, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 
 interface DiscussionContent {
@@ -29,7 +27,6 @@ interface TOEFLAcademicDiscussionScreenProps {
   stance: 'agree' | 'disagree' | null;
   onStanceChange: (stance: 'agree' | 'disagree') => void;
   onSubmit: () => void;
-  onReset: () => void;
 }
 
 export default function TOEFLAcademicDiscussionScreen({
@@ -45,7 +42,6 @@ export default function TOEFLAcademicDiscussionScreen({
   stance,
   onStanceChange,
   onSubmit,
-  onReset,
 }: TOEFLAcademicDiscussionScreenProps) {
   // 時間を分:秒形式に変換
   const formatTime = (seconds: number) => {
@@ -57,8 +53,8 @@ export default function TOEFLAcademicDiscussionScreen({
   // Textarea reference and simple history stacks for Undo/Redo
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [localText, setLocalText] = useState<string>(essayText);
-  const [history, setHistory] = useState<string[]>([]);
-  const [redoStack, setRedoStack] = useState<string[]>([]);
+  const [, setHistory] = useState<string[]>([]);
+  const [, setRedoStack] = useState<string[]>([]);
 
   // Keep local in sync when parent text changes externally
   useEffect(() => {
@@ -183,7 +179,7 @@ export default function TOEFLAcademicDiscussionScreen({
             <div className="bg-white border border-gray-300 rounded p-4">
               {/* Instructions Section */}
               <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                Your professor is teaching a class on career readiness. Write a post responding to the professor's question.
+                Your professor is teaching a class on career readiness. Write a post responding to the professor&apos;s question.
               </h3>
               <div className="space-y-2 text-sm text-gray-700">
                 <p className="font-semibold">In your response, you should do the following.</p>

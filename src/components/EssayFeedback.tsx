@@ -1,6 +1,16 @@
 import { Essay } from "@/lib/types"
 import { Card } from "@/components/ui/card"
 
+type SuggestionDetails = {
+  suggestion?: string
+  title?: string
+  implementation?: string
+  whereToInclude?: string
+  effectiveness?: string
+  reasoning?: string
+  example?: string
+}
+
 interface EssayFeedbackProps {
   essay: Essay
 }
@@ -117,7 +127,7 @@ export default function EssayFeedback({ essay }: EssayFeedbackProps) {
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">新しいアイデアの提案</h3>
         <ul className="list-disc list-inside space-y-2">
-          {essay.feedback.specificSuggestions.suggestions.map((suggestion: any, index: number) => (
+          {essay.feedback.specificSuggestions.suggestions.map((suggestion: string | SuggestionDetails, index: number) => (
             <li key={index} className="text-gray-700">
               {typeof suggestion === 'string'
                 ? suggestion

@@ -6,7 +6,7 @@ import Layout from "@/components/layout"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, Clock, Target, FileText, MessageSquare, CheckCircle, AlertCircle, Lightbulb, BookOpen } from "lucide-react"
-import { getEssays, getTaskById, getEssayFeedback } from "@/lib/firebase"
+import { getTaskById } from "@/lib/firebase"
 import { Essay as EssayType, Task } from "@/lib/types"
 import { doc, onSnapshot } from "firebase/firestore"
 import { db } from "@/lib/firebase"
@@ -26,9 +26,17 @@ export default function ResultPage({ params }: { params: Promise<{ resultId: str
   const [task, setTask] = useState<Task | null>(null)
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
-  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const [isTaskDetailModalOpen, setIsTaskDetailModalOpen] = useState(false)
+  type SuggestionDetails = {
+    suggestion?: string
+    title?: string
+    implementation?: string
+    whereToInclude?: string
+    effectiveness?: string
+    reasoning?: string
+    example?: string
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -38,7 +46,6 @@ export default function ResultPage({ params }: { params: Promise<{ resultId: str
       async (doc) => {
         try {
           if (!doc.exists()) {
-            setError('エッセイが見つかりません。指定されたエッセイは存在しないか、削除された可能性があります。');
             setLoading(false);
             return;
           }
@@ -100,14 +107,12 @@ export default function ResultPage({ params }: { params: Promise<{ resultId: str
           }
         } catch (error) {
           console.error('Error loading essay:', error);
-          setError('エッセイの読み込み中にエラーが発生しました。');
         } finally {
           setLoading(false);
         }
       },
       (error) => {
         console.error('Error in snapshot listener:', error);
-        setError('エッセイの読み込み中にエラーが発生しました。');
         setLoading(false);
       }
     );
@@ -144,18 +149,6 @@ export default function ResultPage({ params }: { params: Promise<{ resultId: str
         </div>
       </Layout>
     )
-  }
-
-  const getScoreIcon = (score: number) => {
-    if (score >= 4) return <CheckCircle className="w-5 h-5 text-green-500" />
-    if (score >= 3) return <CheckCircle className="w-5 h-5 text-yellow-500" />
-    return <AlertCircle className="w-5 h-5 text-red-500" />
-  }
-
-  const getScoreColor = (score: number) => {
-    if (score >= 4) return "text-green-600"
-    if (score >= 3) return "text-yellow-600"
-    return "text-red-600"
   }
 
   return (
@@ -531,11 +524,11 @@ export default function ResultPage({ params }: { params: Promise<{ resultId: str
                           ? suggestion
                           : suggestion && typeof suggestion === 'object'
                           ? [
-                              (suggestion as any).suggestion || (suggestion as any).title,
-                              (suggestion as any).implementation,
-                              (suggestion as any).whereToInclude,
-                              (suggestion as any).effectiveness || (suggestion as any).reasoning,
-                              (suggestion as any).example,
+                              (suggestion as SuggestionDetails).suggestion || (suggestion as SuggestionDetails).title,
+                              (suggestion as SuggestionDetails).implementation,
+                              (suggestion as SuggestionDetails).whereToInclude,
+                              (suggestion as SuggestionDetails).effectiveness || (suggestion as SuggestionDetails).reasoning,
+                              (suggestion as SuggestionDetails).example,
                             ]
                               .filter(Boolean)
                               .join(' / ')

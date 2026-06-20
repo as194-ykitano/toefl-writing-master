@@ -24,7 +24,7 @@ export default function LearningGoals() {
   const [targetScore, setTargetScore] = useState('');
   const [targetDate, setTargetDate] = useState<Date | undefined>();
   const [weeklyGoal, setWeeklyGoal] = useState('');
-  const [streak, setStreak] = useState(0);
+  const [streak] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

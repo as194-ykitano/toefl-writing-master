@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 
+type ErrorWithMessage = { message?: string };
+
 export default function ProfileForm() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -36,8 +38,8 @@ export default function ProfileForm() {
         displayName: profile.displayName,
       });
       setSuccess('プロフィールを更新しました');
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as ErrorWithMessage).message || 'プロフィール更新に失敗しました');
     } finally {
       setLoading(false);
     }
@@ -55,8 +57,8 @@ export default function ProfileForm() {
       const photoURL = await uploadProfileImage(user.uid, file);
       setProfile(prev => prev ? { ...prev, photoURL } : null);
       setSuccess('プロフィール画像を更新しました');
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as ErrorWithMessage).message || '画像アップロードに失敗しました');
     } finally {
       setLoading(false);
     }

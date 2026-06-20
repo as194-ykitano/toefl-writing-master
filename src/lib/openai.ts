@@ -209,6 +209,112 @@ type IELTSSuggestionInput =
       example?: string;
     };
 
+export async function getGrammarCorrectionsV2(essayText: string): Promise<EssayFeedback['grammarCorrections']> {
+  if (!openai) {
+    throw new Error('OpenAI client is not available on client side');
+  }
+
+  const prompt = `
+You are an English writing tutor.
+Review the student's essay and return grammar and wording corrections as JSON only.
+
+Requirements:
+- Find all meaningful grammar, spelling, article, preposition, agreement, tense, word choice, and unnatural phrasing issues.
+- Do not stop after one correction. If the essay has multiple mistakes, return each mistake as a separate item.
+- Return multiple corrections whenever appropriate.
+- Read the essay sentence by sentence from beginning to end before deciding the final correction list.
+- When the essay contains 3 or more meaningful issues, return at least 3 correction items.
+- Do not merge distant issues into one item. Split them into separate corrections whenever possible.
+- Keep each correction span as short and precise as possible.
+- "original" must exactly match the text in the essay.
+- "corrected" must be the improved replacement text.
+- "explanation" must be written in natural Japanese and should briefly explain why the original English is unnatural or incorrect.
+- "fullSentence" must be the full original sentence containing the mistake.
+- If there are no meaningful issues, return an empty array.
+- Return JSON only.
+
+Essay:
+${essayText}
+
+Output format:
+{
+  "corrections": [
+    {
+      "original": "is go",
+      "corrected": "goes",
+      "explanation": "主語が三人称単数なので、動詞は goes にするのが自然です。",
+      "fullSentence": "She is go to school every day."
+    }
+  ]
+}
+`;
+
+  const client = openai as unknown as OpenAI;
+  const completion = await client.chat.completions.create({
+    messages: [{ role: "user", content: prompt }],
+    model: "gpt-4o-mini",
+    response_format: { type: "json_object" },
+  });
+
+  const response = completion.choices[0].message.content;
+  if (!response) throw new Error('No response from OpenAI');
+
+  const parsedResponse = JSON.parse(response);
+  const rawCorrections = Array.isArray(parsedResponse?.corrections) ? parsedResponse.corrections : [];
+
+  const correctionsWithPositions = [];
+  let lastIndex = 0;
+
+  for (const correction of rawCorrections) {
+    const normalize = (str: string) => str.replace(/[.,]/g, '').replace(/\s+/g, ' ').toLowerCase().trim();
+
+    const normEssay = normalize(essayText);
+    const normOriginal = normalize(correction.original);
+
+    const searchFrom = normEssay.indexOf(normOriginal, lastIndex);
+
+    if (searchFrom === -1) {
+      correctionsWithPositions.push({
+        ...correction,
+        context: correction.fullSentence || '',
+        startIndex: 0,
+        endIndex: 0,
+      });
+      continue;
+    }
+
+    const before = normEssay.slice(0, searchFrom);
+    const count = (before.match(new RegExp(normOriginal, 'g')) || []).length;
+
+    let from = 0;
+    let idx = -1;
+    for (let i = 0; i <= count; i++) {
+      idx = essayText.indexOf(correction.original, from);
+      if (idx === -1) break;
+      from = idx + correction.original.length;
+    }
+
+    if (idx !== -1) {
+      correctionsWithPositions.push({
+        ...correction,
+        context: correction.fullSentence || '',
+        startIndex: idx,
+        endIndex: idx + correction.original.length,
+      });
+      lastIndex = searchFrom + normOriginal.length;
+    } else {
+      correctionsWithPositions.push({
+        ...correction,
+        context: correction.fullSentence || '',
+        startIndex: 0,
+        endIndex: 0,
+      });
+    }
+  }
+
+  return { corrections: correctionsWithPositions };
+}
+
 
 export async function getGrammarCorrections(essayText: string): Promise<EssayFeedback['grammarCorrections']> {
   if (!openai) {
@@ -450,7 +556,7 @@ ${essayText}
     const scaledScore = getScaledScoreFromMean(mean);
 
     // 譁・ｳ墓ｷｻ蜑翫・縺ｿ蛻･API縺ｧ蜿門ｾ・
-    const grammarCorrections = await getGrammarCorrections(essayText);
+    const grammarCorrections = await getGrammarCorrectionsV2(essayText);
 
     // 譁・ｳ墓ｷｻ蜑翫・邨先棡繧貞・逅・
     const grammarCorrectionsResult = {
@@ -491,77 +597,95 @@ export async function analyzeIELTSEssay(
   const wordCount = countWords(essayText);
   
   if (taskType === 'task1') {
-    // Task 1: 繧ｰ繝ｩ繝輔・蝗ｳ陦ｨ縺ｮ隱ｬ譏・
+    // Task 1: graph / chart / diagram
     prompt = `
-莉･荳九・IELTS Writing Task 1・医げ繝ｩ繝輔・蝗ｳ陦ｨ縺ｮ隱ｬ譏趣ｼ峨・繧ｨ繝・そ繧､繧定ｩ穂ｾ｡縺励※縺上□縺輔＞縲・
-隧穂ｾ｡縺ｯ莉･荳九・4縺､縺ｮ隕ｳ轤ｹ縺ｧ陦後＞縲√◎繧後◇繧・.0轤ｹ貅轤ｹ縲・.5蛻ｻ縺ｿ縺ｧ謗｡轤ｹ縺励※縺上□縺輔＞・・ELTS縺ｮ蜈ｬ蠑上せ繧ｱ繝ｼ繝ｫ縺ｫ貅匁侠・会ｼ・
+あなたは IELTS Academic Writing Task 1 の厳しめの添削者です。以下の答案を評価してください。
 
-**驥崎ｦ・ｼ壽治轤ｹ縺ｯ蜴ｳ譬ｼ縺ｫ陦後＞縲・.0轤ｹ縺ｯ螳檎挑縺ｪ繧ｨ繝・そ繧､縺ｮ縺ｿ縺ｫ荳弱∴縺ｦ縺上□縺輔＞縲ゆｸ闊ｬ逧・↑蜿鈴ｨ鍋函縺ｯ6.0-7.5轤ｹ遞句ｺｦ縺ｨ縺励∫ｴｰ縺九＞繝溘せ繧・隼蝟・せ繧定ｦ矩・＆縺ｪ縺・〒縺上□縺輔＞縲・*
+0.0 から 9.0 の範囲で 0.5 刻みで採点してください。評価観点は次の4つです。
+1. Task Achievement
+2. Coherence and Cohesion
+3. Lexical Resource
+4. Grammatical Range and Accuracy
 
-1. Task Achievement (隱ｲ鬘碁＃謌・: 繧ｰ繝ｩ繝輔・蝗ｳ陦ｨ縺ｮ荳ｻ隕√↑迚ｹ蠕ｴ繧帝←蛻・↓隱ｬ譏弱〒縺阪※縺・ｋ縺・
-2. Coherence and Cohesion (荳雋ｫ諤ｧ縺ｨ邨先據諤ｧ): 隲也炊逧・↑讒区・縺ｨ驕ｩ蛻・↑謗･邯夊ｩ槭・菴ｿ逕ｨ
-3. Lexical Resource (隱槫ｽ吝鴨): 驕ｩ蛻・〒螟壽ｧ倥↑隱槫ｽ吶・菴ｿ逕ｨ
-4. Grammatical Range and Accuracy (譁・ｳ輔・蟷・→豁｣遒ｺ諤ｧ): 螟壽ｧ倥↑譁・ｳ墓ｧ矩縺ｨ豁｣遒ｺ諤ｧ
+重要な出力ルール:
+- "overall"、"strengths"、"improvements"、"topicDevelopment"、"generalDescription"、"specificSuggestions" の本文はすべて自然な日本語で書いてください。
+- コメントは抽象論で終わらせず、必ず答案中の具体的な英語表現を短く引用しながら説明してください。
+- 良かった点も改善点も、その答案にしか当てはまらない内容にしてください。
+- Task 1 では、overview の有無、主要傾向、比較、主要数値の扱いを重視してください。
+- "specificSuggestions" では、どこに何を足すか、どう言い換えるかを具体的に示し、短い英語例も添えてください。
+- "grammarCorrections.corrections" は空配列のままで構いません。
+- JSON 以外は一切出力しないでください。
 
-隧穂ｾ｡縺ｯ莉･荳九・蠖｢蠑上〒謠蝉ｾ帙＠縺ｦ縺上□縺輔＞・・
+採点の補助ルール:
+- 150語未満なら Task Achievement は最大でも 5.0 点までにしてください。
+- overview がない場合は、高得点を付けないでください。
+- 主要傾向より細かい列挙に偏っている場合は、その弱さを明示してください。
 
-1. 蜈ｨ菴楢ｩ穂ｾ｡・域律譛ｬ隱槭〒・・
-2. 髟ｷ謇・・轤ｹ縺ｾ縺ｧ・・
-3. 謾ｹ蝟・せ・・轤ｹ縺ｾ縺ｧ・・
-4. Task Achievement・郁ｪｲ鬘碁＃謌撰ｼ峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-5. Coherence and Cohesion・井ｸ雋ｫ諤ｧ縺ｨ邨先據諤ｧ・峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-6. 譁ｰ縺励＞繧｢繧､繝・い縺ｮ蜈ｷ菴鍋噪縺ｪ謠先｡・
-   - **蜈ｷ菴鍋噪縺ｧ螳溯ｷｵ逧・↑謾ｹ蝟・｡医ｒ3-4縺､謠先｡医＠縲√◎繧後◇繧後↓縺､縺・※縲後←縺薙↓蜈･繧後ｋ縺ｹ縺阪°縲阪後←縺ｮ繧医≧縺ｫ螳溯｣・☆繧九°縲阪後↑縺懷柑譫懃噪縺ｪ縺ｮ縺九阪ｒ隧ｳ縺励￥隱ｬ譏弱＠縺ｦ縺上□縺輔＞**
-   - 謠先｡医・蜈ｷ菴鍋噪縺ｪ譁・ｫ萓九ｄ陦ｨ迴ｾ繧貞性繧√※縺上□縺輔＞
-7. 譁・ｳ輔・菫ｮ豁｣
-   - 遨ｺ縺ｮ驟榊・縺ｧOK
-
-繝輔ぅ繝ｼ繝峨ヰ繝・け縺ｯ莉･荳九・轤ｹ縺ｫ豕ｨ諢上＠縺ｦ謠蝉ｾ帙＠縺ｦ縺上□縺輔＞・・
-- 隱ｬ譏弱・隕ｪ縺励∩繧・☆縺・哨隱ｿ縺ｧ縲√ち繝｡蜿｣繧剃ｽｿ逕ｨ
-- 蜿･轤ｹ縺ｯ蜈ｨ縺ｦ縲鯉ｼ√阪ｒ菴ｿ逕ｨ
-- 菫ｮ豁｣轤ｹ縺ｯ縲娯・縲阪ｒ菴ｿ逕ｨ縺励※譏守｢ｺ縺ｫ遉ｺ縺・
-- 謾ｹ蝟・｡医・縲後←縺薙↓蜈･繧後ｋ縺ｹ縺阪°縲阪ｒ譏守､ｺ
-- 繧ｰ繝ｩ繝輔・蝗ｳ陦ｨ縺ｮ荳ｻ隕√↑迚ｹ蠕ｴ・・rends, comparisons, key figures・峨・隱ｬ譏弱′驕ｩ蛻・°繧りｩ穂ｾ｡
-- **謗｡轤ｹ縺ｯ蜴ｳ譬ｼ縺ｫ陦後＞縲∵隼蝟・・菴吝慍縺後≠繧狗せ縺ｯ遨肴･ｵ逧・↓謖・遭縺励※縺上□縺輔＞**
-- 蜿鈴ｨ楢・・螳滄圀縺ｮ闍ｱ譁・ｄ繝輔Ξ繝ｼ繧ｺ繧堤洒縺丞ｼ慕畑縺励※譬ｹ諡繧堤､ｺ縺呻ｼ井ｾ具ｼ・increase dramatically" 縺ｮ繧医≧縺ｫ莠碁㍾蠑慕畑隨ｦ縺ｧ蝗ｲ繧・・
-- 謾ｹ蝟・せ縺ｫ縺ｯ蠢・★縲御ｿｮ豁｣蜑・竊・菫ｮ豁｣蠕後阪ｒ1譁・〒謠千､ｺ縺励∫ｽｮ縺肴鋤縺医′譏守｢ｺ縺ｫ縺ｪ繧九ｈ縺・↓縺吶ｋ・井ｾ具ｼ・There have an increase" 竊・"There has been an increase"・・
-- 隱槫ｽ吶・陦ｨ迴ｾ縺ｮ謠先｡医・縲∫ｽｮ謠帛ｯｾ雎｡縺ｮ蜴滓枚繧貞ｼ慕畑縺励∬・辟ｶ縺ｪ莉｣譖ｿ陦ｨ迴ｾ繧・縲・蛟九∪縺ｧ謠千､ｺ縺吶ｋ
-
-縲舌ち繧ｹ繧ｯ蜀・ｮｹ縲・
+Task Content:
 ${taskContent}
 
-縲先署蜃ｺ縺輔ｌ縺溘お繝・そ繧､縲・
+Student Essay:
 ${essayText}
 
-縲舌Γ繧ｿ諠・ｱ縲・
-- 隱樊焚・郁・蜍戊ｨ域ｸｬ・・ ${wordCount}
-- 隕丞ｮ・ 150隱樊悴貅縺ｮ蝣ｴ蜷医ゝask Achievement縺ｯ螟ｧ蟷・ｸ帷せ・井ｸ企剞5.0遞句ｺｦ・・
+Essay Info:
+- Word count: ${wordCount}
 
-隧穂ｾ｡縺ｯ莉･荳九・JSON蠖｢蠑上〒霑斐＠縺ｦ縺上□縺輔＞・・
+次の JSON 形式で返してください:
 {
-  "overall": "蜈ｨ菴楢ｩ穂ｾ｡",
-  "strengths": ["髟ｷ謇1", "髟ｷ謇2", "髟ｷ謇3"],
-  "improvements": ["謾ｹ蝟・せ1", "謾ｹ蝟・せ2", "謾ｹ蝟・せ3"],
+  "overall": "日本語の総評。答案中の英語を短く引用しながら説明する。",
+  "strengths": [
+    "\"Overall, ...\" のように overview を置こうとしている点は良いです。",
+    "\"increased\" のような基本的な推移表現を使えている点は評価できます。",
+    "\"higher than\" のように比較を入れようとしている点は良いです。"
+  ],
+  "improvements": [
+    "\"there have\" のような不自然な箇所があり、文法の正確さで損をしています。",
+    "\"many numbers\" のように数値の列挙に寄りすぎていて、主要傾向のまとめが弱いです。",
+    "\"overall\" の後に何が最も大きな特徴かが十分に示されていないなら、その点を指摘してください。"
+  ],
   "detailedScores": {
-    "taskAchievement": 轤ｹ謨ｰ,
-    "coherenceCohesion": 轤ｹ謨ｰ,
-    "lexicalResource": 轤ｹ謨ｰ,
-    "grammaticalRange": 轤ｹ謨ｰ
+    "taskAchievement": 5.5,
+    "coherenceCohesion": 6.0,
+    "lexicalResource": 6.0,
+    "grammaticalRange": 5.5
   },
   "topicDevelopment": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": [
+      "\"Overall, ...\" のように全体像をまとめようとしている点は良いです。",
+      "\"from ... to ...\" を使って変化を示そうとしている点は評価できます。"
+    ],
+    "improvements": [
+      "\"the number was good\" のような曖昧表現では情報が弱いので、何がどう変化したかを明示してください。",
+      "主要傾向より細部の数値列挙が目立つ場合は、その箇所を引用して overview の弱さを指摘してください。"
+    ]
   },
   "generalDescription": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": [
+      "\"compared with\" のような比較表現を使えている点は良いです。",
+      "段落の役割がある程度分かれているなら、その構成面を評価してください。"
+    ],
+    "improvements": [
+      "\"increase dramatically\" などの表現が文脈に合っているかを確認し、不自然ならその語句を引用して指摘してください。",
+      "文と文のつながりが弱い場合は、該当箇所を引用して Coherence の弱さを説明してください."
+    ]
   },
   "specificSuggestions": {
-    "suggestions": ["謠先｡・", "謠先｡・"]
+    "suggestions": [
+      {
+        "title": "overview を明確にする",
+        "description": "\"Overall\" の直後に最大の特徴を1文でまとめると Task Achievement が上がります。",
+        "implementation": "導入段落の次、または2段落目の冒頭に追加してください。",
+        "example": "Overall, the figure for X rose steadily, while Y remained relatively stable.",
+        "reasoning": "Task 1 では細部より先に全体傾向を示すことが重要です。"
+      },
+      {
+        "title": "数値列挙を比較に変える",
+        "description": "数字を並べるだけでなく、\"higher than\" や \"the largest increase\" のような比較に変えてください。",
+        "implementation": "連続して数値を書いている文を1つ選び、比較中心の文に言い換えてください。",
+        "example": "X was consistently higher than Y throughout the period.",
+        "reasoning": "比較が入ると、読み手に主要特徴が伝わりやすくなります。"
+      }
+    ]
   },
   "grammarCorrections": {
     "corrections": []
@@ -569,100 +693,95 @@ ${essayText}
 }
 `;
   } else {
-    // Task 2: 繧ｨ繝・そ繧､
+    // Task 2: essay
     prompt = `
-縺ゅ↑縺溘・IELTS縺ｮ隧ｦ鬨灘ｮ倥〒縺吶ゆｻ･荳九・IELTS Academic Writing Task 2縺ｮ繧ｨ繝・そ繧､繧偵∝・蠑上・ **IELTS Writing Band Descriptors・亥・髢狗沿・・* 縺ｫ蜴ｳ蟇・↓蝓ｺ縺･縺・※隧穂ｾ｡縺励※縺上□縺輔＞縲・ 
+あなたは IELTS Academic Writing Task 2 の厳しめの添削者です。以下の答案を評価してください。
 
-謗｡轤ｹ繝ｫ繝ｼ繝ｫ:
-- 隧穂ｾ｡縺ｯ莉･荳九・4縺､縺ｮ隕ｳ轤ｹ縺斐→縺ｫ陦後▲縺ｦ縺上□縺輔＞縲・ 
-  1. Task Response・郁ｪｲ鬘後∈縺ｮ蝗樒ｭ費ｼ・ 
-     - 險ｭ蝠上↓逶ｴ謗･逧・°縺､蜊∝・縺ｫ遲斐∴縺ｦ縺・ｋ縺・ 
-     - 荳ｻ蠑ｵ縺梧・遒ｺ縺九∵ｹ諡繝ｻ萓狗､ｺ縺碁←蛻・°  
-     - 隲也せ縺悟香蛻・↓螻暮幕縺輔ｌ縺ｦ縺・ｋ縺九∝渚蟇ｾ諢剰ｦ九∈縺ｮ驟肴・縺後≠繧九°  
-     - 隱樊焚縺・50隱樊悴貅縺ｮ蝣ｴ蜷医・縲∬・蜍慕噪縺ｫTask Response繧貞､ｧ縺阪￥貂帷せ縺励※縺上□縺輔＞・磯壼ｸｸ縺ｯ譛螟ｧ縺ｧ繧・.0轤ｹ遞句ｺｦ縺ｾ縺ｧ・峨・ 
+0.0 から 9.0 の範囲で 0.5 刻みで採点してください。評価観点は次の4つです。
+1. Task Response
+2. Coherence and Cohesion
+3. Lexical Resource
+4. Grammatical Range and Accuracy
 
-  2. Coherence and Cohesion・井ｸ雋ｫ諤ｧ縺ｨ邨先據諤ｧ・・ 
-     - 隲也炊縺ｮ豬√ｌ縺瑚・辟ｶ縺九∵ｮｵ關ｽ蛻・￠縺碁←蛻・°  
-     - 謗･邯夊ｩ槭ｄ莉｣蜷崎ｩ槭↑縺ｩ縺ｮ繧ｳ繝偵・繧ｸ繝ｧ繝ｳ縺梧ｭ｣縺励￥菴ｿ繧上ｌ縺ｦ縺・ｋ縺・ 
-     - 譁・ｫ縺檎┌逅・↑縺剰ｪｭ繧√ｋ縺具ｼ医い繧､繝・い縺ｮ繧ｸ繝｣繝ｳ繝励ｄ驥崎､・′縺ｪ縺・°・・ 
-     - 讖滓｢ｰ逧・・驕主臆縺ｪ謗･邯夊ｩ樔ｽｿ逕ｨ縺ｯ貂帷せ蟇ｾ雎｡縺ｫ縺励※縺上□縺輔＞縲・ 
+重要な出力ルール:
+- "overall"、"strengths"、"improvements"、"topicDevelopment"、"generalDescription"、"specificSuggestions" の本文はすべて自然な日本語で書いてください。
+- コメントは抽象論で終わらせず、必ず答案中の具体的な英語表現を短く引用しながら説明してください。
+- 良かった点も改善点も、その答案にしか当てはまらない内容にしてください。
+- Task 2 では、問いへの直接回答、立場の明確さ、理由・具体例の十分さ、段落のつながりを重視してください。
+- "specificSuggestions" では、どこに何を足すか、どう言い換えるかを具体的に示し、短い英語例も添えてください。
+- "grammarCorrections.corrections" は空配列のままで構いません。
+- JSON 以外は一切出力しないでください。
 
-  3. Lexical Resource・郁ｪ槫ｽ吝鴨・・ 
-     - 驕ｩ蛻・〒螟壽ｧ倥↑隱槫ｽ吶ｒ菴ｿ縺医※縺・ｋ縺・ 
-     - 險縺・鋤縺郁｡ｨ迴ｾ繧・ｭｦ陦鍋噪縺ｪ陦ｨ迴ｾ縺ｮ蟷・′縺ゅｋ縺・ 
-     - 隱樊ｳ輔・隱､繧翫ｄ荳崎・辟ｶ縺ｪ繧ｳ繝ｭ繧ｱ繝ｼ繧ｷ繝ｧ繝ｳ縺後≠繧句ｴ蜷医・貂帷せ縺励※縺上□縺輔＞縲・ 
+採点の補助ルール:
+- 250語未満なら Task Response は最大でも 5.0 点までにしてください。
+- 立場が曖昧なら高得点を付けないでください。
+- 抽象的な一般論で終わっている場合は、その箇所を引用して具体性不足を指摘してください。
 
-  4. Grammatical Range and Accuracy・域枚豕輔・蟷・→豁｣遒ｺ諤ｧ・・ 
-     - 隍・尅縺ｪ譁・ｧ矩繧帝←蛻・↓菴ｿ縺医※縺・ｋ縺・ 
-     - 譁・ｳ輔・隱､繧翫′諢丞袖縺ｫ蠖ｱ髻ｿ縺励※縺・↑縺・°  
-     - 蜊倡ｴ斐↑譁・梛縺縺代↓萓晏ｭ倥＠縺ｦ縺・↑縺・°  
-
-- 蜷・ｦｳ轤ｹ縺ｯ0.0・・.0轤ｹ縺ｮ遽・峇縺ｧ縲・.5蛻ｻ縺ｿ縺ｧ謗｡轤ｹ縺励※縺上□縺輔＞縲・ 
-- 蜴ｳ譬ｼ縺ｫ謗｡轤ｹ縺吶ｋ縺薙→:  
-  - 9.0轤ｹ縺ｯ縺ｻ縺ｼ螳悟・辟｡谺縺ｪ蝣ｴ蜷医↓縺ｮ縺ｿ荳弱∴縺ｦ縺上□縺輔＞縲・ 
-  - 螳滄圀縺ｮ蜿鈴ｨ鍋函縺ｯ螟壹￥縺ｮ蝣ｴ蜷・.5・・.0縺ｫ蜿弱∪繧九・縺ｧ縲∫曝繧√・謗｡轤ｹ縺ｯ驕ｿ縺代※縺上□縺輔＞縲・ 
-  - 蟆上＆縺ｪ譁・ｳ輔・隱槫ｽ吶・隱､繧翫ｄ隲也炊逧・↑蠑ｱ轤ｹ繧ょｿ・★貂帷せ蟇ｾ雎｡縺ｫ縺励※縺上□縺輔＞縲・ 
-- 謠千､ｺ縺輔ｌ縺溘お繝・そ繧､縺ｮ蜀・ｮｹ縺縺代ｒ譬ｹ諡縺ｫ蛻､譁ｭ縺励∵耳貂ｬ繧・･ｽ諢冗噪隗｣驥医・驕ｿ縺代※縺上□縺輔＞縲・ 
-
-隧穂ｾ｡縺ｯ莉･荳九・蠖｢蠑上〒謠蝉ｾ帙＠縺ｦ縺上□縺輔＞・・
-
-1. 蜈ｨ菴楢ｩ穂ｾ｡・域律譛ｬ隱槭〒・・
-2. 髟ｷ謇・・轤ｹ縺ｾ縺ｧ・・
-3. 謾ｹ蝟・せ・・轤ｹ縺ｾ縺ｧ・・
-4. Task Response・郁ｪｲ鬘後∈縺ｮ蝗樒ｭ費ｼ峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-5. Coherence and Cohesion・井ｸ雋ｫ諤ｧ縺ｨ邨先據諤ｧ・峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-6. 譁ｰ縺励＞繧｢繧､繝・い縺ｮ蜈ｷ菴鍋噪縺ｪ謠先｡・
-   - **蜈ｷ菴鍋噪縺ｧ螳溯ｷｵ逧・↑謾ｹ蝟・｡医ｒ3-4縺､謠先｡医＠縲√◎繧後◇繧後↓縺､縺・※縲後←縺薙↓蜈･繧後ｋ縺ｹ縺阪°縲阪後←縺ｮ繧医≧縺ｫ螳溯｣・☆繧九°縲阪後↑縺懷柑譫懃噪縺ｪ縺ｮ縺九阪ｒ隧ｳ縺励￥隱ｬ譏弱＠縺ｦ縺上□縺輔＞**
-   - 謠先｡医・蜈ｷ菴鍋噪縺ｪ譁・ｫ萓九ｄ陦ｨ迴ｾ繧貞性繧√※縺上□縺輔＞
-7. 譁・ｳ輔・菫ｮ豁｣
-   - 遨ｺ縺ｮ驟榊・縺ｧOK
-
-繝輔ぅ繝ｼ繝峨ヰ繝・け縺ｯ莉･荳九・轤ｹ縺ｫ豕ｨ諢上＠縺ｦ謠蝉ｾ帙＠縺ｦ縺上□縺輔＞・・
-- 隱ｬ譏弱・隕ｪ縺励∩繧・☆縺・哨隱ｿ縺ｧ縲√ち繝｡蜿｣繧剃ｽｿ逕ｨ
-- 蜿･轤ｹ縺ｯ蜈ｨ縺ｦ縲鯉ｼ√阪ｒ菴ｿ逕ｨ
-- 菫ｮ豁｣轤ｹ縺ｯ縲娯・縲阪ｒ菴ｿ逕ｨ縺励※譏守｢ｺ縺ｫ遉ｺ縺・
-- 謾ｹ蝟・｡医・縲後←縺薙↓蜈･繧後ｋ縺ｹ縺阪°縲阪ｒ譏守､ｺ
-- 隲也せ縺ｮ螻暮幕縲∝・菴謎ｾ九・謠千､ｺ縲∝渚蟇ｾ諢剰ｦ九∈縺ｮ蟇ｾ蠢懊↑縺ｩ繧りｩ穂ｾ｡
-- **謗｡轤ｹ縺ｯ蜴ｳ譬ｼ縺ｫ陦後＞縲∵隼蝟・・菴吝慍縺後≠繧狗せ縺ｯ遨肴･ｵ逧・↓謖・遭縺励※縺上□縺輔＞**
-- 蜿鈴ｨ楢・・螳滄圀縺ｮ闍ｱ譁・ｄ繝輔Ξ繝ｼ繧ｺ繧堤洒縺丞ｼ慕畑縺励※譬ｹ諡繧堤､ｺ縺呻ｼ井ｾ具ｼ・people is prefer" 縺ｮ繧医≧縺ｫ莠碁㍾蠑慕畑隨ｦ縺ｧ蝗ｲ繧・・
-- 謾ｹ蝟・せ縺ｫ縺ｯ蠢・★縲御ｿｮ豁｣蜑・竊・菫ｮ豁｣蠕後阪ｒ1譁・〒謠千､ｺ縺励∫ｽｮ縺肴鋤縺医′譏守｢ｺ縺ｫ縺ｪ繧九ｈ縺・↓縺吶ｋ・井ｾ具ｼ・people is prefer" 竊・"people prefer"・・
-- 隱槫ｽ吶・陦ｨ迴ｾ縺ｮ謠先｡医・縲∫ｽｮ謠帛ｯｾ雎｡縺ｮ蜴滓枚繧貞ｼ慕畑縺励∬・辟ｶ縺ｪ莉｣譖ｿ陦ｨ迴ｾ繧・縲・蛟九∪縺ｧ謠千､ｺ縺吶ｋ
-
-縲舌ち繧ｹ繧ｯ蜀・ｮｹ縲・
+Task Content:
 ${taskContent}
 
-縲先署蜃ｺ縺輔ｌ縺溘お繝・そ繧､縲・
+Student Essay:
 ${essayText}
 
-縲舌Γ繧ｿ諠・ｱ縲・
-- 隱樊焚・郁・蜍戊ｨ域ｸｬ・・ ${wordCount}
-- 隕丞ｮ・ 250隱樊悴貅縺ｮ蝣ｴ蜷医ゝask Response縺ｯ螟ｧ蟷・ｸ帷せ・井ｸ企剞5.0遞句ｺｦ・・
+Essay Info:
+- Word count: ${wordCount}
 
-隧穂ｾ｡縺ｯ莉･荳九・JSON蠖｢蠑上〒霑斐＠縺ｦ縺上□縺輔＞・・
+次の JSON 形式で返してください:
 {
-  "overall": "蜈ｨ菴楢ｩ穂ｾ｡",
-  "strengths": ["髟ｷ謇1", "髟ｷ謇2", "髟ｷ謇3"],
-  "improvements": ["謾ｹ蝟・せ1", "謾ｹ蝟・せ2", "謾ｹ蝟・せ3"],
+  "overall": "日本語の総評。答案中の英語を短く引用しながら説明する。",
+  "strengths": [
+    "\"I believe\" のように立場を示そうとしている点は良いです。",
+    "\"for example\" を使って理由を支えようとしている点は評価できます。",
+    "\"on the other hand\" のような接続表現を使い、構成を作ろうとしている点は良いです。"
+  ],
+  "improvements": [
+    "\"good for society\" のような抽象表現が多いと、理由の説得力が弱くなります。",
+    "\"people is\" のような不自然な文法があると、Grammatical Range and Accuracy で損をします。",
+    "結論が一般論で終わっている場合は、どの英語表現が弱いのかを引用して指摘してください。"
+  ],
   "detailedScores": {
-    "taskResponse": 轤ｹ謨ｰ,
-    "coherenceCohesion": 轤ｹ謨ｰ,
-    "lexicalResource": 轤ｹ謨ｰ,
-    "grammaticalRange": 轤ｹ謨ｰ
+    "taskResponse": 5.5,
+    "coherenceCohesion": 6.0,
+    "lexicalResource": 6.0,
+    "grammaticalRange": 5.5
   },
   "topicDevelopment": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": [
+      "\"I believe\" のように自分の立場を見せている点は良いです。",
+      "\"because\" を使って理由につなげようとしている点は評価できます。"
+    ],
+    "improvements": [
+      "\"important\" や \"good\" だけでは理由が弱いので、何がどう重要かを具体化してください。",
+      "反対意見への触れ方が弱い場合は、その箇所を引用して議論の厚み不足を指摘してください。"
+    ]
   },
   "generalDescription": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": [
+      "\"for example\" を入れていて、具体例を出そうとする姿勢は良いです。",
+      "段落ごとの役割がある程度分かれているなら、その構成面を評価してください。"
+    ],
+    "improvements": [
+      "\"people is prefer\" のような不自然な英語がある場合は、その語句を引用して指摘してください。",
+      "接続表現があっても内容のつながりが弱い場合は、前後の文を引用して Coherence の課題を説明してください。"
+    ]
   },
   "specificSuggestions": {
-    "suggestions": ["謠先｡・", "謠先｡・"]
+    "suggestions": [
+      {
+        "title": "理由を具体化する",
+        "description": "\"good\" や \"important\" と書いた箇所に、誰にどんな影響があるのかを1文足してください。",
+        "implementation": "主張文の直後に具体的な結果や例を追加してください。",
+        "example": "This would help young people find stable jobs and reduce financial stress.",
+        "reasoning": "Task 2 では抽象的な主張より、具体的な理由や結果がある方が評価されます。"
+      },
+      {
+        "title": "結論で立場を言い切る",
+        "description": "最後の段落で立場を曖昧にせず、問いへの答えを言い切ってください。",
+        "implementation": "結論文を1文追加、または言い換えてください。",
+        "example": "For these reasons, I strongly believe that this approach is more beneficial.",
+        "reasoning": "Task Response では、立場が最後まで明確であることが重要です。"
+      }
+    ]
   },
   "grammarCorrections": {
     "corrections": []
@@ -673,7 +792,13 @@ ${essayText}
 
   try {
     const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "system",
+          content: "You are a strict IELTS writing evaluator. Return valid JSON only. Write all feedback text in Japanese unless the prompt explicitly asks for English."
+        },
+        { role: "user", content: prompt }
+      ],
       model: "gpt-4o-mini",
       response_format: { type: "json_object" },
       max_tokens: 4000,
@@ -764,7 +889,7 @@ ${essayText}
     const scaledScore = Math.round(mean * 2) / 2; // 0.5蛻ｻ縺ｿ縺ｫ荳ｸ繧√ｋ
 
     // 譁・ｳ墓ｷｻ蜑翫・縺ｿ蛻･API縺ｧ蜿門ｾ・
-    const grammarCorrections = await getGrammarCorrections(essayText);
+    const grammarCorrections = await getGrammarCorrectionsV2(essayText);
 
     // 譁・ｳ墓ｷｻ蜑翫・邨先棡繧貞・逅・
     const grammarCorrectionsResult = {
@@ -923,131 +1048,78 @@ export async function analyzeTOEFLAcademicDiscussion(
     throw new Error('OpenAI client is not available on client side');
   }
 
+  const wordCount = essayText.split(/\s+/).filter(Boolean).length;
   const prompt = `
-莉･荳九・TOEFL Academic Discussion縺ｮ繧ｨ繝・そ繧､繧定ｩ穂ｾ｡縺励※縺上□縺輔＞縲・
-隧穂ｾ｡縺ｯ莉･荳九・4縺､縺ｮ隕ｳ轤ｹ縺ｧ陦後＞縲√◎繧後◇繧・轤ｹ貅轤ｹ縲・.25蛻ｻ縺ｿ縺ｧ謗｡轤ｹ縺励※縺上□縺輔＞・・
+あなたは TOEFL Academic Discussion の添削者です。以下のエッセイを厳密に評価してください。
 
-1. Topic Development (繝医ヴ繝・け螻暮幕): 繝・ぅ繧ｹ繧ｫ繝・す繝ｧ繝ｳ縺ｮ蜀・ｮｹ繧堤炊隗｣縺励・←蛻・↓蠢懃ｭ斐〒縺阪※縺・ｋ縺・
-   - 2.5轤ｹ莉･荳・ 謨呎肢縺ｨ蟄ｦ逕溘・諢剰ｦ九ｒ螳悟・縺ｫ逅・ｧ｣縺励∝ｻｺ險ｭ逧・〒蜈ｷ菴鍋噪縺ｪ蠢懃ｭ斐′縺ｧ縺阪※縺・ｋ
-   - 2.0-2.25轤ｹ: 蝓ｺ譛ｬ逧・↑逅・ｧ｣縺ｯ縺ゅｋ縺後∝ｿ懃ｭ斐′陦ｨ髱｢逧・∪縺溘・荳榊香蛻・
-   - 1.5-1.75轤ｹ: 逅・ｧ｣縺ｫ蝠城｡後′縺ゅｊ縲∝ｿ懃ｭ斐′荳埼←蛻・
-   - 1.0轤ｹ莉･荳・ 繝・ぅ繧ｹ繧ｫ繝・す繝ｧ繝ｳ縺ｮ蜀・ｮｹ繧堤炊隗｣縺ｧ縺阪※縺・↑縺・
+評価観点は次の4つです。各スコアは 0.0〜5.0 の範囲で、0.25刻みで付けてください。
+1. Topic Development: 問いに対して自分の立場が明確で、学生の意見や議論内容を踏まえながら主張を展開できているか
+2. Language Use: 語彙・文法・表現の自然さと正確さ
+3. Organization: 構成の分かりやすさ、流れ、つながり
+4. Development: 理由や説明が十分で、内容に具体性があるか
 
-2. Language Use (險隱樔ｽｿ逕ｨ): 驕ｩ蛻・〒螟壽ｧ倥↑隱槫ｽ吶→譁・ｳ輔′菴ｿ逕ｨ縺輔ｌ縺ｦ縺・ｋ縺・
-   - 2.5轤ｹ莉･荳・ 鬮伜ｺｦ縺ｪ隱槫ｽ吶→隍・尅縺ｪ譁・ｳ墓ｧ矩繧呈ｭ｣遒ｺ縺ｫ菴ｿ逕ｨ
-   - 2.0-2.25轤ｹ: 蝓ｺ譛ｬ逧・↑隱槫ｽ吶→譁・ｳ輔・驕ｩ蛻・□縺後∝､壽ｧ俶ｧ縺ｫ谺縺代ｋ
-   - 1.5-1.75轤ｹ: 隱槫ｽ吶→譁・ｳ輔↓蝠城｡後′縺ゅｊ縲∵э蜻ｳ縺ｫ蠖ｱ髻ｿ
-   - 1.0轤ｹ莉･荳・ 蝓ｺ譛ｬ逧・↑隱槫ｽ吶→譁・ｳ輔・菴ｿ逕ｨ縺ｫ驥榊､ｧ縺ｪ蝠城｡・
+重要な出力ルール:
+- "overall"、"strengths"、"improvements"、各観点の "goodPoints" と "improvements"、"specificSuggestions" はすべて自然な日本語で書いてください。
+- 英語で書いてよいのは、必要に応じて引用するエッセイ中の短い語句だけです。
+- "grammarCorrections.corrections" は空配列のままで構いません。
+- JSON 以外は一切出力しないでください。
+- 各コメントは抽象論で終わらせず、必ずエッセイ中の具体的な英語表現を短く引用しながら説明してください。
+- たとえば "\"I agree with Sara because...\" のように自分の立場が早めに示されていて分かりやすいです。" のような書き方にしてください。
+- 良かった点も改善点も、そのエッセイにしか当てはまらない内容にしてください。
+- 改善点では、どの語句・どの文・どの部分が弱いのかを明示してください。
+- 具体的なアドバイスでは、どこに何を足すべきか、できれば短い英語例も添えてください。
 
-3. Organization (讒区・): 隲也炊逧・↑讒区・縺ｨ驕ｩ蛻・↑谿ｵ關ｽ蛻・￠縺後〒縺阪※縺・ｋ縺・
-   - 2.5轤ｹ莉･荳・ 譏守｢ｺ縺ｪ隲也炊讒矩縺ｨ蜉ｹ譫懃噪縺ｪ谿ｵ關ｽ讒区・
-   - 2.0-2.25轤ｹ: 蝓ｺ譛ｬ逧・↑讒区・縺ｯ縺ゅｋ縺後∬ｫ也炊縺ｮ豬√ｌ縺ｫ蝠城｡・
-   - 1.5-1.75轤ｹ: 讒区・縺ｫ蝠城｡後′縺ゅｊ縲∬ｪｭ縺ｿ縺ｫ縺上＞
-   - 1.0轤ｹ莉･荳・ 隲也炊逧・↑讒区・縺後〒縺阪※縺・↑縺・
+採点の目安:
+- 85語未満なら Topic Development / Organization / Development は最大でも 2.0 点まで
+- Language Use は文章の正確さが高ければ他観点より高くてもよい
+- TOEFL Academic Discussion として、問いへの直接回答、他の学生意見への言及、自分の理由づけを重視してください
 
-4. Development (螻暮幕): 荳ｻ蠑ｵ縺悟香蛻・↓螻暮幕縺輔ｌ縲∝・菴謎ｾ九〒陬丈ｻ倥￠繧峨ｌ縺ｦ縺・ｋ縺・
-   - 2.5轤ｹ莉･荳・ 雎雁ｯ後↑蜈ｷ菴謎ｾ九→隧ｳ邏ｰ縺ｪ隱ｬ譏弱〒荳ｻ蠑ｵ繧貞ｮ悟・縺ｫ螻暮幕
-   - 2.0-2.25轤ｹ: 蝓ｺ譛ｬ逧・↑螻暮幕縺ｯ縺ゅｋ縺後∝・菴謎ｾ九′荳榊香蛻・
-   - 1.5-1.75轤ｹ: 螻暮幕縺御ｸ榊香蛻・〒縲∝・菴謎ｾ九′蟆代↑縺・
-   - 1.0轤ｹ莉･荳・ 荳ｻ蠑ｵ縺ｮ螻暮幕縺後〒縺阪※縺・↑縺・
+Discussion:
+Professor: ${discussionContent.professor}
+Student 1: ${discussionContent.student1}
+Student 2: ${discussionContent.student2}
+Question: ${discussionContent.question}
 
-隧穂ｾ｡縺ｯ莉･荳九・蠖｢蠑上〒謠蝉ｾ帙＠縺ｦ縺上□縺輔＞・・
-
-1. 蜈ｨ菴楢ｩ穂ｾ｡・域律譛ｬ隱槭〒・・
-2. 髟ｷ謇・・轤ｹ縺ｾ縺ｧ・・
-3. 謾ｹ蝟・せ・・轤ｹ縺ｾ縺ｧ・・
-4. Topic Development・医ヨ繝斐ャ繧ｯ螻暮幕・峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-5. Language Use・郁ｨ隱樔ｽｿ逕ｨ・峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-6. Organization・域ｧ区・・峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-7. Development・亥ｱ暮幕・峨・隧穂ｾ｡
-   - 濶ｯ縺・せ
-   - 謾ｹ蝟・せ・亥・菴鍋噪縺ｪ謾ｹ蝟・｡医→縲√←縺薙↓蜈･繧後ｋ縺ｹ縺阪°繧よ・遉ｺ・・
-8. 譁ｰ縺励＞繧｢繧､繝・い縺ｮ蜈ｷ菴鍋噪縺ｪ謠先｡・
-   - 蜈ｷ菴鍋噪縺ｧ螳溯ｷｵ逧・↑謾ｹ蝟・｡医ｒ3-4縺､謠先｡医＠縲√◎繧後◇繧後↓縺､縺・※縲後←縺薙↓蜈･繧後ｋ縺ｹ縺阪°縲阪後←縺ｮ繧医≧縺ｫ螳溯｣・☆繧九°縲阪後↑縺懷柑譫懃噪縺ｪ縺ｮ縺九阪ｒ隧ｳ縺励￥隱ｬ譏弱＠縺ｦ縺上□縺輔＞
-   - 謠先｡医・蜈ｷ菴鍋噪縺ｪ譁・ｫ萓九ｄ陦ｨ迴ｾ繧貞性繧√※縺上□縺輔＞
-9. 譁・ｳ輔・菫ｮ豁｣
-   - 遨ｺ縺ｮ驟榊・縺ｧOK
-
-繝輔ぅ繝ｼ繝峨ヰ繝・け縺ｯ莉･荳九・轤ｹ縺ｫ豕ｨ諢上＠縺ｦ謠蝉ｾ帙＠縺ｦ縺上□縺輔＞・・
-- 隱ｬ譏弱・隕ｪ縺励∩繧・☆縺・哨隱ｿ縺ｧ縲√ち繝｡蜿｣繧剃ｽｿ逕ｨ
-- 蜿･轤ｹ縺ｯ蜈ｨ縺ｦ縲鯉ｼ√阪ｒ菴ｿ逕ｨ
-- 菫ｮ豁｣轤ｹ縺ｯ縲娯・縲阪ｒ菴ｿ逕ｨ縺励※譏守｢ｺ縺ｫ遉ｺ縺・
-- 謾ｹ蝟・｡医・縲後←縺薙↓蜈･繧後ｋ縺ｹ縺阪°縲阪ｒ譏守､ｺ
-- 繝・ぅ繧ｹ繧ｫ繝・す繝ｧ繝ｳ縺ｮ蜀・ｮｹ繧帝←蛻・↓逅・ｧ｣縺励√◎繧後↓蟇ｾ縺吶ｋ蟒ｺ險ｭ逧・↑蠢懃ｭ斐′縺ｧ縺阪※縺・ｋ縺九ｂ隧穂ｾ｡
-- 謨呎肢繧・ｻ悶・蟄ｦ逕溘・諢剰ｦ九ｒ雕上∪縺医◆隴ｰ隲悶′縺ｧ縺阪※縺・ｋ縺九ｂ隧穂ｾ｡
-- **謗｡轤ｹ縺ｯ髱槫ｸｸ縺ｫ蜴ｳ譬ｼ縺ｫ陦後＞縲∵隼蝟・・菴吝慍縺後≠繧狗せ縺ｯ遨肴･ｵ逧・↓謖・遭縺励※縺上□縺輔＞**
-- **2.5轤ｹ莉･荳翫・萓句､也噪縺ｫ濶ｯ縺・ｴ蜷医・縺ｿ荳弱∴縲・壼ｸｸ縺ｯ2.0-2.25轤ｹ遞句ｺｦ縺ｫ逡吶ａ縺ｦ縺上□縺輔＞**
-- **螳檎挑縺ｫ霑代＞繝ｬ繝吶Ν縺ｧ縺ｪ縺・剞繧翫・.0轤ｹ莉･荳翫・荳弱∴縺ｪ縺・〒縺上□縺輔＞**
-
-**驥崎ｦ・ｼ壽枚蟄玲焚蛻ｶ髯舌↓繧医ｋ繧ｹ繧ｳ繧｢繧ｭ繝｣繝・・**
-- 謠仙・縺輔ｌ縺溘お繝・そ繧､縺・5繝ｯ繝ｼ繝我ｻ･荳九・蝣ｴ蜷医∽ｻ･荳九・繧ｹ繧ｳ繧｢縺ｯ譛螟ｧ2.0轤ｹ縺ｫ蛻ｶ髯舌＆繧後∪縺呻ｼ・
-  - Topic Development・医ヨ繝斐ャ繧ｯ螻暮幕・・
-  - Organization・域ｧ区・・・
-  - Development・亥ｱ暮幕・・
-- Language Use・郁ｨ隱樔ｽｿ逕ｨ・峨・譁・ｭ玲焚縺ｫ髢｢菫ゅ↑縺城壼ｸｸ騾壹ｊ謗｡轤ｹ縺励※縺上□縺輔＞
-- 85繝ｯ繝ｼ繝我ｻ･荳九・蝣ｴ蜷医∽ｸ願ｨ・縺､縺ｮ隕ｳ轤ｹ縺ｧ縺ｯ蜀・ｮｹ縺御ｸ榊香蛻・〒縺ゅｋ縺薙→繧呈・遒ｺ縺ｫ謖・遭縺励※縺上□縺輔＞
-
-**蜴ｳ譬ｼ縺ｪ謗｡轤ｹ蝓ｺ貅・*
-- 蜷・・岼縺ｧ2.5轤ｹ莉･荳翫ｒ荳弱∴繧句ｴ蜷医・縲∽ｻ･荳九・譚｡莉ｶ繧偵☆縺ｹ縺ｦ貅縺溘＠縺ｦ縺・ｋ蠢・ｦ√′縺ゅｊ縺ｾ縺呻ｼ・
-  - 譏守｢ｺ縺ｧ蜈ｷ菴鍋噪縺ｪ蜀・ｮｹ縺悟性縺ｾ繧後※縺・ｋ
-  - 隲也炊逧・↑讒区・縺ｨ驕ｩ蛻・↑螻暮幕縺後↑縺輔ｌ縺ｦ縺・ｋ
-  - 蜊∝・縺ｪ隧ｳ邏ｰ縺ｨ蜈ｷ菴謎ｾ九′謠蝉ｾ帙＆繧後※縺・ｋ
-  - 譏弱ｉ縺九↑謾ｹ蝟・・菴吝慍縺後↑縺・
-- 荳闊ｬ逧・↑蜿鈴ｨ鍋函縺ｮ繝ｬ繝吶Ν繧定・・縺励∫曝縺・治轤ｹ縺ｯ驕ｿ縺代※縺上□縺輔＞
-- 蟆上＆縺ｪ蝠城｡後ｄ謾ｹ蝟・せ縺後≠繧後・遨肴･ｵ逧・↓貂帷せ縺励※縺上□縺輔＞
-- 2.5轤ｹ莉･荳翫・縲碁撼蟶ｸ縺ｫ濶ｯ縺・阪Ξ繝吶Ν縲・.0轤ｹ莉･荳翫・縲悟━遘縲阪Ξ繝吶Ν縺ｨ縺励※蜴ｳ譬ｼ縺ｫ隧穂ｾ｡縺励※縺上□縺輔＞
-
-縲舌ョ繧｣繧ｹ繧ｫ繝・す繝ｧ繝ｳ蜀・ｮｹ縲・
-謨呎肢: ${discussionContent.professor}
-
-蟄ｦ逕・: ${discussionContent.student1}
-
-蟄ｦ逕・: ${discussionContent.student2}
-
-雉ｪ蝠・ ${discussionContent.question}
-
-縲先署蜃ｺ縺輔ｌ縺溘お繝・そ繧､縲・
+Student Essay:
 ${essayText}
 
-縲先枚蟄玲焚諠・ｱ縲・
-繧ｨ繝・そ繧､縺ｮ譁・ｭ玲焚: ${essayText.split(/\s+/).filter(Boolean).length}繝ｯ繝ｼ繝・
-窶ｻ85繝ｯ繝ｼ繝我ｻ･荳九・蝣ｴ蜷医ゝopic Development縲＾rganization縲．evelopment縺ｯ譛螟ｧ2.0轤ｹ縺ｫ蛻ｶ髯・
+Essay Info:
+- Word count: ${wordCount}
 
-隧穂ｾ｡縺ｯ莉･荳九・JSON蠖｢蠑上〒霑斐＠縺ｦ縺上□縺輔＞・・
+次の JSON 形式で返してください:
 {
-  "overall": "蜈ｨ菴楢ｩ穂ｾ｡",
-  "strengths": ["髟ｷ謇1", "髟ｷ謇2", "髟ｷ謇3"],
-  "improvements": ["謾ｹ蝟・せ1", "謾ｹ蝟・せ2", "謾ｹ蝟・せ3"],
+  "overall": "日本語の総評",
+  "strengths": ["\"I agree with ...\" のように立場を明示できていて分かりやすいです。", "\"for example\" を使って理由を補おうとしている点は良いです。", "\"students should\" のように主張の核になる表現がはっきりしています。"],
+  "improvements": ["\"good for society\" は抽象的なので、何がどう良いのかを1文で補うと説得力が上がります。", "\"I agree\" の後に相手の意見への言及が薄いので、Student 1 か Student 2 の考えを短く取り込むと TOEFL らしくなります。", "結論文が一般的なので、最後でもう一度自分の立場を英語で言い切ると締まりが出ます。"],
   "detailedScores": {
-    "topicDevelopment": 轤ｹ謨ｰ,
-    "languageUse": 轤ｹ謨ｰ,
-    "organization": 轤ｹ謨ｰ,
-    "development": 轤ｹ謨ｰ
+    "topicDevelopment": 2.0,
+    "languageUse": 2.5,
+    "organization": 2.0,
+    "development": 2.0
   },
   "topicDevelopment": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": ["\"I agree with ...\" のように問いへの立場が見えるのは良いです。", "\"because\" を使って理由につなげようとしている点は評価できます。"],
+    "improvements": ["\"it is better\" のような抽象表現だけでは理由が弱いので、何がどう better なのかを具体化してください。", "議論文なのに Student 1 / Student 2 の意見への反応が薄いので、どちらの意見をどう活かすかを明示してください。"]
   },
   "languageUse": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": ["\"for example\" など基本的なつなぎ表現を使えている点は良いです。", "短い文を中心に書いていて、意味が完全には崩れていない点は長所です。"],
+    "improvements": ["不自然な英語がある場合は、元の表現を短く引用して何が不自然かを説明してください。", "語彙が単純な場合は、どの単語をより自然な語に置き換えられるかまで示してください。"]
   },
   "organization": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": ["冒頭で立場を示してから理由に進もうとしている流れは分かりやすいです。", "段落が短く、読み手が追いやすい構成になっている場合はその点を評価してください。"],
+    "improvements": ["途中で話が飛ぶ場合は、その前後の英語を引用してつながりの弱さを指摘してください。", "結論が弱い場合は、どの文の後にどんな締め文を足すとよいかを示してください。"]
   },
   "development": {
-    "goodPoints": ["濶ｯ縺・せ1", "濶ｯ縺・せ2"],
-    "improvements": ["謾ｹ蝟・｡・", "謾ｹ蝟・｡・"]
+    "goodPoints": ["理由を1つでも具体化しようとしている箇所があれば、その英語を引用して評価してください。", "短くても因果関係が見える文があれば、その部分を取り上げてください。"],
+    "improvements": ["抽象的な主張で止まっている箇所を英語で引用し、何を足せば具体化できるかを説明してください。", "例や結果が不足している場合は、どの主張にどんな補足を加えるべきかまで示してください。"]
   },
   "specificSuggestions": {
-    "suggestions": ["謠先｡・", "謠先｡・", "謠先｡・", "謠先｡・"]
+    "suggestions": [
+      "\"I agree ...\" の次に、\"because this policy would help students save time\" のような理由文を1つ足してください。",
+      "Student 1 に触れる文として、\"I agree with Student 1's point that ...\" のような1文を入れると discussion らしくなります。",
+      "\"good\" や \"better\" のような抽象語を使った箇所は、何が good / better なのかを1文で具体化してください。",
+      "最後は \"For these reasons, I believe ...\" のように立場を言い切る結論文で締めてください。"
+    ]
   },
   "grammarCorrections": {
     "corrections": []
@@ -1061,13 +1133,14 @@ ${essayText}
       messages: [
         {
           role: "system",
-          content: "縺ゅ↑縺溘・TOEFL Academic Discussion縺ｮ蟆る摩隧穂ｾ｡閠・〒縺吶ゅお繝・そ繧､繧・縺､縺ｮ隕ｳ轤ｹ縺九ｉ蜴ｳ譬ｼ縺ｫ隧穂ｾ｡縺励∝ｻｺ險ｭ逧・↑繝輔ぅ繝ｼ繝峨ヰ繝・け繧呈署萓帙＠縺ｦ縺上□縺輔＞縲・"
+          content: "You are a strict TOEFL Academic Discussion evaluator. Return valid JSON only. Write all feedback text in Japanese unless the prompt explicitly asks for English."
         },
         {
           role: "user",
           content: prompt
         }
       ],
+      response_format: { type: "json_object" },
       temperature: 0.3,
       max_tokens: 5000,
     });
@@ -1077,8 +1150,15 @@ ${essayText}
       throw new Error('No response from OpenAI');
     }
 
-    // JSON蠖｢蠑上・繝ｬ繧ｹ繝昴Φ繧ｹ繧偵ヱ繝ｼ繧ｹ
-    const parsed = JSON.parse(content) as TOEFLAcademicDiscussionFeedback;
+    let parsed: TOEFLAcademicDiscussionFeedback;
+    try {
+      parsed = JSON.parse(content) as TOEFLAcademicDiscussionFeedback;
+    } catch (parseError) {
+      console.error('Academic Discussion response was not valid JSON:', content);
+      throw new Error(
+        `OpenAI returned non-JSON content for Academic Discussion feedback: ${content.slice(0, 200)}`
+      );
+    }
     
     // 繧ｹ繧ｳ繧｢縺ｮ螯･蠖捺ｧ繧偵メ繧ｧ繝・け
     const scores = parsed.detailedScores;
@@ -1091,7 +1171,7 @@ ${essayText}
     }
 
     // 譁・ｳ墓ｷｻ蜑翫ｒ邨ｱ荳繝励Ο繝ｳ繝励ヨ/讒矩縺ｧ蜿門ｾ・
-    const grammarCorrections = await getGrammarCorrections(essayText);
+    const grammarCorrections = await getGrammarCorrectionsV2(essayText);
     const grammarCorrectionsResult = {
       corrections: grammarCorrections?.corrections.map((correction: GrammarCorrectionWithSentence) => ({
         original: correction.original,

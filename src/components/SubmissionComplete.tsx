@@ -15,7 +15,6 @@ interface SubmissionCompleteProps {
 }
 
 export default function SubmissionComplete({ 
-  essayId, 
   taskTitle, 
   wordCount, 
   timeSpent,

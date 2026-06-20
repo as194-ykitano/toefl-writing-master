@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, query, where, orderBy, getDocs, doc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Essay } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,11 +35,11 @@ export default function EssayHistory() {
         })) as Essay[];
 
         setEssays(essayList);
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error loading essays:', error);
-        if (error.code === 'permission-denied') {
+        if ((error as { code?: string }).code === 'permission-denied') {
           setError('アクセス権限がありません。管理者にお問い合わせください。');
-        } else if (error.code === 'failed-precondition') {
+        } else if ((error as { code?: string }).code === 'failed-precondition') {
           setError('データベースの設定が必要です。管理者にお問い合わせください。');
         } else {
           setError('エッセイの読み込み中にエラーが発生しました。');

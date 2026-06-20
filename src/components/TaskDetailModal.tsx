@@ -123,6 +123,8 @@ export default function TaskDetailModal({ task, isOpen, onClose }: TaskDetailMod
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   };
 
+  void formatBoldText;
+
   const renderSampleAnswer = (text: string) => {
     // **テキスト** を分割して配列にする
     const parts = text.split(/(\*\*.*?\*\*)/g);
