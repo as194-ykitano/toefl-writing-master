@@ -2,9 +2,13 @@
 import Layout from "@/components/layout"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Clock, BookOpen, Headphones, PenTool, ArrowRight } from "lucide-react"
+import { BookOpen, Headphones, PenTool, ArrowRight, LogOut, MessageSquare, FileText } from "lucide-react"
 import { useEffect, useState } from "react"
-import { getTasks, Task } from "@/lib/firebase"
+import { getTasks } from "@/lib/firebase"
+import { Task } from "@/lib/types"
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const getDifficultyStyle = (difficulty: string) => {
   switch (difficulty) {
@@ -22,11 +26,25 @@ const getDifficultyStyle = (difficulty: string) => {
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const { logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (e) {
+      alert('ログアウトに失敗しました');
+    }
+    setLogoutDialogOpen(false);
+  };
 
   useEffect(() => {
     const fetchTasks = async () => {
       const data = await getTasks()
-      setTasks(data)
+      const integratedOnly = data.filter(task => task.type === "integrated")
+      setTasks(integratedOnly)
       setLoading(false)
     }
     fetchTasks()
@@ -34,30 +52,71 @@ export default function TasksPage() {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="max-w-4xl mx-auto px-8 py-12">
-          <div>Loading...</div>
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">データを読み込み中...</h1>
+            <p className="text-gray-600">しばらくお待ちください。</p>
+          </div>
         </div>
-      </Layout>
+      </div>
     )
   }
 
   return (
-    <Layout>
-      <div className="max-w-4xl mx-auto px-8 py-12">
-        {/* Header */}
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-              <BookOpen className="w-4 h-4 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900">Integrated Task 演習</h1>
+    <>
+      {/* ヘッダー部分（max-w-7xlで横幅を広げる） */}
+      <div className="max-w-7xl mx-auto px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard">
+              <Button variant="outline" className="text-gray-600 hover:text-gray-800">
+                ← ダッシュボードに戻る
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold text-gray-900">TOEFL問題リスト</h1>
           </div>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            本番と同じ形式でTOEFL iBT Writing Integrated Taskを練習しましょう。各タスクは約26分で完了します。
-          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard">
+              <Button>
+                <FileText className="w-4 h-4 mr-2" /> ダッシュボードに戻る
+              </Button>
+            </Link>
+            <Link href="/essays">
+              <Button variant="outline">
+                <MessageSquare className="w-4 h-4 mr-2" /> 過去のエッセイ
+              </Button>
+            </Link>
+            {/* ログアウトボタン */}
+            <Button variant="ghost" onClick={() => setLogoutDialogOpen(true)}>
+              <LogOut className="w-4 h-4 mr-2" /> ログアウト
+            </Button>
+          </div>
         </div>
+      </div>
 
+      {/* ログアウト確認ダイアログ */}
+      <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>ログアウトの確認</DialogTitle>
+            <DialogDescription>
+              ログアウトしてもよろしいですか？
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setLogoutDialogOpen(false)}>
+              キャンセル
+            </Button>
+            <Button variant="destructive" onClick={handleLogout}>
+              ログアウト
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* メインコンテンツ部分は従来通りmax-w-4xlで */}
+      <div className="max-w-4xl mx-auto px-8 py-12">
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           <div className="text-center py-8 bg-white rounded-lg border border-gray-200">
@@ -103,10 +162,10 @@ export default function TasksPage() {
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <div className="flex items-center gap-6 text-sm text-gray-500">
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
                       {task.estimatedTime}
-                    </div>
+                    </div> */}
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4" />
                       <Headphones className="w-4 h-4" />
@@ -124,26 +183,7 @@ export default function TasksPage() {
             </div>
           ))}
         </div>
-
-        {/* Tips */}
-        <div className="mt-16 p-8 bg-white rounded-lg border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">演習のポイント</h3>
-          <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-gray-700">リーディングは3分間で集中して読み、要点をメモしましょう</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-gray-700">リスニングは一度しか聞けないので、注意深く聞き取りましょう</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-              <p className="text-gray-700">ライティングでは両方の内容を統合して論理的に記述しましょう</p>
-            </div>
-          </div>
-        </div>
       </div>
-    </Layout>
+    </>
   )
 }

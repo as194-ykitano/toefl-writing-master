@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { getTasks, Task, ReadingPassage } from '../lib/firebase';
+import { getTasks } from '../lib/firebase';
+import { Task, ReadingPassage } from '../lib/types';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ export default function TaskDisplay() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('client FIREBASE_API_KEY:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
     const fetchData = async () => {
       try {
         // タスクの取得
@@ -42,7 +44,7 @@ export default function TaskDisplay() {
         // タスクにパッセージを紐付け
         const tasksWithPassage = tasksData.map(task => ({
           ...task,
-          readingPassage: passagesMap[task.readingPassageId]
+          readingPassage: task.readingPassageId ? passagesMap[task.readingPassageId] : undefined
         }));
         setTasks(tasksWithPassage);
 
@@ -80,6 +82,27 @@ export default function TaskDisplay() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  // Replace direct function call with API call
+  const analyzeEssay = async (essayText: string, readingPassage: string, listeningPassage: string) => {
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        essayText,
+        readingPassage,
+        listeningPassage,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to analyze essay');
+    }
+
+    return response.json();
   };
 
   return (
