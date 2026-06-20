@@ -1,218 +1,711 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Layout from "@/components/layout"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { BarChart3, TrendingUp, Clock, Target, ArrowRight, Calendar } from "lucide-react"
-import { getEssays, getTaskById, deleteAllEssays, Essay, Task } from "@/lib/firebase"
+import { useAuth } from '@/contexts/AuthContext';
+import { useNotification } from '@/contexts/NotificationContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { collection, query, where, orderBy, getDocs, doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { getThisMonthVocabularyCount } from "@/lib/firebase";
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  ChartData
+} from 'chart.js';
+import { TrendingUp, BookOpen, Clock, FileText, BarChart2, MessageSquare, LogOut, Target, Calendar, CheckCircle, AlertCircle, Settings, List } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import NotificationToast from '@/components/NotificationToast';
+import { isAdmin } from '@/lib/utils';
+
+// Chart.jsの登録
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+type ScoreType = 'total' | 'integration' | 'organization' | 'language' | 'development';
+
+type EssayWithScores = {
+  id: string;
+  taskId: string;
+  userId: string;
+  content: string;
+  submittedAt: string;
+  score: number;
+  integrationScore: number;
+  organizationScore: number;
+  languageScore: number;
+  developmentScore: number;
+  wordCount: number;
+  timeSpent: number;
+  status: 'pending' | 'processing' | 'completed' | 'feedback_completed' | 'error';
+  feedbackRead?: boolean;
+  taskType?: string;
+  feedback?: {
+    overall: string;
+    strengths: string[];
+    improvements: string[];
+    detailedScores: {
+      integration: number;
+      organization: number;
+      language: number;
+      development: number;
+    };
+    topicDevelopment: {
+      goodPoints: string[];
+      improvements: string[];
+    };
+    generalDescription: {
+      goodPoints: string[];
+      improvements: string[];
+    };
+    specificSuggestions: {
+      suggestions: string[];
+    };
+    grammarCorrections: {
+      corrections: Array<{
+        original: string;
+        corrected: string;
+        explanation: string;
+        context: string;
+        startIndex: number;
+        endIndex: number;
+      }>;
+    };
+  };
+};
 
 export default function DashboardPage() {
-  const [essays, setEssays] = useState<Essay[]>([])
-  const [tasks, setTasks] = useState<{ [key: string]: Task }>({})
-  const [loading, setLoading] = useState(true)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const { user, logout } = useAuth();
+  const { 
+    unreadFeedbackCount, 
+    isNotificationVisible, 
+    notificationEssayId, 
+    notificationTaskTitle,
+    hideFeedbackNotification,
+    notificationEssayType 
+  } = useNotification();
+  const router = useRouter();
+  const [essays, setEssays] = useState<EssayWithScores[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedScoreType, setSelectedScoreType] = useState<ScoreType>('total');
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [thisMonthVocabularyCount, setThisMonthVocabularyCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        // エッセイの取得
-        const essaysData = await getEssays()
-        setEssays(essaysData)
+      if (!user) return;
 
-        // 各エッセイに関連するタスクの取得
-        const taskIds = Array.from(new Set(essaysData.map(essay => essay.taskId)))
-        const tasksData: { [key: string]: Task } = {}
-        await Promise.all(
-          taskIds.map(async (taskId) => {
-            const task = await getTaskById(taskId)
-            if (task) {
-              tasksData[taskId] = task
-            }
-          })
-        )
-        setTasks(tasksData)
+      try {
+        setLoading(true);
+        
+        // エッセイと単語数を並行して取得
+        const [essayList, vocabularyCount] = await Promise.all([
+          fetchEssays(),
+          getThisMonthVocabularyCount(user.uid)
+        ]);
+        
+        setEssays(essayList);
+        setThisMonthVocabularyCount(vocabularyCount);
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error fetching data:', error);
       } finally {
-        setLoading(false)
+        setLoading(false);
+      }
+    };
+
+    const fetchEssays = async () => {
+      const essaysRef = collection(db, 'users', user!.uid, 'essays');
+      
+      try {
+        // 全エッセイを取得
+        const q = query(
+          essaysRef,
+          orderBy('submittedAt', 'desc')
+        );
+        const querySnapshot = await getDocs(q);
+        const allEssays = processEssayData(querySnapshot);
+        
+        // TOEFLの問題のみをフィルタリング（taskIdを使ってタスク情報を確認）
+        const toeflEssays = [];
+        
+        for (const essay of allEssays) {
+          if (essay.taskId) {
+            try {
+              // タスク情報を取得
+              const taskDoc = await getDoc(doc(db, 'tasks', essay.taskId));
+              if (taskDoc.exists()) {
+                const taskData = taskDoc.data();
+                // TOEFLタスクの条件: typeが"integrated"または"independent"で、IELTS用のtaskTypeフィールドがない
+                if (taskData.type && !taskData.taskType) {
+                  toeflEssays.push(essay);
+                }
+              }
+            } catch (error) {
+              console.log(`タスク ${essay.taskId} の取得に失敗しました:`, error);
+              // エラーの場合は既存のtaskTypeフィールドで判断
+              if (!essay.taskType || essay.taskType === 'toefl') {
+                toeflEssays.push(essay);
+              }
+            }
+          } else {
+            // taskIdがない場合は既存のtaskTypeフィールドで判断
+            if (!essay.taskType || essay.taskType === 'toefl') {
+              toeflEssays.push(essay);
+            }
+          }
+        }
+        
+        return toeflEssays;
+      } catch (error) {
+        console.error('エッセイの取得に失敗しました:', error);
+        return [];
+      }
+    };
+
+    const processEssayData = (querySnapshot: any): EssayWithScores[] => {
+      const essayList = querySnapshot.docs.map((doc: any) => {
+        const data = doc.data();
+        // submittedAtの処理を安全に行う
+        let submittedAt: string;
+        if (data.submittedAt?.toDate) {
+          // Firestoreのタイムスタンプの場合
+          submittedAt = data.submittedAt.toDate().toISOString();
+        } else if (data.submittedAt instanceof Date) {
+          // Dateオブジェクトの場合
+          submittedAt = data.submittedAt.toISOString();
+        } else if (typeof data.submittedAt === 'string') {
+          // 既に文字列の場合
+          submittedAt = data.submittedAt;
+        } else if (typeof data.submittedAt === 'number') {
+          // タイムスタンプの場合
+          submittedAt = new Date(data.submittedAt).toISOString();
+        } else {
+          // デフォルト値
+          submittedAt = new Date().toISOString();
+        }
+
+        // フィードバックデータの処理
+        const feedback = data.feedback || {};
+        const detailedScores = feedback.detailedScores || {};
+        
+        // Academic Discussionかどうかを判定（topicDevelopmentの存在で判定）
+        const isAcademicDiscussion = 'topicDevelopment' in detailedScores;
+
+        return {
+          id: doc.id,
+          taskId: data.taskId || '',
+          userId: user!.uid,
+          content: data.content || '',
+          submittedAt,
+          score: data.score || 0,
+          integrationScore: isAcademicDiscussion 
+            ? (detailedScores.topicDevelopment || 0)
+            : (detailedScores.integration || 0),
+          organizationScore: detailedScores.organization || 0,
+          languageScore: isAcademicDiscussion 
+            ? (detailedScores.languageUse || 0)
+            : (detailedScores.language || 0),
+          developmentScore: detailedScores.development || 0,
+          wordCount: data.wordCount || 0,
+          timeSpent: data.timeSpent || 0,
+          status: data.status || 'pending',
+          feedbackRead: data.feedbackRead,
+          feedback: data.feedback,
+          taskType: isAcademicDiscussion ? 'academic_discussion' : (data.taskType || 'toefl')
+        } as EssayWithScores;
+      });
+      
+      return essayList;
+    };
+
+    fetchData();
+  }, [user]);
+
+  const averageScore = essays.length > 0
+    ? Math.round(essays.reduce((sum, e) => sum + (e.score || 0), 0) / essays.length)
+    : 0;
+  const totalAttempts = essays.length;
+  const bestScore = essays.length > 0
+    ? Math.max(...essays.map((e) => e.score || 0))
+    : 0;
+
+  // スコア推移グラフのデータを準備
+  const getScoreData = (type: ScoreType) => {
+    return essays
+      .slice()
+      .reverse()
+      .map(essay => {
+        switch (type) {
+          case 'integration':
+            return essay.integrationScore || 0;
+          case 'organization':
+            return essay.organizationScore || 0;
+          case 'language':
+            return essay.languageScore || 0;
+          case 'development':
+            return essay.developmentScore || 0;
+          default:
+            return essay.score || 0;
+        }
+      });
+  };
+
+  const getScoreLabel = (type: ScoreType) => {
+    switch (type) {
+      case 'integration':
+        return 'Integration/Topic Development';
+      case 'organization':
+        return 'Organization';
+      case 'language':
+        return 'Language/Language Use';
+      case 'development':
+        return 'Development';
+      default:
+        return '総合スコア';
+    }
+  };
+
+  const chartData: ChartData<'line'> = {
+    labels: essays
+      .slice()
+      .reverse()
+      .map(essay => new Date(essay.submittedAt).toLocaleDateString('ja-JP')),
+    datasets: [
+      {
+        label: getScoreLabel(selectedScoreType),
+        data: getScoreData(selectedScoreType),
+        borderColor: 'rgb(99, 102, 241)',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: 'rgb(99, 102, 241)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index' as const,
+      intersect: false,
+    },
+    plugins: {
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: {
+          size: 14,
+          weight: 'bold' as const,
+        },
+        bodyFont: {
+          size: 13,
+        },
+        padding: 12,
+        callbacks: {
+          label: function(context: any) {
+            return `${getScoreLabel(selectedScoreType)}: ${context.parsed.y}点`;
+          }
+        }
+      },
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          font: {
+            size: 12
+          }
+        }
+      },
+      y: {
+        min: 0,
+        max: selectedScoreType === 'total' ? 30 : 5,
+        ticks: {
+          stepSize: selectedScoreType === 'total' ? 5 : 0.5,
+          font: {
+            size: 12
+          }
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.1)'
+        }
       }
     }
+  };
 
-    fetchData()
-  }, [])
+  // Integrated（このページで取得したもの）に限定した未読数
+  const integratedUnreadCount = essays.filter(essay =>
+    (essay.status === 'completed' || essay.status === 'feedback_completed') &&
+    essay.feedback &&
+    !essay.feedbackRead
+  ).length;
 
-  const handleDeleteAllEssays = async () => {
-    if (!confirm('本当に全てのエッセイを削除しますか？この操作は取り消せません。')) {
-      return;
-    }
-    
-    setIsDeleting(true);
+  const handleLogout = async () => {
     try {
-      await deleteAllEssays();
-      setEssays([]);
-      alert('全てのエッセイを削除しました');
-    } catch (error) {
-      console.error('Error deleting essays:', error);
-      alert('エッセイの削除中にエラーが発生しました');
-    } finally {
-      setIsDeleting(false);
+      await logout();
+      router.push('/login');
+    } catch (e) {
+      alert('ログアウトに失敗しました');
     }
+    setLogoutDialogOpen(false);
+  };
+
+  const handleNotificationView = () => {
+    if (notificationEssayId) {
+      router.push(`/dashboard/essays/${notificationEssayId}`);
+    }
+    hideFeedbackNotification();
   };
 
   if (loading) {
     return (
-      <Layout>
-        <div className="max-w-5xl mx-auto px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">データを読み込み中...</h1>
-            <p className="text-gray-600">しばらくお待ちください。</p>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">データを読み込み中...</h1>
+              <p className="text-gray-600">しばらくお待ちください。</p>
+            </div>
           </div>
         </div>
-      </Layout>
-    )
+      </ProtectedRoute>
+    );
   }
 
-  const averageScore = essays.length > 0
-    ? Math.round(essays.reduce((sum, e) => sum + (e.score || 0), 0) / essays.length)
-    : 0
-  const totalAttempts = essays.length
-  const bestScore = essays.length > 0
-    ? Math.max(...essays.map((e) => e.score || 0))
-    : 0
-
   return (
-    <Layout>
-      <div className="max-w-5xl mx-auto px-8 py-12">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-16">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">ダッシュボード</h1>
-            <p className="text-gray-600">学習の進捗と成績を確認しましょう</p>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/tasks">
-              <Button className="bg-black hover:bg-gray-800 text-white">
-                新しい演習を開始
-                <ArrowRight className="w-4 h-4 ml-2" />
+    <ProtectedRoute>
+      <div className="max-w-6xl mx-auto px-8 py-8">
+        {/* ヘッダー部分 */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link href="/training-selection">
+              <Button variant="outline" className="text-gray-600 hover:text-gray-800">
+                ← トレーニング選択に戻る
               </Button>
             </Link>
-            <Button 
-              variant="destructive" 
-              onClick={handleDeleteAllEssays}
-              disabled={isDeleting || essays.length === 0}
-            >
-              {isDeleting ? '削除中...' : '全てのエッセイを削除'}
+            <h1 className="text-2xl font-bold text-gray-900">TOEFL Integrated Task</h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/tasks">
+              <Button>
+                <FileText className="w-4 h-4 mr-2" /> 演習を始める
+              </Button>
+            </Link>
+            <Link href="/essays">
+              <Button variant="outline" className="relative">
+                <MessageSquare className="w-4 h-4 mr-2" /> 
+                過去のエッセイ
+                {integratedUnreadCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {integratedUnreadCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            {/* 管理者のみ表示されるadmin dashboardへのリンク */}
+            {user && isAdmin(user.email) && (
+              <Link href="/admin/dashboard">
+                <Button variant="outline" className="bg-blue-50 hover:bg-blue-100 border-blue-200">
+                  <Settings className="w-4 h-4 mr-2" />
+                  管理者ダッシュボード
+                </Button>
+              </Link>
+            )}
+            {/* ログアウトボタン */}
+            <Button variant="ghost" onClick={() => setLogoutDialogOpen(true)}>
+              <LogOut className="w-4 h-4 mr-2" /> ログアウト
             </Button>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-4 h-4 text-white" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-gray-900">{totalAttempts}</p>
-              <p className="text-gray-600 text-sm">総演習回数</p>
-              <p className="text-gray-500 text-xs">今月の目標: 10回</p>
-            </div>
-          </div>
+        {/* ログアウト確認ダイアログ */}
+        <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>ログアウトの確認</DialogTitle>
+              <DialogDescription>
+                ログアウトしてもよろしいですか？
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setLogoutDialogOpen(false)}>
+                キャンセル
+              </Button>
+              <Button variant="destructive" onClick={handleLogout}>
+                ログアウト
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-white" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-gray-900">{averageScore}</p>
-              <p className="text-gray-600 text-sm">平均スコア</p>
-              <p className="text-gray-500 text-xs">目標スコア: 26</p>
-            </div>
-          </div>
+        {/* 通知トースト */}
+        <NotificationToast
+          essayId={notificationEssayId || ''}
+          taskTitle={notificationTaskTitle || undefined}
+          isVisible={isNotificationVisible}
+          onClose={hideFeedbackNotification}
+          onView={handleNotificationView}
+          essayType={notificationEssayType || undefined}
+        />
 
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
-                <Target className="w-4 h-4 text-white" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-gray-900">{bestScore}</p>
-              <p className="text-gray-600 text-sm">最高スコア</p>
-              <p className="text-gray-500 text-xs">前回から +2点</p>
-            </div>
-          </div>
-        </div>
+        <div className="max-w-7xl mx-auto">
+          {/* 統計カード */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">総演習回数</CardTitle>
+                <BookOpen className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalAttempts}</div>
+                <p className="text-xs text-muted-foreground">
+                  これまでに提出したエッセイの数
+                </p>
+              </CardContent>
+            </Card>
 
-        {/* Recent Essays */}
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <Calendar className="w-5 h-5 text-gray-600" />
-            <h2 className="text-xl font-semibold text-gray-900">最近の演習</h2>
-          </div>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">平均スコア</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{averageScore}</div>
+                <p className="text-xs text-muted-foreground">
+                  全エッセイの平均スコア
+                </p>
+              </CardContent>
+            </Card>
 
-          <div className="space-y-4">
-            {essays.map((essay, index) => (
-              <Link key={essay.id} href={`/dashboard/results/${essay.id}`}>
-                <div className="bg-white rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer border border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 bg-black text-white rounded-lg flex items-center justify-center text-sm font-bold">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{tasks[essay.taskId]?.title || 'Unknown Task'}</h3>
-                        <p className="text-sm text-gray-600">{essay.createdAt.toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-8 text-sm">
-                      <div className="text-center">
-                        <div className="font-semibold text-gray-900">{essay.wordCount}</div>
-                        <div className="text-gray-600">語</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="font-semibold text-gray-900">{essay.timeSpent}</div>
-                        <div className="text-gray-600">時間</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-gray-900">{essay.score || '-'}</div>
-                        <div className="text-gray-600">点</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={`font-semibold ${essay.status === "submitted" ? "text-blue-600" : "text-green-600"}`}>
-                          {essay.status === "submitted" ? "提出完了" : "フィードバック完了"}
-                        </div>
-                        <div className="text-gray-600">ステータス</div>
-                      </div>
-                      <ArrowRight className="w-4 h-4 text-gray-400" />
-                    </div>
-                  </div>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">最高スコア</CardTitle>
+                <Target className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{bestScore}</div>
+                <p className="text-xs text-muted-foreground">
+                  これまでの最高スコア
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 border-2 border-transparent hover:border-blue-200 bg-gradient-to-br from-white to-blue-50/30" onClick={() => router.push('/vocabularylist')}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">単語リスト</CardTitle>
+                <List className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{thisMonthVocabularyCount}</div>
+                <p className="text-xs text-muted-foreground">
+                  今月追加された単語・フレーズ
+                </p>
+                <div className="mt-2 flex items-center gap-1 text-xs text-blue-600">
+                  <span>詳細を見る</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
-              </Link>
-            ))}
+              </CardContent>
+            </Card>
           </div>
-        </div>
 
-        {/* Chart Placeholder */}
-        <div className="mt-16">
-          <div className="flex items-center gap-3 mb-8">
-            <TrendingUp className="w-5 h-5 text-gray-600" />
-            <h2 className="text-xl font-semibold text-gray-900">スコア推移</h2>
-          </div>
-          <div className="bg-white rounded-lg p-12 border border-gray-200">
-            <div className="text-center">
-              <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500 font-medium">グラフ表示エリア</p>
-              <p className="text-gray-400 text-sm">Chart.js実装予定</p>
-            </div>
-          </div>
+          {/* スコア推移チャート */}
+          <Card className="mb-8">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>スコア推移</CardTitle>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSelectedScoreType('total')}
+                    className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                      selectedScoreType === 'total'
+                        ? 'bg-indigo-100 text-indigo-700'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    総合
+                  </button>
+                  <button
+                    onClick={() => setSelectedScoreType('integration')}
+                    className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                      selectedScoreType === 'integration'
+                        ? 'bg-indigo-100 text-indigo-700'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Integration
+                  </button>
+                  <button
+                    onClick={() => setSelectedScoreType('organization')}
+                    className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                      selectedScoreType === 'organization'
+                        ? 'bg-indigo-100 text-indigo-700'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Organization
+                  </button>
+                  <button
+                    onClick={() => setSelectedScoreType('language')}
+                    className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                      selectedScoreType === 'language'
+                        ? 'bg-indigo-100 text-indigo-700'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Language
+                  </button>
+                  <button
+                    onClick={() => setSelectedScoreType('development')}
+                    className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                      selectedScoreType === 'development'
+                        ? 'bg-indigo-100 text-indigo-700'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Development
+                  </button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center h-[400px]">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+              ) : essays.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">まだエッセイが提出されていません。</p>
+                  <Button asChild className="mt-4">
+                    <Link href="/tasks">新しいエッセイを書く</Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="h-[400px]">
+                  <Line data={chartData} options={chartOptions} />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* 未確認のフィードバック */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>未確認のフィードバック</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center h-32">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+              ) : essays.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">まだエッセイが提出されていません。</p>
+                  <Button asChild className="mt-4">
+                    <Link href="/tasks">新しいエッセイを書く</Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {essays
+                    .filter(essay => 
+                      (essay.status === 'completed' || essay.status === 'feedback_completed') && 
+                      essay.feedback && 
+                      !essay.feedbackRead
+                    )
+                    .sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime())
+                    .slice(0, 5)
+                    .map((essay) => (
+                    <div
+                      key={essay.id}
+                      className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium">
+                            {new Date(essay.submittedAt).toLocaleDateString('ja-JP')} {new Date(essay.submittedAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            スコア: {essay.score !== undefined && essay.score !== null ? 
+                              essay.score.toFixed(1) : 
+                              essay.status === 'processing' ? 'AI添削中' :
+                              essay.status === 'error' ? 'エラー' :
+                              '評価中'}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {/* 未読バッジのみ表示 */}
+                          <div className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>未読</span>
+                          </div>
+                          <Button asChild variant="outline" size="sm">
+                            <Link href={`/dashboard/essays/${essay.id}`}>詳細を見る</Link>
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {essay.content}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  {/* 未読のフィードバックがない場合のメッセージ */}
+                  {essays.filter(essay => 
+                    (essay.status === 'completed' || essay.status === 'feedback_completed') && 
+                    essay.feedback && 
+                    !essay.feedbackRead
+                  ).length === 0 && (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">未確認のフィードバックはありません。</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+
         </div>
       </div>
-    </Layout>
-  )
+    </ProtectedRoute>
+  );
 }

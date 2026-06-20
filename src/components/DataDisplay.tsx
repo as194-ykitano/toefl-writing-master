@@ -1,12 +1,20 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { getTasks, getEssays, Task, Essay, ReadingPassage } from '../lib/firebase';
+import { getTasks, getEssays } from '../lib/firebase';
+import { Task, Essay, ReadingPassage } from '../lib/types';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
+// 秒を分:秒の形式に変換する関数
+const formatTime = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
 export default function DataDisplay() {
   // Task型は now: readingPassageId, listeningAudioURL でOK
-  const [tasks, setTasks] = useState<Task[]>([]);
+  // const [tasks, setTasks] = useState<Task[]>([]);
   const [essays, setEssays] = useState<Essay[]>([]);
   const [readingPassages, setReadingPassages] = useState<ReadingPassage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,23 +28,25 @@ export default function DataDisplay() {
       try {
         // タスクの取得
         const tasksData = await getTasks();
-        setTasks(tasksData);
+        // setTasks(tasksData);
 
         // 各タスクのreadingPassageIdでパッセージを取得
         const passagesMap: { [id: string]: ReadingPassage } = {};
-        const passageIds = Array.from(new Set(tasksData.map(t => t.readingPassageId)));
+        const passageIds = Array.from(new Set(tasksData.map(t => t.readingPassageId).filter(Boolean)));
         await Promise.all(
           passageIds.map(async (pid) => {
-            const docSnap = await getDoc(doc(db, 'readingPassages', pid));
-            if (docSnap.exists()) {
-              passagesMap[pid] = { id: docSnap.id, ...docSnap.data() } as ReadingPassage;
+            if (pid) {
+              const docSnap = await getDoc(doc(db, 'readingPassages', pid));
+              if (docSnap.exists()) {
+                passagesMap[pid] = { id: docSnap.id, ...docSnap.data() } as ReadingPassage;
+              }
             }
           })
         );
         // タスクにパッセージを紐付け
         const tasksWithPassage = tasksData.map(task => ({
           ...task,
-          readingPassage: passagesMap[task.readingPassageId]
+          readingPassage: task.readingPassageId ? passagesMap[task.readingPassageId] : undefined
         }));
         setTasksWithPassage(tasksWithPassage);
 
@@ -97,11 +107,11 @@ export default function DataDisplay() {
         <div className="grid gap-4">
           {essays.map(essay => (
             <div key={essay.id} className="border p-4 rounded-lg shadow">
-              <p className="text-gray-800">{essay.essayText}</p>
+              <p className="text-gray-800">{essay.content}</p>
               <div className="mt-2 text-sm text-gray-600">
                 <p>Word Count: {essay.wordCount}</p>
                 <p>Time Spent: {essay.timeSpent}</p>
-                <p>Status: {essay.status === "submitted" ? "提出完了" : "フィードバック完了"}</p>
+                <p>Status: {essay.status === "completed" ? "提出完了" : "フィードバック完了"}</p>
                 {essay.score && <p>Score: {essay.score}</p>}
               </div>
             </div>

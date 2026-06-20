@@ -1,0 +1,85 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 管理者のメールアドレスリスト
+    function isAdmin() {
+      return request.auth != null && 
+        request.auth.token.email in [
+          'admin@gmail.com',    // 管理者のメールアドレス
+          'admin@example.com',  // 管理者のメールアドレスをここに追加
+          'ykita@example.com'   // あなたのメールアドレスを追加
+        ];
+    }
+
+    // ユーザーコレクション全体 - 管理者のみが読み取り可能
+    match /users/{userId} {
+      // 個別ユーザーは自分の情報のみ読み取り・更新可能
+      // これにはtrainingPermissions（TOEFL、IELTS、Basic、YouTuber、TOEFL Academic Discussion）も含まれる
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // 管理者は全ユーザーの情報を読み取り・更新可能
+      // 管理者はユーザーのトレーニング権限を設定可能
+      allow read, update: if isAdmin();
+      
+      // サブコレクション
+      match /essays/{essayId} {
+        // ユーザーは自分のエッセイのみ読み取り・作成・更新・削除可能
+        // これにはTOEFL、IELTS、TOEFL Academic Discussionの全エッセイが含まれる
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+        // 管理者は全ユーザーのエッセイを読み取り・更新・削除可能
+        allow read, update, delete: if isAdmin();
+      }
+      // Basicトレーニング用エッセイサブコレクション
+      match /basicEssays/{essayId} {
+        // ユーザーは自分のBasicエッセイのみ読み取り・作成・更新・削除可能
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+        // 管理者は全ユーザーのBasicエッセイを読み取り・更新・削除可能
+        allow read, update, delete: if isAdmin();
+      }
+      // YouTube Learning用エッセイサブコレクション
+      match /youTuberEssays/{essayId} {
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+        // 管理者は全ユーザーのYouTuberエッセイを読み取り・更新・削除可能
+        allow read, update, delete: if isAdmin();
+      }
+      match /studySessions/{sessionId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      // 単語・フレーズコレクション
+      match /vocabulary/{vocabularyId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // タスク - 認証されたユーザーが読み取り可能、管理者のみが作成・更新・削除可能
+    // これにはTOEFL、IELTS、Basic、YouTuber、TOEFL Academic Discussionの全タスクが含まれる
+    match /tasks/{taskId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // リーディングパッセージ - 認証されたユーザーが読み取り可能、管理者のみが作成・更新・削除可能
+    match /readingPassages/{passageId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // YouTube Learning用タスク - 認証されたユーザーが読み取り可能、管理者のみが作成・更新・削除可能
+    match /youTuberTasks/{taskId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // YouTube動画 - 認証されたユーザーが読み取り・作成可能、管理者のみが更新・削除可能
+    match /youtubeVideos/{videoId} {
+      allow read, create: if request.auth != null;
+      allow update, delete: if isAdmin();
+    }
+
+    // エッセイコレクション（ルートレベル - 現在は使用されていない）
+    match /essays/{essayId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+  }
+}

@@ -14,7 +14,6 @@ export default function ListeningScreen({ imageURL, audioURL, onComplete }: List
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function ListeningScreen({ imageURL, audioURL, onComplete }: List
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(() => {
-          setIsPlaying(true);
+          // setIsPlaying(true);
         }).catch((error) => {
           console.error('Auto-play failed:', error);
           setError('音声の再生に失敗しました。ブラウザの設定を確認してください。');
@@ -112,29 +111,6 @@ export default function ListeningScreen({ imageURL, audioURL, onComplete }: List
       audio.removeEventListener('error', handleError);
     };
   }, [audioURL, onComplete]);
-
-  const handlePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch((error) => {
-            console.error('Playback failed:', error);
-            setError('音声の再生に失敗しました。ブラウザの設定を確認してください。');
-          });
-        }
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">

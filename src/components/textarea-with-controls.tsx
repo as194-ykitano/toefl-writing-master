@@ -105,7 +105,15 @@ export default function TextAreaWithControls({
           >
             Reset
           </Button>
-          <Button onClick={onSubmit} disabled={disabled} className="bg-green-600 hover:bg-green-700" size="sm">
+          <Button 
+            onClick={() => {
+              console.log('=== Submit button clicked ===');
+              onSubmit();
+            }} 
+            disabled={disabled} 
+            className="bg-green-600 hover:bg-green-700" 
+            size="sm"
+          >
             Submit
           </Button>
         </div>

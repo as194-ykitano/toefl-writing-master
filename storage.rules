@@ -1,0 +1,38 @@
+rules_version = '2';
+
+// Craft rules based on data in your Firestore database
+// allow write: if firestore.get(
+//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 音声ファイルのルール
+    match /audio/{taskId}/{fileName} {
+      // 認証済みユーザーのみ読み取り可能
+      allow read: if request.auth != null;
+      
+      // 管理者のみ書き込み可能（将来的に実装）
+      // 現在は一時的に認証済みユーザーに書き込み許可
+      allow write: if request.auth != null;
+    }
+    
+    // IELTS画像のルール
+    match /ielts_images/{fileName} {
+      // 認証済みユーザーのみ読み取り可能
+      allow read: if request.auth != null;
+      
+      // 認証済みユーザーに書き込み許可（管理者チェックは将来的に実装）
+      allow write: if request.auth != null;
+    }
+    
+    // プロフィール画像のルール
+    match /profile-images/{userId}/{fileName} {
+      // 自分のプロフィール画像のみ読み取り・書き込み可能
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // その他のファイルは拒否
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+} 

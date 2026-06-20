@@ -1,8 +1,11 @@
-﻿node_modules/
+node_modules/
 .next/
 .env
 .env.local
+app.yaml
 .DS_Store
 *.log
 output/plan/
 outputs/plans/
+out/
+tsconfig.tsbuildinfo

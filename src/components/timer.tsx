@@ -15,9 +15,11 @@ export default function Timer({ initialSeconds, isRunning, onFinish }: TimerProp
   useEffect(() => {
     setSeconds(initialSeconds)
     hasFinished.current = false
+    console.log('Timer initialized:', { initialSeconds, isRunning });
   }, [initialSeconds])
 
   useEffect(() => {
+    console.log('Timer running state changed:', { isRunning, seconds });
     if (!isRunning) return
 
     const interval = setInterval(() => {
@@ -36,6 +38,7 @@ export default function Timer({ initialSeconds, isRunning, onFinish }: TimerProp
   useEffect(() => {
     if (seconds === 0 && isRunning && !hasFinished.current) {
       hasFinished.current = true
+      console.log('Timer finished, calling onFinish');
       onFinish()
     }
   }, [seconds, isRunning, onFinish])
