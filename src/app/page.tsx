@@ -20,7 +20,8 @@ export default function HomePage() {
           if (!user.displayName || user.displayName.trim() === '') {
             router.push("/user-name-setup");
           } else {
-            router.push("/training-selection");
+            // 新しい 4 技能ホームへ（旧 /training-selection も引き続き利用可能）
+            router.push("/home");
           }
         }
       } else {

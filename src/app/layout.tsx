@@ -9,8 +9,8 @@ import { Toaster } from 'sonner';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Writing Master",
-  description: "Writingの練習ができるアプリケーション",
+  title: "Prep Master — TOEFL / IELTS 4技能対策",
+  description: "TOEFL / IELTS の4技能（Reading / Listening / Speaking / Writing）を練習・診断・復習できるアプリケーション",
   icons: {
     icon: "/writing-webapp-icon.svg",
   },
