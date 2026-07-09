@@ -154,47 +154,78 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "audio file is required" }, { status: 400 });
     }
 
-    // 1. 文字起こし（verbose_json でセグメントのタイムスタンプも取得し、流暢性計測に使う）
+    // 1. 文字起こし
+    //    verbose_json + 単語レベルのタイムスタンプで、ポーズ（無音）を語間ギャップから正確に計測する。
+    //    フィードバックモードではフィラー語の書き起こしを促す prompt を与える
+    //    （Whisper は既定で um / uh などを省略しがちなため）。
+    //    Listen and Repeat はお手本文と比較するため prompt なしの素の書き起こしを使う。
     const transcription = (await openai.audio.transcriptions.create({
       file: audio,
       model: "whisper-1",
       language: "en",
       response_format: "verbose_json",
-      // Listen and Repeat はお手本文をヒントに与えると近い語彙で書き起こされすぎるため
-      // prompt は渡さない（純粋な発話の書き起こしを得る）
+      timestamp_granularities: ["word"],
+      ...(evalMode === "repeat"
+        ? {}
+        : { prompt: "Umm, uh, er, ah, hmm... you know, I mean, like..." }),
     })) as unknown as {
       text?: string;
       duration?: number;
-      segments?: { start: number; end: number; text: string }[];
+      words?: { word: string; start: number; end: number }[];
     };
     const transcript = transcription.text?.trim() ?? "";
 
-    // 流暢性メトリクス: 無音割合・ポーズ回数・WPM
-    const segments = transcription.segments ?? [];
+    // 流暢性メトリクス: 単語間ギャップからポーズを計測
+    const words = transcription.words ?? [];
     const totalDurationSec =
-      transcription.duration ?? (segments.length > 0 ? segments[segments.length - 1].end : 0);
-    const speechSec = segments.reduce((a, s) => a + Math.max(0, s.end - s.start), 0);
+      transcription.duration ?? (words.length > 0 ? words[words.length - 1].end : 0);
+    const PAUSE_MIN = 0.3; // これ以上の語間ギャップを「ポーズ」とみなす
+    const LONG_PAUSE = 1.0;
+    let pauseSec = 0;
     let longPauses = 0;
-    if (segments.length > 0) {
-      if (segments[0].start > 1.0) longPauses += 1;
-      for (let i = 1; i < segments.length; i++) {
-        if (segments[i].start - segments[i - 1].end > 1.0) longPauses += 1;
+    if (words.length > 0 && totalDurationSec > 0) {
+      const gaps: number[] = [];
+      gaps.push(words[0].start); // 出だしの沈黙
+      for (let i = 1; i < words.length; i++) {
+        gaps.push(words[i].start - words[i - 1].end);
+      }
+      gaps.push(Math.max(0, totalDurationSec - words[words.length - 1].end)); // 末尾の沈黙
+      for (const gap of gaps) {
+        if (gap >= PAUSE_MIN) pauseSec += gap;
+        if (gap >= LONG_PAUSE) longPauses += 1;
       }
     }
-    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
+    const speechSec = Math.max(0, totalDurationSec - pauseSec);
+
+    // フィラーワードの検出
+    const FILLER_RE = /^(um+|uh+|er+m?|ah+|hmm+|mm+)$/i;
+    const transcriptTokens = transcript
+      .toLowerCase()
+      .replace(/[^a-z'\s]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+    const fillerHits: string[] = transcriptTokens.filter((t) => FILLER_RE.test(t));
+    // "you know" / "I mean" の口癖もカウント
+    const phraseFillers =
+      (transcript.toLowerCase().match(/\byou know\b/g)?.length ?? 0) +
+      (transcript.toLowerCase().match(/\bi mean\b/g)?.length ?? 0);
+    const fillerCount = fillerHits.length + phraseFillers;
+
+    const wordCount = words.length > 0 ? words.length : transcriptTokens.length;
     const fluency =
       totalDurationSec > 1 && wordCount > 0
         ? {
             durationSec: Math.round(totalDurationSec * 10) / 10,
             /** 発話速度（総時間ベースの words per minute） */
             wpm: Math.round(wordCount / (totalDurationSec / 60)),
-            /** 調音速度（実際に話している時間ベースの WPM） */
-            articulationWpm:
-              speechSec > 0.5 ? Math.round(wordCount / (speechSec / 60)) : 0,
-            /** 無音割合（0〜1） */
-            pauseRatio: Math.max(0, Math.round((1 - speechSec / totalDurationSec) * 100) / 100,),
+            /** 調音速度（ポーズを除いた発話時間ベースの WPM） */
+            articulationWpm: speechSec > 0.5 ? Math.round(wordCount / (speechSec / 60)) : 0,
+            /** 無音割合（0.3 秒以上のポーズの合計 ÷ 総時間） */
+            pauseRatio: Math.round((pauseSec / totalDurationSec) * 100) / 100,
             /** 1 秒以上のポーズの回数 */
             longPauses,
+            /** フィラーワード（um, uh, you know など）の回数 */
+            fillerCount,
           }
         : undefined;
 
@@ -236,8 +267,8 @@ export async function POST(request: Request) {
         {
           role: "system",
           content: `あなたは経験豊富な ${isIelts ? "IELTS" : "TOEFL"} Speaking 試験官です。受験者の回答の文字起こしと計測済みの流暢性データを評価し、日本語でフィードバックを返します。
-評価観点: Fluency and Coherence（提供される無音割合・ポーズ回数・WPM の計測値を必ず考慮）/ Lexical Resource / Grammatical Range and Accuracy（発音は文字起こしからは評価できないため言及しない）。
-参考: 英語話者の自然な発話速度はおよそ 120〜160 WPM。100 未満はゆっくり、長いポーズが多いと流暢性の減点要因。
+評価観点: Fluency and Coherence（提供される無音割合・ポーズ回数・WPM・フィラー回数の計測値を必ず考慮）/ Lexical Resource / Grammatical Range and Accuracy（発音は文字起こしからは評価できないため言及しない）。
+参考: 英語話者の自然な発話速度はおよそ 120〜160 WPM。100 未満はゆっくり。長いポーズの多発・無音割合 30% 超・フィラーの多用（回答時間 30 秒あたり 3 回以上）は流暢性の減点要因。
 ${scaleNote}
 必ず次の JSON 形式で返してください:
 {
@@ -252,7 +283,7 @@ ${scaleNote}
           role: "user",
           content: `【タスク】${label}\n【設問】\n${prompt}\n\n【受験者の回答（文字起こし）】\n${transcript}\n\n【流暢性の計測値】\n${
             fluency
-              ? `回答時間: ${fluency.durationSec} 秒 / 発話速度: ${fluency.wpm} WPM（調音速度 ${fluency.articulationWpm} WPM）/ 無音割合: ${Math.round(fluency.pauseRatio * 100)}% / 1 秒以上のポーズ: ${fluency.longPauses} 回`
+              ? `回答時間: ${fluency.durationSec} 秒 / 発話速度: ${fluency.wpm} WPM（調音速度 ${fluency.articulationWpm} WPM）/ 無音割合: ${Math.round(fluency.pauseRatio * 100)}% / 1 秒以上のポーズ: ${fluency.longPauses} 回 / フィラー: ${fluency.fillerCount} 回`
               : "計測できませんでした"
           }`,
         },

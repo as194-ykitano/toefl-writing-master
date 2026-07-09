@@ -475,12 +475,13 @@ function SpeakingFeedbackCard({
       ) : (
         <>
           {feedback.fluency && (
-            <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
               {[
                 { label: "回答時間", value: `${feedback.fluency.durationSec} 秒` },
                 { label: "発話速度", value: `${feedback.fluency.wpm} WPM` },
                 { label: "無音割合", value: `${Math.round(feedback.fluency.pauseRatio * 100)}%` },
                 { label: "長いポーズ", value: `${feedback.fluency.longPauses} 回` },
+                { label: "フィラー", value: `${feedback.fluency.fillerCount ?? 0} 回` },
               ].map((m) => (
                 <div key={m.label} className="bg-gray-50 rounded-lg border border-gray-100 px-3 py-2">
                   <div className="text-[10px] text-gray-400">{m.label}</div>

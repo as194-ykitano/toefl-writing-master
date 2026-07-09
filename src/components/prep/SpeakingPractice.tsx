@@ -19,12 +19,17 @@ import {
 } from "@/lib/prep/types";
 import { newSessionId, saveSession } from "@/lib/prep/session-store";
 import { saveRecording } from "@/lib/prep/recording-store";
+import { convertToWav, pickRecorderMimeType } from "@/lib/prep/audio-utils";
 
 type Phase = "ready" | "prep" | "recording" | "review";
 
 interface Recording {
   url: string;
   blob: Blob;
+  /** 平均音量。0.005 未満はマイクがほぼ無音だった可能性が高い */
+  rms?: number;
+  /** WAV 変換（=デコード検証）に失敗した場合のメッセージ */
+  convertError?: string;
 }
 
 interface SpeakingPracticeProps {
@@ -82,7 +87,10 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const [submitted, setSubmitted] = useState(false);
   const [analyzingIndex, setAnalyzingIndex] = useState(0);
   const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
+  const [micLevel, setMicLevel] = useState(0);
   const questionAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const levelRafRef = useRef<number>(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -121,9 +129,39 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const cleanupStream = () => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
+    cancelAnimationFrame(levelRafRef.current);
+    audioCtxRef.current?.close().catch(() => undefined);
+    audioCtxRef.current = null;
+    setMicLevel(0);
   };
 
   useEffect(() => cleanupStream, []);
+
+  /** 録音中のマイク入力レベルを可視化（マイクが拾えていない場合に気づけるように） */
+  const startLevelMeter = (stream: MediaStream) => {
+    try {
+      const ctx = new AudioContext();
+      audioCtxRef.current = ctx;
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+      source.connect(analyser);
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      const tick = () => {
+        analyser.getByteTimeDomainData(data);
+        let sum = 0;
+        for (let i = 0; i < data.length; i++) {
+          const v = (data[i] - 128) / 128;
+          sum += v * v;
+        }
+        setMicLevel(Math.min(1, Math.sqrt(sum / data.length) * 4));
+        levelRafRef.current = requestAnimationFrame(tick);
+      };
+      tick();
+    } catch {
+      // レベルメーターが使えなくても録音は続行
+    }
+  };
 
   const playQuestionAudio = () => {
     if (!task.audioUrl) return;
@@ -153,20 +191,41 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+      startLevelMeter(stream);
       chunksRef.current = [];
-      const recorder = new MediaRecorder(stream);
+      const mimeType = pickRecorderMimeType();
+      const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
       recorder.ondataavailable = (e) => {
         if (e.data.size > 0) chunksRef.current.push(e.data);
       };
-      recorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
-        setRecordings((prev) => ({
-          ...prev,
-          [task.id]: { url: URL.createObjectURL(blob), blob },
-        }));
+      recorder.onerror = () => setMicError(true);
+      recorder.onstop = async () => {
+        const rawBlob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
         cleanupStream();
+        try {
+          // WAV へ変換（デコード成功＝録音の検証。duration・再生互換性の問題も解消）
+          const { wavBlob, rms } = await convertToWav(rawBlob);
+          setRecordings((prev) => ({
+            ...prev,
+            [task.id]: { url: URL.createObjectURL(wavBlob), blob: wavBlob, rms },
+          }));
+        } catch (error) {
+          console.warn("録音の変換に失敗:", error);
+          setRecordings((prev) => ({
+            ...prev,
+            [task.id]: {
+              url: URL.createObjectURL(rawBlob),
+              blob: rawBlob,
+              convertError:
+                rawBlob.size === 0
+                  ? "録音データが空でした。マイクの接続と権限を確認してください。"
+                  : "録音データを検証できませんでした。再生できない場合は録り直してください。",
+            },
+          }));
+        }
       };
-      recorder.start();
+      // timeslice を指定して定期的にデータを受け取る（最終チャンク欠落対策）
+      recorder.start(1000);
       mediaRecorderRef.current = recorder;
     } catch {
       // マイク拒否・非対応でもタイマーだけで練習を続けられるようにする
@@ -357,6 +416,24 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
                   録音中
                 </div>
                 <div className="text-5xl font-bold text-gray-900 tabular-nums">{formatTime(countdown)}</div>
+                {/* マイク入力レベル */}
+                {!micError && (
+                  <div className="w-full max-w-xs">
+                    <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-[width] duration-75 ${
+                          micLevel > 0.05 ? "bg-emerald-500" : "bg-gray-300"
+                        }`}
+                        style={{ width: `${Math.max(3, micLevel * 100)}%` }}
+                      />
+                    </div>
+                    <div className="mt-1 text-[10px] text-gray-400 text-center">
+                      {micLevel > 0.05
+                        ? "マイク入力を検出しています"
+                        : "マイク入力が検出されていません — マイクの位置・音量を確認してください"}
+                    </div>
+                  </div>
+                )}
                 {micError && (
                   <div className="flex items-center gap-2 text-xs text-orange-600 bg-orange-50 rounded-lg px-3 py-2">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -381,7 +458,21 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
                   Task {task.number} の回答が完了しました
                 </div>
                 {recordings[task.id] ? (
-                  <audio controls src={recordings[task.id].url} className="w-full max-w-md" />
+                  <div className="w-full max-w-md space-y-2">
+                    <audio controls src={recordings[task.id].url} className="w-full" />
+                    {recordings[task.id].convertError && (
+                      <div className="flex items-center gap-2 text-xs text-orange-600 bg-orange-50 rounded-lg px-3 py-2">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        {recordings[task.id].convertError}
+                      </div>
+                    )}
+                    {recordings[task.id].rms !== undefined && recordings[task.id].rms! < 0.005 && (
+                      <div className="flex items-center gap-2 text-xs text-orange-600 bg-orange-50 rounded-lg px-3 py-2">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        録音がほぼ無音です。マイクの設定を確認して録り直すことをおすすめします。
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <div className="text-xs text-gray-400">録音データはありません</div>
                 )}

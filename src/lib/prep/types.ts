@@ -202,10 +202,12 @@ export interface SpeakingTaskFeedback {
     wpm: number;
     /** 調音速度（発話中の時間ベース WPM） */
     articulationWpm: number;
-    /** 無音割合 (0〜1) */
+    /** 無音割合 (0〜1)。0.3 秒以上の語間ギャップの合計 ÷ 総時間 */
     pauseRatio: number;
     /** 1 秒以上のポーズの回数 */
     longPauses: number;
+    /** フィラーワード（um, uh, you know など）の回数 */
+    fillerCount?: number;
   };
   /** 解析に失敗した場合のエラーメッセージ */
   error?: string;
