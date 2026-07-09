@@ -248,11 +248,9 @@ function SkillPageInner() {
   const types = getPracticeTypes(examId, skillId);
   const selectedType = typeParam ? getPracticeType(examId, skillId, typeParam) : undefined;
 
-  // 選択中タイプの問題セット（speaking はタイプ横断でセットを表示）
+  // 選択中タイプの問題セット
   const filteredSets = selectedType
-    ? skillId === "speaking"
-      ? sets
-      : sets.filter((s) => s.practiceType === selectedType.id)
+    ? sets.filter((s) => s.practiceType === selectedType.id)
     : sets;
 
   // タイプ未定義のセット（モックデータなど）— タイプ一覧の下に表示
@@ -315,14 +313,12 @@ function SkillPageInner() {
                 type={type}
                 exam={examId}
                 skill={skillId}
-                setCount={
-                  skillId === "speaking" ? sets.length : (typeCounts[type.id] ?? 0)
-                }
+                setCount={typeCounts[type.id] ?? 0}
               />
             ))}
           </div>
 
-          {untypedSets.length > 0 && skillId !== "speaking" && skillId !== "writing" && (
+          {untypedSets.length > 0 && skillId !== "writing" && (
             <>
               <h2 className="mt-10 text-base font-bold text-gray-900">その他の問題セット</h2>
               <p className="mt-1 text-xs text-gray-500">複数の問題タイプを含む総合演習セット</p>

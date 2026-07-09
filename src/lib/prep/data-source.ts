@@ -11,6 +11,7 @@ import { ExamId, ListeningSet, ReadingSet, SkillId, SpeakingSet } from "./types"
 
 let importedReading: ReadingSet[] | null = null;
 let importedListening: ListeningSet[] | null = null;
+let importedSpeaking: SpeakingSet[] | null = null;
 
 async function loadImportedReading(): Promise<ReadingSet[]> {
   if (!importedReading) {
@@ -47,17 +48,58 @@ export async function getListeningSets(exam: ExamId): Promise<ListeningSet[]> {
   return [...imported, ...mock];
 }
 
+// Storage 上の音声・画像パス（scripts/upload-ielts-assets.mjs が生成）。
+// アップロード前・権限エラー時は URL 解決に失敗するので、
+// その場合は従来どおり audioUrl 未設定（読み上げフォールバック）で返す。
+async function resolveAssetUrls(set: ListeningSet): Promise<ListeningSet> {
+  if (set.audioUrl) return set;
+  try {
+    const pathsMod = await import("./data/ielts-asset-paths.json");
+    const paths = (pathsMod.default as Record<string, { audioPath?: string; imagePath?: string }>)[
+      set.id
+    ];
+    if (!paths) return set;
+    const [{ storage }, { getDownloadURL, ref }] = await Promise.all([
+      import("@/lib/firebase"),
+      import("firebase/storage"),
+    ]);
+    const resolved = { ...set };
+    if (paths.audioPath) {
+      resolved.audioUrl = await getDownloadURL(ref(storage, paths.audioPath)).catch(() => undefined);
+    }
+    if (paths.imagePath) {
+      resolved.imageUrl = await getDownloadURL(ref(storage, paths.imagePath)).catch(() => undefined);
+    }
+    return resolved;
+  } catch {
+    return set;
+  }
+}
+
 export async function getListeningSet(exam: ExamId, setId: string): Promise<ListeningSet | null> {
   const sets = await getListeningSets(exam);
-  return sets.find((s) => s.id === setId) ?? null;
+  const set = sets.find((s) => s.id === setId) ?? null;
+  return set ? resolveAssetUrls(set) : null;
+}
+
+async function loadImportedSpeaking(): Promise<SpeakingSet[]> {
+  if (!importedSpeaking) {
+    const mod = await import("./data/ielts-speaking-sets.json");
+    importedSpeaking = mod.default as unknown as SpeakingSet[];
+  }
+  return importedSpeaking;
 }
 
 export async function getSpeakingSets(exam: ExamId): Promise<SpeakingSet[]> {
-  return SPEAKING_SETS.filter((s) => s.exam === exam);
+  const mock = SPEAKING_SETS.filter((s) => s.exam === exam);
+  if (exam !== "ielts") return mock;
+  const imported = await loadImportedSpeaking();
+  return [...imported, ...mock];
 }
 
 export async function getSpeakingSet(exam: ExamId, setId: string): Promise<SpeakingSet | null> {
-  return SPEAKING_SETS.find((s) => s.exam === exam && s.id === setId) ?? null;
+  const sets = await getSpeakingSets(exam);
+  return sets.find((s) => s.id === setId) ?? null;
 }
 
 // ---- 集計（ハブ・セクションページ表示用） ----
@@ -85,6 +127,9 @@ export async function getSkillStats(exam: ExamId, skill: SkillId): Promise<Skill
     for (const set of sets) {
       stats.setCount += 1;
       stats.questionCount += set.tasks.length;
+      if (set.practiceType) {
+        stats.typeCounts[set.practiceType] = (stats.typeCounts[set.practiceType] ?? 0) + 1;
+      }
     }
   }
   return stats;

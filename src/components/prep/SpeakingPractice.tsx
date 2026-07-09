@@ -3,20 +3,61 @@
 // Speaking 演習画面
 // 問題表示 → 準備時間 → 録音（回答時間） → 再生確認 → 次のタスク / Submit
 // 録音は MediaRecorder を使用。マイクが使えない場合もタイマー進行だけで練習可能
+// Submit 時に録音を /api/analyze-speaking へ送信し、
+// Whisper 文字起こし + AI フィードバック（Band 推定・講評）を取得して結果画面へ渡す
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, CheckCircle2, Mic, Send, Square } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, Mic, Send, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExamTopBar, formatTime } from "./exam-ui";
-import { EXAM_LABELS, PracticeMode, SpeakingSet } from "@/lib/prep/types";
+import {
+  EXAM_LABELS,
+  PracticeMode,
+  SpeakingSet,
+  SpeakingTaskFeedback,
+} from "@/lib/prep/types";
 import { newSessionId, saveSession } from "@/lib/prep/session-store";
 
 type Phase = "ready" | "prep" | "recording" | "review";
 
+interface Recording {
+  url: string;
+  blob: Blob;
+}
+
 interface SpeakingPracticeProps {
   set: SpeakingSet;
   mode: PracticeMode;
+}
+
+async function analyzeRecording(
+  set: SpeakingSet,
+  taskId: string,
+  recording: Recording
+): Promise<SpeakingTaskFeedback> {
+  const task = set.tasks.find((t) => t.id === taskId);
+  const formData = new FormData();
+  const ext = recording.blob.type.includes("mp4") ? "mp4" : "webm";
+  formData.append("audio", new File([recording.blob], `answer.${ext}`, { type: recording.blob.type }));
+  formData.append("prompt", task?.prompt ?? "");
+  formData.append("exam", set.exam);
+  formData.append("label", task?.label ?? "");
+
+  const res = await fetch("/api/analyze-speaking", { method: "POST", body: formData });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json?.message ?? json?.error ?? "解析に失敗しました");
+  }
+  return {
+    taskId,
+    transcript: json.transcript ?? "",
+    bandEstimate: typeof json.bandEstimate === "number" ? json.bandEstimate : undefined,
+    summary: json.summary ?? "",
+    strengths: Array.isArray(json.strengths) ? json.strengths : [],
+    improvements: Array.isArray(json.improvements) ? json.improvements : [],
+    improvedVersion: json.improvedVersion || undefined,
+  };
 }
 
 export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
@@ -24,10 +65,11 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const [taskIndex, setTaskIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("ready");
   const [countdown, setCountdown] = useState(0);
-  const [recordings, setRecordings] = useState<Record<string, string>>({}); // taskId -> blob URL
+  const [recordings, setRecordings] = useState<Record<string, Recording>>({});
   const [micError, setMicError] = useState(false);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [analyzingIndex, setAnalyzingIndex] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -38,6 +80,7 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const task = set.tasks[taskIndex];
   const isLastTask = taskIndex === set.tasks.length - 1;
   const exitHref = `/practice/${set.exam}/speaking`;
+  const recordedCount = Object.keys(recordings).length;
 
   // 全体経過時間
   useEffect(() => {
@@ -88,7 +131,10 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
       };
       recorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
-        setRecordings((prev) => ({ ...prev, [task.id]: URL.createObjectURL(blob) }));
+        setRecordings((prev) => ({
+          ...prev,
+          [task.id]: { url: URL.createObjectURL(blob), blob },
+        }));
         cleanupStream();
       };
       recorder.start();
@@ -121,9 +167,30 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
     setPhase("ready");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (submitted) return;
     setSubmitted(true);
+
+    // 録音があるタスクを順番に AI 解析（進捗表示のため直列実行）
+    const feedback: SpeakingTaskFeedback[] = [];
+    const recordedTasks = set.tasks.filter((t) => recordings[t.id]);
+    for (let i = 0; i < recordedTasks.length; i++) {
+      const t = recordedTasks[i];
+      setAnalyzingIndex(i + 1);
+      try {
+        feedback.push(await analyzeRecording(set, t.id, recordings[t.id]));
+      } catch (error) {
+        feedback.push({
+          taskId: t.id,
+          transcript: "",
+          summary: "",
+          strengths: [],
+          improvements: [],
+          error: error instanceof Error ? error.message : "解析に失敗しました",
+        });
+      }
+    }
+
     const sessionId = newSessionId();
     saveSession({
       id: sessionId,
@@ -141,9 +208,24 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
         userAnswer: recordings[t.id] ? "(録音提出済み)" : null,
         correct: false,
       })),
+      speakingFeedback: feedback,
     });
     router.push(`/results/${sessionId}`);
   };
+
+  if (submitted) {
+    const total = Object.keys(recordings).length;
+    return (
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center gap-4 px-4">
+        <Loader2 className="w-10 h-10 text-eg-dark animate-spin" />
+        <div className="font-semibold text-gray-900">AI が回答を採点しています…</div>
+        <div className="text-sm text-gray-500">
+          {total > 0 ? `文字起こしとフィードバックを生成中（${analyzingIndex} / ${total}）` : "結果を保存しています"}
+        </div>
+        <p className="text-xs text-gray-400">このままお待ちください（30 秒〜1 分程度かかることがあります）</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -163,20 +245,22 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
             <div
               key={t.id}
               className={`flex-1 h-1.5 rounded-full ${
-                i < taskIndex ? "bg-blue-600" : i === taskIndex ? "bg-blue-300" : "bg-gray-200"
+                i < taskIndex ? "bg-eg" : i === taskIndex ? "bg-eg/40" : "bg-gray-200"
               }`}
             />
           ))}
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-          <div className="text-xs font-semibold tracking-wide text-blue-600 uppercase mb-2">
+          <div className="text-xs font-semibold tracking-wide text-eg-deep uppercase mb-2">
             Task {task.number} / {set.tasks.length} — {task.label}
           </div>
-          <p className="text-[15px] sm:text-base text-gray-900 font-medium leading-relaxed">{task.prompt}</p>
+          <p className="text-[15px] sm:text-base text-gray-900 font-medium leading-relaxed whitespace-pre-line">
+            {task.prompt}
+          </p>
 
           {task.material && (phase === "ready" || phase === "prep") && (
-            <div className="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-100 text-sm leading-relaxed text-gray-700">
+            <div className="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-100 text-sm leading-relaxed text-gray-700 whitespace-pre-line">
               {task.material}
             </div>
           )}
@@ -189,7 +273,7 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
                   <br />
                   準備時間が終わると自動的に録音が始まります
                 </div>
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={startPrep}>
+                <Button size="lg" className="bg-eg hover:bg-eg-dark text-black" onClick={startPrep}>
                   準備を開始する
                 </Button>
               </>
@@ -197,7 +281,7 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
 
             {phase === "prep" && (
               <>
-                <div className="text-sm font-medium text-orange-600">準備時間</div>
+                <div className="text-sm font-medium text-eg-deep">準備時間</div>
                 <div className="text-5xl font-bold text-gray-900 tabular-nums">{formatTime(countdown)}</div>
                 <Button variant="outline" onClick={() => setCountdown(0)}>
                   スキップして録音を開始
@@ -236,7 +320,7 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
                   Task {task.number} の回答が完了しました
                 </div>
                 {recordings[task.id] ? (
-                  <audio controls src={recordings[task.id]} className="w-full max-w-md" />
+                  <audio controls src={recordings[task.id].url} className="w-full max-w-md" />
                 ) : (
                   <div className="text-xs text-gray-400">録音データはありません</div>
                 )}
@@ -247,7 +331,7 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
                     </Button>
                   )}
                   {!isLastTask ? (
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={goNextTask}>
+                    <Button className="bg-eg hover:bg-eg-dark text-black" onClick={goNextTask}>
                       次のタスクへ
                     </Button>
                   ) : (
@@ -262,7 +346,9 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
         </div>
 
         <p className="text-xs text-gray-400 text-center">
-          提出後、AI フィードバック（発音・流暢さ・内容の評価）は今後のアップデートで提供予定です。
+          {recordedCount > 0
+            ? `録音済み: ${recordedCount} タスク。提出すると AI が文字起こしと Band 推定つきフィードバックを生成します。`
+            : "提出時に録音済みの回答へ AI フィードバック（Band 推定・講評・改善例）が生成されます。"}
         </p>
       </div>
     </div>

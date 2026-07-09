@@ -92,10 +92,12 @@ export interface SpeakingTask {
   /** タスク種別（例: "Independent", "Integrated", "Part 2"） */
   label: string;
   prompt: string;
-  /** 準備で読む資料（Integrated 用） */
+  /** 準備で読む資料（Integrated 用）や試験インストラクション */
   material?: string;
   prepSec: number;
   speakSec: number;
+  /** Band 別などの模範解答（結果画面で表示） */
+  sampleAnswers?: { label: string; text: string }[];
 }
 
 export interface SpeakingSet {
@@ -120,6 +122,22 @@ export interface QuestionResult {
   correct: boolean;
 }
 
+/** Speaking 1 タスク分の AI フィードバック */
+export interface SpeakingTaskFeedback {
+  taskId: string;
+  /** Whisper による文字起こし */
+  transcript: string;
+  /** 推定 Band（0.5 刻み） */
+  bandEstimate?: number;
+  summary: string;
+  strengths: string[];
+  improvements: string[];
+  /** 改善例（言い直し例） */
+  improvedVersion?: string;
+  /** 解析に失敗した場合のエラーメッセージ */
+  error?: string;
+}
+
 export interface PracticeSessionResult {
   id: string;
   exam: ExamId;
@@ -134,6 +152,8 @@ export interface PracticeSessionResult {
   results: QuestionResult[];
   /** 復習済みにした問題 ID */
   reviewedQuestionIds?: string[];
+  /** Speaking セッションの AI フィードバック（タスクごと） */
+  speakingFeedback?: SpeakingTaskFeedback[];
 }
 
 // ---- レポート（モック用の集約データ） ----

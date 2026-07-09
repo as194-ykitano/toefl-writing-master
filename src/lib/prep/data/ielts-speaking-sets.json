@@ -1,0 +1,2477 @@
+[
+ {
+  "id": "ielts-s-part-1-s-s1-1",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-1",
+  "title": "Part 1 — work/study",
+  "description": "身近なトピック（work/study）についての質疑応答",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-1-s-s1-1-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "Do you work or are you a student?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "What do you do / What do you study?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "Where do you work / study?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "How long have you been working / studying there?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "Why did you choose this job / subject?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "What do you like most about it?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "Is there anything you don’t like about it?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "What does a typical day look like for you?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "Is your work / study stressful?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "Do you prefer working alone or with others?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "Have you learned any useful skills?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-1-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Would you like to change your job / major in the future?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-1-s-s1-2",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-1",
+  "title": "Part 1 — hometown/city",
+  "description": "身近なトピック（hometown/city）についての質疑応答",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-1-s-s1-2-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "Where are you from?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "Is it a big city or a small town?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "How long have you lived there?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "What do you like most about your hometown?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "Is it a good place for young people?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "What kind of people live there?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "Has your hometown changed in recent years?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "What is the weather like there?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "Are there many places to relax?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "Would you like to live there in the future?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "What do visitors usually like about your hometown?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-2-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Is public transport convenient there?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-1-s-s1-3",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-1",
+  "title": "Part 1 — free time/hobbies",
+  "description": "身近なトピック（free time/hobbies）についての質疑応答",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-1-s-s1-3-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "What do you usually do in your free time?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "Do you have any hobbies?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "How often do you do them?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "When did you start this hobby?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "Do you prefer indoor or outdoor activities?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "Do you usually spend your free time alone or with others?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "Has your free time changed recently?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "Do you think free time is important?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "What do you do to relax?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "Is there a new activity you want to try?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "Did you have the same hobbies as a child?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-3-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Do you think hobbies can reduce stress?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-1-s-s1-4",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-1",
+  "title": "Part 1 — home/accommodation",
+  "description": "身近なトピック（home/accommodation）についての質疑応答",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-1-s-s1-4-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "Where do you live now?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "Do you live in a house or an apartment?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "Who do you live with?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "How long have you lived there?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "What do you like most about your home?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "Is there anything you want to change?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "Which room do you like best?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "Is your home close to your workplace or school?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "Do you plan to move in the future?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "Is your neighbourhood quiet or busy?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "What kind of home would you like in the future?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-part-1-s-s1-4-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Is it important for you to live near your family?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-1",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a person who influenced you",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-1-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a person who influenced you.\nYou should say:\n・who this person is\n・how you first met or came to know this person\n・what influence this person had on you\nand explain why this person’s influence was important to you.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to talk about a person who influenced me a lot, uh, and that person is my high school English teacher.\n\nI first met her when I was about sixteen years old, um, when I started high school. At that time, I wasn’t very interested in studying English, and I thought it was, uh, quite difficult and boring.\n\nBut she taught English in a very friendly way. For example, she often talked to us in English, uh, even outside the classroom, and she always encouraged us when we made mistakes. Because of that, um, I didn’t feel so scared of speaking English anymore.\n\nAlso, she told me that English is not just for exams, but for communication with people around the world. Uh, this idea really changed my attitude toward learning English. I started watching movies in English and listening to English songs, you know, in my free time.\n\nSo, um, the reason why her influence was important to me is that she helped me become more confident. Because of her, uh, I now feel more positive about using English, and it has helped me in my studies and daily life."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Well, I’d like to talk about a person who influenced me, and that is my high school English teacher.\n\nI first met her when I entered high school, so I was around sixteen years old. At that time, I wasn’t very confident in English, and honestly, I didn’t enjoy studying it very much.\n\nHowever, the way she taught English was quite different from my previous teachers. She often encouraged us to speak English, even if we made mistakes, and she created a relaxed atmosphere in class. Because of this, I gradually became more comfortable using English.\n\nShe also explained that English is a tool for communication rather than just a subject for exams. This really changed how I thought about learning the language. After that, I started watching English movies and listening to English music in my free time.\n\nSo, the reason why her influence was important to me is that she helped me build confidence. Thanks to her, I now feel more motivated to use English, and it has had a positive effect on both my studies and daily life."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a person who had a strong influence on me, and that person is my high school English teacher.\n\nI met her when I started high school, at a time when I lacked confidence in English and saw it mainly as a difficult school subject. I didn’t expect English to become something I would actually enjoy.\n\nWhat made her influential was her approach to teaching. She consistently encouraged us to speak without worrying too much about mistakes and focused more on communication than accuracy. This created a supportive learning environment, which helped me become more willing to express myself in English.\n\nShe also made me realise that English is a practical skill that allows people to connect across cultures, not just an exam requirement. As a result, I became more independent in my learning, watching films in English and listening to English music outside class.\n\nHer influence was important because it changed my mindset. Instead of seeing English as a source of stress, I began to see it as an opportunity. This shift in attitude has stayed with me and continues to benefit me both academically and in everyday situations."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-10",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a recent weekend when you felt relaxed",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-10-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a recent weekend when you felt relaxed.\nYou should say:\n・when this weekend was\n・where you spent most of your time\n・what you did during the weekend\nand explain why this weekend was relaxing for you.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a recent weekend when I felt relaxed.\n\nThis weekend was about two weeks ago. I spent most of my time at home.\n\nDuring the weekend, I watched TV, listened to music, and slept more than usual. I also did some light housework.\n\nI felt relaxed because I didn’t have to worry about work or study. I could rest well and enjoy my free time."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a recent weekend when I felt very relaxed.\n\nIt was a weekend a few weeks ago, and I spent most of my time at home and in my neighbourhood.\n\nDuring the weekend, I watched movies, went for short walks, and caught up on sleep. I also spent some time doing things I enjoy but usually don’t have time for.\n\nThis weekend was relaxing because I had no strict schedule. Having time to slow down helped me feel refreshed and ready for the new week."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a recent weekend when I felt completely relaxed.\n\nIt was about a month ago, and I decided to spend most of the weekend at home and nearby places.\n\nI spent my time watching movies, taking quiet walks, and simply enjoying a slower pace of life. I avoided checking emails and focused on resting both physically and mentally.\n\nThis weekend was relaxing because it allowed me to disconnect from my usual routine. By the end of it, I felt recharged and much more balanced, which had a positive effect on the following week."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-2",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — someone you admire",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-2-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe someone you admire\nYou should say:\n・who this person is\n・how you know this person\n・what qualities this person has\nand explain why you admire this person.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to talk about someone I admire, and that person is my high school English teacher.\n\nI first met her when I was about sixteen years old. She was my English teacher for three years in high school. At that time, I wasn’t very good at English, and I didn’t like studying it very much.\n\nShe has many good qualities. For example, she is very kind and patient. When students made mistakes, she didn’t get angry, and she always encouraged us.\n\nI admire her because she helped me feel more confident about English. Because of her support, I started to think English was interesting, not scary. That is why I admire her."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to describe someone I admire, who is my high school English teacher.\n\nI met her when I entered high school, and she taught me English for several years. At first, I struggled with English and lacked confidence, especially when speaking.\n\nOne quality I really admire about her is her supportive attitude. She was always patient and never criticised students harshly. Instead, she focused on effort rather than mistakes. She was also very passionate about teaching and often told us how English could be useful in real life.\n\nI admire her because she changed my attitude towards learning English. Thanks to her, I became more motivated and confident, and this experience still influences how I study English today."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to talk about a person I truly admire, and that is my high school English teacher.\n\nI met her when I was around sixteen, during my first year of high school. At that time, I wasn’t confident in English at all, particularly in speaking, and I often avoided using it.\n\nWhat I admire most about her is her ability to motivate students. She was incredibly patient and understanding, but at the same time, she challenged us to step outside our comfort zone. She also believed strongly that English was a tool for communication rather than just an exam subject, which left a strong impression on me.\n\nI admire her because she didn’t just teach me English skills; she changed the way I think about learning. Thanks to her influence, I became more open-minded and confident, and that mindset has been helpful not only in my studies but also in my daily life."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-3",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a place you enjoy visiting",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-3-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a place you enjoy visiting.\nYou should say :\n・Where this place is\n・how often you go there\n・what you usually do there\nand explain why you enjoy visiting this place.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a place I enjoy visiting, and that place is a park near my home.\n\nThe park is located about ten minutes away from my house, so it’s very easy to go there. I usually go there once or twice a week, especially on weekends.\n\nWhen I go there, I usually take a walk, sit on a bench, or listen to music. Sometimes I just relax and watch people walking their dogs.\n\nI enjoy visiting this place because it is quiet and peaceful. It helps me relax and forget about my daily stress."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a place I really enjoy visiting, which is a small park near my home.\n\nIt’s located within walking distance, so I usually go there once or twice a week, mainly when I have free time.\n\nWhen I’m there, I often go for a walk, listen to music, or sit down and read a book. Sometimes I visit the park just to clear my mind after a busy day.\n\nI enjoy visiting this place because it allows me to relax both physically and mentally. Spending time there helps me feel refreshed and more focused afterwards."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a place I genuinely enjoy visiting, and that is a small park located near my home.\n\nIt’s only about a ten-minute walk away, so I tend to go there quite regularly, usually once or twice a week, especially when I need a break from my daily routine.\n\nWhen I visit the park, I usually go for a quiet walk, listen to music, or sit on a bench and reflect on my thoughts. Occasionally, I bring a book with me, but most of the time I simply enjoy the calm atmosphere.\n\nI enjoy visiting this place because it provides a sense of balance in my life. Being surrounded by nature helps me slow down, reduce stress, and return home feeling more positive and clear-minded."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-4",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a place you want to live in",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-4-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a place you want to live in.\nYou should say :\n・where this place is\n・what kind of place it is\n・who you would like to live there with\nand explain why you want to live in this place.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a place I want to live in.\n\nThis place is a small town in the countryside, not far from a big city. It is a quiet place with a lot of nature, such as mountains and parks.\n\nI would like to live there with my family in the future.\n\nI want to live in this place because it is peaceful and not very busy. I think living there would be relaxing and good for my health."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a place I would like to live in in the future.\n\nThe place is a small town located in the countryside, but still within easy reach of a large city. It’s a calm area surrounded by nature, such as trees and open spaces.\n\nI would like to live there with my family, as I think it would be a comfortable environment for daily life.\n\nI want to live in this place because it offers a good balance between convenience and a peaceful lifestyle. Compared to living in a big city, I believe it would be less stressful and more suitable for long-term living."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a place I’d like to live in in the future, which is a quiet town located in the countryside, not too far from a major city.\n\nIt’s the kind of place that has plenty of natural surroundings, such as greenery and open spaces, while still offering basic facilities for everyday life.\n\nIdeally, I’d like to live there with my family, as I think it would be a healthier and more relaxed environment for everyone.\n\nThe main reason I want to live in this place is that it represents the lifestyle I’m aiming for. Living away from the noise and fast pace of city life would allow me to slow down, focus on what matters, and maintain a better work-life balance in the long run."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-5",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a piece of technology you use every day",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-5-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a piece of technology you use every day.\nYou should say:\n・what the technology is and how long you have been using it\n・in what situations you usually use it during the day\n・what kinds of tasks or activities you mainly use it for\nand explain why this technology is important in your daily life.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a piece of technology I use every day, which is my smartphone.\n\nI’ve been using a smartphone for about five years. I use it many times a day, from the morning until the evening.\n\nDuring the day, I usually use my smartphone when I check messages, look at social media, or search for information. I also use it when I’m waiting for someone or travelling.\n\nI mainly use it for communication, such as sending messages and making phone calls, and also for entertainment like watching videos.\n\nThis technology is important in my daily life because it makes my life more convenient and helps me stay connected with other people."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a piece of technology I use every day, which is my smartphone.\n\nI’ve been using a smartphone for several years, and it has become a part of my daily routine. I use it throughout the day, especially in the morning and evening.\n\nI usually use my smartphone when checking emails, replying to messages, or looking up information online. I also use it while commuting or during short breaks.\n\nI mainly use it for communication, information searching, and basic daily tasks such as checking schedules or using maps.\n\nThis technology is important to me because it saves time and allows me to manage my daily life more efficiently. Without it, many everyday activities would be less convenient."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a piece of technology I rely on every day, which is my smartphone.\n\nI’ve been using a smartphone for many years now, and it has become an essential part of my daily life. I use it regularly from the moment I wake up until the end of the day.\n\nThroughout the day, I use my smartphone in various situations, such as checking emails in the morning, communicating with others during the day, and relaxing by watching videos or reading articles in the evening.\n\nI mainly use it for communication, information management, and productivity-related tasks, including scheduling, navigation, and quick online research.\n\nThis technology is important to me because it helps me stay organised, connected, and informed. It plays a key role in supporting both my work and personal life on a daily basis."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-6",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a gift you received",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-6-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a gift you received.\nYou should say:\n・what the gift was\n・who gave it to you\n・when you received it\nand explain why this gift was special to you.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a gift I received, which was a wristwatch.\n\nThis gift was given to me by my parents. I received it when I graduated from high school.\n\nIt is a simple watch, but I use it almost every day.\n\nThis gift was special to me because it was my first watch, and it reminds me of my parents. It also helped me learn how to manage my time better."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a gift I received that was very meaningful to me, which was a wristwatch.\n\nMy parents gave it to me as a graduation present when I finished high school a few years ago.\n\nThe watch itself is not very expensive, but it is well designed and easy to use. I started wearing it almost every day, especially when I go out or study.\n\nThis gift was special to me because it symbolised a new stage in my life. It also reminded me to be more responsible and value my time."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a gift that was particularly special to me, which was a wristwatch I received from my parents.\n\nThey gave it to me as a graduation present when I finished high school, marking an important turning point in my life.\n\nThe watch itself is quite simple, but I’ve been wearing it regularly ever since. I usually wear it when I’m studying, going out, or attending important events.\n\nWhat made this gift special was not its price, but its meaning. It represented my parents’ support and trust as I moved on to a new chapter of my life. Every time I wear it, it reminds me to value my time and make the most of the opportunities I’m given."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-7",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a situation when you had to speak or perform in front of other people and felt nervous",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-7-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a situation when you had to speak or perform in front of other people and felt nervous.\nYou should say:\n・what the situation was\n・who was watching\n・what you did\nand explain why you felt nervous in that situation.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a situation when I had to speak in front of other people and felt nervous.\n\nThe situation was a presentation at school. It happened in a classroom during one of my classes.\n\nMy classmates and my teacher were watching me. I had to stand in front of the class and talk about a topic for a few minutes.\n\nI explained my ideas using simple words and tried to remember what I had prepared.\n\nI felt nervous because I’m not very confident about speaking in front of many people. I was worried about making mistakes and forgetting what I wanted to say."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a situation when I had to speak in front of other people and felt quite nervous.\n\nThis situation was a class presentation at university. It took place in a classroom as part of a course assignment.\n\nMy classmates and the lecturer were watching, and I was expected to explain my topic clearly and answer a few questions.\n\nI gave a short presentation using slides and explained the main points I had prepared. Although I had practised before, I still felt tense while speaking.\n\nI felt nervous because I didn’t want to make mistakes in front of others, especially my teacher. I was also worried about whether my explanation was clear enough."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a situation when I had to speak in front of other people and felt extremely nervous.\n\nThe situation was an academic presentation I gave at university as part of a group project. It took place in a lecture room during a regular class.\n\nMy classmates and the course instructor were watching, and I was responsible for presenting the most important part of the project.\n\nI spoke in front of the class using presentation slides and explained our main ideas and results. Even though I had prepared carefully, I could feel my hands shaking at the beginning.\n\nI felt nervous because I was afraid of being judged and making mistakes in front of a large audience. However, this experience later helped me become more confident about public speaking."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-8",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — an important school event you took part in",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-8-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe an important school event you took part in.\nYou should say:\n・what the event was\n・when and where it took place\n・who was involved\nand explain why this event was important to you.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe an important school event I took part in.\n\nThe event was a school festival. It took place when I was in high school, and it was held at my school.\n\nMany students and teachers were involved in this event. I joined it with my classmates, and we prepared a presentation together.\n\nThis event was important to me because it was the first time I worked closely with many classmates. I enjoyed the experience and learned how to cooperate with others."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about an important school event I took part in, which was a school festival.\n\nIt took place during my second year of high school and was held on the school campus over one weekend.\n\nStudents from different classes, teachers, and even parents were involved. I participated with my classmates, and we worked together to prepare a performance for visitors.\n\nThis event was important to me because it helped me improve my communication skills. I also realised how important teamwork is when trying to achieve a common goal."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe an important school event that I took part in, which was a school festival held during my high school years.\n\nThe event took place in my second year and was held on the school campus over several days. It was one of the biggest events of the school year.\n\nStudents from all grades, teachers, and parents were involved. I took part as a member of my class, and we worked together to plan and present a performance for visitors.\n\nThis event was important to me because it taught me valuable lessons beyond academic study. Through preparing for the festival, I learned how to communicate effectively, take responsibility, and work as part of a team. The experience left a lasting impression on me and contributed to my personal growth."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-2-s-s2-9",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-2",
+  "title": "Part 2 — a movie you watched recently and enjoyed",
+  "description": "キューカード形式（準備 1 分 → スピーチ 2 分）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-part-2-s-s2-9-t1",
+    "number": 1,
+    "label": "Part 2 (Cue Card)",
+    "prompt": "Describe a movie you watched recently and enjoyed.\nYou should say:\n・what the movie was\n・when and where you watched it\n・what the movie was about\nand explain why you enjoyed watching this movie.",
+    "material": "You will have to talk about the topic for one or two minutes. You have one minute to think about what you are going to say. You can make some notes to help you if you wish. \n（訳）これから一つの話題について１〜２分話してもらいます。初めに1分程度考える時間をとります。その際メモをしても構いません。",
+    "prepSec": 60,
+    "speakSec": 120,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Um, I’d like to describe a movie I watched recently and enjoyed.\n\nThe movie was a romantic comedy. I watched it at home last month on my laptop.\n\nThe movie was about two people who meet by chance and slowly fall in love. There were some funny scenes and also some sad moments.\n\nI enjoyed watching this movie because it was easy to understand and relaxing. It made me feel happy, and I could forget about my daily stress while watching it."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I’d like to talk about a movie I watched recently and really enjoyed.\n\nThe movie was a romantic comedy, and I watched it at home one evening about a month ago.\n\nIt was about two people who meet unexpectedly and build a relationship over time. The story was simple, but the characters were interesting and realistic.\n\nI enjoyed this movie because it was entertaining and emotionally engaging. It helped me relax after a busy day, and I felt satisfied after finishing it."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d like to describe a movie I watched recently that I truly enjoyed.\n\nIt was a romantic comedy that I watched at home a few weeks ago, after a long day.\n\nThe movie focused on two strangers who meet by chance and gradually develop a relationship. What I liked most was how the story showed their personal growth rather than just the romance itself.\n\nI really enjoyed this movie because it was both light-hearted and meaningful. It helped me unwind, and at the same time, it made me reflect on relationships and communication, which made the experience more memorable."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-1",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Law and Society",
+  "description": "We’ve been talking about laws and rules in society. Now, I’d like to ask you some general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-1-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why do some people break the law?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think some people break the law because they have money problems. For example, they might steal things if they don’t have a job. Also, some people don’t really think about the consequences. They just act without thinking carefully."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "There are several reasons why people break the law. One common reason is financial difficulty, especially if someone is unemployed or in debt. In addition, some people may act impulsively without considering the long-term consequences of their actions. Peer pressure can also play a role, particularly among young people."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I believe people break the law for a variety of reasons, and these reasons often depend on their circumstances. Financial hardship is certainly a major factor, particularly in cases of minor crimes like theft. However, psychological factors such as frustration or a lack of self-control can also contribute. In some situations, individuals may even justify their actions if they feel the system is unfair. So, it’s rarely a simple issue."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-1-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think most people respect the law in your country? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think most people respect the law in my country. People usually follow traffic rules and pay taxes. Of course, some people break the law, but I think the majority try to follow the rules because they don’t want trouble."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Overall, I would say that most people do respect the law. In daily life, people generally follow traffic regulations and other basic rules. However, there are still some minor violations, such as illegal parking. I think people respect the law mainly because they understand that it keeps society organised."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "On the whole, I would argue that most citizens do respect the law, particularly when it comes to fundamental regulations such as traffic rules or taxation. That said, minor offences are fairly common, especially when enforcement is weak. I believe respect for the law largely depends on how fair and transparent the legal system is perceived to be."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-1-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What kind of laws are most important in a society?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think laws about safety are the most important. For example, laws against stealing or hurting people are very important. Without these laws, society would not be safe."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "In my opinion, laws that protect people’s safety and rights are the most important. Criminal laws, for example, prevent violence and theft. In addition, laws related to equality are essential to ensure that everyone is treated fairly."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I would say that laws designed to protect fundamental human rights are the most essential in any society. Criminal laws that prevent violence and fraud are clearly vital, but civil laws that guarantee equality and protect individual freedoms are equally important. Without such laws, social stability and trust would quickly break down."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-1-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think children should learn about laws at school? Why?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think children should learn about laws. It helps them understand what is right and wrong. If they know the rules from a young age, they are more likely to follow them in the future."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, I believe it is important for children to learn about basic laws at school. This can help them develop a sense of responsibility and understand the consequences of their actions. It may also encourage them to become more responsible citizens in the future."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Absolutely. Introducing basic legal education at school can play a significant role in shaping responsible citizens. When children understand not only what the laws are but also why they exist, they are more likely to develop respect for social rules. Moreover, early education about rights and responsibilities can reduce misunderstandings and promote social harmony in the long term.\n\n🌟作成の上で大事なこと\n\n→パート２にテーマが関連していることがある\n\n→パート２との一番の違いは、個人の経験から、一般的な回答が求められること\n\n→試験官と会話しながら進める。パート１と２が混ざった感じ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-10",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Free Time and Relaxation",
+  "description": "We’ve been talking about a recent weekend when you felt relaxed. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-10-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why is it important for people to have time to relax?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "It is important because people feel tired after work or school. If they don’t relax, they may feel stressed and unhappy. Relaxing helps people feel refreshed and ready for the next week."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Relaxation is essential for both mental and physical health. Continuous work without breaks can lead to burnout. Taking time to rest allows people to recharge and maintain productivity in the long term."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Relaxation plays a crucial role in maintaining psychological and physiological balance. Without sufficient downtime, chronic stress can accumulate and negatively affect performance and well-being. Regular rest enables sustainable productivity and emotional stability."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-10-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think people today are more stressed than in the past? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think people are more stressed now. Life is faster, and people have more responsibilities. Technology also makes people busy all the time."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I believe modern society generates higher levels of stress due to competitive workplaces and constant connectivity through technology. Although past generations faced different challenges, today’s fast-paced lifestyle may increase psychological pressure."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "In many respects, contemporary life appears more psychologically demanding. The rise of digital connectivity has blurred boundaries between work and personal life, leading to constant availability. While historical hardships were significant, modern stress often stems from information overload and social comparison."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-10-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What are some effective ways to reduce stress?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "People can exercise, listen to music, or spend time with friends. Doing hobbies can also help reduce stress."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Stress can be reduced through regular exercise, mindfulness practices, and maintaining social connections. Time management is also important to prevent overwhelming workloads."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Effective stress management involves both physical and cognitive strategies. Physical activities such as exercise release tension, while mindfulness and reflection improve emotional regulation. Additionally, setting boundaries in work and digital consumption can significantly reduce long-term stress."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-10-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think people should spend their weekends being productive or resting?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think weekends should be for resting. People need a break from work. However, doing some light productive tasks can also feel satisfying."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "A balance is ideal. While rest is necessary for recovery, engaging in meaningful but low-pressure activities can provide a sense of achievement without causing stress."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Weekends should primarily serve as recovery periods, but productivity does not necessarily contradict relaxation. Engaging in intrinsically motivating activities can enhance well-being. The key distinction lies between restorative productivity and obligatory work."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-10-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How does work-life balance affect people’s health?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "If people work too much, they may become tired and unhealthy. Good balance helps people stay healthy and happy."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Poor work-life balance can lead to stress-related illnesses and mental exhaustion. Maintaining boundaries between professional and personal life supports both physical and emotional health."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Work-life imbalance is closely linked to chronic stress, sleep deprivation, and burnout. Over time, these conditions may contribute to both physical disorders and mental health issues. Establishing clear boundaries promotes resilience and long-term well-being."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-10-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Should companies or schools do more to help people manage stress? In what ways?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, they should. They can reduce workload and give people more breaks. This will help people feel less stressed."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, institutions should provide mental health support and flexible schedules. Encouraging open communication about stress can also create a healthier environment."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Organizations bear significant responsibility in fostering psychologically sustainable environments. Implementing flexible working policies, offering mental health resources, and promoting realistic performance expectations can substantially reduce systemic stress."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-2",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Admiration and Role Models",
+  "description": "We’ve been talking about someone you admire. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-2-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What kinds of people are usually admired in your country?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "In my country, many people admire famous people like athletes or actors. Also, successful business people are respected because they make a lot of money. I think people admire those who become famous and successful."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "In my country, people tend to admire successful individuals such as professional athletes, entrepreneurs, and entertainers. These people are often seen as hardworking and talented. In addition, some people respect teachers or doctors because they contribute to society."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "In my country, admiration is often directed toward people who achieve visible success, such as elite athletes, entrepreneurs, and public figures. However, there is also a growing appreciation for individuals who make meaningful social contributions, such as educators, medical professionals, or activists. I think the definition of “success” is gradually expanding beyond wealth or fame."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-2-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think young people admire different types of people compared to the past? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think it is different now. In the past, young people admired teachers or famous singers. But now, many young people admire YouTubers or influencers because they are popular on social media."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, I believe there has been a clear shift. In the past, young people often looked up to community leaders or well-known professionals. Nowadays, many teenagers admire online influencers or content creators, mainly because they are more visible and relatable through social media."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Yes, there has definitely been a noticeable shift. In previous generations, role models were often authority figures such as teachers, politicians, or established professionals. Today, however, young people are more likely to admire influencers, entrepreneurs, or digital creators. This change is largely driven by social media, which makes these figures more accessible and seemingly relatable."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-2-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What qualities make someone a good role model?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think a good role model should be kind and hardworking. Also, they should not give up easily. If they have a good personality, people will respect them."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "In my opinion, a good role model should be responsible, honest, and resilient. It’s important that they demonstrate consistent effort and integrity. People are more likely to respect someone whose actions match their words."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I believe a good role model should possess integrity, resilience, and a strong sense of responsibility. Beyond external success, their behavior and values are crucial. What truly defines a role model is not perfection, but consistency between what they advocate and how they actually live."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-2-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think the media influences who people admire? In what ways?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think media has a big influence. People see famous people on TV or online, so they start to admire them. If someone appears many times, people think they are important."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, the media plays a significant role. Through television and social media platforms, certain individuals receive a great deal of exposure. As a result, people become more familiar with them and may start to admire them, even if they don’t fully understand their background."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Yes, the media has a profound influence on public perception. Constant exposure can shape who is considered admirable. Social media, in particular, creates carefully curated images of success and happiness, which can strongly affect young people’s standards and aspirations."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-2-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Is it more important to admire famous people or people in your personal life? Why?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think it is better to admire people in our personal life, like parents or teachers. They are closer to us and we can learn directly from them."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Personally, I believe it is more meaningful to admire people in our personal lives. While famous figures can be inspiring, individuals such as parents or mentors have a direct impact on our daily lives and personal development."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I would argue that admiring people in our personal lives is generally more beneficial. Although celebrities may inspire us in abstract ways, close role models provide tangible guidance and emotional support. Their influence tends to be more realistic and sustainable."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-2-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Can admiring someone ever have a negative effect? How?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, sometimes it can be negative. If people copy everything without thinking, it may be bad. Also, if the person does something wrong, it can disappoint them."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, it can sometimes have negative consequences. For example, if someone admires a person blindly, they may imitate unhealthy behaviors or unrealistic lifestyles. This can lead to disappointment or low self-esteem."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Yes, admiration can become problematic when it turns into blind idolization. Unrealistic comparisons may damage self-esteem, especially among young people. Moreover, if the admired figure fails to meet expectations, it can lead to disillusionment. Therefore, critical thinking is essential when choosing role models."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-3",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Places and Leisure Activities",
+  "description": "We’ve been talking about a place you enjoy visiting. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-3-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why do people need places where they can relax or spend their free time?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think people need relaxing places because modern life is very stressful. Many people work long hours or study hard, so they feel tired both physically and mentally. If they don’t have a place to relax, they might feel burned out. Also, relaxing places help people spend time with family and friends, which is important for happiness."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I believe relaxing places are essential because modern lifestyles are often fast-paced and demanding. People are constantly under pressure from work, school, or even social expectations. Having a place to unwind allows them to reduce stress and recharge their energy. In addition, these spaces often encourage social interaction, which helps strengthen relationships and improve mental well-being."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I’d say relaxing spaces are not just a luxury but a necessity in today’s society. With increasing workloads and digital distractions, people rarely get the chance to truly switch off. Having access to parks, cafés, or other leisure spaces enables individuals to disconnect from stress and restore their emotional balance. Moreover, these environments foster a sense of community, which is becoming increasingly valuable in urban life."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-3-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think people today visit different kinds of places compared to the past? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think so. In the past, people usually visited parks or local markets. But nowadays, people like going to shopping malls or theme parks. Also, young people often go to places that look good in photos for social media. So I think the trend has changed."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, I believe there has been a noticeable change. In the past, people tended to visit local parks or community centers because entertainment options were limited. However, today there are more commercial attractions such as shopping malls, amusement parks, and Instagram-famous cafés. Social media and globalization have expanded people’s choices and influenced their preferences."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Definitely. The range of leisure destinations has expanded significantly compared to previous generations. In the past, options were often limited to nearby parks or cultural festivals. Today, however, global tourism, themed attractions, and social media trends heavily shape people’s decisions. In particular, visually appealing locations often gain popularity because they are shareable online, which creates a kind of cycle of influence."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-3-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What factors make a place popular among young people?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think young people like places that are fun and affordable. For example, cafés, karaoke places, or shopping centers. Also, if the place looks stylish or modern, young people are more interested in going there."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "There are several important factors. First, affordability plays a big role because many young people are students. Second, the atmosphere matters — they prefer places that are trendy, comfortable, and suitable for socializing. Lastly, social media presence can make a place more attractive if it is considered “cool” or photogenic."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "A combination of economic, social, and aesthetic factors tends to determine popularity among young people. Affordability is obviously important, but beyond that, the atmosphere and overall experience are crucial. Young people are drawn to places that allow them to socialize freely and express themselves. Additionally, online visibility significantly boosts a location’s appeal, especially if it aligns with current trends."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-3-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How has social media influenced the places people choose to visit?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Social media has a big influence. Many people see photos online and want to visit the same place. If a place becomes famous on Instagram or TikTok, more people go there. Sometimes people visit just to take pictures."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Social media has changed travel and leisure habits dramatically. Platforms like Instagram or TikTok highlight visually attractive locations, which encourages users to visit them. In some cases, people choose destinations mainly for photo opportunities rather than personal interest. This can create sudden trends and overcrowding."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Social media has fundamentally transformed how people select leisure destinations. Algorithms promote visually striking content, which often leads to certain places becoming viral. As a result, individuals may prioritize aesthetic value over personal preference. While this increases exposure for businesses, it can also contribute to overtourism and a loss of authenticity."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-3-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think it is better to visit natural places or man-made attractions? Why?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Personally, I prefer natural places because they are peaceful and relaxing. For example, mountains or beaches help people feel calm. Man-made attractions are fun, but they can be crowded and noisy."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I would say it depends on the purpose. Natural places are ideal for relaxation and escaping daily stress, while man-made attractions are more suitable for entertainment and excitement. However, if I had to choose, I would prefer nature because it improves mental health and provides a refreshing atmosphere."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I think both have distinct advantages, but personally I lean toward natural environments. Natural settings offer psychological restoration and a sense of tranquility that artificial attractions often lack. That said, well-designed man-made spaces can provide structured entertainment and cultural experiences. Ultimately, the choice depends on one’s emotional needs at the time."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-3-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Should governments invest more in public leisure spaces? In what ways?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think they should. Public parks and sports facilities are important for people’s health. The government can build more parks and improve safety so families can enjoy them comfortably."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, I believe governments should prioritize investment in public leisure spaces. These areas improve public health and social interaction. For example, they could develop more green parks, walking paths, and community centers. Ensuring accessibility and safety would also encourage more people to use these spaces."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Absolutely. Investment in public leisure infrastructure is directly linked to both physical and mental well-being. Governments could expand green spaces, integrate urban design with environmental sustainability, and create inclusive facilities accessible to all age groups. Such policies not only enhance quality of life but also foster stronger community cohesion."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-4",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Future Living and Ideal Places",
+  "description": "We’ve been talking about a place you would like to live in. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-4-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why do some people prefer living in big cities while others prefer living in rural areas?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think people prefer big cities because there are more job opportunities and entertainment. Cities have shopping malls, restaurants, and public transport, so life is convenient. On the other hand, some people like rural areas because they are quiet and peaceful. They can enjoy nature and less stress."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "People choose different environments based on their priorities. Big cities offer better career opportunities, education, and healthcare, which attract ambitious individuals. However, rural areas provide a slower pace of life and cleaner environments. Many people prefer the countryside because it reduces stress and improves their quality of life."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "The preference often depends on lifestyle values and life stage. Urban areas provide economic mobility, cultural diversity, and convenience, which are particularly appealing to young professionals. In contrast, rural regions offer tranquility, stronger community bonds, and a closer connection to nature. Ultimately, it reflects whether someone prioritizes opportunity or well-being."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-4-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think people’s preferences about where they live change as they get older? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think so. When people are young, they want excitement and jobs, so they move to cities. But when they get older, they may prefer quiet places. They want safety and comfort."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, preferences often change over time. Younger people usually focus on career development and social life, which cities provide. However, as people age, they tend to value stability, safety, and a peaceful environment. This is why many families move to suburban or rural areas later in life."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Absolutely. Housing preferences tend to evolve alongside personal priorities. In early adulthood, individuals are often career-driven and socially active, making urban centers attractive. However, as responsibilities increase and family life becomes central, people may prioritize safety, space, and long-term stability. This shift reflects changing psychological and practical needs."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-4-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What factors should people consider when choosing a place to live?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "People should think about job opportunities, cost of living, and safety. Also, transportation and schools are important. These things affect daily life."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Several factors should be taken into account, such as employment opportunities, living expenses, safety, and access to public services like schools and hospitals. In addition, people should consider their lifestyle preferences and long-term plans."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Choosing a place to live requires balancing economic, social, and personal considerations. Financial stability, employment prospects, and housing affordability are fundamental. Beyond that, infrastructure, healthcare access, educational quality, and even environmental sustainability should be evaluated. Ideally, the decision aligns with both current needs and future aspirations."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-4-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How has modern technology changed the way people choose where to live?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Technology has made it easier to work from home. So people don’t need to live near their office. They can choose quieter or cheaper places. Also, people can search for houses online easily."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Modern technology, especially remote working, has significantly changed living patterns. Many professionals no longer need to commute daily, which allows them to move to suburban or rural areas. Additionally, online platforms provide detailed information about neighborhoods, making decision-making more efficient."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Technology has reshaped residential decision-making in profound ways. Remote work has reduced geographical constraints, enabling individuals to prioritize lifestyle over proximity to offices. Furthermore, digital platforms provide data-driven insights about neighborhoods, crime rates, and amenities. As a result, housing choices are becoming increasingly strategic and flexible."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-4-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think housing is becoming more difficult to afford in many countries? Why?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think housing is becoming expensive. In many cities, prices are very high. Young people especially find it hard to buy a house because salaries are not increasing as fast as prices."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, housing affordability is a growing issue worldwide. Urbanization has increased demand, while supply often remains limited. In addition, property investment has driven up prices, making it difficult for young adults to enter the housing market."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Without question, housing affordability has become a global concern. Rapid urbanization, population growth, and speculative investment have significantly inflated property prices. Meanwhile, wage growth has not kept pace, creating a widening gap between income levels and housing costs. This imbalance disproportionately affects younger generations."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-4-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Should governments take responsibility for providing affordable housing? In what ways?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think governments should help. They can build public housing and control prices. This will help low-income families."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, governments should play an active role in ensuring affordable housing. They can invest in public housing projects, provide subsidies, or regulate rental markets. These policies can reduce inequality and support vulnerable groups."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I believe governments bear significant responsibility in addressing housing inequality. They could implement policies such as expanding public housing, offering tax incentives for affordable developments, and regulating speculative investment. Additionally, long-term urban planning that balances supply and demand would create a more sustainable housing market."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-5",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Technology in Daily Life",
+  "description": "We’ve been talking about a piece of technology you use every day. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-5-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How has technology changed the way people live in the past few decades?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Technology has changed our lives a lot. For example, we can communicate instantly through smartphones and social media. In the past, people had to send letters. Also, many tasks are easier now because of computers and the internet."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Technology has transformed daily life significantly. Communication has become faster and more convenient through messaging apps and video calls. In addition, online services such as shopping and banking save time and effort. Overall, people’s lifestyles have become more efficient but also more dependent on digital tools."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Over the past few decades, technology has fundamentally reshaped human behavior and social structures. Communication is now instantaneous and global, breaking geographical barriers. Moreover, automation and digitalization have increased efficiency in both professional and personal contexts. However, this shift has also blurred the boundaries between work and private life."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-5-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think people rely too much on technology nowadays? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think people rely on technology too much. Many people cannot live without their smartphones. If the internet stops working, they feel stressed. Sometimes people spend too much time online instead of talking face to face."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "To some extent, yes. While technology improves convenience and productivity, overreliance can reduce face-to-face interaction and critical thinking skills. For instance, many people depend on GPS instead of remembering directions. Balance is important."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I would argue that society has developed a structural dependence on technology. While digital tools enhance efficiency, excessive reliance may weaken interpersonal communication and independent problem-solving abilities. The key issue is not technology itself but the lack of boundaries in its usage."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-5-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What are the advantages and disadvantages of using technology in education?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Technology helps students access information easily. They can watch videos and search online. However, it can also distract students because they might play games or use social media during class."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Technology offers several advantages in education, such as access to online resources, interactive learning tools, and remote classes. However, it also creates distractions and may reduce students’ concentration. Additionally, not all students have equal access to digital devices."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Technology has expanded educational accessibility and personalized learning opportunities. Online platforms enable flexible study and exposure to global resources. Nevertheless, challenges such as digital inequality, reduced attention spans, and overexposure to screens cannot be ignored. Effective integration requires careful regulation and guidance."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-5-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How might technology develop in the future?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "In the future, technology will become more advanced. AI and robots may help people at home and work. Also, smartphones may become even smarter."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Technology is likely to become more integrated into everyday life. Artificial intelligence may automate more tasks, and smart devices could become more connected. However, privacy and security concerns may also increase."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Future technological development will likely emphasize artificial intelligence, automation, and deeper digital integration. Smart environments may anticipate human needs through data analysis. At the same time, ethical debates surrounding privacy, surveillance, and employment displacement will become more prominent."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-5-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think older people face difficulties adapting to new technology? Why?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, many older people find new technology difficult. They are not used to smartphones or computers. Sometimes they feel confused by complicated systems."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Many older individuals struggle with rapidly evolving technology because they did not grow up with digital devices. Learning new systems requires time and patience. However, with proper support and training, they can adapt successfully."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Older generations may encounter cognitive and experiential barriers when adapting to new technologies. Unlike digital natives, they often lack foundational exposure. However, the issue is less about age and more about accessibility and user-friendly design. With inclusive education and simplified interfaces, adaptation becomes more achievable."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-5-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Should governments regulate the use of certain technologies? In what ways?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, governments should control some technologies. For example, they should protect personal data and prevent online crime. This will keep people safe."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Governments should regulate technologies that pose risks, such as data privacy breaches or misinformation. Laws can protect users and ensure ethical use. However, regulations should not limit innovation too much."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Government regulation is essential to balance innovation with social responsibility. Policies could address data protection, cybersecurity, artificial intelligence ethics, and misinformation. The challenge lies in creating adaptive frameworks that protect citizens without stifling technological progress."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-6",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Gifts and the Meaning of Giving",
+  "description": "We’ve been talking about a gift you received. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-6-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why do people give gifts to each other?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "People give gifts to show love and appreciation. For example, on birthdays or special events, giving a present makes the other person happy. It is also a way to celebrate important moments."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "People give gifts as a way of expressing emotions such as gratitude, love, or respect. It strengthens relationships and shows that they care about the other person. In many cultures, gift-giving is also connected to traditions and celebrations."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Gift-giving serves both emotional and social functions. On a personal level, it symbolizes affection and appreciation. On a broader scale, it reinforces social bonds and cultural traditions. In some contexts, it also reflects mutual respect and long-term commitment in relationships."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-6-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think expensive gifts are always better than inexpensive ones? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "No, I don’t think expensive gifts are always better. Sometimes simple gifts can be more meaningful. For example, handmade gifts can show more effort and care."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I don’t believe the price determines the value of a gift. Meaningful presents often reflect thoughtfulness rather than cost. A personalized or handmade item can create stronger emotional impact than something expensive but impersonal."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I strongly disagree with the idea that price equals value. The emotional significance and personal relevance of a gift often outweigh its monetary cost. In fact, overly expensive gifts may sometimes create discomfort, whereas thoughtful gestures tend to leave lasting impressions."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-6-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How has gift-giving changed compared to the past?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "In the past, people gave simple or handmade gifts. Now, many people buy branded products or order online. Technology has made gift-giving more convenient."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Gift-giving has become more commercialized over time. In the past, gifts were often handmade or practical items. Today, people frequently purchase branded goods, and online shopping has made the process faster and easier. Social media also influences gift trends."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Over time, gift-giving has shifted from a primarily symbolic act to a more consumer-driven practice. Modern marketing and e-commerce have expanded options but also increased social pressure. While convenience has improved, some argue that the emotional depth of gift-giving may have diminished."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-6-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think giving gifts is more important in personal relationships or in business relationships?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think it is more important in personal relationships. Gifts between friends or family show love and closeness. In business, gifts are sometimes just formal."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "I believe gift-giving plays a more meaningful role in personal relationships because it strengthens emotional bonds. In business, gifts can be symbolic gestures to build trust, but they are usually more formal and less emotional."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "While gift-giving exists in both contexts, its emotional significance is stronger in personal relationships. In business settings, gifts often serve strategic or cultural purposes, such as establishing goodwill. However, in personal relationships, they carry deeper emotional meaning and reinforce intimacy."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-6-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Are there any situations where giving a gift might not be appropriate?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, sometimes giving a gift is not appropriate. For example, in formal situations or exams, it may look like bribery. It depends on the situation."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, gift-giving can be inappropriate in professional or official contexts. For instance, giving expensive gifts to public officials may raise ethical concerns. Cultural differences also determine what is acceptable."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Certainly. In certain professional or political environments, gift-giving may blur ethical boundaries and raise concerns about corruption. Cultural norms also influence appropriateness. Therefore, understanding context and intention is crucial to avoid misunderstandings."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-6-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think children value gifts differently from adults? Why?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, children usually focus on toys or fun items. Adults may care more about usefulness or emotional meaning."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Children often value gifts based on excitement and entertainment. In contrast, adults tend to appreciate practicality or emotional significance. Life experience changes how people perceive value."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Children typically evaluate gifts based on immediate enjoyment and novelty, whereas adults are more likely to consider sentimental or practical value. As individuals mature, their understanding of relationships and effort deepens, which alters their perception of what makes a gift meaningful."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-7",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Public Speaking and Nervousness",
+  "description": "We’ve been talking about a situation when you felt nervous while speaking or performing in front of others. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-7-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why do many people feel nervous when speaking in public?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Many people feel nervous because they are afraid of making mistakes. They worry that other people will judge them. Also, if they don’t have much experience, they may feel shy and uncomfortable."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Public speaking often causes anxiety because people fear negative evaluation. They may worry about forgetting their words or making mistakes in front of others. In addition, lack of experience can reduce confidence, which increases nervousness."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Public speaking anxiety is largely linked to fear of judgment and social evaluation. When individuals feel that their performance may affect how others perceive them, stress levels naturally rise. Furthermore, the unpredictability of audience reactions can intensify this pressure."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-7-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think public speaking is an important skill? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think it is important. In school and work, people often need to give presentations. If someone can speak clearly, they can share ideas better."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, public speaking is an essential skill in both academic and professional contexts. It allows individuals to communicate ideas effectively and influence others. Strong speaking skills can also improve leadership and career opportunities."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I would argue that public speaking is a fundamental life skill. Beyond presentations, it enables individuals to articulate ideas persuasively and build credibility. In many professions, the ability to communicate confidently can significantly influence career advancement and social impact."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-7-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How can schools help students become more confident speakers?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Schools can give students more chances to speak in class. For example, they can have presentations or group discussions. Practice can help students feel more comfortable."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Schools can encourage regular presentations and interactive discussions. Providing supportive feedback rather than strict criticism can build students’ confidence. Training in communication skills from a young age would also be beneficial."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Educational institutions can foster confidence by creating low-pressure speaking opportunities and constructive feedback systems. Incorporating debate, presentation training, and peer collaboration helps normalize public expression. Over time, repeated exposure reduces fear and strengthens self-efficacy."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-7-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think some people are naturally more confident than others?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think some people are naturally confident. They don’t feel shy easily and can speak comfortably. Others may need more practice."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "To some extent, personality plays a role in confidence. Extroverted individuals may feel more comfortable speaking publicly. However, confidence can also be developed through experience and preparation."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "While certain personality traits, such as extroversion, may predispose individuals to appear more confident, confidence is largely a learned skill. Preparation, repeated exposure, and positive reinforcement often outweigh innate tendencies in shaping public performance."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-7-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Has technology made it easier or harder for people to speak in front of others?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Technology has made it easier because people can practice online or give presentations through video calls. But sometimes speaking online feels strange."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Technology has both advantages and disadvantages. Online platforms allow people to present remotely, which may reduce anxiety. However, virtual communication can feel less personal and may create technical challenges."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Technology has reshaped public speaking dynamics. Virtual platforms may lower immediate social pressure, yet they introduce new complexities such as technical disruptions and reduced audience feedback. Overall, technology has changed — rather than eliminated — performance anxiety."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-7-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think experiencing nervousness can sometimes be beneficial? In what ways?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, a little nervousness can help people focus. If someone is too relaxed, they may not prepare well. Being nervous can make people try harder."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, moderate nervousness can enhance performance. It increases alertness and concentration. However, excessive anxiety can negatively affect performance, so balance is important."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Nervousness, when controlled, can function as a performance enhancer. Psychological arousal increases focus and motivation, which may improve preparation and delivery. The key lies in managing anxiety so that it energizes rather than overwhelms the speaker."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-8",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — School Events and Personal Development",
+  "description": "We’ve been talking about an important school event you took part in. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-8-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why are school events important for students?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "School events are important because they help students make memories and build friendships. Students can enjoy activities outside normal classes. It also helps them feel more connected to their school."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "School events play an important role in students’ overall development. They encourage teamwork, communication, and creativity. In addition, these events create a sense of belonging and improve school spirit."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "School events contribute significantly to holistic development. Beyond academic learning, they foster interpersonal skills, leadership, and emotional resilience. Such experiences often shape students’ identity and strengthen their attachment to the school community."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-8-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think academic events are more important than sports or cultural events? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think academic events are important because education is the main purpose of school. However, sports and cultural events are also important because they help students relax and enjoy school life."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Both types of events are important but serve different purposes. Academic events focus on intellectual growth, while sports and cultural activities support physical health and creativity. A balance between them is necessary for well-rounded development."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "I would argue that comparing them directly may oversimplify their roles. Academic events enhance intellectual competence, whereas sports and cultural activities cultivate discipline, teamwork, and cultural awareness. An effective education system integrates all three to support comprehensive development."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-8-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How can school events help students develop useful skills?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Students can learn teamwork and communication skills. For example, when preparing for a festival or competition, they need to cooperate with others. This experience is useful in the future."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "School events provide opportunities to practice soft skills such as leadership, collaboration, and time management. Students must organize tasks, communicate with peers, and solve problems, which prepares them for real-life situations."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Participating in school events offers experiential learning beyond textbooks. Students develop transferable skills including leadership, strategic planning, and conflict resolution. These competencies are essential not only in higher education but also in professional environments."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-8-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think schools today organize enough extracurricular activities?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "In some schools, yes, but in others, maybe not. Some schools focus too much on exams and don’t provide many activities. It depends on the education system."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "It varies depending on the country and school. In competitive education systems, academic performance often takes priority over extracurricular programs. However, many schools are gradually recognizing the importance of balanced development."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "The availability of extracurricular activities largely depends on educational philosophy and funding. In exam-oriented systems, such programs may be limited. However, progressive institutions increasingly recognize that non-academic engagement enhances student motivation and long-term success."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-8-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How have school events changed compared to the past?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "In the past, events were simpler and less expensive. Now, schools use technology and organize larger events. Students may also share their experiences on social media."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "School events have become more diverse and technologically advanced. Modern schools incorporate digital tools, multimedia presentations, and broader participation. Social media also plays a role in promoting and documenting events."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Compared to the past, school events have become more structured and media-oriented. Technological integration enhances scale and visibility, but it may also increase performance pressure. Additionally, globalization has introduced more culturally diverse activities."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-8-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Should participation in school events be compulsory? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think students should be encouraged, but not forced. Some students feel shy or uncomfortable. It should depend on their personality."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Participation should be encouraged but not entirely compulsory. While involvement promotes growth, forcing students may create stress. Schools should provide options that suit different personalities."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Compulsory participation can ensure inclusivity, but it must be implemented carefully. While exposure to diverse experiences promotes growth, autonomy and personal comfort should be respected. A flexible system that encourages engagement without coercion may be most effective."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-part-3-s-s3-9",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "part-3",
+  "title": "Part 3 — Movies and Entertainment",
+  "description": "We’ve been talking about a movie you watched recently and enjoyed. Now, I’d like to ask you some more general questions related to this topic.",
+  "difficulty": "hard",
+  "tasks": [
+   {
+    "id": "ielts-s-part-3-s-s3-9-t1",
+    "number": 1,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Why do you think movies are so popular around the world?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Movies are popular because they are entertaining and relaxing. People can forget their stress and enjoy a different story. Also, movies are easy to access through streaming services."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Movies are popular because they combine storytelling, visuals, and music, which create strong emotional experiences. They allow people to escape from daily stress and explore different cultures and perspectives. Global streaming platforms have also increased accessibility."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Films have universal appeal because they combine narrative, visual art, and sound to create immersive experiences. They allow audiences to emotionally engage with stories that transcend cultural boundaries. Furthermore, globalization and digital distribution have made cinema more accessible than ever before."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-9-t2",
+    "number": 2,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think movies can influence people’s behavior or opinions?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Yes, I think movies can influence people. For example, some movies show strong characters, and viewers may want to copy them. Movies can also change people’s opinions about social issues."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Yes, films can shape public perception and attitudes. Social or political themes presented in movies may influence how viewers think about certain issues. However, the impact depends on the individual’s critical thinking ability."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Films possess significant persuasive power, particularly when they portray social, cultural, or political narratives. Repeated exposure to certain themes can subtly shape attitudes and normalize specific viewpoints. That said, audience interpretation varies depending on personal values and media literacy."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-9-t3",
+    "number": 3,
+    "label": "Part 3 (Discussion)",
+    "prompt": "How has technology changed the way people watch movies?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Technology has made movie watching easier. People can stream movies at home on their phones or TVs. In the past, they had to go to the cinema."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Technological advances have transformed viewing habits. Streaming services allow people to watch films anytime and anywhere. High-definition screens and surround sound systems also improve the home viewing experience."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Technological innovation has fundamentally reshaped film consumption. On-demand streaming platforms have shifted viewing from communal cinema experiences to individualized home environments. Additionally, advancements in visual effects and sound technology have enhanced production quality."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-9-t4",
+    "number": 4,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Do you think watching movies at home is better than going to the cinema? Why or why not?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think watching at home is more comfortable and cheaper. But cinemas have bigger screens and better sound, so it depends on personal preference."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Both options have advantages. Watching at home offers convenience and flexibility, while cinemas provide immersive audiovisual experiences. Personally, I prefer cinemas for big action movies but home viewing for casual watching."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Each setting offers distinct benefits. Home viewing provides comfort and cost-efficiency, whereas cinemas deliver immersive, large-scale sensory experiences that enhance emotional impact. Ultimately, the choice depends on whether one prioritizes convenience or atmosphere."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-9-t5",
+    "number": 5,
+    "label": "Part 3 (Discussion)",
+    "prompt": "What kinds of movies are most popular among young people in your country?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "Young people usually like action movies, romantic comedies, and animated films. These movies are exciting and easy to enjoy."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "Among young audiences, action films and romantic comedies tend to be particularly popular due to their entertainment value. Recently, superhero and fantasy genres have also gained attention because of their impressive visual effects."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Younger generations are generally drawn to high-energy genres such as action, fantasy, and superhero films. These genres often incorporate cutting-edge visual effects and relatable character arcs. Additionally, socially themed dramas are gradually gaining popularity among more critically minded viewers."
+     }
+    ]
+   },
+   {
+    "id": "ielts-s-part-3-s-s3-9-t6",
+    "number": 6,
+    "label": "Part 3 (Discussion)",
+    "prompt": "Should films always have educational value, or is entertainment enough?",
+    "prepSec": 10,
+    "speakSec": 60,
+    "sampleAnswers": [
+     {
+      "label": "Band 5.5",
+      "text": "I think entertainment is enough because movies are mainly for relaxation. However, educational movies are also good sometimes."
+     },
+     {
+      "label": "Band 6.5",
+      "text": "While films primarily aim to entertain, incorporating educational elements can enhance their impact. Movies can raise awareness about social issues without feeling like formal lessons. A balance between entertainment and meaningful content may be ideal."
+     },
+     {
+      "label": "Band 7.5+",
+      "text": "Although the primary function of cinema is entertainment, films often serve as powerful vehicles for education and social commentary. The most impactful films successfully integrate meaningful themes within engaging narratives. Therefore, education and entertainment need not be mutually exclusive."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-full-practice-s-s1",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "full-practice",
+  "title": "Part 1 通し練習 — practice3（本番仕様 ※ジャンル混成）",
+  "description": "本番仕様のジャンル混成インタビュー練習",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-full-practice-s-s1-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "Do you like taking photos?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "What do you usually take photos of?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "Do you prefer taking photos with a phone or a camera?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "Do you often look at the photos you took in the past?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "Do you like watching or playing sports?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "What sport is the most popular in your country?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "Did you play any sports when you were a child?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "Do you think it’s important for people to do sports regularly?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "Are there any traditional festivals in your country?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "Which festival do you like the most?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "How do people usually celebrate this festival?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Do you prefer celebrating festivals with family or friends?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-full-practice-s-s1",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "full-practice",
+  "title": "Part 1 通し練習 — practice2（本番仕様 ※ジャンル混成）",
+  "description": "本番仕様のジャンル混成インタビュー練習",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-full-practice-s-s1-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "Do you like listening to music?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "What kind of music do you usually listen to?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "When do you usually listen to music?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "Do you prefer listening to music alone or with other people?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "What do you usually do on weekends?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "Do you prefer spending your weekends at home or going out?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "Is your weekend routine different from your weekdays?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "Have your weekends changed compared to the past?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "Do you enjoy reading books?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "What kind of books do you usually read?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "How often do you read in your free time?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Do you prefer reading printed books or e-books?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ },
+ {
+  "id": "ielts-s-full-practice-s-s1",
+  "exam": "ielts",
+  "skill": "speaking",
+  "practiceType": "full-practice",
+  "title": "Part 1 通し練習 — practice1（本番仕様 ※ジャンル混成）",
+  "description": "本番仕様のジャンル混成インタビュー練習",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "ielts-s-full-practice-s-s1-t1",
+    "number": 1,
+    "label": "Part 1",
+    "prompt": "How often do you cook?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t2",
+    "number": 2,
+    "label": "Part 1",
+    "prompt": "Do you think you are good at cooking?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t3",
+    "number": 3,
+    "label": "Part 1",
+    "prompt": "Do you prefer cooking new foods?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t4",
+    "number": 4,
+    "label": "Part 1",
+    "prompt": "Have your eating habits changed recently?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t5",
+    "number": 5,
+    "label": "Part 1",
+    "prompt": "Do you use technology every day?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t6",
+    "number": 6,
+    "label": "Part 1",
+    "prompt": "What kind of apps do you use most?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t7",
+    "number": 7,
+    "label": "Part 1",
+    "prompt": "When did you start using smartphones?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t8",
+    "number": 8,
+    "label": "Part 1",
+    "prompt": "Do you prefer using a phone or a computer?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t9",
+    "number": 9,
+    "label": "Part 1",
+    "prompt": "How often do you travel?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t10",
+    "number": 10,
+    "label": "Part 1",
+    "prompt": "What is the most common transport in your city?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t11",
+    "number": 11,
+    "label": "Part 1",
+    "prompt": "Do you think public transportation is expensive?",
+    "prepSec": 5,
+    "speakSec": 40
+   },
+   {
+    "id": "ielts-s-full-practice-s-s1-t12",
+    "number": 12,
+    "label": "Part 1",
+    "prompt": "Do you like walking or cycling?",
+    "prepSec": 5,
+    "speakSec": 40
+   }
+  ]
+ }
+]

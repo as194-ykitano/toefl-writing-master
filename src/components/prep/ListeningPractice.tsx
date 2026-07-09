@@ -241,6 +241,16 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
             </button>
           </div>
 
+          {set.imageUrl && (
+            <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 p-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={set.imageUrl}
+                alt="地図・図面"
+                className="w-full max-h-[420px] object-contain rounded-lg"
+              />
+            </div>
+          )}
           {set.referenceText && (
             <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 p-4 overflow-x-auto">
               <div className="text-xs font-semibold text-gray-500 mb-2">参照資料</div>

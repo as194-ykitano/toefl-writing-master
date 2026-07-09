@@ -382,6 +382,7 @@ export const SPEAKING_SETS: SpeakingSet[] = [
     id: "toefl-speaking-01",
     exam: "toefl",
     skill: "speaking",
+    practiceType: "take-an-interview",
     title: "Take an Interview Practice 1: Student Life & Technology",
     description: "新形式のインタビュー形式。テーマに沿った 4 つの質問に各 45 秒で回答します",
     difficulty: "medium",

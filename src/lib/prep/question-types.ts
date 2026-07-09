@@ -52,6 +52,44 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
   { id: "sentence-completion", exam: "ielts", skill: "listening", label: "Sentence Completion", labelJa: "文完成" },
   { id: "summary-completion", exam: "ielts", skill: "listening", label: "Summary Completion", labelJa: "要約完成" },
 
+  // ---- IELTS Speaking（Notion からインポート済み） ----
+  {
+    id: "part-1",
+    exam: "ielts",
+    skill: "speaking",
+    label: "Part 1",
+    labelJa: "日常トピックの質疑応答",
+    description: "身近なトピックについての短い質疑応答（各 40 秒目安）",
+    badge: "AI添削",
+  },
+  {
+    id: "part-2",
+    exam: "ielts",
+    skill: "speaking",
+    label: "Part 2",
+    labelJa: "キューカード・スピーチ",
+    description: "準備 1 分 → 2 分間のスピーチ。Band 別模範解答つき",
+    badge: "AI添削",
+  },
+  {
+    id: "part-3",
+    exam: "ielts",
+    skill: "speaking",
+    label: "Part 3",
+    labelJa: "ディスカッション",
+    description: "抽象的・社会的なテーマの深掘り質問。Band 別模範解答つき",
+    badge: "AI添削",
+  },
+  {
+    id: "full-practice",
+    exam: "ielts",
+    skill: "speaking",
+    label: "Full Practice",
+    labelJa: "本番仕様の通し練習",
+    description: "ジャンル混成のインタビュー形式（本番仕様）",
+    badge: "AI添削",
+  },
+
   // ---- IELTS Writing（既存 AI 添削機能へ接続） ----
   {
     id: "task-1",
