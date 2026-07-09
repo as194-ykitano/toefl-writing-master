@@ -100,3 +100,109 @@ export function pickRecorderMimeType(): string {
   }
   return "";
 }
+
+/** サンプルレート変換（線形補間） */
+function downsample(samples: Float32Array, fromRate: number, toRate: number): Float32Array {
+  if (fromRate === toRate) return samples;
+  const ratio = fromRate / toRate;
+  const length = Math.floor(samples.length / ratio);
+  const out = new Float32Array(length);
+  for (let i = 0; i < length; i++) {
+    const pos = i * ratio;
+    const left = Math.floor(pos);
+    const right = Math.min(samples.length - 1, left + 1);
+    const frac = pos - left;
+    out[i] = samples[left] * (1 - frac) + samples[right] * frac;
+  }
+  return out;
+}
+
+/**
+ * Web Audio API で生の PCM を直接収集する録音クラス。
+ *
+ * MediaRecorder の webm/opus は「エンコードはできるがデコード（再生）できない」
+ * 環境が存在するため（Windows のコーデック構成など）、圧縮コーデックを一切
+ * 使わずに PCM → WAV を生成する。WAV の再生はコーデック不要なので、
+ * 録音できた環境では必ず再生もできる。
+ */
+export class PcmRecorder {
+  private ctx: AudioContext;
+  private source: MediaStreamAudioSourceNode;
+  private processor: ScriptProcessorNode;
+  private analyser: AnalyserNode;
+  private levelData: Uint8Array;
+  private chunks: Float32Array[] = [];
+  private stopped = false;
+
+  constructor(stream: MediaStream) {
+    const AudioContextCtor =
+      window.AudioContext ??
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    this.ctx = new AudioContextCtor();
+    this.ctx.resume().catch(() => undefined);
+    this.source = this.ctx.createMediaStreamSource(stream);
+
+    // レベルメーター用
+    this.analyser = this.ctx.createAnalyser();
+    this.analyser.fftSize = 512;
+    this.levelData = new Uint8Array(this.analyser.frequencyBinCount);
+    this.source.connect(this.analyser);
+
+    // PCM 収集（ScriptProcessorNode は非推奨だが全ブラウザで動作する）
+    this.processor = this.ctx.createScriptProcessor(4096, 1, 1);
+    this.processor.onaudioprocess = (e) => {
+      if (this.stopped) return;
+      this.chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+    };
+    this.source.connect(this.processor);
+    // 出力へ接続しないと処理が走らないブラウザがあるため、音量 0 で接続
+    const silent = this.ctx.createGain();
+    silent.gain.value = 0;
+    this.processor.connect(silent);
+    silent.connect(this.ctx.destination);
+  }
+
+  /** 現在の入力レベル (0〜1)。レベルメーター表示用 */
+  getLevel(): number {
+    this.analyser.getByteTimeDomainData(this.levelData);
+    let sum = 0;
+    for (let i = 0; i < this.levelData.length; i++) {
+      const v = (this.levelData[i] - 128) / 128;
+      sum += v * v;
+    }
+    return Math.min(1, Math.sqrt(sum / this.levelData.length) * 4);
+  }
+
+  /** 録音を終了し、WAV (16kHz mono) を生成する */
+  stop(): ConvertedRecording {
+    this.stopped = true;
+    const sourceRate = this.ctx.sampleRate;
+    try {
+      this.processor.disconnect();
+      this.source.disconnect();
+    } catch {
+      // すでに切断済みでも問題なし
+    }
+    this.ctx.close().catch(() => undefined);
+
+    const total = this.chunks.reduce((a, c) => a + c.length, 0);
+    const merged = new Float32Array(total);
+    let offset = 0;
+    for (const chunk of this.chunks) {
+      merged.set(chunk, offset);
+      offset += chunk.length;
+    }
+    this.chunks = [];
+
+    const samples = downsample(merged, sourceRate, TARGET_SAMPLE_RATE);
+    let sumSquares = 0;
+    for (let i = 0; i < samples.length; i++) sumSquares += samples[i] * samples[i];
+    const rms = Math.sqrt(sumSquares / Math.max(1, samples.length));
+
+    return {
+      wavBlob: encodeWav(samples, TARGET_SAMPLE_RATE),
+      durationSec: samples.length / TARGET_SAMPLE_RATE,
+      rms,
+    };
+  }
+}

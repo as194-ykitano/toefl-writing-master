@@ -19,7 +19,7 @@ import {
 } from "@/lib/prep/types";
 import { newSessionId, saveSession } from "@/lib/prep/session-store";
 import { saveRecording } from "@/lib/prep/recording-store";
-import { convertToWav, pickRecorderMimeType } from "@/lib/prep/audio-utils";
+import { PcmRecorder } from "@/lib/prep/audio-utils";
 
 type Phase = "ready" | "prep" | "recording" | "review";
 
@@ -45,7 +45,11 @@ async function analyzeRecording(
   const task = set.tasks.find((t) => t.id === taskId);
   const isRepeat = set.practiceType === "listen-and-repeat";
   const formData = new FormData();
-  const ext = recording.blob.type.includes("mp4") ? "mp4" : "webm";
+  const ext = recording.blob.type.includes("wav")
+    ? "wav"
+    : recording.blob.type.includes("mp4")
+      ? "mp4"
+      : "webm";
   formData.append("audio", new File([recording.blob], `answer.${ext}`, { type: recording.blob.type }));
   formData.append("prompt", task?.prompt ?? "");
   formData.append("exam", set.exam);
@@ -89,12 +93,10 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
   const [micLevel, setMicLevel] = useState(0);
   const questionAudioRef = useRef<HTMLAudioElement | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
   const levelRafRef = useRef<number>(0);
 
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const pcmRecorderRef = useRef<PcmRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
   const phaseRef = useRef<Phase>("ready");
   phaseRef.current = phase;
 
@@ -130,37 +132,19 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     cancelAnimationFrame(levelRafRef.current);
-    audioCtxRef.current?.close().catch(() => undefined);
-    audioCtxRef.current = null;
     setMicLevel(0);
   };
 
   useEffect(() => cleanupStream, []);
 
   /** 録音中のマイク入力レベルを可視化（マイクが拾えていない場合に気づけるように） */
-  const startLevelMeter = (stream: MediaStream) => {
-    try {
-      const ctx = new AudioContext();
-      audioCtxRef.current = ctx;
-      const source = ctx.createMediaStreamSource(stream);
-      const analyser = ctx.createAnalyser();
-      analyser.fftSize = 512;
-      source.connect(analyser);
-      const data = new Uint8Array(analyser.frequencyBinCount);
-      const tick = () => {
-        analyser.getByteTimeDomainData(data);
-        let sum = 0;
-        for (let i = 0; i < data.length; i++) {
-          const v = (data[i] - 128) / 128;
-          sum += v * v;
-        }
-        setMicLevel(Math.min(1, Math.sqrt(sum / data.length) * 4));
-        levelRafRef.current = requestAnimationFrame(tick);
-      };
-      tick();
-    } catch {
-      // レベルメーターが使えなくても録音は続行
-    }
+  const startLevelMeter = () => {
+    const tick = () => {
+      const recorder = pcmRecorderRef.current;
+      if (recorder) setMicLevel(recorder.getLevel());
+      levelRafRef.current = requestAnimationFrame(tick);
+    };
+    tick();
   };
 
   const playQuestionAudio = () => {
@@ -191,42 +175,10 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      startLevelMeter(stream);
-      chunksRef.current = [];
-      const mimeType = pickRecorderMimeType();
-      const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-      recorder.onerror = () => setMicError(true);
-      recorder.onstop = async () => {
-        const rawBlob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
-        cleanupStream();
-        try {
-          // WAV へ変換（デコード成功＝録音の検証。duration・再生互換性の問題も解消）
-          const { wavBlob, rms } = await convertToWav(rawBlob);
-          setRecordings((prev) => ({
-            ...prev,
-            [task.id]: { url: URL.createObjectURL(wavBlob), blob: wavBlob, rms },
-          }));
-        } catch (error) {
-          console.warn("録音の変換に失敗:", error);
-          setRecordings((prev) => ({
-            ...prev,
-            [task.id]: {
-              url: URL.createObjectURL(rawBlob),
-              blob: rawBlob,
-              convertError:
-                rawBlob.size === 0
-                  ? "録音データが空でした。マイクの接続と権限を確認してください。"
-                  : "録音データを検証できませんでした。再生できない場合は録り直してください。",
-            },
-          }));
-        }
-      };
-      // timeslice を指定して定期的にデータを受け取る（最終チャンク欠落対策）
-      recorder.start(1000);
-      mediaRecorderRef.current = recorder;
+      // 生の PCM を直接収集して WAV を生成する（コーデック非依存のため
+      // 「録音はできるのに再生できない」問題が起きない）
+      pcmRecorderRef.current = new PcmRecorder(stream);
+      startLevelMeter();
     } catch {
       // マイク拒否・非対応でもタイマーだけで練習を続けられるようにする
       setMicError(true);
@@ -234,10 +186,22 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
+    const recorder = pcmRecorderRef.current;
+    pcmRecorderRef.current = null;
+    if (recorder) {
+      try {
+        const { wavBlob, rms, durationSec } = recorder.stop();
+        if (durationSec > 0.2) {
+          setRecordings((prev) => ({
+            ...prev,
+            [task.id]: { url: URL.createObjectURL(wavBlob), blob: wavBlob, rms },
+          }));
+        }
+      } catch (error) {
+        console.warn("録音の生成に失敗:", error);
+      }
     }
-    mediaRecorderRef.current = null;
+    cleanupStream();
     setPhase("review");
   };
 
