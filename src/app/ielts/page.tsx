@@ -1,47 +1,46 @@
 "use client";
 
-// IELTS Test Hub
-// Writing Task 1 / 2 は既存の AI 添削機能（/ielts-tasks）へ接続し、R/L/S は新しい演習へ
+// IELTS コースハブ
+// 上位階層は大きなセクション（R / L / S / W / 模試）のみで整理し、
+// 問題タイプ別演習（Matching Headings / TFNG など）は
+// 各セクションページ（/practice/ielts/...）内に表示する。
 
-import {
-  BarChart3,
-  ClipboardList,
-  ListChecks,
-  PenLine,
-  Timer,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { ClipboardList, Timer } from "lucide-react";
 import HubPage from "@/components/prep/HubPage";
-import { LISTENING_SETS, READING_SETS, SPEAKING_SETS } from "@/lib/prep/mock-data";
-
-const readingCount = READING_SETS.filter((s) => s.exam === "ielts").reduce(
-  (acc, s) => acc + s.questions.length,
-  0
-);
-const listeningCount = LISTENING_SETS.filter((s) => s.exam === "ielts").reduce(
-  (acc, s) => acc + s.questions.length,
-  0
-);
-const speakingCount = SPEAKING_SETS.filter((s) => s.exam === "ielts").reduce(
-  (acc, s) => acc + s.tasks.length,
-  0
-);
+import { getSkillStats } from "@/lib/prep/data-source";
 
 export default function IeltsHubPage() {
+  const [counts, setCounts] = useState({ reading: 0, listening: 0, speaking: 0 });
+
+  useEffect(() => {
+    const load = async () => {
+      const [r, l, s] = await Promise.all([
+        getSkillStats("ielts", "reading"),
+        getSkillStats("ielts", "listening"),
+        getSkillStats("ielts", "speaking"),
+      ]);
+      setCounts({ reading: r.questionCount, listening: l.questionCount, speaking: s.questionCount });
+    };
+    load();
+  }, []);
+
   return (
     <HubPage
       title="IELTS Academic 対策"
       headerBadges={["Band 0–9"]}
-      subtitle="IELTS Academic形式に沿って、Reading, Listening, Speaking, Writing を練習します。Band スコアの推定と問題タイプ別の対策ができます。"
+      subtitle="IELTS Academic形式に沿って、Reading, Listening, Speaking, Writing を練習します。各セクションを開くと、Matching Headings や TFNG などの問題タイプ別演習に進めます。"
       sections={[
         {
           style: "banner",
           title: "セクション別学習",
+          description: "セクションを開くと、問題タイプ別演習を選べます",
           banners: [
             {
               label: "リーディング問題演習",
               title: "Reading",
-              subtitle: `合計 ${readingCount}問`,
-              badges: ["TFNG・マッチング対応"],
+              subtitle: counts.reading ? `13 タイプ / 合計 ${counts.reading} 問` : "13 の問題タイプ別演習",
+              badges: ["問題タイプ別"],
               href: "/practice/ielts/reading",
               tone: "indigo",
               pattern: "xo",
@@ -50,8 +49,8 @@ export default function IeltsHubPage() {
             {
               label: "リスニング問題演習",
               title: "Listening",
-              subtitle: `合計 ${listeningCount}問`,
-              badges: ["穴埋め対応"],
+              subtitle: counts.listening ? `11 タイプ / 合計 ${counts.listening} 問` : "11 の問題タイプ別演習",
+              badges: ["問題タイプ別"],
               href: "/practice/ielts/listening",
               tone: "blue",
               pattern: "waves",
@@ -60,7 +59,7 @@ export default function IeltsHubPage() {
             {
               label: "スピーキング問題演習",
               title: "Speaking",
-              subtitle: `合計 ${speakingCount}問（Part 1〜2 形式）`,
+              subtitle: `Part 1〜2 形式（${counts.speaking} タスク）`,
               badges: ["録音・再生確認"],
               href: "/practice/ielts/speaking",
               tone: "teal",
@@ -72,56 +71,11 @@ export default function IeltsHubPage() {
               title: "Writing",
               subtitle: "Task 1 / Task 2",
               badges: ["AI添削", "添削無制限"],
-              href: "/ielts-tasks",
+              href: "/practice/ielts/writing",
               tone: "violet",
               pattern: "letters",
               patternText: "WRITE",
               progress: 0,
-            },
-          ],
-        },
-        {
-          id: "writing",
-          style: "compact",
-          title: "Writing タスク",
-          description: "実績のある AI 添削つき Writing トレーニング（既存機能）",
-          entries: [
-            {
-              title: "Writing Task 1",
-              description: "グラフ・図表の描写タスク（20 分・150 語以上）。AI 添削つき",
-              href: "/ielts-tasks",
-              badge: "AI添削",
-              icon: BarChart3,
-              iconColor: "text-emerald-600 bg-emerald-50",
-            },
-            {
-              title: "Writing Task 2",
-              description: "エッセイライティング（40 分・250 語以上）。AI 添削つき",
-              href: "/ielts-tasks",
-              badge: "AI添削",
-              icon: PenLine,
-              iconColor: "text-emerald-600 bg-emerald-50",
-            },
-          ],
-        },
-        {
-          style: "compact",
-          title: "問題タイプ別練習",
-          description: "苦手な問題タイプを集中的に鍛えます",
-          entries: [
-            {
-              title: "Reading Question Type Practice",
-              description: "TFNG / マッチング / 穴埋めなどタイプ別の集中演習",
-              icon: ListChecks,
-              iconColor: "text-blue-600 bg-blue-50",
-              comingSoon: true,
-            },
-            {
-              title: "Listening Question Type Practice",
-              description: "フォーム穴埋め / 地図問題などタイプ別の集中演習",
-              icon: ListChecks,
-              iconColor: "text-violet-600 bg-violet-50",
-              comingSoon: true,
             },
           ],
         },

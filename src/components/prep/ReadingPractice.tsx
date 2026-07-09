@@ -102,7 +102,7 @@ export default function ReadingPractice({ set, mode }: ReadingPracticeProps) {
           <h2 className="text-lg font-bold text-gray-900 mb-4">{set.passageTitle}</h2>
           <div className="space-y-4">
             {set.paragraphs.map((p, i) => (
-              <p key={i} className="text-[15px] leading-7 text-gray-800">
+              <p key={i} className="text-[15px] leading-7 text-gray-800 whitespace-pre-line">
                 {p.label && <span className="font-bold text-gray-500 mr-2">{p.label}</span>}
                 {p.text}
               </p>
@@ -134,7 +134,9 @@ export default function ReadingPractice({ set, mode }: ReadingPracticeProps) {
             </button>
           </div>
 
-          <p className="text-[15px] text-gray-900 font-medium leading-relaxed mb-5">{question.prompt}</p>
+          <p className="text-[15px] text-gray-900 font-medium leading-relaxed mb-5 whitespace-pre-line">
+            {question.prompt}
+          </p>
 
           <div className="flex-1">
             <QuestionRenderer

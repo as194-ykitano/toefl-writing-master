@@ -109,7 +109,7 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
     // モック再生: スクリプトを読み上げる（実データ投入時は audioUrl を設定）
     if (typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.cancel();
-      const turns = set.transcript.split("/").map((t) => t.trim()).filter(Boolean);
+      const turns = set.transcript.split(/[\n/]/).map((t) => t.trim()).filter(Boolean);
       turns.forEach((turn, i) => {
         const utterance = new SpeechSynthesisUtterance(turn.replace(/^[A-Za-z ]+:\s*/, ""));
         utterance.lang = "en-US";
@@ -199,7 +199,7 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
                 </button>
                 {showTranscript && (
                   <div className="mt-3 text-xs leading-relaxed text-gray-600 space-y-1.5">
-                    {set.transcript.split("/").map((turn, i) => (
+                    {set.transcript.split(/[\n/]/).map((turn, i) => (
                       <p key={i}>{turn.trim()}</p>
                     ))}
                   </div>
@@ -241,7 +241,17 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
             </button>
           </div>
 
-          <p className="text-[15px] text-gray-900 font-medium leading-relaxed mb-5">{question.prompt}</p>
+          {set.referenceText && (
+            <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 p-4 overflow-x-auto">
+              <div className="text-xs font-semibold text-gray-500 mb-2">参照資料</div>
+              <pre className="text-xs text-gray-700 font-mono whitespace-pre leading-relaxed">
+                {set.referenceText}
+              </pre>
+            </div>
+          )}
+          <p className="text-[15px] text-gray-900 font-medium leading-relaxed mb-5 whitespace-pre-line">
+            {question.prompt}
+          </p>
 
           <div className="flex-1">
             <QuestionRenderer

@@ -60,6 +60,8 @@ interface PracticeSetBase {
   difficulty: "easy" | "medium" | "hard";
   /** 制限時間（秒）。テストモードで使用 */
   timeLimitSec: number;
+  /** 問題タイプ別演習のタイプ slug（question-types.ts のカタログと対応） */
+  practiceType?: string;
   questions: PracticeQuestion[];
 }
 
@@ -78,6 +80,10 @@ export interface ListeningSet extends PracticeSetBase {
   transcript: string;
   /** 本番モードでの再生可能回数 */
   playLimitInTest: number;
+  /** 設問と一緒に表示する参照資料（表・フォームなどのテキスト） */
+  referenceText?: string;
+  /** 地図・図面などの画像 URL（map/plan labelling 用。未アップロード時は undefined） */
+  imageUrl?: string;
 }
 
 export interface SpeakingTask {
@@ -99,6 +105,8 @@ export interface SpeakingSet {
   title: string;
   description?: string;
   difficulty: "easy" | "medium" | "hard";
+  /** 問題タイプ別演習のタイプ slug */
+  practiceType?: string;
   tasks: SpeakingTask[];
 }
 

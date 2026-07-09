@@ -197,7 +197,7 @@ export default function ReviewPage() {
               <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5">
                 <div>
                   <div className="text-[11px] text-gray-400 mb-1">{selected.setTitle}</div>
-                  <p className="text-sm font-medium text-gray-900 leading-relaxed">{selected.question.prompt}</p>
+                  <p className="text-sm font-medium text-gray-900 leading-relaxed whitespace-pre-line">{selected.question.prompt}</p>
                 </div>
 
                 <div className="space-y-3">
@@ -217,7 +217,7 @@ export default function ReviewPage() {
 
                 <div>
                   <div className="text-xs font-semibold text-gray-500 mb-1.5">解説</div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{selected.question.explanation}</p>
+                  <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{selected.question.explanation}</p>
                 </div>
 
                 {selected.question.trapNote && (

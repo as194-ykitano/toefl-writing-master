@@ -1,0 +1,605 @@
+{
+ "sourceRoot": "C:\\Users\\ykita\\codex-projects\\notion-practice-training-creation\\outputs\\ielts\\questions\\formatted-question-for-webapp",
+ "listening": [
+  {
+   "setId": "ielts-l-multiple-choice-multiple-answer-green-routes-campus-gardening-groups-orientation",
+   "type": "multiple-choice-multiple-answer",
+   "sourceTxt": "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-142702-campus-gardening-groups-orientation-green-routes-campus-gardening-groups-orientation\\formatted\\type1-green-routes-campus-gardening-groups-orientation.txt",
+   "audio": [
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-142702-campus-gardening-groups-orientation-green-routes-campus-gardening-groups-orientation\\audio\\06-stage6-final-type1.mp3",
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-142702-campus-gardening-groups-orientation-green-routes-campus-gardening-groups-orientation\\audio\\type1-green-routes-campus-gardening-groups-orientation-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-multiple-answer-eastfield-city-schools-athletics-festival",
+   "type": "multiple-choice-multiple-answer",
+   "sourceTxt": "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-190001-city-athletics-festival-volunteer-briefing-eastfield-city-schools-athletics-festival\\formatted\\type1-eastfield-city-schools-athletics-festival.txt",
+   "audio": [
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-190001-city-athletics-festival-volunteer-briefing-eastfield-city-schools-athletics-festival\\audio\\06-stage6-final-type1.mp3",
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-190001-city-athletics-festival-volunteer-briefing-eastfield-city-schools-athletics-festival\\audio\\type1-eastfield-city-schools-athletics-festival-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-multiple-answer-riverside-civic-arts-festival-setup-day",
+   "type": "multiple-choice-multiple-answer",
+   "sourceTxt": "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-231002-civic-arts-festival-setup-briefing-riverside-civic-arts-festival-setup-day\\formatted\\type1-riverside-civic-arts-festival-setup-day.txt",
+   "audio": [
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-231002-civic-arts-festival-setup-briefing-riverside-civic-arts-festival-setup-day\\audio\\06-stage6-final-type1.mp3",
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-231002-civic-arts-festival-setup-briefing-riverside-civic-arts-festival-setup-day\\audio\\type1-riverside-civic-arts-festival-setup-day-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-multiple-answer-harborough-civic-museum-opening-weekend",
+   "type": "multiple-choice-multiple-answer",
+   "sourceTxt": "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-231002-museum-event-briefing-student-helpers-harborough-civic-museum-opening-weekend\\formatted\\type1-harborough-civic-museum-opening-weekend.txt",
+   "audio": [
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-231002-museum-event-briefing-student-helpers-harborough-civic-museum-opening-weekend\\audio\\06-stage6-final-type1.mp3",
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\20260517-231002-museum-event-briefing-student-helpers-harborough-civic-museum-opening-weekend\\audio\\type1-harborough-civic-museum-opening-weekend-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-multiple-answer-hartwell-maritime-museum-exhibition-setup-day",
+   "type": "multiple-choice-multiple-answer",
+   "sourceTxt": "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\test-01-hartwell-maritime-museum-exhibition-setup-day\\formatted\\type1-hartwell-maritime-museum-exhibition-setup-day.txt",
+   "audio": [
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\test-01-hartwell-maritime-museum-exhibition-setup-day\\audio\\06-stage6-final-type1.mp3",
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\test-01-hartwell-maritime-museum-exhibition-setup-day\\audio\\type1-hartwell-maritime-museum-exhibition-setup-day-openai-v6-094-gap33-two-takes.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-multiple-answer-hartwell-maritime-museum-exhibition-setup-day",
+   "type": "multiple-choice-multiple-answer",
+   "sourceTxt": "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\test-02-hartwell-maritime-museum-exhibition-setup-day\\formatted\\type1-hartwell-maritime-museum-exhibition-setup-day.txt",
+   "audio": [
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\test-02-hartwell-maritime-museum-exhibition-setup-day\\audio\\06-stage6-final-type1.mp3",
+    "IELTS Listening\\Type1 - multiple-choice-multiple-answer\\test-02-hartwell-maritime-museum-exhibition-setup-day\\audio\\type1-hartwell-maritime-museum-exhibition-setup-day-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-summary-completion-why-a-public-bicycle-scheme-changed-its-pricing",
+   "type": "summary-completion",
+   "sourceTxt": "IELTS Listening\\Type10 - summary-completion\\20260519-0200-bicycle-pricing-reform-why-a-public-bicycle-scheme-changed-its-pricing\\formatted\\type10-why-a-public-bicycle-scheme-changed-its-pricing.txt",
+   "audio": [
+    "IELTS Listening\\Type10 - summary-completion\\20260519-0200-bicycle-pricing-reform-why-a-public-bicycle-scheme-changed-its-pricing\\audio\\06-stage6-final-type10.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-summary-completion-moving-a-library-archive-to-controlled-storage",
+   "type": "summary-completion",
+   "sourceTxt": "IELTS Listening\\Type10 - summary-completion\\20260519-0200-library-archive-relocation-moving-a-library-archive-to-controlled-storage\\formatted\\type10-moving-a-library-archive-to-controlled-storage.txt",
+   "audio": [
+    "IELTS Listening\\Type10 - summary-completion\\20260519-0200-library-archive-relocation-moving-a-library-archive-to-controlled-storage\\audio\\06-stage6-final-type10.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-summary-completion-why-bees-decline-in-commercial-orchards",
+   "type": "summary-completion",
+   "sourceTxt": "IELTS Listening\\Type10 - summary-completion\\20260519-0200-orchard-bee-decline-why-bees-decline-in-commercial-orchards\\formatted\\type10-why-bees-decline-in-commercial-orchards.txt",
+   "audio": [
+    "IELTS Listening\\Type10 - summary-completion\\20260519-0200-orchard-bee-decline-why-bees-decline-in-commercial-orchards\\audio\\06-stage6-final-type10.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-summary-completion-reducing-losses-in-a-town-water-network",
+   "type": "summary-completion",
+   "sourceTxt": "IELTS Listening\\Type10 - summary-completion\\20260519-0200-town-water-loss-reducing-losses-in-a-town-water-network\\formatted\\type10-reducing-losses-in-a-town-water-network.txt",
+   "audio": [
+    "IELTS Listening\\Type10 - summary-completion\\20260519-0200-town-water-loss-reducing-losses-in-a-town-water-network\\audio\\06-stage6-final-type10.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-summary-completion-how-cities-shared-bicycles",
+   "type": "summary-completion",
+   "sourceTxt": "IELTS Listening\\Type10 - summary-completion\\test-01-how-cities-shared-bicycles\\formatted\\type10-how-cities-shared-bicycles.txt",
+   "audio": [
+    "IELTS Listening\\Type10 - summary-completion\\test-01-how-cities-shared-bicycles\\audio\\06-stage6-final-type10.mp3",
+    "IELTS Listening\\Type10 - summary-completion\\test-01-how-cities-shared-bicycles\\audio\\type10-how-cities-shared-bicycles-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-sentence-completion-seagate-archive-centre",
+   "type": "sentence-completion",
+   "sourceTxt": "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-coastal-archives-salt-resistant-storage-seagate-archive-centre\\formatted\\type11-seagate-archive-centre.txt",
+   "audio": [
+    "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-coastal-archives-salt-resistant-storage-seagate-archive-centre\\audio\\06-stage6-final-type11.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-sentence-completion-riverside-warning-centre",
+   "type": "sentence-completion",
+   "sourceTxt": "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-community-flood-alarms-warning-trust-riverside-warning-centre\\formatted\\type11-riverside-warning-centre.txt",
+   "audio": [
+    "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-community-flood-alarms-warning-trust-riverside-warning-centre\\audio\\06-stage6-final-type11.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-sentence-completion-regional-seed-library-centre",
+   "type": "sentence-completion",
+   "sourceTxt": "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-seed-libraries-climate-adaptation-regional-seed-library-centre\\formatted\\type11-regional-seed-library-centre.txt",
+   "audio": [
+    "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-seed-libraries-climate-adaptation-regional-seed-library-centre\\audio\\06-stage6-final-type11.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-sentence-completion-foundry-lane-workshop-exchange",
+   "type": "sentence-completion",
+   "sourceTxt": "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-shared-urban-workshops-small-manufacturing-foundry-lane-workshop-exchange\\formatted\\type11-foundry-lane-workshop-exchange.txt",
+   "audio": [
+    "IELTS Listening\\Type11 - sentence-completion\\20260519-064002-shared-urban-workshops-small-manufacturing-foundry-lane-workshop-exchange\\audio\\06-stage6-final-type11.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-sentence-completion-harbour-watch-museum",
+   "type": "sentence-completion",
+   "sourceTxt": "IELTS Listening\\Type11 - sentence-completion\\test-01-harbour-watch-museum\\formatted\\type11-harbour-watch-museum.txt",
+   "audio": [
+    "IELTS Listening\\Type11 - sentence-completion\\test-01-harbour-watch-museum\\audio\\06-stage6-final-type11.mp3",
+    "IELTS Listening\\Type11 - sentence-completion\\test-01-harbour-watch-museum\\audio\\type11-harbour-watch-museum-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-cafeteria-waste-reduction-comparison",
+   "type": "multiple-choice",
+   "sourceTxt": "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-cafeteria-waste-reduction-comparison-cafeteria-waste-reduction-comparison\\formatted\\type2-cafeteria-waste-reduction-comparison.txt",
+   "audio": [
+    "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-cafeteria-waste-reduction-comparison-cafeteria-waste-reduction-comparison\\audio\\type2-cafeteria-waste-reduction-comparison-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-university-transport-survey",
+   "type": "multiple-choice",
+   "sourceTxt": "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-campus-transport-survey-redesign-university-transport-survey\\formatted\\type2-university-transport-survey.txt",
+   "audio": [
+    "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-campus-transport-survey-redesign-university-transport-survey\\audio\\type2-university-transport-survey-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-riverside-market-history-case-study",
+   "type": "multiple-choice",
+   "sourceTxt": "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-history-presentation-research-question-repair-riverside-market-history-case-study\\formatted\\type2-riverside-market-history-case-study.txt",
+   "audio": [
+    "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-history-presentation-research-question-repair-riverside-market-history-case-study\\audio\\06-stage6-final-type2.mp3",
+    "IELTS Listening\\Type2 - multiple-choice\\20260517-233001-history-presentation-research-question-repair-riverside-market-history-case-study\\audio\\type2-riverside-market-history-case-study-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-urban-bird-monitoring-pilot-study",
+   "type": "multiple-choice",
+   "sourceTxt": "IELTS Listening\\Type2 - multiple-choice\\20260518-050002-urban-bird-monitoring-pilot-study-limits-urban-bird-monitoring-pilot-study\\formatted\\type2-urban-bird-monitoring-pilot-study.txt",
+   "audio": [
+    "IELTS Listening\\Type2 - multiple-choice\\20260518-050002-urban-bird-monitoring-pilot-study-limits-urban-bird-monitoring-pilot-study\\audio\\06-stage6-final-type2.mp3",
+    "IELTS Listening\\Type2 - multiple-choice\\20260518-050002-urban-bird-monitoring-pilot-study-limits-urban-bird-monitoring-pilot-study\\audio\\type2-urban-bird-monitoring-pilot-study-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-rooftop-gardens-research-paper",
+   "type": "multiple-choice",
+   "sourceTxt": "IELTS Listening\\Type2 - multiple-choice\\test-01-rooftop-gardens-research-paper\\formatted\\type2-rooftop-gardens-research-paper.txt",
+   "audio": [
+    "IELTS Listening\\Type2 - multiple-choice\\test-01-rooftop-gardens-research-paper\\audio\\type2-rooftop-gardens-research-paper-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-multiple-choice-rooftop-gardens-research-paper",
+   "type": "multiple-choice",
+   "sourceTxt": "IELTS Listening\\Type2 - multiple-choice\\test-02-rooftop-gardens-research-paper\\formatted\\type2-rooftop-gardens-research-paper.txt",
+   "audio": [
+    "IELTS Listening\\Type2 - multiple-choice\\test-02-rooftop-gardens-research-paper\\audio\\type2-rooftop-gardens-research-paper-openai-v6-094-gap33-two-takes.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-reducing-packaging-waste-in-fenwick",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\20260512-reducing-packaging-waste-in-fenwick-reducing-packaging-waste-in-fenwick\\formatted\\type3-reducing-packaging-waste-in-fenwick.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\20260512-reducing-packaging-waste-in-fenwick-reducing-packaging-waste-in-fenwick\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\20260512-reducing-packaging-waste-in-fenwick-reducing-packaging-waste-in-fenwick\\audio\\type3-reducing-packaging-waste-in-fenwick-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-saving-water-in-oakstead",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\20260512-saving-water-in-oakstead-saving-water-in-oakstead\\formatted\\type3-saving-water-in-oakstead.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\20260512-saving-water-in-oakstead-saving-water-in-oakstead\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\20260512-saving-water-in-oakstead-saving-water-in-oakstead\\audio\\type3-saving-water-in-oakstead-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-campus-support-at-northfield-university",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\20260518-campus-support-routing-campus-support-at-northfield-university\\formatted\\type3-campus-support-at-northfield-university.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\20260518-campus-support-routing-campus-support-at-northfield-university\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\20260518-campus-support-routing-campus-support-at-northfield-university\\audio\\type3-campus-support-at-northfield-university-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-project-priorities-in-riverside-east",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\20260518-neighbourhood-project-priorities-project-priorities-in-riverside-east\\formatted\\type3-project-priorities-in-riverside-east.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\20260518-neighbourhood-project-priorities-project-priorities-in-riverside-east\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\20260518-neighbourhood-project-priorities-project-priorities-in-riverside-east\\audio\\type3-project-priorities-in-riverside-east-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-scholarship-support-routes-at-westhaven-university",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\20260518-scholarship-support-options-scholarship-support-routes-at-westhaven-university\\formatted\\type3-scholarship-support-routes-at-westhaven-university.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\20260518-scholarship-support-options-scholarship-support-routes-at-westhaven-university\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\20260518-scholarship-support-options-scholarship-support-routes-at-westhaven-university\\audio\\type3-scholarship-support-routes-at-westhaven-university-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-tour-routes-in-mereford",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\20260518-travel-centre-tour-routing-tour-routes-in-mereford\\formatted\\type3-tour-routes-in-mereford.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\20260518-travel-centre-tour-routing-tour-routes-in-mereford\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\20260518-travel-centre-tour-routing-tour-routes-in-mereford\\audio\\type3-tour-routes-in-mereford-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-cutting-packaging-waste-in-alderford",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\test-01-cutting-packaging-waste-in-alderford\\formatted\\type3-cutting-packaging-waste-in-alderford.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\test-01-cutting-packaging-waste-in-alderford\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\test-01-cutting-packaging-waste-in-alderford\\audio\\type3-cutting-packaging-waste-in-alderford-openai-v1-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-matching-cutting-food-waste-in-brookmere",
+   "type": "matching",
+   "sourceTxt": "IELTS Listening\\Type3 - matching\\test-02-cutting-food-waste-in-brookmere\\formatted\\type3-cutting-food-waste-in-brookmere.txt",
+   "audio": [
+    "IELTS Listening\\Type3 - matching\\test-02-cutting-food-waste-in-brookmere\\audio\\06-stage6-final-type3.mp3",
+    "IELTS Listening\\Type3 - matching\\test-02-cutting-food-waste-in-brookmere\\audio\\type3-cutting-food-waste-in-brookmere-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-map-labelling-the-area-around-my-aunt-s-flat",
+   "type": "map-labelling",
+   "sourceTxt": "IELTS Listening\\Type4 - map-labelling\\20260512-the-area-around-my-aunts-flat-the-area-around-my-aunt-s-flat\\formatted\\type4-the-area-around-my-aunt-s-flat.txt",
+   "audio": [
+    "IELTS Listening\\Type4 - map-labelling\\20260512-the-area-around-my-aunts-flat-the-area-around-my-aunt-s-flat\\audio\\type4-the-area-around-my-aunt-s-flat-openai-094-gap33.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type4 - map-labelling\\20260512-the-area-around-my-aunts-flat-the-area-around-my-aunt-s-flat\\type4 test01 image.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-map-labelling-the-area-around-the-student-residence",
+   "type": "map-labelling",
+   "sourceTxt": "IELTS Listening\\Type4 - map-labelling\\20260518-area-around-student-residence-the-area-around-the-student-residence\\formatted\\type4-the-area-around-the-student-residence.txt",
+   "audio": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-area-around-student-residence-the-area-around-the-student-residence\\audio\\06-stage6-final-type4.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-area-around-student-residence-the-area-around-the-student-residence\\ChatGPT Image 2026年6月2日 21_28_43.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-map-labelling-the-campus-area-around-the-main-gate",
+   "type": "map-labelling",
+   "sourceTxt": "IELTS Listening\\Type4 - map-labelling\\20260518-campus-main-gate-orientation-the-campus-area-around-the-main-gate\\formatted\\type4-the-campus-area-around-the-main-gate.txt",
+   "audio": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-campus-main-gate-orientation-the-campus-area-around-the-main-gate\\audio\\06-stage6-final-type4.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-campus-main-gate-orientation-the-campus-area-around-the-main-gate\\ChatGPT Image 2026年6月2日 21_32_10.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-map-labelling-the-paths-around-the-coastal-field-station",
+   "type": "map-labelling",
+   "sourceTxt": "IELTS Listening\\Type4 - map-labelling\\20260518-coastal-field-station-paths-the-paths-around-the-coastal-field-station\\formatted\\type4-the-paths-around-the-coastal-field-station.txt",
+   "audio": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-coastal-field-station-paths-the-paths-around-the-coastal-field-station\\audio\\06-stage6-final-type4.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-coastal-field-station-paths-the-paths-around-the-coastal-field-station\\ChatGPT Image 2026年6月2日 22_04_50.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-map-labelling-the-route-around-the-heritage-village",
+   "type": "map-labelling",
+   "sourceTxt": "IELTS Listening\\Type4 - map-labelling\\20260518-heritage-village-route-the-route-around-the-heritage-village\\formatted\\type4-the-route-around-the-heritage-village.txt",
+   "audio": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-heritage-village-route-the-route-around-the-heritage-village\\audio\\06-stage6-final-type4.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type4 - map-labelling\\20260518-heritage-village-route-the-route-around-the-heritage-village\\ChatGPT Image 2026年6月2日 22_10_49 (1).png"
+   ]
+  },
+  {
+   "setId": "ielts-l-plan-labelling-harbour-discovery-centre-visitor-level",
+   "type": "plan-labelling",
+   "sourceTxt": "IELTS Listening\\Type5 - plan-labelling\\test-01-harbour-discovery-centre-visitor-level\\formatted\\type5-harbour-discovery-centre-visitor-level.txt",
+   "audio": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-01-harbour-discovery-centre-visitor-level\\audio\\type5-harbour-discovery-centre-visitor-level-openai-094-gap33.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-01-harbour-discovery-centre-visitor-level\\type5 test01 image.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-plan-labelling-riverton-central-library-study-floor",
+   "type": "plan-labelling",
+   "sourceTxt": "IELTS Listening\\Type5 - plan-labelling\\test-02-riverton-central-library-study-floor\\formatted\\type5-riverton-central-library-study-floor.txt",
+   "audio": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-02-riverton-central-library-study-floor\\audio\\06-stage6-final-type5.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-02-riverton-central-library-study-floor\\ChatGPT Image 2026年6月3日 09_34_30.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-plan-labelling-westhaven-community-centre-activity-wing",
+   "type": "plan-labelling",
+   "sourceTxt": "IELTS Listening\\Type5 - plan-labelling\\test-03-westhaven-community-centre-activity-wing\\formatted\\type5-westhaven-community-centre-activity-wing.txt",
+   "audio": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-03-westhaven-community-centre-activity-wing\\audio\\06-stage6-final-type5.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-03-westhaven-community-centre-activity-wing\\ChatGPT Image 2026年6月3日 09_36_57.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-plan-labelling-northgate-science-exhibition-hall-main-floor",
+   "type": "plan-labelling",
+   "sourceTxt": "IELTS Listening\\Type5 - plan-labelling\\test-04-northgate-science-exhibition-hall-main-floor\\formatted\\type5-northgate-science-exhibition-hall-main-floor.txt",
+   "audio": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-04-northgate-science-exhibition-hall-main-floor\\audio\\06-stage6-final-type5.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-04-northgate-science-exhibition-hall-main-floor\\ChatGPT Image 2026年6月3日 09_39_07.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-plan-labelling-mereford-house-visitor-floor",
+   "type": "plan-labelling",
+   "sourceTxt": "IELTS Listening\\Type5 - plan-labelling\\test-05-mereford-house-visitor-floor\\formatted\\type5-mereford-house-visitor-floor.txt",
+   "audio": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-05-mereford-house-visitor-floor\\audio\\06-stage6-final-type5.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type5 - plan-labelling\\test-05-mereford-house-visitor-floor\\ChatGPT Image 2026年6月3日 09_41_22.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-form-note-completion-harbour-mobility-cycle-desk",
+   "type": "form-note-completion",
+   "sourceTxt": "IELTS Listening\\Type6 - form-note-completion\\20260518-153302-cycle-hire-day-trip-booking-harbour-mobility-cycle-desk\\formatted\\type6-harbour-mobility-cycle-desk.txt",
+   "audio": [
+    "IELTS Listening\\Type6 - form-note-completion\\20260518-153302-cycle-hire-day-trip-booking-harbour-mobility-cycle-desk\\audio\\06-stage6-final-type6.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-form-note-completion-riverside-archive-library",
+   "type": "form-note-completion",
+   "sourceTxt": "IELTS Listening\\Type6 - form-note-completion\\20260518-153302-library-media-room-reservation-riverside-archive-library\\formatted\\type6-riverside-archive-library.txt",
+   "audio": [
+    "IELTS Listening\\Type6 - form-note-completion\\20260518-153302-library-media-room-reservation-riverside-archive-library\\audio\\06-stage6-final-type6.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-form-note-completion-riverside-community-clinic",
+   "type": "form-note-completion",
+   "sourceTxt": "IELTS Listening\\Type6 - form-note-completion\\20260518-2015-community-clinic-respiratory-assessment-riverside-community-clinic\\formatted\\type6-riverside-community-clinic.txt",
+   "audio": [
+    "IELTS Listening\\Type6 - form-note-completion\\20260518-2015-community-clinic-respiratory-assessment-riverside-community-clinic\\audio\\06-stage6-final-type6.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-form-note-completion-northgate-housing-repairs",
+   "type": "form-note-completion",
+   "sourceTxt": "IELTS Listening\\Type6 - form-note-completion\\20260518-2015-social-housing-appliance-repair-northgate-housing-repairs\\formatted\\type6-northgate-housing-repairs.txt",
+   "audio": [
+    "IELTS Listening\\Type6 - form-note-completion\\20260518-2015-social-housing-appliance-repair-northgate-housing-repairs\\audio\\06-stage6-final-type6.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-form-note-completion-riverside-cycle-hire",
+   "type": "form-note-completion",
+   "sourceTxt": "IELTS Listening\\Type6 - form-note-completion\\test-01-riverside-cycle-hire\\formatted\\type6-riverside-cycle-hire.txt",
+   "audio": [
+    "IELTS Listening\\Type6 - form-note-completion\\test-01-riverside-cycle-hire\\audio\\type6-riverside-cycle-hire-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-note-completion-the-hidden-costs-of-maintaining-old-water-infrastructure",
+   "type": "note-completion",
+   "sourceTxt": "IELTS Listening\\Type7 - note-completion\\20260518-203803-hidden-costs-of-maintaining-old-water-infrastructure-the-hidden-costs-of-maintaining-old-water-infrastructure\\formatted\\type7-the-hidden-costs-of-maintaining-old-water-infrastructure.txt",
+   "audio": [
+    "IELTS Listening\\Type7 - note-completion\\20260518-203803-hidden-costs-of-maintaining-old-water-infrastructure-the-hidden-costs-of-maintaining-old-water-infrastructure\\audio\\06-stage6-final-type7.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-note-completion-how-insect-communities-support-orchard-productivity",
+   "type": "note-completion",
+   "sourceTxt": "IELTS Listening\\Type7 - note-completion\\20260518-203803-how-insects-support-orchard-productivity-beyond-pollination-how-insect-communities-support-orchard-productivity\\formatted\\type7-how-insect-communities-support-orchard-productivity.txt",
+   "audio": [
+    "IELTS Listening\\Type7 - note-completion\\20260518-203803-how-insects-support-orchard-productivity-beyond-pollination-how-insect-communities-support-orchard-productivity\\audio\\06-stage6-final-type7.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-note-completion-why-politically-popular-urban-cooling-plans-still-fail",
+   "type": "note-completion",
+   "sourceTxt": "IELTS Listening\\Type7 - note-completion\\20260518-203803-urban-cooling-plans-that-lose-effectiveness-after-political-support-why-politically-popular-urban-cooling-plans-still-fail\\formatted\\type7-why-politically-popular-urban-cooling-plans-still-fail.txt",
+   "audio": [
+    "IELTS Listening\\Type7 - note-completion\\20260518-203803-urban-cooling-plans-that-lose-effectiveness-after-political-support-why-politically-popular-urban-cooling-plans-still-fail\\audio\\06-stage6-final-type7.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-note-completion-why-online-learning-tools-are-often-abandoned",
+   "type": "note-completion",
+   "sourceTxt": "IELTS Listening\\Type7 - note-completion\\20260518-203803-why-online-learning-tools-are-abandoned-after-early-excitement-why-online-learning-tools-are-often-abandoned\\formatted\\type7-why-online-learning-tools-are-often-abandoned.txt",
+   "audio": [
+    "IELTS Listening\\Type7 - note-completion\\20260518-203803-why-online-learning-tools-are-abandoned-after-early-excitement-why-online-learning-tools-are-often-abandoned\\audio\\06-stage6-final-type7.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-note-completion-reading-survey-results-more-carefully",
+   "type": "note-completion",
+   "sourceTxt": "IELTS Listening\\Type7 - note-completion\\test-01-reading-survey-results-more-carefully\\formatted\\type7-reading-survey-results-more-carefully.txt",
+   "audio": [
+    "IELTS Listening\\Type7 - note-completion\\test-01-reading-survey-results-more-carefully\\audio\\type7-reading-survey-results-more-carefully-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-table-completion-westbridge-university-library-assessment-period-study-area-guide",
+   "type": "table-completion",
+   "sourceTxt": "IELTS Listening\\Type8 - table-completion\\20260518-232202-assessment-period-library-study-area-guide-westbridge-university-library-assessment-period-study-area-guide\\formatted\\type8-westbridge-university-library-assessment-period-study-area-guide.txt",
+   "audio": [
+    "IELTS Listening\\Type8 - table-completion\\20260518-232202-assessment-period-library-study-area-guide-westbridge-university-library-assessment-period-study-area-guide\\audio\\06-stage6-final-type8.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-table-completion-riverside-borough-special-household-waste-guide",
+   "type": "table-completion",
+   "sourceTxt": "IELTS Listening\\Type8 - table-completion\\20260518-232202-riverside-special-household-waste-briefing-riverside-borough-special-household-waste-guide\\formatted\\type8-riverside-borough-special-household-waste-guide.txt",
+   "audio": [
+    "IELTS Listening\\Type8 - table-completion\\20260518-232202-riverside-special-household-waste-briefing-riverside-borough-special-household-waste-guide\\audio\\06-stage6-final-type8.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-table-completion-how-to-leave-laundry-for-collection",
+   "type": "table-completion",
+   "sourceTxt": "IELTS Listening\\Type8 - table-completion\\test-01-how-to-leave-laundry-for-collection\\formatted\\type8-how-to-leave-laundry-for-collection.txt",
+   "audio": [
+    "IELTS Listening\\Type8 - table-completion\\test-01-how-to-leave-laundry-for-collection\\audio\\type8-how-to-leave-laundry-for-collection-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-table-completion-community-fitness-centre-member-induction-briefing",
+   "type": "table-completion",
+   "sourceTxt": "IELTS Listening\\Type8 - table-completion\\test-02-community-fitness-centre-member-induction-briefing\\formatted\\type8-community-fitness-centre-member-induction-briefing.txt",
+   "audio": [
+    "IELTS Listening\\Type8 - table-completion\\test-02-community-fitness-centre-member-induction-briefing\\audio\\type8-community-fitness-centre-member-induction-briefing-openai-094-gap33-rerun.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-table-completion-northside-university-library-study-space-booking-guide",
+   "type": "table-completion",
+   "sourceTxt": "IELTS Listening\\Type8 - table-completion\\test-03-northside-university-library-study-space-booking-guide\\formatted\\type8-northside-university-library-study-space-booking-guide.txt",
+   "audio": [
+    "IELTS Listening\\Type8 - table-completion\\test-03-northside-university-library-study-space-booking-guide\\audio\\type8-northside-university-library-study-space-booking-guide-openai-094-gap33.mp3"
+   ],
+   "images": []
+  },
+  {
+   "setId": "ielts-l-flowchart-completion-reporting-and-fixing-a-faulty-bike-share-docking-point",
+   "type": "flowchart-completion",
+   "sourceTxt": "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-bike-share-docking-point-fault-reporting-reporting-and-fixing-a-faulty-bike-share-docking-point\\formatted\\type9-reporting-and-fixing-a-faulty-bike-share-docking-point.txt",
+   "audio": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-bike-share-docking-point-fault-reporting-reporting-and-fixing-a-faulty-bike-share-docking-point\\audio\\06-stage6-final-type9.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-bike-share-docking-point-fault-reporting-reporting-and-fixing-a-faulty-bike-share-docking-point\\ChatGPT Image 2026年6月3日 10_03_19.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-flowchart-completion-training-museum-volunteers-before-they-handle-fragile-objects",
+   "type": "flowchart-completion",
+   "sourceTxt": "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-museum-volunteer-fragile-object-training-training-museum-volunteers-before-they-handle-fragile-objects\\formatted\\type9-training-museum-volunteers-before-they-handle-fragile-objects.txt",
+   "audio": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-museum-volunteer-fragile-object-training-training-museum-volunteers-before-they-handle-fragile-objects\\audio\\06-stage6-final-type9.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-museum-volunteer-fragile-object-training-training-museum-volunteers-before-they-handle-fragile-objects\\ChatGPT Image 2026年6月3日 10_13_58.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-flowchart-completion-joining-the-university-community-supported-agriculture-scheme",
+   "type": "flowchart-completion",
+   "sourceTxt": "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-university-community-supported-agriculture-scheme-joining-the-university-community-supported-agriculture-scheme\\formatted\\type9-joining-the-university-community-supported-agriculture-scheme.txt",
+   "audio": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-university-community-supported-agriculture-scheme-joining-the-university-community-supported-agriculture-scheme\\audio\\06-stage6-final-type9.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260518-234701-university-community-supported-agriculture-scheme-joining-the-university-community-supported-agriculture-scheme\\ChatGPT Image 2026年6月3日 10_16_03.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-flowchart-completion-joining-the-coastal-habitat-survey-programme",
+   "type": "flowchart-completion",
+   "sourceTxt": "IELTS Listening\\Type9 - flowchart-completion\\20260519-013002-coastal-habitat-survey-programme-joining-the-coastal-habitat-survey-programme\\formatted\\type9-joining-the-coastal-habitat-survey-programme.txt",
+   "audio": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260519-013002-coastal-habitat-survey-programme-joining-the-coastal-habitat-survey-programme\\audio\\06-stage6-final-type9.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260519-013002-coastal-habitat-survey-programme-joining-the-coastal-habitat-survey-programme\\ChatGPT Image 2026年6月3日 10_19_46.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-flowchart-completion-borrowing-specialist-equipment-from-a-university-media-centre",
+   "type": "flowchart-completion",
+   "sourceTxt": "IELTS Listening\\Type9 - flowchart-completion\\20260519-013002-university-media-centre-specialist-equipment-loans-borrowing-specialist-equipment-from-a-university-media-centre\\formatted\\type9-borrowing-specialist-equipment-from-a-university-media-centre.txt",
+   "audio": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260519-013002-university-media-centre-specialist-equipment-loans-borrowing-specialist-equipment-from-a-university-media-centre\\audio\\06-stage6-final-type9.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type9 - flowchart-completion\\20260519-013002-university-media-centre-specialist-equipment-loans-borrowing-specialist-equipment-from-a-university-media-centre\\ChatGPT Image 2026年6月3日 10_22_29.png"
+   ]
+  },
+  {
+   "setId": "ielts-l-flowchart-completion-coastal-fieldwork-programme-application-steps",
+   "type": "flowchart-completion",
+   "sourceTxt": "IELTS Listening\\Type9 - flowchart-completion\\test-01-coastal-fieldwork-programme-application-steps\\formatted\\type9-coastal-fieldwork-programme-application-steps.txt",
+   "audio": [
+    "IELTS Listening\\Type9 - flowchart-completion\\test-01-coastal-fieldwork-programme-application-steps\\audio\\06-stage6-final-type9.mp3",
+    "IELTS Listening\\Type9 - flowchart-completion\\test-01-coastal-fieldwork-programme-application-steps\\audio\\type9-coastal-fieldwork-programme-application-steps-openai-094-gap33-merge-role.mp3"
+   ],
+   "images": [
+    "IELTS Listening\\Type9 - flowchart-completion\\test-01-coastal-fieldwork-programme-application-steps\\ac0269ac-ca89-4b5d-b790-1a1216187111.png"
+   ]
+  }
+ ]
+}

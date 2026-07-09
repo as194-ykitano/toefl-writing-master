@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+// 学習アプリ共通シェル
+// Google Classroom 風のサイドバー型レイアウト:
+//   - デスクトップ: 左固定サイドバー（展開 / アイコンのみへ縮小可能）
+//   - モバイル: ヘッダーのメニューボタンからドロワー表示
+// 色味・ブランド感は English Gym Admin（オレンジ #ff9100）に合わせる。
+
+import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,10 +14,17 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import {
   BookOpenCheck,
   CalendarDays,
+  ChevronsLeft,
+  ChevronsRight,
   GraduationCap,
+  Home,
   LayoutDashboard,
+  Lightbulb,
+  LogOut,
+  LucideIcon,
   Menu,
-  Sparkle,
+  PenLine,
+  Sparkles,
   User,
   X,
 } from "lucide-react";
@@ -25,30 +38,70 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-// ハンバーガーメニュー内の全リンク
-const MENU_ITEMS = [
-  { href: "/home", label: "ホーム" },
-  { href: "/overview", label: "ダッシュボード" },
-  { href: "/toefl", label: "TOEFL" },
-  { href: "/ielts", label: "IELTS" },
-  { href: "/advanced", label: "Advanced" },
-  { href: "/review", label: "復習" },
-  { href: "/study-plan", label: "学習プラン" },
-  { href: "/training-selection", label: "Writing 添削（旧トップ）" },
-];
+const SIDEBAR_COLLAPSED_KEY = "prep_sidebar_collapsed_v1";
 
-// 下部タブナビゲーション
-const TAB_ITEMS = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  /** このいずれかで始まるパスならアクティブ扱い */
+  activeFor: string[];
+}
+
+interface NavGroup {
+  title?: string;
+  items: NavItem[];
+}
+
+const NAV_GROUPS: NavGroup[] = [
   {
-    href: "/home",
-    label: "学習",
-    icon: GraduationCap,
-    // 学習系ページはすべて「学習」タブをアクティブに
-    activeFor: ["/home", "/toefl", "/ielts", "/advanced", "/practice"],
+    items: [
+      { href: "/home", label: "ホーム", icon: Home, activeFor: ["/home"] },
+      {
+        href: "/overview",
+        label: "ダッシュボード",
+        icon: LayoutDashboard,
+        activeFor: ["/overview", "/results"],
+      },
+      { href: "/review", label: "復習", icon: BookOpenCheck, activeFor: ["/review"] },
+      { href: "/study-plan", label: "学習プラン", icon: CalendarDays, activeFor: ["/study-plan"] },
+    ],
   },
-  { href: "/overview", label: "ダッシュボード", icon: LayoutDashboard, activeFor: ["/overview", "/results"] },
-  { href: "/review", label: "復習", icon: BookOpenCheck, activeFor: ["/review"] },
-  { href: "/study-plan", label: "プラン", icon: CalendarDays, activeFor: ["/study-plan"] },
+  {
+    title: "コース",
+    items: [
+      {
+        href: "/toefl",
+        label: "TOEFL",
+        icon: GraduationCap,
+        activeFor: ["/toefl", "/practice/toefl", "/toefl-tasks", "/toefl-dashboard", "/toefl-essays"],
+      },
+      {
+        href: "/ielts",
+        label: "IELTS",
+        icon: GraduationCap,
+        activeFor: ["/ielts", "/practice/ielts", "/ielts-tasks", "/ielts-dashboard", "/ielts-essays"],
+      },
+      {
+        href: "/advanced",
+        label: "Advanced",
+        icon: Lightbulb,
+        activeFor: ["/advanced", "/youtuber-tasks", "/youtuber-dashboard", "/youtuber-essays"],
+      },
+    ],
+  },
+  {
+    title: "その他",
+    items: [
+      {
+        href: "/training-selection",
+        label: "Writing 添削（旧トップ）",
+        icon: PenLine,
+        activeFor: ["/training-selection"],
+      },
+      { href: "/profile", label: "プロフィール", icon: User, activeFor: ["/profile"] },
+    ],
+  },
 ];
 
 interface PrepShellProps {
@@ -59,11 +112,106 @@ interface PrepShellProps {
   requireAuth?: boolean;
 }
 
-function ShellHeader() {
+function isActive(pathname: string | null, item: NavItem): boolean {
+  if (!pathname) return false;
+  return item.activeFor.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+function BrandMark({ collapsed = false }: { collapsed?: boolean }) {
+  return (
+    <Link href="/home" className="flex items-center gap-2.5 min-w-0">
+      <span className="w-8 h-8 rounded-lg bg-eg flex items-center justify-center flex-shrink-0">
+        <Sparkles className="w-4.5 h-4.5 text-black" />
+      </span>
+      {!collapsed && (
+        <span className="min-w-0 leading-tight">
+          <span className="block font-bold text-gray-900 text-[15px] tracking-tight truncate">
+            Prep Master
+          </span>
+          <span className="block text-[10px] text-gray-400 truncate">
+            Supported by English Gym
+          </span>
+        </span>
+      )}
+    </Link>
+  );
+}
+
+function NavLinks({
+  collapsed,
+  onNavigate,
+}: {
+  collapsed: boolean;
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+
+  return (
+    <nav className="flex-1 overflow-y-auto py-3 px-2.5 space-y-4">
+      {NAV_GROUPS.map((group, gi) => (
+        <div key={group.title ?? gi}>
+          {group.title && !collapsed && (
+            <div className="px-3 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+              {group.title}
+            </div>
+          )}
+          {group.title && collapsed && <div className="mx-3 mb-2 border-t border-gray-100" />}
+          <div className="space-y-0.5">
+            {group.items.map((item) => {
+              const active = isActive(pathname, item);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onNavigate}
+                  title={collapsed ? item.label : undefined}
+                  className={`flex items-center gap-3 rounded-full text-sm transition-colors ${
+                    collapsed ? "justify-center px-0 py-2.5" : "px-3.5 py-2.5"
+                  } ${
+                    active
+                      ? "bg-eg-soft text-eg-deep font-semibold"
+                      : "text-gray-600 hover:bg-gray-100 font-medium"
+                  }`}
+                >
+                  <item.icon
+                    className={`w-[18px] h-[18px] flex-shrink-0 ${active ? "text-eg-dark" : "text-gray-400"}`}
+                  />
+                  {!collapsed && <span className="truncate">{item.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+export default function PrepShell({ children, showNav = true, requireAuth = true }: PrepShellProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      setCollapsed(window.localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1");
+    } catch {
+      // localStorage が使えない環境では展開状態のまま
+    }
+  }, []);
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      try {
+        window.localStorage.setItem(SIDEBAR_COLLAPSED_KEY, prev ? "0" : "1");
+      } catch {
+        // 保存できなくても動作には影響しない
+      }
+      return !prev;
+    });
+  };
 
   const handleLogout = async () => {
     try {
@@ -73,74 +221,123 @@ function ShellHeader() {
       console.error("Failed to log out:", error);
     }
     setLogoutDialogOpen(false);
-    setMenuOpen(false);
+    setDrawerOpen(false);
   };
 
-  return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-        <Link href="/home" className="flex items-center gap-2">
-          <Sparkle className="w-6 h-6 text-blue-600 fill-blue-600" />
-          <span className="font-bold text-gray-900 text-lg tracking-tight">Prep Master</span>
-        </Link>
+  if (!showNav) {
+    const bare = <div className="min-h-screen bg-[#f7f6f3]">{children}</div>;
+    return requireAuth ? <ProtectedRoute>{bare}</ProtectedRoute> : bare;
+  }
 
-        <div className="flex items-center gap-1">
-          <Link
-            href="/profile"
-            className="p-2.5 rounded-lg hover:bg-gray-50 text-gray-700"
-            aria-label="プロフィール"
-          >
-            <User className="w-5 h-5" />
-          </Link>
+  const sidebarWidth = collapsed ? "lg:w-[72px]" : "lg:w-64";
+  const mainPad = collapsed ? "lg:pl-[72px]" : "lg:pl-64";
+
+  const content = (
+    <div className="min-h-screen bg-[#f7f6f3]">
+      {/* ヘッダー */}
+      <header className="fixed top-0 inset-x-0 z-40 h-14 bg-white border-b border-gray-200/80">
+        <div className="h-full px-3 sm:px-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            {/* モバイル: ドロワー開閉 / デスクトップ: サイドバー縮小切り替え */}
+            <button
+              className="p-2.5 rounded-full hover:bg-gray-100 text-gray-600 lg:hidden"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="メニューを開く"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <button
+              className="p-2.5 rounded-full hover:bg-gray-100 text-gray-600 hidden lg:inline-flex"
+              onClick={toggleCollapsed}
+              aria-label={collapsed ? "サイドバーを展開" : "サイドバーを縮小"}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <BrandMark />
+          </div>
+
+          <div className="flex items-center gap-1">
+            <Link
+              href="/profile"
+              className="p-2.5 rounded-full hover:bg-gray-100 text-gray-600"
+              aria-label="プロフィール"
+            >
+              <User className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* デスクトップサイドバー */}
+      <aside
+        className={`hidden lg:flex flex-col fixed left-0 top-14 bottom-0 z-30 bg-white border-r border-gray-200/80 transition-[width] duration-200 ${sidebarWidth}`}
+      >
+        <NavLinks collapsed={collapsed} />
+        <div className="border-t border-gray-100 p-2.5 space-y-0.5">
+          {user && (
+            <button
+              onClick={() => setLogoutDialogOpen(true)}
+              title={collapsed ? "ログアウト" : undefined}
+              className={`w-full flex items-center gap-3 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors ${
+                collapsed ? "justify-center px-0 py-2.5" : "px-3.5 py-2.5"
+              }`}
+            >
+              <LogOut className="w-[18px] h-[18px] text-gray-400 flex-shrink-0" />
+              {!collapsed && <span>ログアウト</span>}
+            </button>
+          )}
           <button
-            className="p-2.5 rounded-lg hover:bg-gray-50 text-gray-700"
-            onClick={() => setMenuOpen(true)}
-            aria-label="メニューを開く"
+            onClick={toggleCollapsed}
+            className={`w-full flex items-center gap-3 rounded-full text-sm font-medium text-gray-400 hover:bg-gray-100 transition-colors ${
+              collapsed ? "justify-center px-0 py-2.5" : "px-3.5 py-2.5"
+            }`}
+            aria-label={collapsed ? "サイドバーを展開" : "サイドバーを縮小"}
           >
-            <Menu className="w-5 h-5" />
+            {collapsed ? (
+              <ChevronsRight className="w-[18px] h-[18px] flex-shrink-0" />
+            ) : (
+              <>
+                <ChevronsLeft className="w-[18px] h-[18px] flex-shrink-0" />
+                <span>縮小する</span>
+              </>
+            )}
           </button>
         </div>
-      </div>
+      </aside>
 
-      {menuOpen && (
-        <div className="fixed inset-0 z-50">
-          <div className="fixed inset-0 bg-black/30" onClick={() => setMenuOpen(false)} />
-          <div className="ml-auto w-72 bg-white h-full shadow-xl p-6 relative flex flex-col">
-            <button className="absolute top-4 right-4 p-2" onClick={() => setMenuOpen(false)}>
-              <X className="w-5 h-5" />
-            </button>
-            <div className="mt-10 space-y-1">
-              {MENU_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="pt-4 mt-4 border-t border-gray-100 space-y-1">
-                <Link
-                  href="/profile"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
-                >
-                  プロフィール編集
-                </Link>
-                {user && (
-                  <button
-                    onClick={() => setLogoutDialogOpen(true)}
-                    className="block w-full text-left px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
-                  >
-                    ログアウト
-                  </button>
-                )}
-              </div>
+      {/* モバイルドロワー */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="fixed inset-0 bg-black/30" onClick={() => setDrawerOpen(false)} />
+          <div className="fixed left-0 top-0 bottom-0 w-72 bg-white shadow-xl flex flex-col">
+            <div className="h-14 px-4 flex items-center justify-between border-b border-gray-100">
+              <BrandMark />
+              <button
+                className="p-2 rounded-full hover:bg-gray-100 text-gray-500"
+                onClick={() => setDrawerOpen(false)}
+                aria-label="メニューを閉じる"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
+            <NavLinks collapsed={false} onNavigate={() => setDrawerOpen(false)} />
+            {user && (
+              <div className="border-t border-gray-100 p-2.5">
+                <button
+                  onClick={() => setLogoutDialogOpen(true)}
+                  className="w-full flex items-center gap-3 rounded-full px-3.5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100"
+                >
+                  <LogOut className="w-[18px] h-[18px] text-gray-400" />
+                  ログアウト
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
+
+      {/* メインコンテンツ */}
+      <main className={`pt-14 transition-[padding] duration-200 ${mainPad}`}>{children}</main>
 
       <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
         <DialogContent>
@@ -158,42 +355,6 @@ function ShellHeader() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </header>
-  );
-}
-
-function BottomNav() {
-  const pathname = usePathname();
-
-  return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-100">
-      <div className="max-w-5xl mx-auto flex">
-        {TAB_ITEMS.map((tab) => {
-          const active = tab.activeFor.some((p) => pathname === p || pathname?.startsWith(`${p}/`));
-          return (
-            <Link
-              key={tab.href}
-              href={tab.href}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-medium transition-colors ${
-                active ? "text-blue-600" : "text-gray-400 hover:text-gray-600"
-              }`}
-            >
-              <tab.icon className="w-5 h-5" />
-              {tab.label}
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
-  );
-}
-
-export default function PrepShell({ children, showNav = true, requireAuth = true }: PrepShellProps) {
-  const content = (
-    <div className="min-h-screen bg-[#f2f3f6]">
-      {showNav && <ShellHeader />}
-      <main className={showNav ? "pb-24" : ""}>{children}</main>
-      {showNav && <BottomNav />}
     </div>
   );
 

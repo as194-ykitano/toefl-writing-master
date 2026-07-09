@@ -112,6 +112,15 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* English Gym ブランドカラー（english-gym-admin と同系色） */
+@theme {
+  --color-eg: #ff9100;
+  --color-eg-dark: #e07f00;
+  --color-eg-deep: #b45309;
+  --color-eg-soft: #fff4e5;
+  --color-eg-faint: #fffaf2;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
