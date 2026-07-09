@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import MarkdownLite from "./MarkdownLite";
 import QuestionRenderer from "./QuestionRenderer";
 import { ExamTopBar, QuestionNav, usePracticeTimer } from "./exam-ui";
 import { EXAM_LABELS, ListeningSet, PracticeMode } from "@/lib/prep/types";
@@ -252,11 +253,9 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
             </div>
           )}
           {set.referenceText && (
-            <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 p-4 overflow-x-auto">
+            <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 p-4">
               <div className="text-xs font-semibold text-gray-500 mb-2">参照資料</div>
-              <pre className="text-xs text-gray-700 font-mono whitespace-pre leading-relaxed">
-                {set.referenceText}
-              </pre>
+              <MarkdownLite text={set.referenceText} />
             </div>
           )}
           <p className="text-[15px] text-gray-900 font-medium leading-relaxed mb-5 whitespace-pre-line">

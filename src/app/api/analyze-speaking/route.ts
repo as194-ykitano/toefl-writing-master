@@ -25,6 +25,58 @@ interface SpeakingAnalysis {
   improvedVersion?: string;
 }
 
+// ---- Listen and Repeat 用の一致率採点 ----
+// ETS の採点方式（各文 0〜5 点・7 問の平均がタスクスコア）に合わせ、
+// Whisper 文字起こしとお手本文の語単位の一致率から項目スコアを算出する。
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9'\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+/** トークン列の編集距離（Levenshtein） */
+function editDistance(a: string[], b: string[]): number {
+  const dp = Array.from({ length: a.length + 1 }, (_, i) => {
+    const row = new Array<number>(b.length + 1).fill(0);
+    row[0] = i;
+    return row;
+  });
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+function matchRatio(expected: string, actual: string): number {
+  const e = tokenize(expected);
+  const a = tokenize(actual);
+  if (e.length === 0) return 0;
+  const distance = editDistance(e, a);
+  return Math.max(0, 1 - distance / Math.max(e.length, a.length));
+}
+
+/** ETS の 0〜5 ルーブリックに合わせた項目スコア
+ *  5: 完全一致 / 4: 軽微なズレ（意味保持） / 2-3: 内容欠落 / 0-1: ほぼ判別不能 */
+function itemScoreFromRatio(ratio: number, hasTranscript: boolean): number {
+  if (!hasTranscript) return 0;
+  if (ratio >= 0.98) return 5;
+  if (ratio >= 0.85) return 4;
+  if (ratio >= 0.65) return 3;
+  if (ratio >= 0.4) return 2;
+  if (ratio >= 0.15) return 1;
+  return 0;
+}
+
 export async function POST(request: Request) {
   try {
     if (!openai) {
@@ -36,6 +88,9 @@ export async function POST(request: Request) {
     const prompt = String(formData.get("prompt") ?? "");
     const exam = String(formData.get("exam") ?? "ielts");
     const label = String(formData.get("label") ?? "");
+    // evalMode "repeat": Listen and Repeat 用（GPT 講評ではなく一致率採点）
+    const evalMode = String(formData.get("evalMode") ?? "feedback");
+    const expected = String(formData.get("expected") ?? "");
 
     if (!(audio instanceof File)) {
       return NextResponse.json({ error: "audio file is required" }, { status: 400 });
@@ -46,8 +101,25 @@ export async function POST(request: Request) {
       file: audio,
       model: "whisper-1",
       language: "en",
+      // Listen and Repeat はお手本文をヒントに与えると近い語彙で書き起こされすぎるため
+      // prompt は渡さない（純粋な発話の書き起こしを得る）
     });
     const transcript = transcription.text?.trim() ?? "";
+
+    // Listen and Repeat: 一致率ベースの採点のみ（GPT 講評なし）
+    if (evalMode === "repeat") {
+      const ratio = transcript ? matchRatio(expected, transcript) : 0;
+      const itemScore = itemScoreFromRatio(ratio, transcript.length > 0);
+      return NextResponse.json({
+        transcript,
+        expectedText: expected,
+        matchRatio: ratio,
+        itemScore,
+        summary: "",
+        strengths: [],
+        improvements: [],
+      });
+    }
 
     if (!transcript) {
       return NextResponse.json({

@@ -242,12 +242,17 @@ async function importSkill(skill, sourceDir) {
         questions: builtQuestions,
       };
 
+      // 日本語訳（プレースホルダの「あとで入れる」は除外）
+      const articleJa =
+        meta.ARTICLE_JA && !/^あとで入れる/.test(meta.ARTICLE_JA.trim()) ? meta.ARTICLE_JA.trim() : "";
+
       if (skill === "reading") {
         sets.push({
           ...base,
           timeLimitSec: builtQuestions.length * 90,
           passageTitle: titleFromSlug(fileSlug),
           paragraphs: buildParagraphs(meta.ARTICLE),
+          translationJa: articleJa || undefined,
         });
       } else {
         // リスニング: 音声は未アップロードのためスクリプト表示にフォールバック
@@ -264,6 +269,7 @@ async function importSkill(skill, sourceDir) {
           ...base,
           timeLimitSec: 300 + builtQuestions.length * 60,
           transcript: meta.ARTICLE,
+          transcriptJa: articleJa || undefined,
           referenceText: meta.REFERENCE || undefined,
           playLimitInTest: 1,
         });

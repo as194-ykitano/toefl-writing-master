@@ -70,6 +70,8 @@ export interface ReadingSet extends PracticeSetBase {
   passageTitle: string;
   /** 段落ごとの本文。ラベル付き（IELTS の Paragraph A〜 など） */
   paragraphs: { label?: string; text: string }[];
+  /** 本文の日本語訳（結果画面で表示） */
+  translationJa?: string;
 }
 
 export interface ListeningSet extends PracticeSetBase {
@@ -80,8 +82,10 @@ export interface ListeningSet extends PracticeSetBase {
   transcript: string;
   /** 本番モードでの再生可能回数 */
   playLimitInTest: number;
-  /** 設問と一緒に表示する参照資料（表・フォームなどのテキスト） */
+  /** 設問と一緒に表示する参照資料（表・フォームなどの markdown テキスト） */
   referenceText?: string;
+  /** スクリプトの日本語訳（結果画面で表示） */
+  transcriptJa?: string;
   /** 地図・図面などの画像 URL（map/plan labelling 用。未アップロード時は undefined） */
   imageUrl?: string;
 }
@@ -184,6 +188,12 @@ export interface SpeakingTaskFeedback {
   improvements: string[];
   /** 改善例（言い直し例） */
   improvedVersion?: string;
+  /** Listen and Repeat: お手本の文 */
+  expectedText?: string;
+  /** Listen and Repeat: 語単位の一致率 (0〜1) */
+  matchRatio?: number;
+  /** Listen and Repeat: ETS 準拠の項目スコア (0〜5) */
+  itemScore?: number;
   /** 解析に失敗した場合のエラーメッセージ */
   error?: string;
 }

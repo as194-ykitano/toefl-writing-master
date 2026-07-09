@@ -292,6 +292,36 @@ function letterIndex(letter) {
   return letter.charCodeAt(0) - 65;
 }
 
+/** 「日本語訳」マーカー（見出しまたは段落）以降の日本語段落を抽出する */
+function extractJapanese(answerNodes, markerRegex = /日本語訳|スクリプトの日本語訳/) {
+  const flat = [...walk(answerNodes)];
+  const idx = flat.findIndex(
+    (n) =>
+      (n.type.startsWith("heading") || n.type === "paragraph") &&
+      markerRegex.test(n.text.trim()) &&
+      n.text.trim().length < 30
+  );
+  if (idx < 0) return "";
+  const source = flat[idx].children.length > 0 ? flat[idx].children : (() => {
+    const out = [];
+    for (let i = idx + 1; i < flat.length; i++) {
+      const n = flat[i];
+      if (n.type.startsWith("heading") && /解説|解答|スクリプト$/.test(n.text.trim())) break;
+      out.push(n);
+    }
+    return out;
+  })();
+  return source
+    .filter(
+      (n) =>
+        (n.type === "paragraph" || n.type === "bulleted_list_item" || n.type.startsWith("heading")) &&
+        n.text.trim() &&
+        asciiRatio(n.text) < 0.5
+    )
+    .map((n) => n.text.trim())
+    .join("\n");
+}
+
 function slugify(value) {
   return value
     .toLowerCase()
@@ -311,6 +341,11 @@ const audioMapping = { listening: {}, speaking: {} };
 let audioCount = 0;
 
 async function downloadAudio(url, fileName) {
+  // 音声アップロード済みで問題テキストだけ更新したい場合: SKIP_AUDIO=1
+  if (process.env.SKIP_AUDIO === "1") {
+    audioCount += 1;
+    return `${AUDIO_DEST_PREFIX}/${fileName}`;
+  }
   const res = await fetch(url);
   if (!res.ok) throw new Error(`audio download failed: ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
@@ -381,6 +416,7 @@ async function buildReadingMCSingle(row, tree, practiceType) {
 
   const shortName = row.name.replace(/^Reading\s*-\s*/i, "").trim();
   const setId = `toefl-r-${practiceType}-${slugify(shortName)}`;
+  const translationJa = extractJapanese(answerSection(tree), /^日本語訳/);
   const questions = mcs.map((mc, i) => {
     const answer = answers.get(mc.number ?? i + 1);
     return {
@@ -409,6 +445,7 @@ async function buildReadingMCSingle(row, tree, practiceType) {
     timeLimitSec: questions.length * 90,
     passageTitle: h1?.text?.trim() || shortName,
     paragraphs,
+    translationJa: translationJa || undefined,
     questions: questions.filter((q) => q.answer),
   };
 }
@@ -513,6 +550,7 @@ async function buildListening(row, tree, practiceType) {
     difficulty: "medium",
     timeLimitSec: 240 + questions.length * 60,
     transcript: extractTranscript(answerNodes),
+    transcriptJa: extractJapanese(answerNodes) || undefined,
     playLimitInTest: 1,
     questions: questions.filter((q) => q.answer),
   };

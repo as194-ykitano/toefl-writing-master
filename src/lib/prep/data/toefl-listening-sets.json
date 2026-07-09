@@ -9,6 +9,7 @@
   "difficulty": "medium",
   "timeLimitSec": 480,
   "transcript": "Today I’d like to introduce Impressionism, a movement that began in late nineteenth-century France. At that time, traditional painters were expected to create carefully finished works that told stories from history or mythology. But cameras had just become popular, and photography could already record precise details. So Impressionist painters asked a different question: What if a painting captured a brief, changing moment instead?\nImpressionists often worked outdoors, painting quickly to follow shifting light and weather. I’ll focus on two features today: their brushwork and their use of color. Instead of smooth, invisible strokes, they used short, broken ones that remain clearly visible. From close up, a Monet landscape can look almost messy. But from a distance, those separate strokes blend together in the viewer’s eye—a process called optical mixing.\nColor was just as experimental. Rather than using black for shadows, painters placed cool blues or purples next to warmer yellows and oranges. This contrast made the scene appear brighter and more alive. If you look at Monet’s series of haystack paintings, for instance, each canvas shows the same object, but the colors and mood change dramatically with the time of day. In our next class, I’ll talk about how Impressionism influenced later modern art movements.",
+  "transcriptJa": "今日は、19世紀後半のフランスで始まった印象派（Impressionism）について紹介します。\n当時、伝統的な画家は、歴史や神話を題材にした、丁寧に仕上げられた作品を描くことが求められていました。\nしかしその頃、カメラが普及し始め、写真はすでに正確な細部を記録できるようになっていました。\nそこで印象派の画家たちは、別の問いを立てました。\n「一瞬で移り変わる瞬間を描いたらどうだろうか」と。\n印象派の画家たちはよく屋外で制作し、変化する光や天候に合わせて素早く描きました。\n今日は、その特徴の中でも筆使いと色の使い方の2点に注目します。\n滑らかで見えない筆致の代わりに、短く途切れた、はっきりと見える筆遣いを用いました。\n近くで見ると、クロード・モネの風景画は、ほとんど雑然として見えることもあります。\nしかし、少し離れて見ると、それぞれの筆の跡が目の中で混ざり合います。これを視覚混合（optical mixing）と呼びます。\n色使いも同じくらい実験的でした。\n影に黒を使う代わりに、青や紫のような寒色を、黄色やオレンジなどの暖色の隣に置きました。\nこうした対比によって、場面はより明るく、生き生きと見えるのです。\nたとえば、モネの「積みわら」の連作を見ると、描かれている対象は同じでも、時間帯によって色や雰囲気が大きく変わっていることが分かります。\n次回の授業では、印象派が後の近代美術運動にどのような影響を与えたかを扱います。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -83,6 +84,7 @@
   "difficulty": "medium",
   "timeLimitSec": 480,
   "transcript": "Today I’d like to talk about the digital divide. This term refers to the gap between people who can make full use of digital technologies and those who cannot. It is not only about whether someone owns a device. It also involves the speed and reliability of their internet connection and their level of digital skills.\nConsider a student who writes her papers on a small phone, using a limited data plan. Technically, she is “online,” but downloading large files or joining video classes is difficult. Her classmates, who have laptops and high-speed home connections, can access materials much more easily. So even within the same school, digital opportunities can be unevenly distributed.\nThe digital divide often mirrors existing social inequalities. Rural areas may lack broadband infrastructure; low-income households may share a single device; older adults may have fewer chances to develop digital literacy. These differences affect not only education and employment, but also participation in civic life, such as reading government information or completing online forms. Governments and community groups are experimenting with public Wi-Fi, inexpensive devices, and training programs to lessen these gaps. In our next class, we’ll examine several cities that have tried different strategies and evaluate how successful they have been.",
+  "transcriptJa": "今日はデジタル・ディバイド（digital divide）について話します。\nこれは、デジタル技術を十分に活用できる人と、そうでない人との間にある格差を指します。\n単に機器を持っているかどうかだけの問題ではありません。\nインターネット接続の速度や安定性、そしてデジタルスキルのレベルも関係します。\nたとえば、限られたデータ通信量の小さなスマートフォンでレポートを書く学生を考えてみてください。\n技術的には彼女は「オンライン」ですが、大きなファイルをダウンロードしたり、ビデオ授業に参加したりするのは困難です。\n一方、ノートパソコンと高速な家庭用インターネットを持つクラスメイトは、教材にずっと簡単にアクセスできます。\nつまり、同じ学校の中でも、デジタル上の機会は不均等に分配されている可能性があります。\nデジタル・ディバイドは、既存の社会的不平等を反映することがよくあります。\n地方ではブロードバンドの整備が不十分な場合があり、低所得世帯では1台の端末を共有していることもあります。\nまた、高齢者はデジタル・リテラシーを身につける機会が少ないことがあります。\nこうした違いは、教育や雇用だけでなく、行政情報を読んだり、オンラインの申請書を提出したりするといった、市民生活への参加にも影響します。\nこの格差を縮めるため、政府や地域団体は公衆Wi-Fi、低価格端末、研修プログラムなどを試みています。\n次回の授業では、こうした戦略を実施したいくつかの都市を取り上げ、その効果を評価します。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -157,6 +159,7 @@
   "difficulty": "medium",
   "timeLimitSec": 480,
   "transcript": "Today I want to focus on the idea of opportunity cost. In economics, we assume that resources—time, money, even attention—are limited. Whenever we choose one option, we give up the chance to use those resources in another way. Opportunity cost refers to the value of the best alternative that we forgo. It is not just the explicit price we pay, but also the benefits we lose by not choosing something else.\nTake a student who is deciding between taking a paid campus job during the semester or joining a study-abroad program. The job provides a clear wage, and the program might not. Still, if the student stays home, the opportunity cost includes the language skills, professional contacts, and personal growth that could have been gained overseas. Even if no money changes hands, those benefits are part of the calculation.\nThe same logic applies to governments. Suppose a city spends a large share of its budget on building a new sports stadium. Officials may hope it will attract tourists, but that spending also means fewer funds for improving public transportation or maintaining schools. Understanding opportunity cost forces decision-makers to ask whether the project they choose is really more valuable than the alternatives they must postpone or abandon. In our next class, we’ll look at why people so often ignore opportunity costs and the decision biases that result.",
+  "transcriptJa": "今日は機会費用（opportunity cost）という考え方に注目します。\n経済学では、時間・お金・注意力といった資源は限られていると考えます。\nそのため、ある選択をするとき、私たちは必ず他の使い方をあきらめています。\n機会費用とは、あきらめた選択肢の中で最も価値の高いものの価値を指します。\nこれは実際に支払う金額だけでなく、別の選択をしなかったことで失われる利益も含みます。\nたとえば、学期中に有給の学内アルバイトをするか、留学プログラムに参加するかで迷っている学生を考えてみましょう。\n仕事には明確な給料がありますが、留学には必ずしもそれがありません。\nそれでも、もし学生が自国に残るなら、失われる機会費用には、海外で得られたはずの語学力、人脈、個人的成長が含まれます。\nお金のやり取りがなくても、これらの利益は計算に入れるべき要素なのです。\n同じ考え方は政府にも当てはまります。\nたとえば、ある都市が予算の大部分を新しいスタジアムの建設に使ったとします。\n観光客の誘致を期待するかもしれませんが、その分、公共交通の改善や学校の維持に使えるお金は減ります。\n機会費用を理解することは、選ばれた計画が、本当に先送りや中止された他の選択肢より価値があるのかを問い直すことにつながります。\n次回の授業では、人々がなぜ機会費用を無視しがちなのか、そしてそこから生じる意思決定のバイアスについて考察します。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -231,6 +234,7 @@
   "difficulty": "medium",
   "timeLimitSec": 480,
   "transcript": "Today I’d like to talk about the urban heat island effect. This term describes the tendency for densely built city areas to be several degrees warmer than nearby rural land. It is related to global climate change, but it is a more local phenomenon. In cities, dark roofs and asphalt streets have low albedo, meaning they absorb rather than reflect sunlight. At the same time, there are fewer trees and soils, so there is less shade and less evapotranspiration, the cooling that occurs when water evaporates from leaves and ground surfaces.\nImagine two neighborhoods on a summer afternoon. One is a downtown block with tall concrete buildings, wide asphalt parking lots, and very little vegetation. The other is a residential district with parks, ponds, and tree-lined streets. Even if the regions share the same air temperature forecast, the surfaces in the first neighborhood will be significantly hotter. Residents there may rely heavily on air-conditioning, which increases electricity demand and can worsen air pollution from power plants.\nBecause heat islands raise the risk of heat-related illness, many cities are searching for mitigation strategies. Some are requiring cool roofs coated with reflective materials; others are planting street trees and creating “pocket parks” on small vacant lots. These measures do not solve every climate problem, but they can lower local surface temperatures. In our next class, I’ll present several case studies comparing how effective different combinations of these strategies have been.",
+  "transcriptJa": "今日はヒートアイランド現象（urban heat island effect）について話します。\nこれは、建物が密集した都市部が、近くの農村地域よりも数度高温になる傾向を指します。\n地球温暖化と関係はありますが、より局所的な現象です。\n都市では、暗い色の屋根やアスファルト道路はアルベド（反射率）が低く、太陽光を反射せず吸収します。\nさらに、樹木や土壌が少ないため、日陰が減り、葉や地表から水が蒸発することで起こる冷却作用である蒸発散（evapotranspiration）も少なくなります。\n夏の午後に、2つの地域を想像してみてください。\n1つは、高いコンクリート建築、広いアスファルト駐車場、ほとんど緑のない都心部です。\nもう1つは、公園や池、街路樹のある住宅地です。\n天気予報上の気温が同じでも、前者の地表温度ははるかに高くなります。\nその結果、住民は冷房に強く依存し、電力需要が増え、発電所からの大気汚染が悪化する可能性があります。\nヒートアイランドは熱中症などのリスクを高めるため、多くの都市が緩和策（mitigation strategies）を模索しています。\n反射性の高い素材で塗ったクールルーフを義務づける都市もあれば、街路樹を植えたり、小さな空き地に「ポケットパーク」を作ったりする都市もあります。\nこれらの対策はすべての気候問題を解決するわけではありませんが、局所的な温度を下げる効果があります。\n次回の授業では、こうした戦略の組み合わせがどれほど効果的かを比較した事例研究を紹介します。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -305,6 +309,7 @@
   "difficulty": "medium",
   "timeLimitSec": 480,
   "transcript": "Today I’d like to discuss a concept called cognitive dissonance. In social psychology, this term refers to the mental discomfort people feel when their beliefs, attitudes, or actions do not match. Because that tension is unpleasant, people are motivated to reduce it—either by changing what they do or by reinterpreting what they have done. Cognitive dissonance is not the only way psychologists explain behavior, but it helps us understand why people sometimes act in ways that seem inconsistent with their own values.\nConsider someone who knows that smoking increases the risk of serious disease but continues to smoke. One way to reduce dissonance is to quit. Another is to downplay the conflict: a smoker might tell themselves that the statistics are exaggerated, or that they only smoke on weekends, so it is “not really that bad.” In consumer behavior, a student who buys an expensive gadget without a discount might later justify the purchase by thinking, “I needed it for my studies,” or by comparing it to an even more costly model and deciding they actually saved money. In both cases, beliefs shift to fit past actions.\nPublic campaigns sometimes try to use this process. For example, a health program may first ask people to write down reasons why they value an active lifestyle and to share those reasons in a group. Later, if they skip exercise, their behavior clashes with the image of themselves that they have publicly expressed. However, if a message demands extremely large changes—such as exercising every single day with no guidance—people may simply dismiss it as unrealistic and feel no obligation to change. In our next class, we’ll look at classic experiments that tested cognitive dissonance in the laboratory.",
+  "transcriptJa": "今日は認知的不協和（cognitive dissonance）という概念について話します。\n社会心理学においてこれは、人の信念・態度・行動が一致しないときに生じる心理的な不快感を指します。\nこの緊張は不快なため、人はそれを減らそうとして、行動を変えたり、過去の行動の意味を解釈し直したりします。\n認知的不協和は行動を説明する唯一の理論ではありませんが、人が自分の価値観と矛盾する行動を取る理由を理解する助けになります。\nたとえば、喫煙が重い病気のリスクを高めると知っていながら、喫煙を続ける人を考えてみてください。\n不協和を減らす一つの方法は、禁煙することです。\nもう一つは、矛盾を過小評価することです。統計は誇張されているとか、週末しか吸わないから「それほど悪くない」と考えるかもしれません。\n消費者行動でも同じことが起こります。\n割引なしで高価なガジェットを買った学生は、後になって\n「勉強に必要だった」と考えたり、もっと高い製品と比べて「実は節約した」と納得したりします。\nいずれの場合も、信念が行動に合わせて変化しています。\n公共キャンペーンは、この仕組みを利用することがあります。\nたとえば健康プログラムでは、まず「なぜ自分は活動的な生活を大切にしているのか」を書き出し、グループで共有させます。\nその後で運動をサボると、自分が公に表明した自己イメージと行動が衝突します。\nただし、「毎日必ず運動しなさい」といった極端な要求では、人は非現実的だと感じ、変わる義務を感じなくなることもあります。\n次回の授業では、認知的不協和を実験室で検証した古典的研究を取り上げます。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -379,6 +384,7 @@
   "difficulty": "medium",
   "timeLimitSec": 480,
   "transcript": "Today I’d like to introduce the idea of loss aversion, a key concept in what is known as prospect theory. In traditional economics, people were often described as rational decision-makers who simply compare possible outcomes and choose the one with the highest overall value. Prospect theory suggests something different: on average, people react more strongly to losing a certain amount than to gaining the same amount. In other words, a loss of fifty dollars typically feels more painful than a gain of fifty dollars feels pleasant.\nOne classic experiment asked students whether they would accept a simple coin toss. If the coin landed on tails, they would lose ten dollars from their own money. To make the gamble attractive, the researchers gradually increased the amount the students could win when the coin landed on heads. Many participants refused the gamble until the possible gain reached twenty or even thirty dollars, which shows that they needed a larger potential win to balance a smaller possible loss. This pattern has been repeated in many studies.\nLoss aversion helps explain why people hold on to losing investments or hesitate to switch phone plans, even when the new option is clearly cheaper. It also matters for public policy. For example, presenting a health program as “avoiding a loss in future income due to illness” can be more persuasive than framing the exact same program as “gaining extra income by staying healthy.” In our next class, we’ll examine how policymakers design nudges that use this tendency in everyday choices.",
+  "transcriptJa": "今日は、損失回避（loss aversion）という考え方を紹介します。これは、プロスペクト理論の中核となる概念です。\n伝統的な経済学では、人は合理的に結果を比較し、最も価値の高い選択をすると考えられてきました。\nしかしプロスペクト理論は、平均的に見ると、人は同じ金額でも「得」をするより「損」をすることに、より強く反応すると示しています。\nつまり、50ドルの損失は、50ドルの利益よりも強い苦痛として感じられるのです。\nある古典的な実験では、学生に単純なコイントスを受け入れるかどうかを尋ねました。\n裏が出たら10ドル失い、表が出たらお金を得るという条件です。\n研究者が表のときにもらえる金額を徐々に増やしていくと、多くの学生は、20ドルや30ドルもらえる可能性がない限り、この賭けを拒否しました。\nこれは、小さな損失を受け入れるためには、より大きな利益が必要になることを示しています。\nこの結果は、多くの研究で繰り返し確認されています。\n損失回避は、赤字の投資をなかなか手放せなかったり、明らかに安いプランがあっても携帯料金を切り替えなかったりする行動を説明します。\nまた、公共政策にも関係します。\nたとえば健康プログラムを、「健康でいることで収入が増える」と説明するよりも、\n「病気によって将来の収入を失うのを防ぐ」と説明したほうが、同じ内容でも説得力が高くなる場合があります。\n次回の授業では、政策立案者がこの傾向を利用した**ナッジ（行動をそっと促す仕組み）**を、日常の選択の中でどのように設計しているかを見ていきます。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -453,6 +459,7 @@
   "difficulty": "medium",
   "timeLimitSec": 360,
   "transcript": "Attention, everyone. This is a quick announcement about a workshop next Wednesday at 3 p.m. in Room 204 of the main library. We will be hosting a session on how to find academic articles and use online databases effectively. The workshop is free and open to all students, but seating is limited. If you’re interested, please sign up at the information desk before Friday so we can reserve a spot for you.",
+  "transcriptJa": "みなさん、ご注目ください。これは、来週水曜日の午後3時にメインライブラリーの204号室で行われるワークショップについての簡単なお知らせです。\n学術論文の探し方と、オンラインデータベースを効果的に使う方法についてのセッションを行います。\nこのワークショップは無料で、すべての学生が参加できますが、座席数には限りがあります。興味がある方は、席を確保するために金曜日までにインフォメーションデスクで申し込みをしてください。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -497,6 +504,7 @@
   "difficulty": "medium",
   "timeLimitSec": 360,
   "transcript": "Good morning, everyone. I’d like to let you know about a change to our lunch service this Friday. Because we’ll be hosting a special cultural food fair in the main dining hall, the regular lunch menu will only be available in the smaller East Wing cafeteria from noon to two p.m. Meal plan cards will still be accepted as usual. If you plan to eat here on Friday, please go directly to the East Wing during that time.",
+  "transcriptJa": "みなさん、おはようございます。今週金曜日のランチサービスについての変更をお知らせします。\nメインの食堂で特別な文化フードフェアを開催するため、通常のランチメニューは、正午から午後2時までの間、東ウイングの小さなカフェテリアのみで提供されます。\nミールプランのカードは、これまで通り使用できます。\n金曜日にここで昼食を取る予定の方は、その時間帯に東ウイングへ直接行ってください。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -541,6 +549,7 @@
   "difficulty": "medium",
   "timeLimitSec": 360,
   "transcript": "Good afternoon, everyone. I’d like to make a brief announcement about the fitness center schedule this coming Tuesday. The entire facility will be closed from nine a.m. until four p.m. for a mandatory safety inspection of all exercise equipment. During this time, no group classes will be held, and the weight room and cardio area will not be available. I’m sorry for the short notice. If you still want to work out on Tuesday, please use the gym in the Physical Education Building or the outdoor running track, which will remain open as usual.",
+  "transcriptJa": "みなさん、こんにちは。\n来週火曜日のフィットネスセンターの利用時間について、簡単なお知らせがあります。\nすべての運動器具の安全点検（義務）のため、フィットネスセンター全体は午前9時から午後4時まで閉鎖されます。\nこの時間帯は、グループクラスは行われず、ウエイトルームと有酸素運動エリアも利用できません。\n直前のお知らせになり申し訳ありません。\n火曜日にどうしても運動したい場合は、体育館（Physical Education Building）内のジム、または屋外のランニングトラックを利用してください。これらは通常どおり開いています。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -585,6 +594,7 @@
   "difficulty": "medium",
   "timeLimitSec": 360,
   "transcript": "Attention all students. I’d like to let you know about a brief interruption to the campus Wi-Fi this Saturday morning. From eight to eleven a.m., the network will be offline while our IT staff upgrades the system. During that time, you won’t be able to access online courses or email on campus. If you have assignments due, please download any materials you need in advance, or use the computer lab at the city library downtown, which will not be affected.",
+  "transcriptJa": "学生のみなさん、ご注意ください。\n今週土曜日の朝に発生する、学内Wi-Fiの一時停止についてお知らせします。\n午前8時から11時まで、ITスタッフによるシステムのアップグレード作業のため、ネットワークは停止します。\nこの時間帯は、学内ではオンライン授業やメールにアクセスできません。\nもし提出期限のある課題がある場合は、必要な資料を事前にダウンロードしておくか、影響を受けない市内ダウンタウンの市立図書館にあるコンピュータ室を利用してください。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -629,6 +639,7 @@
   "difficulty": "medium",
   "timeLimitSec": 360,
   "transcript": "Attention, students. I’d like to let you know about a change to the campus shuttle this Friday evening. Because of road construction near the main gate, the regular “Blue Line” bus will not stop there after six p.m. Instead, it will pick up and drop off passengers at the west parking lot next to the gym. Please check the updated timetable online before you travel on Friday night.",
+  "transcriptJa": "学生のみなさん、ご注意ください。\n今週金曜日の夜のキャンパスシャトルバスについて変更のお知らせがあります。\n正門付近で道路工事が行われるため、通常の「ブルーライン」のバスは、午後6時以降は正門に停車しません。\nその代わりに、ジム横の西側駐車場で乗降することになります。\n金曜日の夜に利用する予定の方は、出発前に最新の時刻表をオンラインで確認してください。",
   "playLimitInTest": 1,
   "questions": [
    {
@@ -673,6 +684,7 @@
   "difficulty": "medium",
   "timeLimitSec": 360,
   "transcript": "Attention, everyone. I have an announcement about the student health center this Thursday. Because of unexpected maintenance in the main building, all flu shot appointments after 1 p.m. will be moved to Room 109 in the Science Hall. Your appointment times will stay the same, but you’ll need to check in at the new location. Please arrive a few minutes early so we can keep the schedule on time.",
+  "transcriptJa": "みなさん、ご注意ください。\n今週木曜日の学生ヘルスセンターについてのお知らせです。\n本館で予期せぬメンテナンスが行われるため、午後1時以降のすべてのインフルエンザ予防接種の予約は、サイエンスホール109号室に変更されます。\n予約時間自体は変わりませんが、新しい場所で受付をする必要があります。\n予定通り進行できるよう、数分早めに到着してください。",
   "playLimitInTest": 1,
   "questions": [
    {

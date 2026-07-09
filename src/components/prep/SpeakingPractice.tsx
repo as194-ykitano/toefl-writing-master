@@ -18,6 +18,7 @@ import {
   SpeakingTaskFeedback,
 } from "@/lib/prep/types";
 import { newSessionId, saveSession } from "@/lib/prep/session-store";
+import { saveRecording } from "@/lib/prep/recording-store";
 
 type Phase = "ready" | "prep" | "recording" | "review";
 
@@ -37,12 +38,18 @@ async function analyzeRecording(
   recording: Recording
 ): Promise<SpeakingTaskFeedback> {
   const task = set.tasks.find((t) => t.id === taskId);
+  const isRepeat = set.practiceType === "listen-and-repeat";
   const formData = new FormData();
   const ext = recording.blob.type.includes("mp4") ? "mp4" : "webm";
   formData.append("audio", new File([recording.blob], `answer.${ext}`, { type: recording.blob.type }));
   formData.append("prompt", task?.prompt ?? "");
   formData.append("exam", set.exam);
   formData.append("label", task?.label ?? "");
+  if (isRepeat) {
+    // Listen and Repeat: お手本文との一致率で採点（GPT 講評なし）
+    formData.append("evalMode", "repeat");
+    formData.append("expected", task?.sampleAnswers?.[0]?.text ?? "");
+  }
 
   const res = await fetch("/api/analyze-speaking", { method: "POST", body: formData });
   const json = await res.json();
@@ -57,6 +64,9 @@ async function analyzeRecording(
     strengths: Array.isArray(json.strengths) ? json.strengths : [],
     improvements: Array.isArray(json.improvements) ? json.improvements : [],
     improvedVersion: json.improvedVersion || undefined,
+    expectedText: json.expectedText || undefined,
+    matchRatio: typeof json.matchRatio === "number" ? json.matchRatio : undefined,
+    itemScore: typeof json.itemScore === "number" ? json.itemScore : undefined,
   };
 }
 
@@ -188,10 +198,16 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const handleSubmit = async () => {
     if (submitted) return;
     setSubmitted(true);
+    const sessionId = newSessionId();
+
+    // 録音を IndexedDB に保存（結果画面での聞き直し用）
+    const recordedTasks = set.tasks.filter((t) => recordings[t.id]);
+    await Promise.all(
+      recordedTasks.map((t) => saveRecording(sessionId, t.id, recordings[t.id].blob))
+    );
 
     // 録音があるタスクを順番に AI 解析（進捗表示のため直列実行）
     const feedback: SpeakingTaskFeedback[] = [];
-    const recordedTasks = set.tasks.filter((t) => recordings[t.id]);
     for (let i = 0; i < recordedTasks.length; i++) {
       const t = recordedTasks[i];
       setAnalyzingIndex(i + 1);
@@ -209,7 +225,6 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
       }
     }
 
-    const sessionId = newSessionId();
     saveSession({
       id: sessionId,
       exam: set.exam,
