@@ -387,11 +387,46 @@ function ChatPanel({ context }: { context: string }) {
 // =====================================================================
 
 function RecordingPlayer({ url }: { url?: string }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const durationFixedRef = useRef(false);
+  const [failed, setFailed] = useState(false);
+
   if (!url) return null;
+
+  // MediaRecorder 製の webm は duration メタデータを持たず 0:00 / Infinity になるため、
+  // 読み込み時に末尾までシークして再生時間を確定させる（既知の回避策）
+  const fixDuration = () => {
+    const el = audioRef.current;
+    if (!el || durationFixedRef.current) return;
+    if (!Number.isFinite(el.duration) || el.duration === 0) {
+      durationFixedRef.current = true;
+      const reset = () => {
+        el.currentTime = 0;
+        el.removeEventListener("timeupdate", reset);
+      };
+      el.addEventListener("timeupdate", reset);
+      el.currentTime = 1e7;
+    }
+  };
+
   return (
     <div className="mt-3">
       <div className="text-[11px] font-semibold text-gray-400 mb-1">あなたの録音</div>
-      <audio controls src={url} className="w-full" preload="none" />
+      {failed ? (
+        <p className="text-xs text-gray-400">
+          この録音はお使いのブラウザで再生できませんでした（録音時と同じブラウザでお試しください）。
+        </p>
+      ) : (
+        <audio
+          ref={audioRef}
+          controls
+          src={url}
+          className="w-full"
+          preload="metadata"
+          onLoadedMetadata={fixDuration}
+          onError={() => setFailed(true)}
+        />
+      )}
     </div>
   );
 }
@@ -439,6 +474,21 @@ function SpeakingFeedbackCard({
         </div>
       ) : (
         <>
+          {feedback.fluency && (
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { label: "回答時間", value: `${feedback.fluency.durationSec} 秒` },
+                { label: "発話速度", value: `${feedback.fluency.wpm} WPM` },
+                { label: "無音割合", value: `${Math.round(feedback.fluency.pauseRatio * 100)}%` },
+                { label: "長いポーズ", value: `${feedback.fluency.longPauses} 回` },
+              ].map((m) => (
+                <div key={m.label} className="bg-gray-50 rounded-lg border border-gray-100 px-3 py-2">
+                  <div className="text-[10px] text-gray-400">{m.label}</div>
+                  <div className="text-sm font-bold text-gray-900 tabular-nums">{m.value}</div>
+                </div>
+              ))}
+            </div>
+          )}
           {feedback.transcript && (
             <div className="mt-3 bg-gray-50 rounded-lg border border-gray-100 px-4 py-3">
               <div className="text-[11px] font-semibold text-gray-400 mb-1">

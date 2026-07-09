@@ -24,6 +24,31 @@ const DEFAULT_SOURCE = path.resolve(
 const SOURCE_ROOT = process.argv[2] ? path.resolve(process.argv[2]) : DEFAULT_SOURCE;
 const OUT_DIR = path.resolve(__dirname, "../src/lib/prep/data");
 const MANIFEST_PATH = path.resolve(__dirname, "ielts-assets-manifest.json");
+// english-gym-admin から取得した日本語訳（scripts/fetch-ielts-translations.mjs の出力）
+const TRANSLATIONS_PATH = path.resolve(__dirname, "ielts-translations.json");
+
+/** 本文照合用フィンガープリント（fetch-ielts-translations.mjs と同一ロジック） */
+function fingerprint(text) {
+  return (text ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+    .slice(0, 240);
+}
+
+let TRANSLATION_MAP = new Map();
+async function loadTranslations() {
+  try {
+    const entries = JSON.parse(await fs.readFile(TRANSLATIONS_PATH, "utf8"));
+    for (const entry of entries) {
+      if (entry.fingerprint && entry.articleJa) {
+        TRANSLATION_MAP.set(entry.fingerprint, entry.articleJa);
+      }
+    }
+    console.log(`translations loaded: ${TRANSLATION_MAP.size} 件`);
+  } catch {
+    console.log("translations file なし（日本語訳マージをスキップ）");
+  }
+}
 
 // ファイル内で「フィールド」として扱う行頭キー
 const FIELD_NAMES = new Set([
@@ -242,9 +267,13 @@ async function importSkill(skill, sourceDir) {
         questions: builtQuestions,
       };
 
-      // 日本語訳（プレースホルダの「あとで入れる」は除外）
-      const articleJa =
-        meta.ARTICLE_JA && !/^あとで入れる/.test(meta.ARTICLE_JA.trim()) ? meta.ARTICLE_JA.trim() : "";
+      // 日本語訳: .txt の ARTICLE_JA を優先し、無効なら english-gym-admin の
+      // practiceTrainings から取得した訳を本文照合でマージ。
+      // 「あとで入れる」プレースホルダ（文字化け版 縺ゅ→縺ｧ… を含む）と短すぎる値は無効扱い
+      const rawJa = (meta.ARTICLE_JA ?? "").trim();
+      const isValidJa =
+        rawJa.length >= 20 && !/^あとで入れる/.test(rawJa) && !/[縺繧繝]/.test(rawJa);
+      const articleJa = isValidJa ? rawJa : (TRANSLATION_MAP.get(fingerprint(meta.ARTICLE)) ?? "");
 
       if (skill === "reading") {
         sets.push({
@@ -280,6 +309,7 @@ async function importSkill(skill, sourceDir) {
 }
 
 async function main() {
+  await loadTranslations();
   const readingDir = path.join(SOURCE_ROOT, "IELTS Reading");
   const listeningDir = path.join(SOURCE_ROOT, "IELTS Listening");
 

@@ -1,29 +1,36 @@
 // Speaking 録音の保存・読み込み（IndexedDB）
-// localStorage はサイズ制限が厳しいため、音声 Blob は IndexedDB に保存する。
+// localStorage はサイズ制限が厳しいため、音声は IndexedDB に保存する。
+// Blob を直接保存するとブラウザによっては読み出し時に再生できないケースがあるため、
+// ArrayBuffer + MIME タイプで保存し、読み出し時に Blob を再構築する。
 // キー: `${sessionId}:${taskId}`。30 日より古い録音は自動削除する。
 
 const DB_NAME = "prep_recordings";
 const STORE_NAME = "recordings";
+const DB_VERSION = 2;
 const MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
 interface RecordingEntry {
   key: string;
   sessionId: string;
   taskId: string;
-  blob: Blob;
+  /** 音声データ本体（Blob ではなく ArrayBuffer で保存する） */
+  buffer: ArrayBuffer;
+  mimeType: string;
   createdAt: number;
 }
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1);
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
     request.onupgradeneeded = () => {
       const db = request.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: "key" });
-        store.createIndex("sessionId", "sessionId");
-        store.createIndex("createdAt", "createdAt");
+      // v1 (Blob 保存) からの移行: ストアを作り直す
+      if (db.objectStoreNames.contains(STORE_NAME)) {
+        db.deleteObjectStore(STORE_NAME);
       }
+      const store = db.createObjectStore(STORE_NAME, { keyPath: "key" });
+      store.createIndex("sessionId", "sessionId");
+      store.createIndex("createdAt", "createdAt");
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
@@ -32,6 +39,8 @@ function openDb(): Promise<IDBDatabase> {
 
 export async function saveRecording(sessionId: string, taskId: string, blob: Blob): Promise<void> {
   try {
+    const buffer = await blob.arrayBuffer();
+    if (buffer.byteLength === 0) return;
     const db = await openDb();
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
@@ -39,7 +48,8 @@ export async function saveRecording(sessionId: string, taskId: string, blob: Blo
         key: `${sessionId}:${taskId}`,
         sessionId,
         taskId,
-        blob,
+        buffer,
+        mimeType: blob.type || "audio/webm",
         createdAt: Date.now(),
       };
       tx.objectStore(STORE_NAME).put(entry);
@@ -47,8 +57,8 @@ export async function saveRecording(sessionId: string, taskId: string, blob: Blo
       tx.onerror = () => reject(tx.error);
     });
     db.close();
-  } catch {
-    // 保存できなくても演習自体は続行できる
+  } catch (error) {
+    console.warn("録音の保存に失敗しました:", error);
   }
 }
 
@@ -65,7 +75,9 @@ export async function loadRecordings(sessionId: string): Promise<Map<string, Blo
         const cursor = request.result;
         if (cursor) {
           const entry = cursor.value as RecordingEntry;
-          result.set(entry.taskId, entry.blob);
+          if (entry.buffer && entry.buffer.byteLength > 0) {
+            result.set(entry.taskId, new Blob([entry.buffer], { type: entry.mimeType }));
+          }
           cursor.continue();
         } else {
           resolve();
@@ -74,8 +86,8 @@ export async function loadRecordings(sessionId: string): Promise<Map<string, Blo
       request.onerror = () => reject(request.error);
     });
     db.close();
-  } catch {
-    // 読み込み失敗時は空のまま返す
+  } catch (error) {
+    console.warn("録音の読み込みに失敗しました:", error);
   }
   return result;
 }

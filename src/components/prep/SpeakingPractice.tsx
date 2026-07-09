@@ -67,6 +67,7 @@ async function analyzeRecording(
     expectedText: json.expectedText || undefined,
     matchRatio: typeof json.matchRatio === "number" ? json.matchRatio : undefined,
     itemScore: typeof json.itemScore === "number" ? json.itemScore : undefined,
+    fluency: json.fluency ?? undefined,
   };
 }
 

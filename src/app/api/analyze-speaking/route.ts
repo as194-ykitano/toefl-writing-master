@@ -29,12 +29,70 @@ interface SpeakingAnalysis {
 // ETS の採点方式（各文 0〜5 点・7 問の平均がタスクスコア）に合わせ、
 // Whisper 文字起こしとお手本文の語単位の一致率から項目スコアを算出する。
 
+// 数詞 → 数字の正規化テーブル（ten ↔ 10 を一致として扱う）
+const NUMBER_WORDS: Record<string, number> = {
+  zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7,
+  eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13,
+  fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18,
+  nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60,
+  seventy: 70, eighty: 80, ninety: 90,
+  // 序数（"the second floor" ↔ "the 2nd floor"）
+  first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7,
+  eighth: 8, ninth: 9, tenth: 10, eleventh: 11, twelfth: 12, thirteenth: 13,
+  fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17, eighteenth: 18,
+  nineteenth: 19, twentieth: 20, thirtieth: 30, fortieth: 40, fiftieth: 50,
+};
+const SCALE_WORDS: Record<string, number> = { hundred: 100, thousand: 1000 };
+
+/** 連続する数詞（"twenty five" / "two hundred"）を 1 つの数字トークンにまとめる */
+function normalizeNumbers(tokens: string[]): string[] {
+  const out: string[] = [];
+  let i = 0;
+  while (i < tokens.length) {
+    const token = tokens[i];
+    if (!(token in NUMBER_WORDS)) {
+      out.push(token);
+      i++;
+      continue;
+    }
+    let value = NUMBER_WORDS[token];
+    let j = i + 1;
+    while (j < tokens.length) {
+      const next = tokens[j];
+      if (next in SCALE_WORDS) {
+        value = Math.max(value, 1) * SCALE_WORDS[next];
+        j++;
+      } else if (next === "and" && j + 1 < tokens.length && tokens[j + 1] in NUMBER_WORDS && value >= 100) {
+        // "one hundred and five"
+        j++;
+      } else if (
+        next in NUMBER_WORDS &&
+        // "twenty five" のような十の位 + 一の位のみ結合（"five five" は結合しない）
+        ((value % 100 === 0 && value >= 20 && NUMBER_WORDS[next] < 100) ||
+          (value >= 20 && value < 100 && value % 10 === 0 && NUMBER_WORDS[next] < 10))
+      ) {
+        value += NUMBER_WORDS[next];
+        j++;
+      } else {
+        break;
+      }
+    }
+    out.push(String(value));
+    i = j;
+  }
+  return out;
+}
+
 function tokenize(text: string): string[] {
-  return text
+  const tokens = text
     .toLowerCase()
-    .replace(/[^a-z0-9'\s]/g, " ")
+    .replace(/[^a-z0-9'\s-]/g, " ")
+    .replace(/-/g, " ") // twenty-five → twenty five
     .split(/\s+/)
-    .filter(Boolean);
+    .filter(Boolean)
+    // "15th" → "15"（序数サフィックスの除去）
+    .map((t) => t.replace(/^(\d+)(st|nd|rd|th)$/, "$1"));
+  return normalizeNumbers(tokens);
 }
 
 /** トークン列の編集距離（Levenshtein） */
@@ -96,15 +154,49 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "audio file is required" }, { status: 400 });
     }
 
-    // 1. 文字起こし
-    const transcription = await openai.audio.transcriptions.create({
+    // 1. 文字起こし（verbose_json でセグメントのタイムスタンプも取得し、流暢性計測に使う）
+    const transcription = (await openai.audio.transcriptions.create({
       file: audio,
       model: "whisper-1",
       language: "en",
+      response_format: "verbose_json",
       // Listen and Repeat はお手本文をヒントに与えると近い語彙で書き起こされすぎるため
       // prompt は渡さない（純粋な発話の書き起こしを得る）
-    });
+    })) as unknown as {
+      text?: string;
+      duration?: number;
+      segments?: { start: number; end: number; text: string }[];
+    };
     const transcript = transcription.text?.trim() ?? "";
+
+    // 流暢性メトリクス: 無音割合・ポーズ回数・WPM
+    const segments = transcription.segments ?? [];
+    const totalDurationSec =
+      transcription.duration ?? (segments.length > 0 ? segments[segments.length - 1].end : 0);
+    const speechSec = segments.reduce((a, s) => a + Math.max(0, s.end - s.start), 0);
+    let longPauses = 0;
+    if (segments.length > 0) {
+      if (segments[0].start > 1.0) longPauses += 1;
+      for (let i = 1; i < segments.length; i++) {
+        if (segments[i].start - segments[i - 1].end > 1.0) longPauses += 1;
+      }
+    }
+    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
+    const fluency =
+      totalDurationSec > 1 && wordCount > 0
+        ? {
+            durationSec: Math.round(totalDurationSec * 10) / 10,
+            /** 発話速度（総時間ベースの words per minute） */
+            wpm: Math.round(wordCount / (totalDurationSec / 60)),
+            /** 調音速度（実際に話している時間ベースの WPM） */
+            articulationWpm:
+              speechSec > 0.5 ? Math.round(wordCount / (speechSec / 60)) : 0,
+            /** 無音割合（0〜1） */
+            pauseRatio: Math.max(0, Math.round((1 - speechSec / totalDurationSec) * 100) / 100,),
+            /** 1 秒以上のポーズの回数 */
+            longPauses,
+          }
+        : undefined;
 
     // Listen and Repeat: 一致率ベースの採点のみ（GPT 講評なし）
     if (evalMode === "repeat") {
@@ -115,6 +207,7 @@ export async function POST(request: Request) {
         expectedText: expected,
         matchRatio: ratio,
         itemScore,
+        fluency,
         summary: "",
         strengths: [],
         improvements: [],
@@ -142,8 +235,9 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `あなたは経験豊富な ${isIelts ? "IELTS" : "TOEFL"} Speaking 試験官です。受験者の回答の文字起こしを評価し、日本語でフィードバックを返します。
-評価観点: Fluency and Coherence / Lexical Resource / Grammatical Range and Accuracy（発音は文字起こしからは評価できないため言及しない）。
+          content: `あなたは経験豊富な ${isIelts ? "IELTS" : "TOEFL"} Speaking 試験官です。受験者の回答の文字起こしと計測済みの流暢性データを評価し、日本語でフィードバックを返します。
+評価観点: Fluency and Coherence（提供される無音割合・ポーズ回数・WPM の計測値を必ず考慮）/ Lexical Resource / Grammatical Range and Accuracy（発音は文字起こしからは評価できないため言及しない）。
+参考: 英語話者の自然な発話速度はおよそ 120〜160 WPM。100 未満はゆっくり、長いポーズが多いと流暢性の減点要因。
 ${scaleNote}
 必ず次の JSON 形式で返してください:
 {
@@ -156,7 +250,11 @@ ${scaleNote}
         },
         {
           role: "user",
-          content: `【タスク】${label}\n【設問】\n${prompt}\n\n【受験者の回答（文字起こし）】\n${transcript}`,
+          content: `【タスク】${label}\n【設問】\n${prompt}\n\n【受験者の回答（文字起こし）】\n${transcript}\n\n【流暢性の計測値】\n${
+            fluency
+              ? `回答時間: ${fluency.durationSec} 秒 / 発話速度: ${fluency.wpm} WPM（調音速度 ${fluency.articulationWpm} WPM）/ 無音割合: ${Math.round(fluency.pauseRatio * 100)}% / 1 秒以上のポーズ: ${fluency.longPauses} 回`
+              : "計測できませんでした"
+          }`,
         },
       ],
       temperature: 0.4,
@@ -173,7 +271,7 @@ ${scaleNote}
       };
     }
 
-    return NextResponse.json({ transcript, ...analysis });
+    return NextResponse.json({ transcript, fluency, ...analysis });
   } catch (error) {
     console.error("Error analyzing speaking:", error);
     const message = error instanceof Error ? error.message : "Unknown error";

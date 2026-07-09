@@ -194,6 +194,19 @@ export interface SpeakingTaskFeedback {
   matchRatio?: number;
   /** Listen and Repeat: ETS 準拠の項目スコア (0〜5) */
   itemScore?: number;
+  /** 流暢性の計測値（Whisper のタイムスタンプから算出） */
+  fluency?: {
+    /** 回答の総時間（秒） */
+    durationSec: number;
+    /** 発話速度（総時間ベース words per minute） */
+    wpm: number;
+    /** 調音速度（発話中の時間ベース WPM） */
+    articulationWpm: number;
+    /** 無音割合 (0〜1) */
+    pauseRatio: number;
+    /** 1 秒以上のポーズの回数 */
+    longPauses: number;
+  };
   /** 解析に失敗した場合のエラーメッセージ */
   error?: string;
 }
