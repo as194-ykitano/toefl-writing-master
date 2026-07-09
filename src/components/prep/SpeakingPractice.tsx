@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, CheckCircle2, Loader2, Mic, Send, Square } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, Mic, Send, Square, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExamTopBar, formatTime } from "./exam-ui";
 import {
@@ -70,6 +70,8 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
   const [elapsedSec, setElapsedSec] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [analyzingIndex, setAnalyzingIndex] = useState(0);
+  const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
+  const questionAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -112,9 +114,25 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
 
   useEffect(() => cleanupStream, []);
 
+  const playQuestionAudio = () => {
+    if (!task.audioUrl) return;
+    questionAudioRef.current?.pause();
+    const audio = new Audio(task.audioUrl);
+    questionAudioRef.current = audio;
+    setQuestionAudioPlaying(true);
+    audio.onended = () => setQuestionAudioPlaying(false);
+    audio.play().catch(() => setQuestionAudioPlaying(false));
+  };
+
+  useEffect(() => {
+    return () => questionAudioRef.current?.pause();
+  }, []);
+
   const startPrep = () => {
     setPhase("prep");
     setCountdown(task.prepSec);
+    // 質問音声つきタスク（TOEFL Interview / Listen and Repeat）は開始時に自動再生
+    if (task.audioUrl) playQuestionAudio();
   };
 
   const startRecording = async () => {
@@ -269,14 +287,41 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
             {phase === "ready" && (
               <>
                 <div className="text-sm text-gray-500 text-center">
-                  準備時間 {task.prepSec} 秒 → 回答時間 {task.speakSec} 秒
-                  <br />
-                  準備時間が終わると自動的に録音が始まります
+                  {task.prepSec > 0 ? (
+                    <>
+                      準備時間 {task.prepSec} 秒 → 回答時間 {task.speakSec} 秒
+                      <br />
+                      準備時間が終わると自動的に録音が始まります
+                    </>
+                  ) : (
+                    <>回答時間 {task.speakSec} 秒（開始するとすぐに録音が始まります）</>
+                  )}
+                  {task.audioUrl && (
+                    <>
+                      <br />
+                      開始すると質問音声が再生されます
+                    </>
+                  )}
                 </div>
                 <Button size="lg" className="bg-eg hover:bg-eg-dark text-black" onClick={startPrep}>
-                  準備を開始する
+                  開始する
                 </Button>
               </>
+            )}
+
+            {(phase === "prep" || phase === "recording") && task.audioUrl && (
+              <button
+                onClick={playQuestionAudio}
+                disabled={questionAudioPlaying}
+                className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 border transition-colors ${
+                  questionAudioPlaying
+                    ? "border-eg bg-eg-soft text-eg-deep"
+                    : "border-gray-200 text-gray-500 hover:border-gray-300"
+                }`}
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+                {questionAudioPlaying ? "質問音声を再生中..." : "質問音声をもう一度聞く"}
+              </button>
             )}
 
             {phase === "prep" && (

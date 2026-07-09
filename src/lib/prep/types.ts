@@ -98,6 +98,8 @@ export interface SpeakingTask {
   speakSec: number;
   /** Band 別などの模範解答（結果画面で表示） */
   sampleAnswers?: { label: string; text: string }[];
+  /** タスクの質問音声（TOEFL Take an Interview / Listen and Repeat 用） */
+  audioUrl?: string;
 }
 
 export interface SpeakingSet {
@@ -113,6 +115,54 @@ export interface SpeakingSet {
 }
 
 export type PracticeSet = ReadingSet | ListeningSet;
+
+// ---- Writing 演習セット（TOEFL 新形式） ----
+
+/** Write an Email: 状況説明を読んでメールを書く（AI 添削つき） */
+export interface EmailWritingSet {
+  id: string;
+  exam: ExamId;
+  skill: "writing";
+  practiceType: "write-an-email";
+  title: string;
+  description?: string;
+  difficulty: "easy" | "medium" | "hard";
+  timeLimitSec: number;
+  /** 状況説明・要件（改行区切り。箇条書きは「・」付き） */
+  promptText: string;
+  to?: string;
+  subject?: string;
+  sampleAnswer?: string;
+  promptJa?: string;
+}
+
+export interface BuildSentenceItem {
+  id: string;
+  number: number;
+  /** 会話の前置き（相手の発言） */
+  context: string;
+  /** 空所つきのテンプレート（The ______ ______ .） */
+  template: string;
+  /** 並べ替え対象の語句（ダミーを含む場合あり） */
+  words: string[];
+  /** 完成した正しい文 */
+  answer: string;
+}
+
+/** Build a Sentence: 語句を並べ替えて文を作る */
+export interface BuildSentenceSet {
+  id: string;
+  exam: ExamId;
+  skill: "writing";
+  practiceType: "build-a-sentence";
+  title: string;
+  description?: string;
+  difficulty: "easy" | "medium" | "hard";
+  timeLimitSec: number;
+  items: BuildSentenceItem[];
+}
+
+export type WritingPracticeSet = EmailWritingSet | BuildSentenceSet;
 
 // ---- セッション（演習の記録） ----
 

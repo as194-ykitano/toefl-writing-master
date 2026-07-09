@@ -10,8 +10,22 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ReadingPractice from "@/components/prep/ReadingPractice";
 import ListeningPractice from "@/components/prep/ListeningPractice";
 import SpeakingPractice from "@/components/prep/SpeakingPractice";
-import { getListeningSet, getReadingSet, getSpeakingSet } from "@/lib/prep/data-source";
-import { ExamId, ListeningSet, PracticeMode, ReadingSet, SpeakingSet } from "@/lib/prep/types";
+import EmailWritingPractice from "@/components/prep/EmailWritingPractice";
+import BuildSentencePractice from "@/components/prep/BuildSentencePractice";
+import {
+  getListeningSet,
+  getReadingSet,
+  getSpeakingSet,
+  getWritingSet,
+} from "@/lib/prep/data-source";
+import {
+  ExamId,
+  ListeningSet,
+  PracticeMode,
+  ReadingSet,
+  SpeakingSet,
+  WritingPracticeSet,
+} from "@/lib/prep/types";
 
 function isExamId(value: string): value is ExamId {
   return value === "toefl" || value === "ielts";
@@ -25,6 +39,7 @@ function PracticePlayer() {
   const [readingSet, setReadingSet] = useState<ReadingSet | null>(null);
   const [listeningSet, setListeningSet] = useState<ListeningSet | null>(null);
   const [speakingSet, setSpeakingSet] = useState<SpeakingSet | null>(null);
+  const [writingSet, setWritingSet] = useState<WritingPracticeSet | null>(null);
   const [loading, setLoading] = useState(true);
 
   const { exam, skill, setId } = params;
@@ -38,6 +53,7 @@ function PracticePlayer() {
       if (skill === "reading") setReadingSet(await getReadingSet(exam, setId));
       else if (skill === "listening") setListeningSet(await getListeningSet(exam, setId));
       else if (skill === "speaking") setSpeakingSet(await getSpeakingSet(exam, setId));
+      else if (skill === "writing") setWritingSet(await getWritingSet(exam, setId));
       setLoading(false);
     };
     load();
@@ -54,6 +70,13 @@ function PracticePlayer() {
   if (skill === "reading" && readingSet) return <ReadingPractice set={readingSet} mode={mode} />;
   if (skill === "listening" && listeningSet) return <ListeningPractice set={listeningSet} mode={mode} />;
   if (skill === "speaking" && speakingSet) return <SpeakingPractice set={speakingSet} mode={mode} />;
+  if (skill === "writing" && writingSet) {
+    return writingSet.practiceType === "write-an-email" ? (
+      <EmailWritingPractice set={writingSet} mode={mode} />
+    ) : (
+      <BuildSentencePractice set={writingSet} mode={mode} />
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-500 gap-4">

@@ -112,7 +112,7 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     badge: "AI添削",
   },
 
-  // ---- TOEFL Reading（新形式。問題データは後で追加） ----
+  // ---- TOEFL Reading（新形式。Notion からインポート済み） ----
   {
     id: "complete-the-words",
     exam: "toefl",
@@ -120,7 +120,6 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Complete the Words",
     labelJa: "単語補完",
     description: "文中の欠けた単語の後半を補うタスク",
-    comingSoon: true,
   },
   {
     id: "daily-life",
@@ -128,8 +127,7 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     skill: "reading",
     label: "Read in Daily Life",
     labelJa: "日常文書の読解",
-    description: "掲示・メール・広告など日常的なテキストの読解",
-    comingSoon: true,
+    description: "メール・掲示・SNS 投稿など日常的なテキストの読解",
   },
   {
     id: "academic-passage",
@@ -138,17 +136,16 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Read an Academic Passage",
     labelJa: "アカデミック読解",
     description: "アカデミックな文章を読んで設問に答える",
-    comingSoon: true,
   },
 
-  // ---- TOEFL Listening（新形式。問題データは後で追加） ----
+  // ---- TOEFL Listening（新形式。Notion からインポート済み） ----
   {
     id: "conversation",
     exam: "toefl",
     skill: "listening",
     label: "Listen to a Conversation",
     labelJa: "会話の聞き取り",
-    comingSoon: true,
+    description: "2 人の会話を聞いて 2〜3 問に回答",
   },
   {
     id: "announcement",
@@ -156,7 +153,7 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     skill: "listening",
     label: "Listen to an Announcement",
     labelJa: "アナウンスの聞き取り",
-    comingSoon: true,
+    description: "キャンパス内のアナウンスを聞いて設問に回答",
   },
   {
     id: "academic-talk",
@@ -164,10 +161,19 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     skill: "listening",
     label: "Listen to an Academic Talk",
     labelJa: "講義の聞き取り",
+    description: "短い講義を聞いて 4 問に回答",
+  },
+  {
+    id: "listen-and-choose",
+    exam: "toefl",
+    skill: "listening",
+    label: "Listen and Choose a Response",
+    labelJa: "応答選択",
+    description: "短い発話に対する適切な応答を選ぶ",
     comingSoon: true,
   },
 
-  // ---- TOEFL Speaking（新形式） ----
+  // ---- TOEFL Speaking（新形式。Notion からインポート済み） ----
   {
     id: "listen-and-repeat",
     exam: "toefl",
@@ -175,7 +181,7 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Listen and Repeat",
     labelJa: "復唱タスク",
     description: "聞こえた短い文をそのまま復唱する（7 問）",
-    comingSoon: true,
+    badge: "AI添削",
   },
   {
     id: "take-an-interview",
@@ -184,6 +190,7 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Take an Interview",
     labelJa: "インタビュー形式",
     description: "テーマに沿った 4 つの質問に各 45 秒で回答",
+    badge: "AI添削",
   },
 
   // ---- TOEFL Writing（新形式。Academic Discussion は既存 AI 添削へ接続） ----
@@ -194,7 +201,6 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Build a Sentence",
     labelJa: "文の並べ替え",
     description: "語順が入れ替わった返信文を正しく並べ替える（10 問・約 7 分）",
-    comingSoon: true,
   },
   {
     id: "write-an-email",
@@ -203,7 +209,7 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Write an Email",
     labelJa: "メールライティング",
     description: "状況と 3 つの要件を含むメールを書く（7 分・80〜120 語）",
-    comingSoon: true,
+    badge: "AI添削",
   },
   {
     id: "academic-discussion",

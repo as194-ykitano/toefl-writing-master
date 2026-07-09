@@ -1,0 +1,1582 @@
+[
+ {
+  "id": "toefl-s-listen-and-repeat-slr-1",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Library",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to help new students use the campus library. Listen to the librarian and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the main library."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Study tables and computers are on the first floor."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Quiet reading rooms are upstairs on the second floor."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please keep your voice low and silence your phones."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can borrow up to ten books at a time."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Return materials to the drop box before the due date."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-1-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you need more help, ask the staff at the information desk."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-10",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Language Center",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain the campus language center to new students. Listen to the staff member and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus language center."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Conversation practice rooms are on the second floor."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Computer stations with headsets are available for online listening exercises."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please bring your student ID when you check in at the front desk."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For quiet study, turn off your phone and use headphones for audio."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Placement tests, held at the beginning of each term, help us choose your class."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-10-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you need language tutoring, ask the receptionist to make an appointment."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-2",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Student Center",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to give tours of the student center to new students. Listen to the coordinator and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus student center."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Cafés and snack bars are on the ground floor."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Club offices and meeting rooms are upstairs on the second and third floors."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please check the digital screens for today’s events and room changes."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For group projects, you can reserve study rooms in advance at the front desk."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "The counseling and career services offices, located at the end of this hallway, provide confidential support."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-2-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you have questions about activities, staff at the information desk can help you get started."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-3",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Bookstore",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to guide new students through the campus bookstore. Listen to the manager and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus bookstore."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Required textbooks for most courses are on the first floor."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "School supplies, like notebooks and calculators, are along the back wall."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please keep your bags with you and do not open merchandise before paying."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can rent or buy used books to save money each semester."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For online orders, pick up your items at the counter near the entrance."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-3-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you need help finding a title, please ask at the information desk."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-4",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Dining Hall",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain how the campus dining hall works to new students. Listen to the manager and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the main campus dining hall."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Hot meals and a salad bar are available here three times a day."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can pay with your student ID card or a meal plan."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please return your trays and dishes to the conveyor belt when you finish eating."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For students with allergies, ingredient lists are posted above each station."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Take-out containers are near the exit if you need to bring food with you."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-4-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you have questions about special diets, please ask the staff at the nutrition desk."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-5",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Residence Hall",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain the campus residence hall to new students. Listen to the hall manager and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to our campus residence hall."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Student rooms are on the second through fifth floors."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Shared kitchens and lounges are located at the end of each hallway."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please keep noise down during quiet hours after ten in the evening."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can do your laundry in the basement laundry room with your student card."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For packages and letters, check the mailroom beside the main lobby."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-5-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you have problems in your room, contact the resident advisor at the front desk."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-6",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Health Center",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain the campus health center to new students. Listen to the staff member and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus health center."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Doctors and nurses are on duty here during regular weekdays."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can make an appointment online or by calling the front desk."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please bring your student ID and arrive ten minutes before your visit."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For urgent situations, a nurse is available for walk-in consultations."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "The counseling rooms, located at the end of this hallway, are for private talks."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-6-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you feel unwell on campus, come here first to get checked."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-7",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Computer Lab",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain the campus computer lab to new students. Listen to the staff member and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus computer lab."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Desktop computers and printers are available here for student use."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You must sign in with your student ID before using any machine."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please do not install new software or change the computer settings."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you lose your work, staff can sometimes help recover recent files."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "For class projects, you can borrow headphones or adapters at the front counter."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-7-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you have trouble logging in, ask the technician on duty for assistance."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-8",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Career Center",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain the campus career center to new students. Listen to the staff member and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus career center."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Career advising and job search help are available here on weekdays."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can book an appointment online or visit during drop-in hours."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please check the bulletin boards for new internship and part-time job listings."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "We also offer workshops on resumes, interviews, and networking skills."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "The resource room, located next to the front desk, has computers and sample application forms."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-8-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you are unsure where to start, ask a counselor for guidance."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-listen-and-repeat-slr-9",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "listen-and-repeat",
+  "title": "Listen and Repeat — Campus Library",
+  "description": "聞こえた文をそのまま復唱するタスク。音声は 1 回だけ再生されます",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t1",
+    "number": 1,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "material": "You are learning to explain the campus library to new students. Listen to the librarian and repeat what she says. Repeat only once.",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Welcome to the campus library."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t2",
+    "number": 2,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Quiet study areas and group rooms are on the upper floors."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t3",
+    "number": 3,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Course reserves and reference books are kept behind the main desk."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t4",
+    "number": 4,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Please keep your voice low and turn your phone to silent mode."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t5",
+    "number": 5,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "You can borrow laptops and chargers for a limited time with your student ID."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t6",
+    "number": 6,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "Printing and scanning stations, located near the windows, are self-service."
+     }
+    ]
+   },
+   {
+    "id": "toefl-s-listen-and-repeat-slr-9-t7",
+    "number": 7,
+    "label": "Listen and Repeat",
+    "prompt": "音声を聞いて、聞こえた文をそのまま復唱してください。",
+    "prepSec": 0,
+    "speakSec": 15,
+    "sampleAnswers": [
+     {
+      "label": "スクリプト",
+      "text": "If you need help finding an article, ask a librarian for assistance."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-1",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Online Shopping Habits",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-1-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about your online shopping habits. First, before you buy something online, is it important to compare prices on different websites? Why or why not?",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about online shopping habits. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-1-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you want to buy a new pair of shoes. You can order them online and wait a few days for delivery, or you can go to a local store and get them right away, but they cost a little more. Which option would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-1-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people worry about problems with online shopping, such as late deliveries or damaged items. What do you think are one or two good ways that companies could make online shopping safer or more reliable? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-1-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, looking to the future, some experts think that most shopping will happen online and many physical stores will close. How do you think this change might affect cities in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-10",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Spending and Saving Money",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-10-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about spending and saving money. First, when you receive money, for example from a job or from your family, how do you usually use it? Please describe what you spend it on and how you feel about your habits.",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about how people spend and save money. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-10-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you receive a bonus of 200 dollars. You can either spend it on something you really want right now, or save it for a future goal, such as travel or education. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-10-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people find it hard to control their spending, especially with online shopping and mobile payments. What are one or two things schools or families could do to help young people develop better money habits? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-10-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, more payments may be completely digital, and people might hardly ever use cash. How do you think this change might affect people’s spending habits in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-2",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Social Media Use",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-2-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about your social media use. First, when you open a social media app, how do you usually feel? Please explain why you feel that way.",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about how people use social media. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-2-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you have some free time in the evening. You can spend thirty minutes scrolling through social media, or you can spend that time talking with a friend face-to-face. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-2-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people worry that social media can be a waste of time, but others say it can be useful. What are one or two good ways that people can use social media more productively? Give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-2-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, looking to the future, some experts think social media will become even more important in everyday life. How do you think this might affect local communities in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-3",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Part-time Jobs",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-3-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about part-time work. First, have you ever had a part-time job? If so, what did you do, and how did you feel about that job?",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about part-time jobs for students. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-3-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you are looking for a new part-time job. You can choose a job on campus that pays a little less but is very close, or a job in the city that pays more money but takes forty minutes to get there. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-3-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some students say that part-time jobs can be stressful or hard to balance with school work. What do you think are one or two good ways that employers or schools could make part-time jobs easier for students? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-3-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, more students may do remote or online part-time work instead of working in local shops and restaurants. How do you think this change might affect communities in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-4",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Studying with Technology",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-4-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about studying with technology. First, when you study, do you usually use digital tools, such as laptops, tablets, or study apps? Please describe what you use and how you feel about it.",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about how students use technology for studying. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-4-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you have to prepare for an important exam. You can choose to study mainly with printed textbooks and notebooks, or mainly with digital materials on a screen. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-4-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people think that technology can make students lose focus, but others say it can improve learning. What are one or two good ways students can use technology to stay focused and learn more effectively? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-4-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, more classes may move online and use digital tools instead of traditional classrooms and paper materials. How do you think this change might affect education in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-5",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Learning New Languages",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-5-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about learning new languages. First, have you ever tried to learn a language other than your first language? Please tell me which language it was and how you felt about the experience.",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about learning new languages. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-5-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you want to start learning a new language this year. You can either take an in-person class with a teacher once a week, or study on your own using online videos and apps whenever you like. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-5-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people say that learning a language is easier now because of technology, while others still prefer traditional methods like textbooks and grammar drills. What are one or two effective ways to combine technology with more traditional study methods? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-5-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, more people may use AI tools to help them learn and practice languages. How do you think this might change the way people study, in both positive and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-6",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Free Time and Relaxation",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-6-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about free time and relaxation. First, when you have a free evening with no plans, what do you usually do to relax? Please describe what you do and how it makes you feel.",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about how people use their free time to relax. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-6-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you’ve had a very busy week. On Friday evening, you can either stay home alone and rest, or go out with friends for dinner and a late movie. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-6-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people feel they never really relax, even when they have free time, because they are still thinking about work or studies. What are one or two things schools or workplaces could do to help people use their free time in a more relaxing way? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-6-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, people may have more flexible schedules and more free time because of technology and changing work styles. How do you think this might affect people’s lifestyles in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-7",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Healthy Lifestyle",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-7-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about healthy lifestyle habits. First, in your daily life, what do you usually do to stay healthy? Please describe what you do and how it makes you feel.",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about healthy lifestyle habits. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-7-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you want to become more active this year. You can choose to join a gym near your home, or you can exercise outside in parks and on the streets without paying. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-7-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people say it is hard to keep healthy habits when they are busy with school or work. What are one or two things schools or workplaces could do to help people live in a healthier way? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-7-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, food delivery services and online entertainment may become even more common, so people can do almost everything from home. How do you think this might affect people’s health in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-8",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Group Work and Collaboration",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-8-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about working in groups. First, can you tell me about a time when you had to work on a project with other people? What was the project, and how did you feel about working in that group?",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about group work and collaboration. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-8-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you have an important assignment. You can choose to do it alone and have full control, or do it as part of a small group and share the work. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-8-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people dislike group work because of problems such as unequal effort or poor communication. What are one or two things teachers or managers could do to make group work more effective and fair? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-8-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, more group work may happen online, with team members living in different countries and time zones. How do you think this might affect collaboration in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ },
+ {
+  "id": "toefl-s-take-an-interview-sti-9",
+  "exam": "toefl",
+  "skill": "speaking",
+  "practiceType": "take-an-interview",
+  "title": "Take an Interview — Volunteering and Community Service",
+  "description": "インタビュー形式。4 つの質問に各 45 秒で回答します（準備時間なし）",
+  "difficulty": "medium",
+  "tasks": [
+   {
+    "id": "toefl-s-take-an-interview-sti-9-t1",
+    "number": 1,
+    "label": "Take an Interview",
+    "prompt": "Thank you for joining the study. Today, I’d like to ask you some questions about volunteering and community service. First, have you ever done any volunteer work? If so, what did you do, and how did you feel about the experience?",
+    "material": "An interviewer will ask you questions. Answer the questions and be sure to say as much as you can in the time allowed.\nNo time for preparation will be provided.\nYou have volunteered for a research study about volunteering and community service. You will have a short online interview with a researcher. The researcher will ask you some questions. Please answer the interviewer’s questions.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-9-t2",
+    "number": 2,
+    "label": "Take an Interview",
+    "prompt": "I see. Now imagine that you have some free time on weekends. You can choose to spend that time doing volunteer work in your neighborhood, or doing a paid part-time job. Which would you choose, and why?",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-9-t3",
+    "number": 3,
+    "label": "Take an Interview",
+    "prompt": "Interesting. Some people say they want to help their community, but they don’t know how to start or they feel too busy. What are one or two things local governments or organizations could do to encourage more people to volunteer? Please give reasons for your answer.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   },
+   {
+    "id": "toefl-s-take-an-interview-sti-9-t4",
+    "number": 4,
+    "label": "Take an Interview",
+    "prompt": "Good points. Lastly, in the future, more volunteer work might be done online, such as translating documents or helping people through video calls, instead of only doing activities in person. How do you think this might affect communities in positive ways and negative ways? Please give one example of each.",
+    "prepSec": 0,
+    "speakSec": 45,
+    "sampleAnswers": []
+   }
+  ]
+ }
+]

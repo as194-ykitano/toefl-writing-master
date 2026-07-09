@@ -9,3 +9,6 @@ output/plan/
 outputs/plans/
 out/
 tsconfig.tsbuildinfo
+
+# TOEFL 音声ステージング（Storage アップロード用の一時ファイル）
+scripts/.toefl-audio-staging/

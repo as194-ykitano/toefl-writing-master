@@ -28,6 +28,7 @@ import {
   getReadingSets,
   getSkillStats,
   getSpeakingSets,
+  getWritingSets,
 } from "@/lib/prep/data-source";
 import { getPracticeType, getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
 import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId } from "@/lib/prep/types";
@@ -88,6 +89,20 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
       description: s.description,
       difficulty: s.difficulty,
       meta: `${s.tasks.length} タスク`,
+      practiceType: s.practiceType,
+    }));
+  }
+  if (skill === "writing") {
+    const list = await getWritingSets(exam);
+    return list.map((s) => ({
+      id: s.id,
+      title: s.title,
+      description: s.description,
+      difficulty: s.difficulty,
+      meta:
+        s.practiceType === "build-a-sentence"
+          ? `${s.items.length} 問 / ${Math.round(s.timeLimitSec / 60)} 分`
+          : `${Math.round(s.timeLimitSec / 60)} 分`,
       practiceType: s.practiceType,
     }));
   }

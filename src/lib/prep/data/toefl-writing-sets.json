@@ -1,0 +1,764 @@
+[
+ {
+  "id": "toefl-w-build-a-sentence-wbs-1",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "build-a-sentence",
+  "title": "Build a Sentence — WBS 1",
+  "description": "語順が入れ替わった語句を並べ替えて正しい文を作ります（10 問・約 7 分）",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "items": [
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q1",
+    "number": 1,
+    "context": "What did you think of the museum?",
+    "template": "The ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "who",
+     "the paintings",
+     "museum guide",
+     "excellent",
+     "showed us",
+     "was",
+     "were"
+    ],
+    "answer": "The museum guide who showed us the paintings was excellent."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q2",
+    "number": 2,
+    "context": "I heard Tom might move abroad.",
+    "template": "Do you know ______ ______ ______ ______ ______ ______ ?",
+    "words": [
+     "was",
+     "to Canada",
+     "is",
+     "if",
+     "planning",
+     "he",
+     "to go"
+    ],
+    "answer": "Do you know if he is planning to go to Canada?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q3",
+    "number": 3,
+    "context": "We’re thinking about booking that hotel.",
+    "template": "Can you tell me ______ ______ ______ ______ ______ ?",
+    "words": [
+     "will be",
+     "available",
+     "whether",
+     "about",
+     "there next weekend",
+     "any rooms"
+    ],
+    "answer": "Can you tell me whether any rooms will be available there next weekend?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q4",
+    "number": 4,
+    "context": "I’m really excited about the movie tonight.",
+    "template": "What time ______ ______ ______ ?",
+    "words": [
+     "the movie",
+     "starts",
+     "does",
+     "start"
+    ],
+    "answer": "What time does the movie start?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q5",
+    "number": 5,
+    "context": "The project report is due next Friday.",
+    "template": "Do you know ______ ______ ______ ______ ______ ?",
+    "words": [
+     "is",
+     "to finish",
+     "how long",
+     "everything",
+     "it",
+     "will take"
+    ],
+    "answer": "Do you know how long it will take to finish everything?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q6",
+    "number": 6,
+    "context": "I’m visiting your hometown in January.",
+    "template": "What ______ ______ ______ ______ ______ ______ ?",
+    "words": [
+     "there",
+     "you",
+     "winter",
+     "the weather",
+     "is",
+     "usually like",
+     "in"
+    ],
+    "answer": "What is the weather usually like there in winter?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q7",
+    "number": 7,
+    "context": "I still need to get some things for the trip.",
+    "template": "______ ______ ______ ______ ?",
+    "words": [
+     "have",
+     "do",
+     "he",
+     "you",
+     "a packing list"
+    ],
+    "answer": "Do you have a packing list?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q8",
+    "number": 8,
+    "context": "I’ll be registering for classes this afternoon.",
+    "template": "Which courses ______ ______ ______ ______ ?",
+    "words": [
+     "next semester",
+     "take",
+     "you",
+     "will",
+     "be"
+    ],
+    "answer": "Which courses will you take next semester?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q9",
+    "number": 9,
+    "context": "What did your supervisor ask you about the meeting?",
+    "template": "She ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "would",
+     "when",
+     "start",
+     "them",
+     "wanted",
+     "to know",
+     "the meeting"
+    ],
+    "answer": "She wanted to know when the meeting would start."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-1-q10",
+    "number": 10,
+    "context": "How was the workshop yesterday?",
+    "template": "I enjoyed ______ ______ ______ ______ ______ .",
+    "words": [
+     "were",
+     "the activities",
+     "organizing",
+     "by the instructors",
+     "organized",
+     "that"
+    ],
+    "answer": "I enjoyed the activities that were organized by the instructors."
+   }
+  ]
+ },
+ {
+  "id": "toefl-w-build-a-sentence-wbs-2",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "build-a-sentence",
+  "title": "Build a Sentence — WBS 2",
+  "description": "語順が入れ替わった語句を並べ替えて正しい文を作ります（10 問・約 7 分）",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "items": [
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q1",
+    "number": 1,
+    "context": "How was your homestay family?",
+    "template": "The ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "really kind",
+     "staying",
+     "to stay",
+     "host family",
+     "was",
+     "who",
+     "invited me"
+    ],
+    "answer": "The host family who invited me to stay was really kind."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q2",
+    "number": 2,
+    "context": "I heard Lisa is changing her major.",
+    "template": "Do you know ______ ______ ______ ______ ?",
+    "words": [
+     "she decided",
+     "it",
+     "why",
+     "did",
+     "to change"
+    ],
+    "answer": "Do you know why she decided to change it?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q3",
+    "number": 3,
+    "context": "We’re thinking about joining the photography club.",
+    "template": "Can you tell me ______ ______ ______ ______ ______ ?",
+    "words": [
+     "accept",
+     "new members",
+     "they",
+     "are",
+     "whether",
+     "still"
+    ],
+    "answer": "Can you tell me whether they still accept new members?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q4",
+    "number": 4,
+    "context": "I’m taking the placement test next week.",
+    "template": "______ ______ ______ ______ ?",
+    "words": [
+     "the test",
+     "where",
+     "is",
+     "take place",
+     "will"
+    ],
+    "answer": "Where will the test take place?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q5",
+    "number": 5,
+    "context": "The orientation session is on Friday.",
+    "template": "Do you know ______ ______ ______ ______ ?",
+    "words": [
+     "attending",
+     "are",
+     "students",
+     "will be",
+     "how many"
+    ],
+    "answer": "Do you know how many students will be attending?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q6",
+    "number": 6,
+    "context": "I’m going to your city in August.",
+    "template": "What ______ ______ ______ ______ ______ ?",
+    "words": [
+     "there",
+     "in August",
+     "it",
+     "usually like",
+     "is",
+     "the weather"
+    ],
+    "answer": "What is the weather usually like there in August?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q7",
+    "number": 7,
+    "context": "I need to finish this assignment tonight.",
+    "template": "______ ______ ______ ______ ______ ?",
+    "words": [
+     "homework",
+     "have",
+     "homeworks",
+     "do",
+     "you",
+     "any other"
+    ],
+    "answer": "Do you have any other homework?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q8",
+    "number": 8,
+    "context": "I’ll be free on Saturday morning.",
+    "template": "What ______ ______ ______ ______ ?",
+    "words": [
+     "do",
+     "on Saturday morning",
+     "be",
+     "will",
+     "you"
+    ],
+    "answer": "What will you do on Saturday morning?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q9",
+    "number": 9,
+    "context": "What did your friend ask you about the conference?",
+    "template": "He ______ ______ ______ ______ ______ .",
+    "words": [
+     "it",
+     "is held",
+     "would be held",
+     "wanted",
+     "where",
+     "to know"
+    ],
+    "answer": "He wanted to know where it would be held."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-2-q10",
+    "number": 10,
+    "context": "How was the lecture yesterday?",
+    "template": "I ______ ______ ______ ______ ______ .",
+    "words": [
+     "by the speaker",
+     "it",
+     "liked",
+     "were given",
+     "that",
+     "the examples"
+    ],
+    "answer": "I liked the examples that were given by the speaker."
+   }
+  ]
+ },
+ {
+  "id": "toefl-w-build-a-sentence-wbs-3",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "build-a-sentence",
+  "title": "Build a Sentence — WBS 3",
+  "description": "語順が入れ替わった語句を並べ替えて正しい文を作ります（10 問・約 7 分）",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "items": [
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q1",
+    "number": 1,
+    "context": "What do you think of your new math teacher?",
+    "template": "The ______ ______ ______ ______ ______ .",
+    "words": [
+     "who started",
+     "that",
+     "very friendly",
+     "this semester",
+     "new math teacher",
+     "is"
+    ],
+    "answer": "The new math teacher who started this semester is very friendly."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q2",
+    "number": 2,
+    "context": "The workshop was suddenly canceled.",
+    "template": "Can you tell me ______ ______ ______ ______ ?",
+    "words": [
+     "was",
+     "the workshop",
+     "that",
+     "why",
+     "canceled"
+    ],
+    "answer": "Can you tell me why the workshop was canceled?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q3",
+    "number": 3,
+    "context": "I’m thinking about renting an apartment near campus.",
+    "template": "I was wondering ______ ______ ______ ______ .",
+    "words": [
+     "will go up",
+     "they",
+     "the rent",
+     "if",
+     "next year"
+    ],
+    "answer": "I was wondering if the rent will go up next year."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q4",
+    "number": 4,
+    "context": "I’m excited about the campus tour.",
+    "template": "What time ______ ______ ______ ______ ?",
+    "words": [
+     "did",
+     "the tour",
+     "does",
+     "tomorrow",
+     "begin"
+    ],
+    "answer": "What time does the tour begin tomorrow?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q5",
+    "number": 5,
+    "context": "I’m trying to plan my schedule for next semester.",
+    "template": "Do you know ______ ______ ______ ______ ?",
+    "words": [
+     "credits",
+     "to graduate",
+     "how many",
+     "do",
+     "I need"
+    ],
+    "answer": "Do you know how many credits I need to graduate?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q6",
+    "number": 6,
+    "context": "I’m visiting your city in January.",
+    "template": "Do you know ______ ______ ______ ______ ______ ______ ?",
+    "words": [
+     "in January",
+     "snows",
+     "there",
+     "is",
+     "whether",
+     "it",
+     "a lot"
+    ],
+    "answer": "Do you know whether it snows a lot there in January?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q7",
+    "number": 7,
+    "context": "I still haven’t decided what to bring to the picnic.",
+    "template": "______ ______ ______ ______ ______ ______ ?",
+    "words": [
+     "things we need",
+     "which",
+     "you",
+     "have",
+     "of",
+     "Do",
+     "a list"
+    ],
+    "answer": "Do you have a list of things we need?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q8",
+    "number": 8,
+    "context": "Course registration opens next Monday.",
+    "template": "Which class ______ ______ ______ ______ ______ ?",
+    "words": [
+     "to take",
+     "to",
+     "planning",
+     "are",
+     "first",
+     "you"
+    ],
+    "answer": "Which class are you planning to take first?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q9",
+    "number": 9,
+    "context": "What did your advisor ask you after the meeting?",
+    "template": "She ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "you would",
+     "wanted",
+     "knowing",
+     "the report",
+     "when",
+     "submit",
+     "to know"
+    ],
+    "answer": "She wanted to know when you would submit the report."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-3-q10",
+    "number": 10,
+    "context": "I heard a new dorm opened last year.",
+    "template": "The ______ ______ ______ ______ ______ .",
+    "words": [
+     "dorm",
+     "already",
+     "is",
+     "that",
+     "full",
+     "that was built last year"
+    ],
+    "answer": "The dorm that was built last year is already full."
+   }
+  ]
+ },
+ {
+  "id": "toefl-w-build-a-sentence-wbs-4",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "build-a-sentence",
+  "title": "Build a Sentence — WBS 4",
+  "description": "語順が入れ替わった語句を並べ替えて正しい文を作ります（10 問・約 7 分）",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "items": [
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q1",
+    "number": 1,
+    "context": "How was the seminar this morning?",
+    "template": "Our ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "climate policy",
+     "talked about",
+     "which",
+     "answered every question",
+     "who",
+     "clearly",
+     "guest speaker"
+    ],
+    "answer": "Our guest speaker who talked about climate policy answered every question clearly."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q2",
+    "number": 2,
+    "context": "I need to catch a flight tonight.",
+    "template": "Could you tell me ______ ______ ______ ______ ______ ______ ?",
+    "words": [
+     "supposed",
+     "to the airport",
+     "the next shuttle bus",
+     "is",
+     "supposing",
+     "when",
+     "to arrive"
+    ],
+    "answer": "Could you tell me when the next shuttle bus to the airport is supposed to arrive?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q3",
+    "number": 3,
+    "context": "The tutor said this before the class ended.",
+    "template": "If ______ any help, ______ ______ ______ ______ .",
+    "words": [
+     "me",
+     "with the statistics assignment",
+     "you need",
+     "to",
+     "you can email",
+     "this weekend"
+    ],
+    "answer": "If you need any help with the statistics assignment, you can email me this weekend."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q4",
+    "number": 4,
+    "context": "How was the reading for tomorrow’s class?",
+    "template": "The article ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "it",
+     "than I expected",
+     "for homework",
+     "that",
+     "was",
+     "more difficult",
+     "we read"
+    ],
+    "answer": "The article that we read for homework was more difficult than I expected."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q5",
+    "number": 5,
+    "context": "Do you want to go out for dinner?",
+    "template": "I’m not sure ______ ______ ______ ______ ______ ______ .",
+    "words": [
+     "able",
+     "the presentation slides",
+     "I’ll be",
+     "should",
+     "whether",
+     "to finish",
+     "before midnight"
+    ],
+    "answer": "I’m not sure whether I’ll be able to finish the presentation slides before midnight."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q6",
+    "number": 6,
+    "context": "I’m filling out the form for the orientation camp.",
+    "template": "What kind of accommodation ______ ______ ______ ______ ______ ?",
+    "words": [
+     "international students",
+     "when",
+     "will be",
+     "available",
+     "during the first week",
+     "for"
+    ],
+    "answer": "What kind of accommodation will be available for international students during the first week?"
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q7",
+    "number": 7,
+    "context": "You got an email from Mia, right?",
+    "template": "She asked ______ ______ ______ ______ ______ .",
+    "words": [
+     "the updated file",
+     "she should",
+     "who",
+     "that",
+     "send",
+     "to"
+    ],
+    "answer": "She asked who she should send the updated file to."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q8",
+    "number": 8,
+    "context": "Why was the class delayed this afternoon?",
+    "template": "The lab equipment ______ ______ ______ ______ ______ .",
+    "words": [
+     "it",
+     "checked",
+     "before the experiment",
+     "was",
+     "started",
+     "by the technician"
+    ],
+    "answer": "The lab equipment was checked by the technician before the experiment started."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q9",
+    "number": 9,
+    "context": "How did people react to his speech?",
+    "template": "What ______ ______ was ______ ______ ______ .",
+    "words": [
+     "at",
+     "responded to his question",
+     "surprised me",
+     "the audience",
+     "most",
+     "how quickly"
+    ],
+    "answer": "What surprised me most was how quickly the audience responded to his question."
+   },
+   {
+    "id": "toefl-w-build-a-sentence-wbs-4-q10",
+    "number": 10,
+    "context": "What did your classmate ask you after class?",
+    "template": "She wanted to know ______ ______ ______ ______ ______ .",
+    "words": [
+     "chosen",
+     "for the final paper",
+     "to choose",
+     "whether",
+     "I had already",
+     "a topic"
+    ],
+    "answer": "She wanted to know whether I had already chosen a topic for the final paper."
+   }
+  ]
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-1",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Study Room Reservation Problem",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nYou recently booked a study room in the campus library for a group project meeting.\nWhen your group arrived, another group was already using the same room, and they also had a reservation confirmation.\nYour group had to look for another place to work, and it was noisy and hard to concentrate.\nYou want to inform the library staff about the problem and ask how to avoid this situation in the future.\nWrite an email to the library staff. In your email, do the following.\n・Explain what happened with the study room reservation.\n・Describe how the problem affected your group.\n・Ask what the library can do to prevent this from happening again.\nWrite as much as you can and in complete sentences.",
+  "to": "studyrooms@rivercollege.edu",
+  "subject": "Study Room Reservation Problem",
+  "sampleAnswer": "Dear Library Staff,\n\nI am writing about a problem my group had with a study room reservation yesterday. I booked Room 204 from 6:00 to 8:00 p.m. through the online system and received a confirmation, but when we arrived another group was already in the room and said they had the same time reserved. As a result, the five of us had to move to the open area on the first floor, which was noisy and made it hard to discuss our project. Could you please check what went wrong with the booking system and let me know how we can avoid this kind of double booking in the future? I would really appreciate any advice, such as whether we should also confirm our reservation at the desk.\n\nBest regards,",
+  "promptJa": "メールを書く\nこれからいくつかの情報を読み、その情報を使ってメールを書きます。\nメールを書く時間は 7 分です。\nあなたは最近、グループプロジェクトのミーティングのために、大学図書館の自習室を予約しました。\nしかしグループで部屋に行くと、すでに別のグループがその部屋を利用しており、そのグループも予約確認メールを持っていました。\nあなたのグループは別の場所を探さなければならず、その場所はうるさくて集中しにくい環境でした。\nあなたは、この問題について図書館スタッフに知らせ、今後同じことが起きないようにしたいと考えています。\n図書館スタッフにメールを書きなさい。メールの中で、次のことを行ってください。\n・自習室の予約で何が起こったのか説明する。\n・その問題がグループにどのような影響を与えたか述べる。\n・今後このようなことが起こらないよう、図書館側でどのような対応ができるか尋ねる。\nできるだけ多く書き、完全な文で書きなさい。\n宛先・件名：\nTo: studyrooms@rivercollege.edu\nSubject: Study Room Reservation Problem"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-2",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Question about Online Volunteer Application",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nYour university recently started a new community volunteer program and created a website where students can apply online. You visited the site and decided to apply for two volunteer activities. However, after you filled out the form and clicked “submit,” the page froze and you did not see any confirmation message. You are not sure your application was received.\nWrite an email to the volunteer program coordinator. In your email, do the following.\n・Tell the coordinator what you like about the new volunteer program.\n・Describe the problem you had with the online application form.\n・Ask about the status of your application and what you should do next.\nWrite as much as you can and in complete sentences.",
+  "to": "volunteer@lakeviewuniversity.edu",
+  "subject": "Question about Online Volunteer Application",
+  "sampleAnswer": "Hi Coordinator,\n\nI hope you are doing well. I wanted to say that I’m very interested in the new community volunteer program at Lakeview University; I think it’s a great idea to connect students with local organizations. Yesterday, I tried to apply for two activities using the online form on the website. After I filled in my information and clicked “submit,” the page froze and never showed a confirmation message, so I’m not sure if my application was sent successfully. Could you please check whether you received my application and let me know if I need to submit it again? I would really appreciate any help you can provide.\n\nBest regards,",
+  "promptJa": "メールを書く\nこれからいくつかの情報を読み、その情報を使ってメールを書きます。\nメールを書く時間は 7 分です。\nあなたの大学では最近、新しいコミュニティ・ボランティア・プログラムが始まり、学生がオンラインで応募できるウェブサイトが作られました。あなたはそのサイトを見て、2つのボランティア活動に応募することにしました。しかし、申込フォームに入力して「submit」をクリックしたところ、ページが固まってしまい、確認メッセージも表示されませんでした。応募がきちんと送信されたかどうか分かりません。\nボランティア・プログラムのコーディネーターにメールを書きなさい。メールの中で、次のことを行ってください。\n・新しいボランティア・プログラムのどんな点が良いと思うか伝える。\n・オンライン申込フォームでどのような問題があったか説明する。\n・自分の応募が今どうなっているのか、また今後どうすべきかを尋ねる。\nできるだけ多く書き、完全な文で書きなさい。\n宛先・件名：\nTo: volunteer@lakeviewuniversity.edu\nSubject: Question about Online Volunteer Application"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-3",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Project Management App",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nYour coworker, Kevin, recently suggested that your team start using a new project management app to organize tasks. You agreed to try it for a few weeks. However, the app has been difficult to use, and it has caused some confusion about deadlines. Several team members are unhappy with it, and you want to talk with Kevin about other options.\nWrite an email to Kevin. In your email, do the following.\n・Explain what problems your team has had with the new app.\n・Describe how the team has reacted to using it.\n・Suggest alternative ways to manage your team’s tasks.\nWrite as much as you can and in complete sentences.",
+  "to": "Kevin",
+  "subject": "Project Management App",
+  "sampleAnswer": "Hi Kevin,\n\nI hope you’re doing well. Thanks again for suggesting the new project management app for our team; I appreciate that you’re always looking for ways to improve how we work. However, after using it for the past two weeks, we’ve had some difficulties. The interface is a bit confusing, it takes several steps just to update simple tasks, and the notifications don’t always appear, so a few deadlines were almost missed. Several team members have said they would prefer to go back to our shared spreadsheet or use a simpler app. Would you be open to talking about other options at our next meeting, maybe combining a basic checklist with our calendar so everything is easier to follow?\n\nBest regards,\n\n[Your Name]"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-4",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Final Project Group Assignment",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nYesterday, your professor held an important class meeting to introduce the final group project and assign students to groups. On the same morning, you suddenly felt sick and had to visit the campus clinic. Because of this, you missed the class and do not know which group you are in or what you are supposed to do for the project. You want to contact your professor.\nWrite an email to your professor. In your email, do the following.\n・Apologize for missing the class and briefly explain why you were absent.\n・Ask for information about the group you were assigned to.\n・Ask what you should do to catch up on the project.\nWrite as much as you can and in complete sentences.",
+  "to": "Professor Lee",
+  "subject": "Final Project Group Assignment",
+  "sampleAnswer": "Dear Professor Lee,\n\nI’m writing to apologize for missing class yesterday. I woke up feeling very sick and had to go to the campus clinic, so I wasn’t able to attend the meeting about the final group project. I heard that groups were assigned and that you explained the project requirements, but I don’t know which group I’m in or what tasks we are supposed to do. Could you please let me know which group I was placed in and who my group members are? I would also appreciate any instructions or materials I should review so that I can catch up and be prepared for our first group meeting.\n\nBest regards,\n\n[Your Name]"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-5",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Question about my short story file",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nA new online fiction magazine is asking readers to submit short stories, and you decided to send one of your stories. You filled out the online submission form and attached a file. Later that day, you realized that you attached the wrong file—it was an early draft, not your final version. You want to contact the editor and ask what to do.\nWrite an email to the editor of the magazine. In your email, do the following.\n・Tell the editor what you like about the new magazine.\n・Explain the mistake you made with your story file.\n・Ask if it is possible to send the correct version of your story.\nWrite as much as you can and in complete sentences.",
+  "to": "editor@silverlanestories.com",
+  "subject": "Question about my short story file",
+  "sampleAnswer": "Dear Editor,\n\nI’m writing because I really enjoy the new Silver Lane Stories magazine. I like how you publish short, imaginative pieces from new writers and make them available online for free. Yesterday I submitted one of my short stories through your website, but I realized later that I attached the wrong file—it was an early draft, not the final version I wanted to share. Could you please let me know if it is possible to replace that file with the corrected version of my story? I would be very grateful if you could tell me how to resend it or whether I should submit it again.\n\nBest regards,\n\n[Your Name]"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-6",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Thoughts on the team-building event",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nYour coworker, Kevin, recently organized an after-work team-building event at an indoor sports center. He chose the place and encouraged everyone to join. You went with the rest of the team, but the event did not go as well as you had hoped. The center was very crowded and noisy, and some of the activities were too physical for a few team members. You want to tell Kevin how the team felt and suggest a different type of event for next time.\nWrite an email to Kevin. In your email, do the following.\n・Explain what parts of the event were difficult for the team.\n・Describe how team members felt about the activities.\n・Suggest different ideas for a future team activity.\nWrite as much as you can and in complete sentences.",
+  "to": "Kevin",
+  "subject": "Thoughts on the team-building event",
+  "sampleAnswer": "Hi Kevin,\n\nThanks again for taking the time to organize the team-building event last Friday. It was nice that so many of us could get together outside the office, and I appreciate your effort. However, the sports center turned out to be very crowded and noisy, and some of the games were quite intense. A few people mentioned that the fast-paced activities were a bit too physical for them, so they felt uncomfortable joining in and just watched from the side. Would you be open to trying a different kind of event next time, maybe a quiet dinner, a board-game night, or a simple coffee meetup? I think something more relaxed would allow everyone to participate and enjoy talking with each other.\n\nBest regards,\n\n[Your Name]"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-7",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Question about my membership price",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nLast month, you joined the campus fitness center. At the front desk, the staff member told you that there was a discounted “student membership” price, so you filled out a form and signed up. This week, you looked at your bank statement and noticed that you were charged the regular price instead of the student price. You want to contact the fitness center about this.\nWrite an email to the fitness center staff. In your email, do the following.\n・Explain how and when you signed up for the membership.\n・Describe the problem you found with the price you were charged.\n・Ask what they can do to correct the mistake and how to avoid it in the future.\nWrite as much as you can and in complete sentences.",
+  "to": "fitnesscenter@westfieldcollege.edu",
+  "subject": "Question about my membership price",
+  "sampleAnswer": "Dear Fitness Center Staff,\n\nI am writing to ask about the price of my membership. I joined the center about three weeks ago at the front desk, and the staff member there told me I could sign up for the discounted student membership, so I filled out the form and paid with my bank card. This week I checked my bank statement and saw that I was charged the regular price instead of the student price. Could you please check my account and let me know if the amount can be adjusted or if a refund is possible? I would also appreciate any advice on how to make sure I am correctly registered as a student member in the future.\n\nBest regards,\n\n[Your Name]"
+ },
+ {
+  "id": "toefl-w-write-an-email-wae-8",
+  "exam": "toefl",
+  "skill": "writing",
+  "practiceType": "write-an-email",
+  "title": "Write an Email — Question about résumé workshop",
+  "description": "7 分・80〜120 語。状況に沿ったメールを書きます",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "promptText": "Write an Email\nYou will read some information and use the information to write an email.\nYou will have 7 minutes to write the email.\nYour university’s career center recently offered a free workshop on how to write résumés and cover letters. You registered online and planned to attend. The day before the workshop, the time was changed from 3:00 p.m. to 1:00 p.m., but you did not see the email about the change. As a result, you arrived at 3:00 p.m. and missed most of the workshop. You want to contact the career center.\nWrite an email to a staff member at the career center. In your email, do the following.\n・Explain why you missed most of the workshop.\n・Say why the workshop topic is important for you.\n・Ask if there is a way for you to receive the information you missed.\nWrite as much as you can and in complete sentences.",
+  "to": "careercenter@hillviewuniversity.edu",
+  "subject": "Question about résumé workshop",
+  "sampleAnswer": "Dear Career Center Staff,\n\nI am writing about the résumé and cover letter workshop that was held yesterday. I had registered online and planned to attend at 3:00 p.m., but I did not notice the email saying that the time was changed to 1:00 p.m. Because of this, I arrived at 3:00 and only caught the last few minutes of the session. This topic is very important to me because I will start applying for internships soon and want to make sure my application materials are strong. Could you please let me know if there are slides, handouts, or another session that I can use to learn what I missed? I would really appreciate any help.\n\nBest regards,\n\n[Your Name]"
+ }
+]
