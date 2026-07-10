@@ -22,15 +22,17 @@ import {
 import MarkdownLite from "./MarkdownLite";
 import QuestionRenderer from "./QuestionRenderer";
 import { ExamTopBar, QuestionNav, usePracticeTimer } from "./exam-ui";
-import { EXAM_LABELS, ListeningSet, PracticeMode } from "@/lib/prep/types";
+import { EXAM_LABELS, ListeningSet, PracticeMode, PracticeSessionResult } from "@/lib/prep/types";
 import { isAnswerCorrect, newSessionId, saveSession } from "@/lib/prep/session-store";
 
 interface ListeningPracticeProps {
   set: ListeningSet;
   mode: PracticeMode;
+  /** 模試モード: 完了時に結果を親へ渡す（渡すと結果画面へは遷移しない） */
+  onComplete?: (result: PracticeSessionResult) => void;
 }
 
-export default function ListeningPractice({ set, mode }: ListeningPracticeProps) {
+export default function ListeningPractice({ set, mode, onComplete }: ListeningPracticeProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
@@ -57,10 +59,10 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
       const userAnswer = answers[q.id] ?? null;
       return { questionId: q.id, userAnswer, correct: isAnswerCorrect(q, userAnswer) };
     });
-    saveSession({
+    const session = {
       id: sessionId,
       exam: set.exam,
-      skill: "listening",
+      skill: "listening" as const,
       setId: set.id,
       setTitle: set.title,
       mode,
@@ -69,8 +71,10 @@ export default function ListeningPractice({ set, mode }: ListeningPracticeProps)
       correctCount: results.filter((r) => r.correct).length,
       totalCount: results.length,
       results,
-    });
-    router.push(`/results/${sessionId}`);
+    };
+    saveSession(session);
+    if (onComplete) onComplete(session);
+    else router.push(`/results/${sessionId}`);
   };
 
   const { elapsedSec, remainingSec } = usePracticeTimer(

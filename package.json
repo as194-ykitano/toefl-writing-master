@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
     "migrate-audio": "node scripts/migrate-audio.js",
     "gcp-build": "npm run build"
   },
@@ -48,6 +49,7 @@
     "eslint-config-next": "^15.5.9",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.7"
   }
 }

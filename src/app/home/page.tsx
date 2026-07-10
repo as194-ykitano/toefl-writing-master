@@ -93,7 +93,7 @@ export default function HomePage() {
             title="Mock Test"
             subtitle="フル模試・ミニ模試で現在地を測定"
             badges={["スコアレポート"]}
-            comingSoon
+            href="/mock"
             tone="amber"
             pattern="letters"
             patternText="MOCK TEST"

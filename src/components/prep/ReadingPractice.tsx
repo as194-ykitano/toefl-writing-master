@@ -17,15 +17,17 @@ import {
 } from "@/components/ui/dialog";
 import QuestionRenderer from "./QuestionRenderer";
 import { ExamTopBar, QuestionNav, usePracticeTimer } from "./exam-ui";
-import { EXAM_LABELS, PracticeMode, ReadingSet } from "@/lib/prep/types";
+import { EXAM_LABELS, PracticeMode, PracticeSessionResult, ReadingSet } from "@/lib/prep/types";
 import { isAnswerCorrect, newSessionId, saveSession } from "@/lib/prep/session-store";
 
 interface ReadingPracticeProps {
   set: ReadingSet;
   mode: PracticeMode;
+  /** 模試モード: 完了時に結果を親へ渡す（渡すと結果画面へは遷移しない） */
+  onComplete?: (result: PracticeSessionResult) => void;
 }
 
-export default function ReadingPractice({ set, mode }: ReadingPracticeProps) {
+export default function ReadingPractice({ set, mode, onComplete }: ReadingPracticeProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
@@ -46,10 +48,10 @@ export default function ReadingPractice({ set, mode }: ReadingPracticeProps) {
         const userAnswer = answers[q.id] ?? null;
         return { questionId: q.id, userAnswer, correct: isAnswerCorrect(q, userAnswer) };
       });
-      saveSession({
+      const session = {
         id: sessionId,
         exam: set.exam,
-        skill: "reading",
+        skill: "reading" as const,
         setId: set.id,
         setTitle: set.title,
         mode,
@@ -58,10 +60,12 @@ export default function ReadingPractice({ set, mode }: ReadingPracticeProps) {
         correctCount: results.filter((r) => r.correct).length,
         totalCount: results.length,
         results,
-      });
-      router.push(`/results/${sessionId}`);
+      };
+      saveSession(session);
+      if (onComplete) onComplete(session);
+      else router.push(`/results/${sessionId}`);
     },
-    [answers, mode, questions, router, set, submitted]
+    [answers, mode, onComplete, questions, router, set, submitted]
   );
 
   const { elapsedSec, remainingSec } = usePracticeTimer(

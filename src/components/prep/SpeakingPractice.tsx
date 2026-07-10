@@ -14,6 +14,7 @@ import { ExamTopBar, formatTime } from "./exam-ui";
 import {
   EXAM_LABELS,
   PracticeMode,
+  PracticeSessionResult,
   SpeakingSet,
   SpeakingTaskFeedback,
 } from "@/lib/prep/types";
@@ -35,6 +36,8 @@ interface Recording {
 interface SpeakingPracticeProps {
   set: SpeakingSet;
   mode: PracticeMode;
+  /** 模試モード: 完了時に結果を親へ渡す（渡すと結果画面へは遷移しない） */
+  onComplete?: (result: PracticeSessionResult) => void;
 }
 
 async function analyzeRecording(
@@ -80,7 +83,7 @@ async function analyzeRecording(
   };
 }
 
-export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
+export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPracticeProps) {
   const router = useRouter();
   const [taskIndex, setTaskIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("ready");
@@ -249,10 +252,10 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
       }
     }
 
-    saveSession({
+    const session = {
       id: sessionId,
       exam: set.exam,
-      skill: "speaking",
+      skill: "speaking" as const,
       setId: set.id,
       setTitle: set.title,
       mode,
@@ -266,8 +269,10 @@ export default function SpeakingPractice({ set, mode }: SpeakingPracticeProps) {
         correct: false,
       })),
       speakingFeedback: feedback,
-    });
-    router.push(`/results/${sessionId}`);
+    };
+    saveSession(session);
+    if (onComplete) onComplete(session);
+    else router.push(`/results/${sessionId}`);
   };
 
   if (submitted) {

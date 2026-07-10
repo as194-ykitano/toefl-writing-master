@@ -14,6 +14,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import {
   BookOpenCheck,
   CalendarDays,
+  ClipboardCheck,
   ChevronsLeft,
   ChevronsRight,
   GraduationCap,
@@ -63,6 +64,7 @@ const NAV_GROUPS: NavGroup[] = [
         icon: LayoutDashboard,
         activeFor: ["/overview", "/results"],
       },
+      { href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] },
       { href: "/review", label: "復習", icon: BookOpenCheck, activeFor: ["/review"] },
       { href: "/study-plan", label: "学習プラン", icon: CalendarDays, activeFor: ["/study-plan"] },
     ],
