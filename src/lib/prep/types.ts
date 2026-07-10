@@ -215,6 +215,8 @@ export interface EssayWritingSet {
   minWords?: number;
   targetWords?: number;
   sampleAnswer?: string;
+  /** 解答例の日本語訳（練習モードで参照） */
+  sampleAnswerJa?: string;
 }
 
 export type WritingPracticeSet = EmailWritingSet | BuildSentenceSet | EssayWritingSet;

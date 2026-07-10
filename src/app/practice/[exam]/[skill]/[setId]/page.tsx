@@ -11,6 +11,7 @@ import ReadingPractice from "@/components/prep/ReadingPractice";
 import ListeningPractice from "@/components/prep/ListeningPractice";
 import SpeakingPractice from "@/components/prep/SpeakingPractice";
 import EssayWritingPractice from "@/components/prep/EssayWritingPractice";
+import AcademicDiscussionPractice from "@/components/prep/AcademicDiscussionPractice";
 import BuildSentencePractice from "@/components/prep/BuildSentencePractice";
 import {
   getListeningSet,
@@ -74,8 +75,11 @@ function PracticePlayer() {
     if (writingSet.practiceType === "build-a-sentence") {
       return <BuildSentencePractice set={writingSet} mode={mode} />;
     }
-    // Write an Email / IELTS Task 1・2 / Academic Discussion は
-    // 旧 Writing Masters 版と同等の深い添削フロー（EssayWritingPractice）へ
+    // Academic Discussion は本番 ETS 風レイアウト（Cut/Paste/Undo/Redo・Stance つき）
+    if (writingSet.practiceType === "academic-discussion") {
+      return <AcademicDiscussionPractice set={writingSet} mode={mode} />;
+    }
+    // Write an Email / IELTS Task 1・2 は深い添削フロー（EssayWritingPractice）へ
     return <EssayWritingPractice set={writingSet} mode={mode} />;
   }
 

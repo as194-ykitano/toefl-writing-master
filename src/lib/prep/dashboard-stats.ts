@@ -113,8 +113,15 @@ export function buildDashboardData({
   const start = periodStart(period, now);
   const inRange = (iso: string) => start === null || new Date(iso).getTime() >= start;
 
-  const examSessions = sessions.filter((s) => s.exam === exam && inRange(s.finishedAt));
-  const examWriting = writingResults.filter((w) => w.exam === exam && inRange(w.finishedAt));
+  // 古い順にソート（同日の複数提出でも新しい方が右＝末尾に来るように、時刻で並べる）
+  const byTime = (a: { finishedAt: string }, b: { finishedAt: string }) =>
+    new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime();
+  const examSessions = sessions
+    .filter((s) => s.exam === exam && inRange(s.finishedAt))
+    .sort(byTime);
+  const examWriting = writingResults
+    .filter((w) => w.exam === exam && inRange(w.finishedAt))
+    .sort(byTime);
 
   const bySkill: Record<SkillId, SkillAggregate> = {
     reading: emptySkill(100),

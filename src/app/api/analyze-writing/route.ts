@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import {
   analyzeIELTSEssay,
   analyzeTOEFLAcademicDiscussion,
+  generateTOEFLAcademicDiscussionModelAnswer,
   getGrammarCorrectionsV2,
 } from "@/lib/openai";
 import type {
@@ -33,6 +34,8 @@ interface AnalyzeRequest {
   discussion?: DiscussionContent;
   to?: string;
   subject?: string;
+  /** Academic Discussion: 立場（モデル解答生成に使用） */
+  stance?: "agree" | "disagree";
 }
 
 function round025(v: number): number {
@@ -92,7 +95,8 @@ async function analyzeIelts(
 // ---- TOEFL Academic Discussion ----
 async function analyzeDiscussion(
   essayText: string,
-  discussion: DiscussionContent
+  discussion: DiscussionContent,
+  stance?: "agree" | "disagree"
 ): Promise<WritingFeedback> {
   const fb = await analyzeTOEFLAcademicDiscussion(essayText, {
     professor: discussion.professor,
@@ -100,6 +104,23 @@ async function analyzeDiscussion(
     student2: discussion.student2,
     question: discussion.question,
   });
+  // 選択した立場（Agree / Disagree）に沿ったモデル解答を生成し、解答例として提示
+  let modelAnswer: string | undefined;
+  if (stance) {
+    try {
+      modelAnswer = await generateTOEFLAcademicDiscussionModelAnswer(stance, essayText, {
+        professor: discussion.professor,
+        student1: discussion.student1,
+        student2: discussion.student2,
+        question: discussion.question,
+        professorName: discussion.professorName,
+        student1Name: discussion.student1Name,
+        student2Name: discussion.student2Name,
+      });
+    } catch {
+      modelAnswer = undefined;
+    }
+  }
   const s = fb.detailedScores;
   const scoreItems = [
     { label: "Topic Development", score: s.topicDevelopment, max: 5 },
@@ -136,6 +157,7 @@ async function analyzeDiscussion(
     grammarCorrections: normalizeGrammar(
       fb.grammarCorrections?.corrections as WritingGrammarCorrection[] | undefined
     ),
+    sampleAnswer: modelAnswer,
   };
 }
 
@@ -259,7 +281,7 @@ export async function POST(request: Request) {
         if (!body.discussion) {
           return NextResponse.json({ error: "discussion is required" }, { status: 400 });
         }
-        feedback = await analyzeDiscussion(essayText, body.discussion);
+        feedback = await analyzeDiscussion(essayText, body.discussion, body.stance);
         break;
       case "toefl-email":
         feedback = await analyzeEmail(

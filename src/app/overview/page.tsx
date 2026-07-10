@@ -26,6 +26,7 @@ import PrepShell from "@/components/prep/PrepShell";
 import { MiniBarChart, MiniLineChart } from "@/components/prep/charts";
 import { loadSessions } from "@/lib/prep/session-store";
 import { loadWritingResults } from "@/lib/prep/writing-store";
+import { getListeningSets, getReadingSets, getSpeakingSets } from "@/lib/prep/data-source";
 import { getPracticeTypes } from "@/lib/prep/question-types";
 import {
   buildDashboardData,
@@ -69,13 +70,47 @@ export default function OverviewPage() {
 
   const [period, setPeriod] = useState<PeriodKey>("30d");
   const [skill, setSkill] = useState<SkillId>("reading");
+  const [selectedType, setSelectedType] = useState<string | null>(null);
   const [sessions, setSessions] = useState<PracticeSessionResult[]>([]);
   const [writingResults, setWritingResults] = useState<WritingResult[]>([]);
 
+  // 技能・試験を切り替えたら問題タイプ選択をリセット（自動で最初のデータあり項目を選ぶ）
   useEffect(() => {
-    setSessions(loadSessions());
+    setSelectedType(null);
+  }, [skill, exam]);
+
+  useEffect(() => {
     setWritingResults(loadWritingResults());
   }, []);
+
+  // セッションを読み込み、practiceType が無い旧セッションはセット定義から補完する
+  // （problem-type 別集計で「その他」に落ちてしまうのを防ぐ）
+  useEffect(() => {
+    const raw = loadSessions();
+    setSessions(raw);
+    let cancelled = false;
+    (async () => {
+      const [rd, ls, sp] = await Promise.all([
+        getReadingSets(activeExam),
+        getListeningSets(activeExam),
+        getSpeakingSets(activeExam),
+      ]);
+      const map = new Map<string, string | undefined>();
+      for (const s of [...rd, ...ls]) map.set(s.id, s.practiceType);
+      for (const s of sp) map.set(s.id, s.practiceType);
+      if (cancelled) return;
+      setSessions((prev) =>
+        prev.map((se) =>
+          se.practiceType || !map.has(se.setId)
+            ? se
+            : { ...se, practiceType: map.get(se.setId) }
+        )
+      );
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeExam]);
 
   const data = useMemo(
     () => buildDashboardData({ exam: activeExam, period, sessions, writingResults }),
@@ -100,6 +135,20 @@ export default function OverviewPage() {
       }
       return entries;
     }, [catalogTypes, skillAgg]);
+
+  // 選択中の問題タイプ（未選択ならデータのある最初のタイプ、無ければ技能全体）
+  const firstWithData = typeEntries.find((t) => t.agg && t.agg.attempts > 0)?.id ?? null;
+  const effectiveType =
+    selectedType && skillAgg.byType[selectedType] ? selectedType : firstWithData;
+  const chartAgg = effectiveType ? skillAgg.byType[effectiveType] : null;
+  const chartPoints = (chartAgg ? chartAgg.points : skillAgg.points).map((p) => ({
+    label: p.date.slice(5).replace("-", "/"),
+    value: p.value,
+  }));
+  const chartScoreMax = chartAgg?.scoreMax ?? skillAgg.scoreMax;
+  const chartAvg = chartAgg ? chartAgg.avgScore : skillAgg.avgScore;
+  const effectiveTypeLabel =
+    (effectiveType && typeEntries.find((t) => t.id === effectiveType)?.label) || null;
 
   const totals = data.totals;
 
@@ -149,18 +198,21 @@ export default function OverviewPage() {
           </div>
         </div>
 
-        {/* サマリーカード */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-          {summaryCards.map((c) => (
-            <div key={c.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2 ${c.tone}`}>
-                <c.icon className="w-4 h-4" />
+        {/* サマリーカード（合計学習時間 / 問題回答数 / 提出数 / 正答率 / 連続日数 / 文法ミス / 語彙）
+            必要なデータ設計を再検討するまで一時的に非表示。summaryCards は残置。 */}
+        {false && (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            {summaryCards.map((c) => (
+              <div key={c.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2 ${c.tone}`}>
+                  <c.icon className="w-4 h-4" />
+                </div>
+                <div className="text-[11px] text-gray-400 leading-tight">{c.label}</div>
+                <div className="text-lg font-bold text-gray-900 mt-0.5">{c.value}</div>
               </div>
-              <div className="text-[11px] text-gray-400 leading-tight">{c.label}</div>
-              <div className="text-lg font-bold text-gray-900 mt-0.5">{c.value}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* 技能タブ */}
         <div className="grid grid-cols-4 gap-2">
@@ -193,26 +245,37 @@ export default function OverviewPage() {
           })}
         </div>
 
-        {/* 平均スコア推移 */}
+        {/* 平均スコア推移（選択中の問題タイプに応じて変化） */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-1">
-            <h2 className="font-semibold text-gray-900">{EXAM_LABELS[activeExam]} {skillMeta.label} の平均スコア推移</h2>
-            {skillAgg.avgScore !== null && (
-              <span className="text-sm font-bold" style={{ color: skillMeta.color }}>
-                {formatScore(skill, skillAgg.avgScore, skillAgg.scoreMax)}
-              </span>
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div>
+              <h2 className="font-semibold text-gray-900">
+                {effectiveTypeLabel
+                  ? `${effectiveTypeLabel} の推移`
+                  : `${skillMeta.label} の平均スコア推移`}
+              </h2>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {skill === "reading" || skill === "listening"
+                  ? "正答率（%）の推移"
+                  : skill === "speaking"
+                    ? "推定バンドの推移"
+                    : "添削スコアの推移"}
+                {" ・ "}
+                下のタイプを選ぶとグラフが切り替わります
+              </p>
+            </div>
+            {chartAvg !== null && (
+              <div className="text-right">
+                <div className="text-xl font-bold tabular-nums" style={{ color: skillMeta.color }}>
+                  {formatScore(skill, chartAvg, chartScoreMax)}
+                </div>
+                <div className="text-[10px] text-gray-400">平均</div>
+              </div>
             )}
           </div>
-          <p className="text-xs text-gray-400 mb-3">
-            {skill === "reading" || skill === "listening"
-              ? "各演習の正答率の推移"
-              : skill === "speaking"
-                ? "各提出の推定バンドの推移"
-                : "各添削スコアの推移"}
-          </p>
           <MiniLineChart
-            points={skillAgg.points.map((p) => ({ value: p.value }))}
-            max={skill === "reading" || skill === "listening" ? 100 : skillAgg.scoreMax}
+            points={chartPoints}
+            max={skill === "reading" || skill === "listening" ? 100 : chartScoreMax}
             color={skillMeta.color}
             format={(v) =>
               skill === "reading" || skill === "listening" ? `${Math.round(v)}` : `${Math.round(v * 10) / 10}`
@@ -220,60 +283,71 @@ export default function OverviewPage() {
           />
         </div>
 
-        {/* 問題タイプ別 */}
+        {/* 問題タイプ別（クリックで上のグラフを切替） */}
         <div>
           <h2 className="font-semibold text-gray-900 mb-3">{skillMeta.label} の問題タイプ別</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {typeEntries.map((t) => {
-              const has = t.agg && t.agg.attempts > 0 && t.agg.avgScore !== null;
+              const has = !!(t.agg && t.agg.attempts > 0 && t.agg.avgScore !== null);
+              const active = t.id === effectiveType;
               return (
-                <div
+                <button
                   key={t.id}
-                  className={`rounded-xl border p-4 ${
-                    has ? "border-gray-200/70 bg-white" : "border-gray-100 bg-gray-50/50"
+                  onClick={() => has && setSelectedType(t.id)}
+                  disabled={!has}
+                  className={`rounded-xl border p-3.5 text-left transition-all ${
+                    active
+                      ? "border-transparent bg-white shadow-sm"
+                      : has
+                        ? "border-gray-200/70 bg-white hover:border-gray-300 hover:shadow-sm"
+                        : "border-gray-100 bg-gray-50/50 cursor-default"
                   }`}
+                  style={active ? { boxShadow: `0 0 0 2px ${skillMeta.color}` } : undefined}
                 >
                   <div className="text-[11px] text-gray-500 leading-tight truncate" title={t.label}>
                     {t.label}
                     <span className="text-gray-400"> ({t.agg?.attempts ?? 0})</span>
                   </div>
                   {has ? (
-                    <div className="mt-1 text-lg font-bold text-gray-900">
+                    <div className="mt-1 text-base font-bold text-gray-900 tabular-nums">
                       {formatScore(skill, t.agg!.avgScore!, t.agg!.scoreMax)}
                     </div>
                   ) : (
                     <div className="mt-1 text-sm font-medium text-gray-300">データなし</div>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>
         </div>
 
-        {/* アクティビティ系列 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <h3 className="text-sm font-semibold text-gray-900">解答した問題数</h3>
+        {/* アクティビティ系列（解答した問題数 / 学習時間 / 文法ミス数の推移）
+            表示する内容・見た目を再検討するまで一時的に非表示。 */}
+        {false && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <h3 className="text-sm font-semibold text-gray-900">解答した問題数</h3>
+              </div>
+              <MiniBarChart points={data.daily.map((d) => ({ value: d.questions }))} color="#10b981" height={120} />
             </div>
-            <MiniBarChart points={data.daily.map((d) => ({ value: d.questions }))} color="#10b981" height={120} />
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <Clock className="w-4 h-4 text-blue-500" />
-              <h3 className="text-sm font-semibold text-gray-900">学習時間（分）</h3>
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <Clock className="w-4 h-4 text-blue-500" />
+                <h3 className="text-sm font-semibold text-gray-900">学習時間（分）</h3>
+              </div>
+              <MiniBarChart points={data.daily.map((d) => ({ value: d.minutes }))} color="#3b82f6" height={120} />
             </div>
-            <MiniBarChart points={data.daily.map((d) => ({ value: d.minutes }))} color="#3b82f6" height={120} />
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-4 h-4 text-rose-500" />
-              <h3 className="text-sm font-semibold text-gray-900">文法ミス数の推移</h3>
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle className="w-4 h-4 text-rose-500" />
+                <h3 className="text-sm font-semibold text-gray-900">文法ミス数の推移</h3>
+              </div>
+              <MiniBarChart points={data.daily.map((d) => ({ value: d.grammarMistakes }))} color="#f43f5e" height={120} />
             </div>
-            <MiniBarChart points={data.daily.map((d) => ({ value: d.grammarMistakes }))} color="#f43f5e" height={120} />
           </div>
-        </div>
+        )}
 
         {/* 最近の演習 / 未接続項目の注記 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

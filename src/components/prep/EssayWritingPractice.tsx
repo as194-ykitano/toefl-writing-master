@@ -58,6 +58,8 @@ export default function EssayWritingPractice({ set, mode }: EssayWritingPractice
   const rubric = rubricOf(set);
   const exitHref = `/practice/${set.exam}/writing`;
   const minWords = minWordsHint(set);
+  // 練習モードのみ日本語訳を表示（本番モードでは非表示）
+  const isPractice = mode === "practice";
 
   const { elapsedSec, remainingSec } = usePracticeTimer(
     mode,
@@ -149,63 +151,95 @@ export default function EssayWritingPractice({ set, mode }: EssayWritingPractice
         exitHref={exitHref}
       />
 
-      <div className="flex-1 max-w-6xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* 左: 問題 */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
-          <PromptPanel set={set} />
-        </div>
-
-        {/* 右: 回答 */}
-        <div className="space-y-4">
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-sm font-semibold text-gray-700">Your Response</div>
-              <div
-                className={`text-xs ${
-                  wordCount >= minWords ? "text-emerald-600" : "text-gray-400"
-                }`}
-              >
-                {wordCount} words（目安 {minWords} 語以上）
-              </div>
-            </div>
-            <Textarea
-              value={essay}
-              onChange={(e) => setEssay(e.target.value)}
-              placeholder={isEmailSet(set) ? "Dear ..., " : "Write your response here..."}
-              disabled={submitting}
-              className="min-h-[24rem] text-sm leading-relaxed"
-            />
-            {error && (
-              <p className="mt-3 text-sm text-red-600">添削エラー: {error}</p>
-            )}
-            <Button
-              className="mt-4 bg-eg hover:bg-eg-dark text-black self-end"
-              onClick={handleSubmit}
-              disabled={submitting || essay.trim().length === 0}
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> AI 添削中...
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4 mr-1.5" /> 提出して添削を受ける
-                </>
-              )}
-            </Button>
-            <p className="mt-2 text-[11px] text-gray-400 self-end">
-              提出すると添削結果ページに移動します（結果は保存され、後から見返せます）
-            </p>
+      {(
+        <div className="flex-1 max-w-6xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* 左: 問題 */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+            <PromptPanel set={set} isPractice={isPractice} />
           </div>
+          {/* 右: 回答 */}
+          <ResponseEditor
+            essay={essay}
+            setEssay={setEssay}
+            wordCount={wordCount}
+            minWords={minWords}
+            submitting={submitting}
+            error={error}
+            onSubmit={handleSubmit}
+            placeholder={isEmailSet(set) ? "Dear ..., " : "Write your response here..."}
+            label="Your Response"
+          />
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
+// ---- 回答エディタ（AD / その他で共通） ----
+
+function ResponseEditor({
+  essay,
+  setEssay,
+  wordCount,
+  minWords,
+  submitting,
+  error,
+  onSubmit,
+  placeholder,
+  label,
+}: {
+  essay: string;
+  setEssay: (v: string) => void;
+  wordCount: number;
+  minWords: number;
+  submitting: boolean;
+  error: string | null;
+  onSubmit: () => void;
+  placeholder: string;
+  label: string;
+}) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col lg:max-h-[calc(100vh-8rem)]">
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-sm font-semibold text-gray-700">{label}</div>
+        <div className={`text-xs ${wordCount >= minWords ? "text-emerald-600" : "text-gray-400"}`}>
+          {wordCount} words（目安 {minWords} 語以上）
+        </div>
+      </div>
+      <Textarea
+        value={essay}
+        onChange={(e) => setEssay(e.target.value)}
+        placeholder={placeholder}
+        disabled={submitting}
+        className="min-h-[24rem] flex-1 text-sm leading-relaxed"
+      />
+      {error && <p className="mt-3 text-sm text-red-600">添削エラー: {error}</p>}
+      <Button
+        className="mt-4 bg-eg hover:bg-eg-dark text-black self-end"
+        onClick={onSubmit}
+        disabled={submitting || essay.trim().length === 0}
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> AI 添削中...
+          </>
+        ) : (
+          <>
+            <Send className="w-4 h-4 mr-1.5" /> 提出して添削を受ける
+          </>
+        )}
+      </Button>
+      <p className="mt-2 text-[11px] text-gray-400 self-end">
+        提出すると添削結果ページに移動します（結果は保存され、後から見返せます）
+      </p>
+    </div>
+  );
+}
+
+
 // ---- 問題パネル（ルーブリック別の表示） ----
 
-function PromptPanel({ set }: { set: SupportedSet }) {
+function PromptPanel({ set, isPractice }: { set: SupportedSet; isPractice: boolean }) {
   if (isEmailSet(set)) {
     return (
       <>
@@ -229,7 +263,7 @@ function PromptPanel({ set }: { set: SupportedSet }) {
             )}
           </div>
         )}
-        {set.promptJa && <JaTranslation text={set.promptJa} />}
+        {isPractice && set.promptJa && <JaTranslation text={set.promptJa} />}
       </>
     );
   }
@@ -250,7 +284,7 @@ function PromptPanel({ set }: { set: SupportedSet }) {
           <div className="text-[11px] font-semibold text-eg-deep mb-1">設問</div>
           {d.question}
         </div>
-        {set.promptJa && <JaTranslation text={set.promptJa} />}
+        {isPractice && set.promptJa && <JaTranslation text={set.promptJa} />}
       </>
     );
   }
@@ -276,7 +310,7 @@ function PromptPanel({ set }: { set: SupportedSet }) {
           />
         </div>
       )}
-      {set.promptJa && <JaTranslation text={set.promptJa} />}
+      {isPractice && set.promptJa && <JaTranslation text={set.promptJa} />}
     </>
   );
 }
