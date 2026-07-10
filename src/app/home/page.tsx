@@ -32,14 +32,41 @@ interface SkillTab {
   title: string;
   description: string;
   icon: typeof BookOpen;
-  accent: string; // アクティブバーの色
+  /** ライトモードのアクティブ塗り（グラデーション） */
+  accent: string;
+  /** ダークモードのアクティブ時：ベタ塗りをやめ、外枠を色で縁取り + 落ち着いた色にする */
+  darkBorder: string;
+  darkTint: string;
+  darkTitle: string;
+  darkDesc: string;
+  darkIcon: string;
 }
 
 const SKILL_TABS: SkillTab[] = [
-  { skill: "reading", title: "Reading", description: "問題タイプ別に読解を演習", icon: BookOpen, accent: "from-blue-500 to-blue-600" },
-  { skill: "listening", title: "Listening", description: "音声を聞いて設問に回答", icon: Headphones, accent: "from-violet-500 to-violet-600" },
-  { skill: "speaking", title: "Speaking", description: "準備 → 録音 → AI 添削", icon: Mic, accent: "from-orange-500 to-orange-600" },
-  { skill: "writing", title: "Writing", description: "AI 添削つきで英作文", icon: PenLine, accent: "from-emerald-500 to-emerald-600" },
+  {
+    skill: "reading", title: "Reading", description: "問題タイプ別に読解を演習", icon: BookOpen,
+    accent: "from-blue-500 to-blue-600",
+    darkBorder: "dark:border-blue-500/70", darkTint: "dark:bg-blue-500/10",
+    darkTitle: "dark:text-blue-200", darkDesc: "dark:text-blue-200/70", darkIcon: "dark:text-blue-400",
+  },
+  {
+    skill: "listening", title: "Listening", description: "音声を聞いて設問に回答", icon: Headphones,
+    accent: "from-violet-500 to-violet-600",
+    darkBorder: "dark:border-violet-500/70", darkTint: "dark:bg-violet-500/10",
+    darkTitle: "dark:text-violet-200", darkDesc: "dark:text-violet-200/70", darkIcon: "dark:text-violet-400",
+  },
+  {
+    skill: "speaking", title: "Speaking", description: "準備 → 録音 → AI 添削", icon: Mic,
+    accent: "from-orange-500 to-orange-600",
+    darkBorder: "dark:border-orange-500/70", darkTint: "dark:bg-orange-500/10",
+    darkTitle: "dark:text-orange-200", darkDesc: "dark:text-orange-200/70", darkIcon: "dark:text-orange-400",
+  },
+  {
+    skill: "writing", title: "Writing", description: "AI 添削つきで英作文", icon: PenLine,
+    accent: "from-emerald-500 to-emerald-600",
+    darkBorder: "dark:border-emerald-500/70", darkTint: "dark:bg-emerald-500/10",
+    darkTitle: "dark:text-emerald-200", darkDesc: "dark:text-emerald-200/70", darkIcon: "dark:text-emerald-400",
+  },
 ];
 
 function TypeCard({
@@ -166,22 +193,32 @@ export default function HomePage() {
                 onClick={() => setSkill(tab.skill)}
                 className={`relative overflow-hidden rounded-xl border p-4 text-left transition-all ${
                   active
-                    ? "border-transparent text-white shadow-md"
+                    ? `border-transparent text-white shadow-md ${tab.darkBorder} ${tab.darkTint} dark:shadow-none`
                     : "border-gray-200/70 bg-white hover:border-gray-300 hover:shadow-sm"
                 }`}
               >
                 {active && (
-                  <span className={`absolute inset-0 bg-gradient-to-br ${tab.accent}`} aria-hidden />
+                  // ライトはベタ塗りのグラデーション。ダークでは塗らず外枠の色で表現する
+                  <span
+                    className={`absolute inset-0 bg-gradient-to-br dark:hidden ${tab.accent}`}
+                    aria-hidden
+                  />
                 )}
                 <span className="relative flex items-center gap-2">
-                  <Icon className={`w-5 h-5 ${active ? "text-white" : "text-gray-400"}`} />
-                  <span className={`text-sm font-bold ${active ? "text-white" : "text-gray-900"}`}>
+                  <Icon
+                    className={`w-5 h-5 ${active ? `text-white ${tab.darkIcon}` : "text-gray-400"}`}
+                  />
+                  <span
+                    className={`text-sm font-bold ${
+                      active ? `text-white ${tab.darkTitle}` : "text-gray-900"
+                    }`}
+                  >
                     {tab.title}
                   </span>
                 </span>
                 <span
                   className={`relative mt-1.5 block text-[11px] leading-snug ${
-                    active ? "text-white/85" : "text-gray-400"
+                    active ? `text-white/85 ${tab.darkDesc}` : "text-gray-400"
                   }`}
                 >
                   {tab.description}

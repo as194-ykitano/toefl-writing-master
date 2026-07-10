@@ -121,6 +121,67 @@
   --color-eg-faint: #fffaf2;
 }
 
+/* =========================================================================
+   ダークモード用の中立色リマップ
+   -------------------------------------------------------------------------
+   アプリは全体が `bg-white` / `text-gray-*` / `border-gray-*` などの
+   ハードコード色（白・グレー基調 + アクセント色）で一貫して書かれている。
+   個々のコンポーネントに `dark:` を付けて回る代わりに、`.dark` スコープで
+   これらの中立ユーティリティをまとめてダーク値へ再マップし、全ページを
+   一括でダーク化する。アクセント色（eg オレンジ / blue など）は残す。
+
+   @layer の外に書くことで Tailwind のレイヤー付きユーティリティより
+   カスケード上で確実に優先される（unlayered > layered）。
+   ========================================================================= */
+.dark {
+  --d-page: #17171a; /* ページ背景 */
+  --d-surface: #212125; /* カード・white 面 */
+  --d-raised: #2b2b31; /* 一段持ち上げ・hover 面 */
+  --d-border: rgba(255, 255, 255, 0.1);
+  --d-border-soft: rgba(255, 255, 255, 0.06);
+}
+
+/* ---- 背景（面）---- */
+.dark .bg-white { background-color: var(--d-surface); }
+.dark .bg-\[\#f7f6f3\] { background-color: var(--d-page); }
+.dark .bg-gray-50 { background-color: var(--d-raised); }
+.dark .bg-gray-50\/70 { background-color: var(--d-raised); }
+.dark .bg-gray-100 { background-color: var(--d-raised); }
+.dark .bg-gray-200 { background-color: #35353c; }
+
+/* ---- hover 背景 ---- */
+.dark .hover\:bg-gray-50:hover { background-color: var(--d-raised); }
+.dark .hover\:bg-gray-100:hover { background-color: #34343a; }
+.dark .hover\:bg-white:hover { background-color: var(--d-raised); }
+
+/* ---- テキスト（text-black / 各アクセント色は変更しない）---- */
+.dark .text-gray-900 { color: #ededed; }
+.dark .text-gray-800 { color: #e2e2e2; }
+.dark .text-gray-700 { color: #d2d2d4; }
+.dark .text-gray-600 { color: #bdbdc0; }
+.dark .text-gray-500 { color: #9c9ca1; }
+.dark .text-gray-400 { color: #7e7e85; }
+
+/* ---- ボーダー ---- */
+.dark .border-gray-300 { border-color: var(--d-border); }
+.dark .border-gray-200 { border-color: var(--d-border); }
+.dark .border-gray-200\/80 { border-color: var(--d-border); }
+.dark .border-gray-200\/70 { border-color: var(--d-border); }
+.dark .border-gray-100 { border-color: var(--d-border-soft); }
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) { border-color: var(--d-border-soft); }
+
+/* ---- ブランドソフト面 / 選択状態（明るすぎる箇所を落ち着かせる）---- */
+.dark .bg-eg-soft { background-color: rgba(255, 145, 0, 0.14); }
+.dark .bg-eg-faint { background-color: rgba(255, 145, 0, 0.08); }
+.dark .text-eg-deep { color: #fbbf6f; }
+.dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.16); }
+.dark .bg-blue-50\/70 { background-color: rgba(59, 130, 246, 0.16); }
+
+/* 色の切替を滑らかに */
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

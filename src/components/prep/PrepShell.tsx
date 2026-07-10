@@ -20,12 +20,15 @@ import {
   LogOut,
   LucideIcon,
   Menu,
+  Moon,
   PenLine,
   Sparkles,
+  Sun,
   User,
   X,
 } from "lucide-react";
 import { useExam } from "@/contexts/ExamContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   Dialog,
   DialogContent,
@@ -181,6 +184,30 @@ function NavLinks({
   );
 }
 
+/** サイドバー用のテーマ切替ボタン（ワンクリックでライト⇄ダーク） */
+function ThemeToggleButton({ collapsed = false }: { collapsed?: boolean }) {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+  const label = isDark ? "ライトモードに切替" : "ダークモードに切替";
+  return (
+    <button
+      onClick={toggleTheme}
+      title={collapsed ? label : undefined}
+      aria-label={label}
+      className={`w-full flex items-center gap-3 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors ${
+        collapsed ? "justify-center px-0 py-2.5" : "px-3.5 py-2.5"
+      }`}
+    >
+      {isDark ? (
+        <Sun className="w-[18px] h-[18px] text-eg-dark flex-shrink-0" />
+      ) : (
+        <Moon className="w-[18px] h-[18px] text-gray-400 flex-shrink-0" />
+      )}
+      {!collapsed && <span>{isDark ? "ライトモード" : "ダークモード"}</span>}
+    </button>
+  );
+}
+
 export default function PrepShell({ children, showNav = true, requireAuth = true }: PrepShellProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
@@ -272,6 +299,7 @@ export default function PrepShell({ children, showNav = true, requireAuth = true
       >
         <NavLinks collapsed={collapsed} />
         <div className="border-t border-gray-100 p-2.5 space-y-0.5">
+          <ThemeToggleButton collapsed={collapsed} />
           {user && (
             <button
               onClick={() => setLogoutDialogOpen(true)}
@@ -319,8 +347,9 @@ export default function PrepShell({ children, showNav = true, requireAuth = true
               </button>
             </div>
             <NavLinks collapsed={false} onNavigate={() => setDrawerOpen(false)} />
-            {user && (
-              <div className="border-t border-gray-100 p-2.5">
+            <div className="border-t border-gray-100 p-2.5 space-y-0.5">
+              <ThemeToggleButton />
+              {user && (
                 <button
                   onClick={() => setLogoutDialogOpen(true)}
                   className="w-full flex items-center gap-3 rounded-full px-3.5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100"
@@ -328,8 +357,8 @@ export default function PrepShell({ children, showNav = true, requireAuth = true
                   <LogOut className="w-[18px] h-[18px] text-gray-400" />
                   ログアウト
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}
