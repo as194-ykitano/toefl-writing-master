@@ -33,6 +33,7 @@ async function loadJson<T>(key: string, loader: () => Promise<{ default: unknown
 }
 
 const loaders = {
+  toeicReading: () => import("./data/toeic-reading-sets.json"),
   ieltsReading: () => import("./data/ielts-reading-sets.json"),
   ieltsListening: () => import("./data/ielts-listening-sets.json"),
   ieltsSpeaking: () => import("./data/ielts-speaking-sets.json"),
@@ -114,12 +115,15 @@ async function resolveSpeakingAssets(set: SpeakingSet): Promise<SpeakingSet> {
 
 // ---- Reading ----
 
+const READING_LOADERS: Record<ExamId, () => Promise<{ default: unknown }>> = {
+  ielts: loaders.ieltsReading,
+  toefl: loaders.toeflReading,
+  toeic: loaders.toeicReading,
+};
+
 export async function getReadingSets(exam: ExamId): Promise<ReadingSet[]> {
   const mock = READING_SETS.filter((s) => s.exam === exam);
-  const imported = await loadJson<ReadingSet[]>(
-    `${exam}-reading`,
-    exam === "ielts" ? loaders.ieltsReading : loaders.toeflReading
-  );
+  const imported = await loadJson<ReadingSet[]>(`${exam}-reading`, READING_LOADERS[exam]);
   return [...imported, ...mock];
 }
 
@@ -132,6 +136,8 @@ export async function getReadingSet(exam: ExamId, setId: string): Promise<Readin
 
 export async function getListeningSets(exam: ExamId): Promise<ListeningSet[]> {
   const mock = LISTENING_SETS.filter((s) => s.exam === exam);
+  // TOEIC は初回スコープで Reading のみ（Listening データ未整備）
+  if (exam === "toeic") return mock;
   const imported = await loadJson<ListeningSet[]>(
     `${exam}-listening`,
     exam === "ielts" ? loaders.ieltsListening : loaders.toeflListening
@@ -149,6 +155,8 @@ export async function getListeningSet(exam: ExamId, setId: string): Promise<List
 
 export async function getSpeakingSets(exam: ExamId): Promise<SpeakingSet[]> {
   const mock = SPEAKING_SETS.filter((s) => s.exam === exam);
+  // TOEIC は初回スコープで Reading のみ（Speaking データ未整備）
+  if (exam === "toeic") return mock;
   const imported = await loadJson<SpeakingSet[]>(
     `${exam}-speaking`,
     exam === "ielts" ? loaders.ieltsSpeaking : loaders.toeflSpeaking
@@ -165,6 +173,8 @@ export async function getSpeakingSet(exam: ExamId, setId: string): Promise<Speak
 // ---- Writing（TOEFL 新形式の演習セット） ----
 
 export async function getWritingSets(exam: ExamId): Promise<WritingPracticeSet[]> {
+  // TOEIC は初回スコープで Reading のみ（Writing データ未整備）
+  if (exam === "toeic") return [];
   if (exam === "ielts") {
     // IELTS Writing Task 1 / Task 2（エッセイ型）
     return loadJson<WritingPracticeSet[]>("ielts-writing", loaders.ieltsWriting);

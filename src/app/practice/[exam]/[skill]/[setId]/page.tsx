@@ -29,7 +29,7 @@ import {
 } from "@/lib/prep/types";
 
 function isExamId(value: string): value is ExamId {
-  return value === "toefl" || value === "ielts";
+  return value === "toefl" || value === "ielts" || value === "toeic";
 }
 
 function PracticePlayer() {

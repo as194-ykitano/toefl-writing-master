@@ -218,6 +218,48 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     description: "教授の質問に対して意見を投稿する（10 分・100〜130 語）。AI 添削つき",
     badge: "AI添削",
   },
+
+  // ---- TOEIC Reading（EG の practiceTrainings からインポート済み） ----
+  {
+    id: "part-5",
+    exam: "toeic",
+    skill: "reading",
+    label: "Part 5",
+    labelJa: "短文穴埋め",
+    description: "1 文中の空所に最適な語句を選ぶ（文法・語彙）",
+  },
+  {
+    id: "part-6",
+    exam: "toeic",
+    skill: "reading",
+    label: "Part 6",
+    labelJa: "長文穴埋め",
+    description: "短い文書中の複数の空所を文脈に合わせて補う",
+  },
+  {
+    id: "part-7-single",
+    exam: "toeic",
+    skill: "reading",
+    label: "Part 7 — Single",
+    labelJa: "1 文書の読解",
+    description: "メール・広告・記事など 1 つの文書を読んで設問に回答",
+  },
+  {
+    id: "part-7-double",
+    exam: "toeic",
+    skill: "reading",
+    label: "Part 7 — Double",
+    labelJa: "2 文書の読解",
+    description: "関連する 2 つの文書を読み比べて設問に回答",
+  },
+  {
+    id: "part-7-triple",
+    exam: "toeic",
+    skill: "reading",
+    label: "Part 7 — Triple",
+    labelJa: "3 文書の読解",
+    description: "関連する 3 つの文書を読み比べて設問に回答",
+  },
 ];
 
 export function getPracticeTypes(exam: ExamId, skill: SkillId): PracticeTypeInfo[] {

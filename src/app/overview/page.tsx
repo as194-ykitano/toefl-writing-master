@@ -66,7 +66,7 @@ function formatMinutes(min: number): string {
 
 export default function OverviewPage() {
   const { exam } = useExam();
-  const activeExam: ExamId = exam === "ielts" ? "ielts" : "toefl";
+  const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
 
   const [period, setPeriod] = useState<PeriodKey>("30d");
   const [skill, setSkill] = useState<SkillId>("reading");

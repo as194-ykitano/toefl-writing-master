@@ -2,7 +2,7 @@
 // 問題データは後から実データに差し替える前提のため、
 // UI はすべてこの型を経由して描画する
 
-export type ExamId = "toefl" | "ielts";
+export type ExamId = "toefl" | "ielts" | "toeic";
 export type CategoryId = ExamId | "advanced";
 export type SkillId = "reading" | "listening" | "speaking" | "writing";
 export type PracticeMode = "practice" | "test";
@@ -10,6 +10,14 @@ export type PracticeMode = "practice" | "test";
 export const EXAM_LABELS: Record<ExamId, string> = {
   toefl: "TOEFL iBT",
   ielts: "IELTS Academic",
+  toeic: "TOEIC",
+};
+
+/** その試験で対応している技能。TOEIC は初回スコープで Reading のみ。 */
+export const EXAM_SKILLS: Record<ExamId, SkillId[]> = {
+  toefl: ["reading", "listening", "speaking", "writing"],
+  ielts: ["reading", "listening", "speaking", "writing"],
+  toeic: ["reading"],
 };
 
 export const SKILL_LABELS: Record<SkillId, string> = {

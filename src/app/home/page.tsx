@@ -25,7 +25,7 @@ import { useExam } from "@/contexts/ExamContext";
 import PrepShell from "@/components/prep/PrepShell";
 import { getSkillStats } from "@/lib/prep/data-source";
 import { getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
-import { EXAM_LABELS, ExamId, SkillId } from "@/lib/prep/types";
+import { EXAM_LABELS, EXAM_SKILLS, ExamId, SkillId } from "@/lib/prep/types";
 
 interface SkillTab {
   skill: SkillId;
@@ -106,7 +106,13 @@ export default function HomePage() {
   const { exam } = useExam();
   const router = useRouter();
   const name = user?.displayName;
-  const activeExam: ExamId = exam === "ielts" ? "ielts" : "toefl";
+  const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
+
+  // その試験で対応している技能タブのみ表示（TOEIC は Reading のみ）
+  const visibleTabs = useMemo(
+    () => SKILL_TABS.filter((t) => EXAM_SKILLS[activeExam].includes(t.skill)),
+    [activeExam]
+  );
 
   // Advanced 選択時はホームではなく Advanced ハブを表示する
   useEffect(() => {
@@ -116,6 +122,13 @@ export default function HomePage() {
   const [skill, setSkill] = useState<SkillId>("reading");
   const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});
   const [questionCount, setQuestionCount] = useState(0);
+
+  // 試験を切り替えたとき、選択中の技能がその試験に無ければ先頭の技能へ戻す
+  useEffect(() => {
+    if (!EXAM_SKILLS[activeExam].includes(skill)) {
+      setSkill(EXAM_SKILLS[activeExam][0]);
+    }
+  }, [activeExam, skill]);
 
   useEffect(() => {
     let cancelled = false;
@@ -144,7 +157,7 @@ export default function HomePage() {
 
         {/* 横長の技能バー（押すと下にその技能の問題タイプが並ぶ） */}
         <div className="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          {SKILL_TABS.map((tab) => {
+          {visibleTabs.map((tab) => {
             const active = tab.skill === skill;
             const Icon = tab.icon;
             return (

@@ -52,7 +52,7 @@ const DIFFICULTY_LABELS: Record<string, { label: string; className: string }> = 
 };
 
 function isExamId(value: string): value is ExamId {
-  return value === "toefl" || value === "ielts";
+  return value === "toefl" || value === "ielts" || value === "toeic";
 }
 
 function isSkillId(value: string): value is SkillId {

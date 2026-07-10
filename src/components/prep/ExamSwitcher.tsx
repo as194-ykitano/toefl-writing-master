@@ -16,7 +16,9 @@ interface ExamSwitcherProps {
 }
 
 function isCategoryId(value: string): value is CategoryId {
-  return value === "toefl" || value === "ielts" || value === "advanced";
+  return (
+    value === "toefl" || value === "ielts" || value === "toeic" || value === "advanced"
+  );
 }
 
 export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {

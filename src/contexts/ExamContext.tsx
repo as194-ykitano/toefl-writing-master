@@ -28,13 +28,15 @@ export interface ExamOption {
 export const EXAM_OPTIONS: ExamOption[] = [
   { id: "toefl", label: "TOEFL iBT", sublabel: "4技能・新形式対応", href: "/home" },
   { id: "ielts", label: "IELTS Academic", sublabel: "4技能・Band 推定", href: "/home" },
+  { id: "toeic", label: "TOEIC", sublabel: "Reading（Part 5-7）", href: "/home" },
   { id: "advanced", label: "Advanced", sublabel: "YouTube・自由記述", href: "/advanced" },
-  { id: "toeic", label: "TOEIC", sublabel: "近日追加予定", href: "#", comingSoon: true },
 ];
 
 /** 選択可能な CategoryId かどうか */
 function isCategoryId(value: string): value is CategoryId {
-  return value === "toefl" || value === "ielts" || value === "advanced";
+  return (
+    value === "toefl" || value === "ielts" || value === "toeic" || value === "advanced"
+  );
 }
 
 const STORAGE_KEY = "prep_selected_exam_v1";
