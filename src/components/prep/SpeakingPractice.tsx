@@ -284,6 +284,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
       skill: "speaking" as const,
       setId: set.id,
       setTitle: set.title,
+      practiceType: set.practiceType,
       mode,
       finishedAt: new Date().toISOString(),
       durationSec: elapsedSec,

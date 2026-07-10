@@ -65,6 +65,7 @@ export default function ListeningPractice({ set, mode, onComplete }: ListeningPr
       skill: "listening" as const,
       setId: set.id,
       setTitle: set.title,
+      practiceType: set.practiceType,
       mode,
       finishedAt: new Date().toISOString(),
       durationSec: elapsedSec,

@@ -54,6 +54,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
         skill: "reading" as const,
         setId: set.id,
         setTitle: set.title,
+        practiceType: set.practiceType,
         mode,
         finishedAt: new Date().toISOString(),
         durationSec: elapsedSec,

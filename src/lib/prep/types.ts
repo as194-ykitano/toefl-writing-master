@@ -364,6 +364,8 @@ export interface PracticeSessionResult {
   skill: SkillId;
   setId: string;
   setTitle: string;
+  /** 問題タイプ slug（ダッシュボードの問題タイプ別集計に使用）。旧セッションには無い */
+  practiceType?: string;
   mode: PracticeMode;
   finishedAt: string; // ISO
   durationSec: number;
