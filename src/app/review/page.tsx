@@ -152,18 +152,12 @@ export default function ReviewPage() {
             <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
             <h2 className="font-semibold text-gray-900">未復習の問題はありません</h2>
             <p className="text-sm text-gray-500 mt-1">新しい演習に挑戦しましょう。</p>
-            <div className="mt-5 flex justify-center gap-3">
+            <div className="mt-5 flex justify-center">
               <Link
-                href="/toefl"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 transition-colors"
+                href="/home"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-eg hover:bg-eg-dark text-black text-sm font-semibold px-5 py-2.5 transition-colors"
               >
-                TOEFL 演習へ <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/ielts"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold px-5 py-2.5 transition-colors"
-              >
-                IELTS 演習へ <ArrowRight className="w-4 h-4" />
+                演習へ <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>

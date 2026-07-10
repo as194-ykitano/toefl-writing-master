@@ -654,7 +654,7 @@ export const STUDY_PLAN: StudyPlan = {
     {
       day: "Day 7",
       focus: "ミニ模試で計測",
-      tasks: [{ title: "TOEFL Mini Mock Test", href: "/toefl", minutes: 60 }],
+      tasks: [{ title: "TOEFL Mini Mock Test", href: "/mock", minutes: 60 }],
     },
   ],
 };

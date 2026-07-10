@@ -318,13 +318,11 @@ function SkillPageInner() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
       <Link
-        href={selectedType ? `/practice/${exam}/${skill}` : `/${exam}`}
+        href={selectedType ? `/practice/${exam}/${skill}` : `/home`}
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-5"
       >
         <ChevronLeft className="w-4 h-4" />
-        {selectedType
-          ? `${SKILL_LABELS[skillId]} のタイプ一覧に戻る`
-          : `${EXAM_LABELS[examId]} コースに戻る`}
+        {selectedType ? `${SKILL_LABELS[skillId]} のタイプ一覧に戻る` : "ホームに戻る"}
       </Link>
 
       <div className="flex items-center gap-3">
