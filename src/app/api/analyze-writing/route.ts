@@ -52,6 +52,7 @@ function normalizeGrammar(
     context: c.context ?? "",
     startIndex: c.startIndex ?? 0,
     endIndex: c.endIndex ?? 0,
+    category: c.category,
   }));
 }
 

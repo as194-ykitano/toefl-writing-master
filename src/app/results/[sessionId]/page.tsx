@@ -546,7 +546,7 @@ function SpeakingFeedbackCard({
               <GrammarCorrectionExercise
                 items={feedback.grammarCorrections}
                 sourceText={feedback.transcript}
-                heading="文法チューター — 自分で直してみましょう"
+                heading="エラー修正ドリル — 自分で直してみましょう"
               />
             </div>
           )}

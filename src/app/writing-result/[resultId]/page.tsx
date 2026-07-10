@@ -355,7 +355,7 @@ export default function WritingResultPage() {
             <GrammarCorrectionExercise
               items={writingCorrectionsToItems(fb.grammarCorrections)}
               sourceText={result.content}
-              heading="文法チューター — 自分で直してみましょう"
+              heading="エラー修正ドリル — 自分で直してみましょう"
             />
           </div>
         )}

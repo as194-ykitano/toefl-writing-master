@@ -15,6 +15,6 @@ export function writingCorrectionsToItems(
       explanation: c.explanation,
       // context が空なら誤り語句自体を文脈として使う
       context: c.context?.trim() || c.original,
-      category: undefined,
+      category: c.category,
     }));
 }

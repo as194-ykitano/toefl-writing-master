@@ -37,20 +37,74 @@ const DEFAULT_STYLE: CatStyle = {
   mark: "bg-gray-100 border-b-2 border-gray-400",
   markActive: "bg-gray-200 border-b-2 border-gray-500 ring-2 ring-gray-300",
 };
-const CATEGORY_STYLES: Record<string, CatStyle> = {
-  "動詞の時制": { dot: "bg-amber-500", chipBg: "bg-amber-50", chipText: "text-amber-700", mark: "bg-amber-100 border-b-2 border-amber-400", markActive: "bg-amber-200 border-b-2 border-amber-500 ring-2 ring-amber-300" },
-  "主述の一致": { dot: "bg-rose-500", chipBg: "bg-rose-50", chipText: "text-rose-700", mark: "bg-rose-100 border-b-2 border-rose-400", markActive: "bg-rose-200 border-b-2 border-rose-500 ring-2 ring-rose-300" },
-  "冠詞": { dot: "bg-orange-500", chipBg: "bg-orange-50", chipText: "text-orange-700", mark: "bg-orange-100 border-b-2 border-orange-400", markActive: "bg-orange-200 border-b-2 border-orange-500 ring-2 ring-orange-300" },
-  "前置詞": { dot: "bg-cyan-500", chipBg: "bg-cyan-50", chipText: "text-cyan-700", mark: "bg-cyan-100 border-b-2 border-cyan-400", markActive: "bg-cyan-200 border-b-2 border-cyan-500 ring-2 ring-cyan-300" },
-  "単数・複数": { dot: "bg-emerald-500", chipBg: "bg-emerald-50", chipText: "text-emerald-700", mark: "bg-emerald-100 border-b-2 border-emerald-400", markActive: "bg-emerald-200 border-b-2 border-emerald-500 ring-2 ring-emerald-300" },
-  "語順": { dot: "bg-blue-500", chipBg: "bg-blue-50", chipText: "text-blue-700", mark: "bg-blue-100 border-b-2 border-blue-400", markActive: "bg-blue-200 border-b-2 border-blue-500 ring-2 ring-blue-300" },
-  "語彙選択": { dot: "bg-violet-500", chipBg: "bg-violet-50", chipText: "text-violet-700", mark: "bg-violet-100 border-b-2 border-violet-400", markActive: "bg-violet-200 border-b-2 border-violet-500 ring-2 ring-violet-300" },
-  "語形": { dot: "bg-fuchsia-500", chipBg: "bg-fuchsia-50", chipText: "text-fuchsia-700", mark: "bg-fuchsia-100 border-b-2 border-fuchsia-400", markActive: "bg-fuchsia-200 border-b-2 border-fuchsia-500 ring-2 ring-fuchsia-300" },
-  "スペリング": { dot: "bg-red-500", chipBg: "bg-red-50", chipText: "text-red-700", mark: "bg-red-100 border-b-2 border-red-400", markActive: "bg-red-200 border-b-2 border-red-500 ring-2 ring-red-300" },
-  "その他": DEFAULT_STYLE,
-};
+
+// 16 色のパレット（種別ごとに固有色を割り当てる）
+const p = (c: string): CatStyle => ({
+  dot: `bg-${c}-500`,
+  chipBg: `bg-${c}-50`,
+  chipText: `text-${c}-700`,
+  mark: `bg-${c}-100 border-b-2 border-${c}-400`,
+  markActive: `bg-${c}-200 border-b-2 border-${c}-500 ring-2 ring-${c}-300`,
+});
+// ※ 下のコメントは Tailwind の safelist 検出用（動的クラス名を含めるため）:
+// bg-amber-500 bg-amber-50 text-amber-700 bg-amber-100 border-amber-400 bg-amber-200 border-amber-500 ring-amber-300
+// bg-rose-500 bg-rose-50 text-rose-700 bg-rose-100 border-rose-400 bg-rose-200 border-rose-500 ring-rose-300
+// bg-orange-500 bg-orange-50 text-orange-700 bg-orange-100 border-orange-400 bg-orange-200 border-orange-500 ring-orange-300
+// bg-cyan-500 bg-cyan-50 text-cyan-700 bg-cyan-100 border-cyan-400 bg-cyan-200 border-cyan-500 ring-cyan-300
+// bg-emerald-500 bg-emerald-50 text-emerald-700 bg-emerald-100 border-emerald-400 bg-emerald-200 border-emerald-500 ring-emerald-300
+// bg-blue-500 bg-blue-50 text-blue-700 bg-blue-100 border-blue-400 bg-blue-200 border-blue-500 ring-blue-300
+// bg-violet-500 bg-violet-50 text-violet-700 bg-violet-100 border-violet-400 bg-violet-200 border-violet-500 ring-violet-300
+// bg-fuchsia-500 bg-fuchsia-50 text-fuchsia-700 bg-fuchsia-100 border-fuchsia-400 bg-fuchsia-200 border-fuchsia-500 ring-fuchsia-300
+// bg-red-500 bg-red-50 text-red-700 bg-red-100 border-red-400 bg-red-200 border-red-500 ring-red-300
+// bg-teal-500 bg-teal-50 text-teal-700 bg-teal-100 border-teal-400 bg-teal-200 border-teal-500 ring-teal-300
+// bg-indigo-500 bg-indigo-50 text-indigo-700 bg-indigo-100 border-indigo-400 bg-indigo-200 border-indigo-500 ring-indigo-300
+// bg-pink-500 bg-pink-50 text-pink-700 bg-pink-100 border-pink-400 bg-pink-200 border-pink-500 ring-pink-300
+// bg-lime-500 bg-lime-50 text-lime-700 bg-lime-100 border-lime-400 bg-lime-200 border-lime-500 ring-lime-300
+// bg-sky-500 bg-sky-50 text-sky-700 bg-sky-100 border-sky-400 bg-sky-200 border-sky-500 ring-sky-300
+// bg-purple-500 bg-purple-50 text-purple-700 bg-purple-100 border-purple-400 bg-purple-200 border-purple-500 ring-purple-300
+// bg-yellow-500 bg-yellow-50 text-yellow-700 bg-yellow-100 border-yellow-400 bg-yellow-200 border-yellow-500 ring-yellow-300
+const PALETTE: CatStyle[] = [
+  p("amber"), p("rose"), p("orange"), p("cyan"), p("emerald"), p("blue"),
+  p("violet"), p("fuchsia"), p("red"), p("teal"), p("indigo"), p("pink"),
+  p("lime"), p("sky"), p("purple"), p("yellow"),
+];
+
+// 既知の誤り種別（この順でパレットの色が安定して割り当たる）。API のプロンプトと揃える。
+export const GRAMMAR_CATEGORIES = [
+  "動詞の時制",
+  "主述の一致",
+  "三単現",
+  "冠詞",
+  "前置詞",
+  "単数・複数",
+  "可算・不可算",
+  "代名詞",
+  "語順",
+  "語彙選択",
+  "コロケーション",
+  "語形",
+  "スペリング",
+  "句読点",
+  "大文字小文字",
+  "接続詞",
+  "関係詞",
+  "比較",
+  "態（受動・能動）",
+  "動名詞・不定詞",
+  "冗長・簡潔さ",
+];
+
+function hashIndex(s: string, mod: number): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h % mod;
+}
 function styleOf(category?: string): CatStyle {
-  return (category && CATEGORY_STYLES[category]) || DEFAULT_STYLE;
+  const cat = category?.trim();
+  if (!cat || cat === "その他") return DEFAULT_STYLE;
+  const known = GRAMMAR_CATEGORIES.indexOf(cat);
+  if (known >= 0) return PALETTE[known % PALETTE.length];
+  return PALETTE[hashIndex(cat, PALETTE.length)];
 }
 
 /** 判定用の正規化: 小文字化・前後空白除去・連続空白圧縮・両端の約物除去 */
@@ -97,7 +151,7 @@ function locateRanges(sourceText: string, items: GrammarCorrectionItem[]): Range
 export default function GrammarCorrectionExercise({
   items,
   sourceText,
-  heading = "文法チューター",
+  heading = "エラー修正ドリル",
 }: GrammarCorrectionExerciseProps) {
   const [index, setIndex] = useState(0);
   const [inputs, setInputs] = useState<Record<number, string>>({});

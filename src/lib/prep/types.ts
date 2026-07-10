@@ -251,6 +251,8 @@ export interface WritingGrammarCorrection {
   /** 本文中の開始・終了インデックス（インラインハイライト用） */
   startIndex: number;
   endIndex: number;
+  /** 誤り種別ラベル（例: "冠詞" / "動詞の時制"）。エクササイズの色分けに使用 */
+  category?: string;
 }
 
 /** 観点別スコア（ラベル付き） */
