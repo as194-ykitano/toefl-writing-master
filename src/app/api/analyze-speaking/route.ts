@@ -17,12 +17,21 @@ const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
+interface GrammarCorrection {
+  mistake: string;
+  correction: string;
+  explanation: string;
+  context: string;
+  category?: string;
+}
+
 interface SpeakingAnalysis {
   bandEstimate?: number;
   summary: string;
   strengths: string[];
   improvements: string[];
   improvedVersion?: string;
+  grammarCorrections?: GrammarCorrection[];
 }
 
 // ---- Listen and Repeat 用の一致率採点 ----
@@ -197,6 +206,12 @@ export async function POST(request: Request) {
     }
     const speechSec = Math.max(0, totalDurationSec - pauseSec);
 
+    // 文字起こしの語ごとに「直前のポーズ長（秒）」を付与（フィラー着色・ポーズ位置の可視化用）
+    const speechWords = words.map((w, i) => ({
+      w: w.word,
+      gap: i === 0 ? Math.round(w.start * 100) / 100 : Math.round((w.start - words[i - 1].end) * 100) / 100,
+    }));
+
     // フィラーワードの検出
     const FILLER_RE = /^(um+|uh+|er+m?|ah+|hmm+|mm+)$/i;
     const transcriptTokens = transcript
@@ -276,8 +291,20 @@ ${scaleNote}
   "summary": "全体講評（2〜3文、日本語）",
   "strengths": ["良かった点（日本語、最大3つ）"],
   "improvements": ["改善点（日本語で指摘し、具体的な英語の言い換え例を含める。最大3つ）"],
-  "improvedVersion": "受験者の回答内容を活かしたまま、1つ上のBandに引き上げた英語の改善例（英語）"
-}`,
+  "improvedVersion": "受験者の回答内容を活かしたまま、1つ上のBandに引き上げた英語の改善例（英語）",
+  "grammarCorrections": [
+    {
+      "mistake": "文字起こしに実際に現れた誤った語句（そのまま抜き出す。学習者がこの語句を直す）",
+      "correction": "正しい語句（できるだけ短く、誤り箇所だけを直したもの）",
+      "explanation": "なぜ誤りか・どう直すかの簡潔な解説（日本語）",
+      "context": "その誤りを含む文全体（文字起こしから1文をそのまま抜き出す。mistake はこの文の部分文字列にする）",
+      "category": "誤り種別（次のいずれか: 動詞の時制 / 主述の一致 / 冠詞 / 前置詞 / 単数・複数 / 語順 / 語彙選択 / 語形 / その他）"
+    }
+  ]
+}
+grammarCorrections は文字起こしに実在する明確な文法・語法の誤りだけを最大8件挙げてください（フィラーや言い淀みは対象外）。
+重要: mistake は「誤っている最小限の語句（1〜4語程度）」にピンポイントで絞ってください。長い文全体や節をまるごと mistake にしないでください（学習者が直しやすいように、修正が必要な語だけを抜き出す）。correction も同じ範囲だけを直した最小限の語句にします。
+誤りが無ければ空配列にしてください。mistake と context は必ず文字起こしの文言をそのまま使い、context には mistake が部分文字列として含まれるようにしてください。`,
         },
         {
           role: "user",
@@ -302,7 +329,7 @@ ${scaleNote}
       };
     }
 
-    return NextResponse.json({ transcript, fluency, ...analysis });
+    return NextResponse.json({ transcript, fluency, speechWords, ...analysis });
   } catch (error) {
     console.error("Error analyzing speaking:", error);
     const message = error instanceof Error ? error.message : "Unknown error";

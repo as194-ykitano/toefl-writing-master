@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ExamProvider } from "@/contexts/ExamContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import NotificationToastWrapper from "@/components/NotificationToastWrapper";
 import { Toaster } from 'sonner';
@@ -25,10 +26,12 @@ export default function RootLayout({
     <html lang="ja">
       <body className={inter.className}>
         <AuthProvider>
-          <NotificationProvider>
-            {children}
-            <NotificationToastWrapper />
-          </NotificationProvider>
+          <ExamProvider>
+            <NotificationProvider>
+              {children}
+              <NotificationToastWrapper />
+            </NotificationProvider>
+          </ExamProvider>
         </AuthProvider>
         <Toaster position="top-center" />
       </body>

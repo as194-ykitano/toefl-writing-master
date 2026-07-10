@@ -38,6 +38,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import ExamSwitcher from "@/components/prep/ExamSwitcher";
 
 const SIDEBAR_COLLAPSED_KEY = "prep_sidebar_collapsed_v1";
 
@@ -262,6 +263,10 @@ export default function PrepShell({ children, showNav = true, requireAuth = true
               <Menu className="w-5 h-5" />
             </button>
             <BrandMark />
+            {/* 画面左上の試験切替ドロップダウン。選択でその試験の Home / ハブへ */}
+            <div className="pl-2 ml-1 border-l border-gray-200">
+              <ExamSwitcher />
+            </div>
           </div>
 
           <div className="flex items-center gap-1">

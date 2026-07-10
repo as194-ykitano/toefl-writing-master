@@ -21,6 +21,8 @@ import {
 import { newSessionId, saveSession } from "@/lib/prep/session-store";
 import { saveRecording } from "@/lib/prep/recording-store";
 import { PcmRecorder } from "@/lib/prep/audio-utils";
+import RecordingWaveform from "./RecordingWaveform";
+import SubmitQuiz from "./SubmitQuiz";
 
 type Phase = "ready" | "prep" | "recording" | "review";
 
@@ -76,6 +78,30 @@ async function analyzeRecording(
     strengths: Array.isArray(json.strengths) ? json.strengths : [],
     improvements: Array.isArray(json.improvements) ? json.improvements : [],
     improvedVersion: json.improvedVersion || undefined,
+    grammarCorrections: Array.isArray(json.grammarCorrections)
+      ? json.grammarCorrections
+          .filter(
+            (c: unknown): c is { mistake: string; correction: string; context?: string; explanation?: string; category?: string } =>
+              !!c &&
+              typeof (c as { mistake?: unknown }).mistake === "string" &&
+              typeof (c as { correction?: unknown }).correction === "string"
+          )
+          .map((c: { mistake: string; correction: string; context?: string; explanation?: string; category?: string }) => ({
+            mistake: c.mistake,
+            correction: c.correction,
+            explanation: c.explanation ?? "",
+            context: c.context?.trim() || c.mistake,
+            category: c.category || undefined,
+          }))
+      : undefined,
+    speechWords: Array.isArray(json.speechWords)
+      ? json.speechWords
+          .filter(
+            (w: unknown): w is { w: string; gap: number } =>
+              !!w && typeof (w as { w?: unknown }).w === "string"
+          )
+          .map((w: { w: string; gap?: number }) => ({ w: w.w, gap: typeof w.gap === "number" ? w.gap : 0 }))
+      : undefined,
     expectedText: json.expectedText || undefined,
     matchRatio: typeof json.matchRatio === "number" ? json.matchRatio : undefined,
     itemScore: typeof json.itemScore === "number" ? json.itemScore : undefined,
@@ -278,13 +304,29 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   if (submitted) {
     const total = Object.keys(recordings).length;
     return (
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center gap-4 px-4">
-        <Loader2 className="w-10 h-10 text-eg-dark animate-spin" />
-        <div className="font-semibold text-gray-900">AI が回答を採点しています…</div>
-        <div className="text-sm text-gray-500">
-          {total > 0 ? `文字起こしとフィードバックを生成中（${analyzingIndex} / ${total}）` : "結果を保存しています"}
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center gap-6 px-4 py-10">
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2 text-eg-deep">
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span className="text-sm font-semibold">回答を採点しています…</span>
+          </div>
+          <div className="text-xs text-gray-500">
+            {total > 0
+              ? `文字起こしとフィードバックを生成中（${analyzingIndex} / ${total}）`
+              : "結果を保存しています"}
+          </div>
+          {/* 進捗バー（おおよその見た目。実際の完了で結果画面へ遷移） */}
+          <div className="h-1.5 w-56 overflow-hidden rounded-full bg-gray-200">
+            <div className="h-full w-1/3 animate-pulse rounded-full bg-eg" />
+          </div>
         </div>
-        <p className="text-xs text-gray-400">このままお待ちください（30 秒〜1 分程度かかることがあります）</p>
+
+        {/* 採点を待つ間の文法ミニクイズ（この間も英語学習できる） */}
+        <SubmitQuiz />
+
+        <p className="text-[11px] text-gray-400">
+          採点は 30 秒〜1 分程度かかることがあります。その間クイズで待ちましょう。
+        </p>
       </div>
     );
   }
@@ -314,8 +356,37 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-          <div className="text-xs font-semibold tracking-wide text-eg-deep uppercase mb-2">
-            Task {task.number} / {set.tasks.length} — {task.label}
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="text-xs font-semibold tracking-wide text-eg-deep uppercase">
+              Task {task.number} / {set.tasks.length} — {task.label}
+            </div>
+            {/* Preparation → Recording ステッパー（画像3・4枚目） */}
+            {task.prepSec > 0 && (phase === "prep" || phase === "recording") && (
+              <div className="flex items-center gap-1.5 text-[11px] font-medium">
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 ${
+                    phase === "prep"
+                      ? "bg-amber-100 text-amber-700"
+                      : "bg-emerald-50 text-emerald-600"
+                  }`}
+                >
+                  {phase === "recording" && <CheckCircle2 className="w-3 h-3" />}
+                  {phase === "prep" && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />}
+                  Preparation
+                </span>
+                <span className="text-gray-300">—</span>
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 ${
+                    phase === "recording"
+                      ? "bg-red-100 text-red-600"
+                      : "bg-gray-100 text-gray-400"
+                  }`}
+                >
+                  {phase === "recording" && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />}
+                  Recording
+                </span>
+              </div>
+            )}
           </div>
           <p className="text-[15px] sm:text-base text-gray-900 font-medium leading-relaxed whitespace-pre-line">
             {task.prompt}
@@ -385,15 +456,12 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
                   録音中
                 </div>
                 <div className="text-5xl font-bold text-gray-900 tabular-nums">{formatTime(countdown)}</div>
-                {/* マイク入力レベル */}
+                {/* 録音中の波形（画像4枚目） */}
                 {!micError && (
-                  <div className="w-full max-w-xs">
-                    <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-[width] duration-75 ${
-                          micLevel > 0.05 ? "bg-emerald-500" : "bg-gray-300"
-                        }`}
-                        style={{ width: `${Math.max(3, micLevel * 100)}%` }}
+                  <div className="w-full max-w-md">
+                    <div className="h-16 w-full rounded-xl border border-gray-200 bg-gray-50/70 px-2">
+                      <RecordingWaveform
+                        getLevel={() => pcmRecorderRef.current?.getLevel() ?? 0}
                       />
                     </div>
                     <div className="mt-1 text-[10px] text-gray-400 text-center">

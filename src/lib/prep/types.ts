@@ -219,6 +219,25 @@ export interface EssayWritingSet {
 
 export type WritingPracticeSet = EmailWritingSet | BuildSentenceSet | EssayWritingSet;
 
+// ---- 文法修正エクササイズ（Speaking / Writing 共通） ----
+//
+// 「最初から答えを見せる」のではなく、学習者に一度考えさせて
+// タイピングで直させるための1問分のデータ。
+// WritingGrammarCorrection / SpeakingTaskFeedback の双方からこの型へ変換して使う。
+
+export interface GrammarCorrectionItem {
+  /** 誤りの語句（学習者が直す対象。文中でハイライトされる） */
+  mistake: string;
+  /** 正しい語句 */
+  correction: string;
+  /** 解説 */
+  explanation: string;
+  /** 誤りを含む文全体（前後の文脈表示に使う） */
+  context: string;
+  /** 誤り種別ラベル（例: "冠詞" / "動詞の時制"）。任意 */
+  category?: string;
+}
+
 // ---- Writing 添削フィードバック（旧 Writing Masters 版を新仕様へ移植） ----
 
 export interface WritingGrammarCorrection {
@@ -310,6 +329,10 @@ export interface SpeakingTaskFeedback {
   improvements: string[];
   /** 改善例（言い直し例） */
   improvedVersion?: string;
+  /** 文法修正エクササイズ用の1問ずつの修正項目（発話の文字起こしに対する添削） */
+  grammarCorrections?: GrammarCorrectionItem[];
+  /** 文字起こしの語ごとの「直前ポーズ長（秒）」。フィラー着色・長いポーズ位置の可視化に使う */
+  speechWords?: { w: string; gap: number }[];
   /** Listen and Repeat: お手本の文 */
   expectedText?: string;
   /** Listen and Repeat: 語単位の一致率 (0〜1) */

@@ -27,6 +27,8 @@ import {
 import PrepShell from "@/components/prep/PrepShell";
 import ScoreGauge from "@/components/prep/ScoreGauge";
 import MarkdownLite from "@/components/prep/MarkdownLite";
+import GrammarCorrectionExercise from "@/components/prep/GrammarCorrectionExercise";
+import SpeakingTranscriptView from "@/components/prep/SpeakingTranscriptView";
 import { SAMPLE_REPORTS } from "@/lib/prep/mock-data";
 import { getListeningSet, getReadingSet, getSpeakingSet } from "@/lib/prep/data-source";
 import { loadSession } from "@/lib/prep/session-store";
@@ -491,12 +493,12 @@ function SpeakingFeedbackCard({
             </div>
           )}
           {feedback.transcript && (
-            <div className="mt-3 bg-gray-50 rounded-lg border border-gray-100 px-4 py-3">
-              <div className="text-[11px] font-semibold text-gray-400 mb-1">
-                あなたの回答（文字起こし）
-              </div>
-              <p className="text-sm text-gray-800 leading-relaxed">{feedback.transcript}</p>
-            </div>
+            <SpeakingTranscriptView
+              transcript={feedback.transcript}
+              speechWords={feedback.speechWords}
+              fillerCount={feedback.fluency?.fillerCount}
+              longPauses={feedback.fluency?.longPauses}
+            />
           )}
 
           {feedback.summary && (
@@ -536,6 +538,16 @@ function SpeakingFeedbackCard({
                 ワンランク上の言い直し例
               </div>
               <p className="text-sm text-gray-800 leading-relaxed italic">{feedback.improvedVersion}</p>
+            </div>
+          )}
+
+          {feedback.grammarCorrections && feedback.grammarCorrections.length > 0 && (
+            <div className="mt-3">
+              <GrammarCorrectionExercise
+                items={feedback.grammarCorrections}
+                sourceText={feedback.transcript}
+                heading="文法チューター — 自分で直してみましょう"
+              />
             </div>
           )}
         </>
