@@ -1,0 +1,121 @@
+[
+  {
+    "id": "toeic-l-p1-sample",
+    "exam": "toeic",
+    "skill": "listening",
+    "practiceType": "part-1",
+    "title": "Part 1 — Photographs #1 (テスト用)",
+    "description": "写真描写問題のサンプル（1 問）。音声・画像は後日アップロード予定。",
+    "difficulty": "easy",
+    "timeLimitSec": 60,
+    "playLimitInTest": 1,
+    "transcript": "(A) The woman is typing on a laptop.\n(B) The woman is pouring a cup of coffee.\n(C) The woman is closing a window.\n(D) The woman is watering some plants.",
+    "transcriptJa": "(A) 女性はノートパソコンで入力している。\n(B) 女性はコーヒーを注いでいる。\n(C) 女性は窓を閉めている。\n(D) 女性は植物に水をやっている。",
+    "questions": [
+      {
+        "id": "toeic-l-p1-sample-q1",
+        "number": 1,
+        "type": "multiple_choice",
+        "prompt": "Look at the photograph and select the statement that best describes it.",
+        "options": [
+          "(A) The woman is typing on a laptop.",
+          "(B) The woman is pouring a cup of coffee.",
+          "(C) The woman is closing a window.",
+          "(D) The woman is watering some plants."
+        ],
+        "answer": "(A) The woman is typing on a laptop.",
+        "explanation": "写真中の女性はノートパソコンで作業しているため (A) が正解。他は写真に写っていない動作。",
+        "skillTag": "detail"
+      }
+    ]
+  },
+  {
+    "id": "toeic-l-p2-sample",
+    "exam": "toeic",
+    "skill": "listening",
+    "practiceType": "part-2",
+    "title": "Part 2 — Question-Response #1 (テスト用)",
+    "description": "応答問題のサンプル（1 問）。音声は後日アップロード予定。",
+    "difficulty": "easy",
+    "timeLimitSec": 60,
+    "playLimitInTest": 1,
+    "transcript": "Where did you put the quarterly report?\n(A) It was a great quarter.\n(B) I left it on your desk.\n(C) About three o'clock.",
+    "transcriptJa": "四半期報告書はどこに置きましたか。\n(A) 素晴らしい四半期でした。\n(B) あなたの机の上に置いておきました。\n(C) 3 時ごろです。",
+    "questions": [
+      {
+        "id": "toeic-l-p2-sample-q1",
+        "number": 1,
+        "type": "multiple_choice",
+        "prompt": "Select the best response to the question or statement.",
+        "options": [
+          "(A) It was a great quarter.",
+          "(B) I left it on your desk.",
+          "(C) About three o'clock."
+        ],
+        "answer": "(B) I left it on your desk.",
+        "explanation": "Where（場所）を尋ねる質問なので、場所を答えている (B) が最も適切。",
+        "skillTag": "detail"
+      }
+    ]
+  },
+  {
+    "id": "toeic-l-p3-sample",
+    "exam": "toeic",
+    "skill": "listening",
+    "practiceType": "part-3",
+    "title": "Part 3 — Conversations #1 (テスト用)",
+    "description": "会話問題のサンプル（1 問）。音声は後日アップロード予定。",
+    "difficulty": "medium",
+    "timeLimitSec": 120,
+    "playLimitInTest": 1,
+    "transcript": "M: Hi, I'd like to reserve a meeting room for tomorrow afternoon, around two o'clock.\nW: Sure. The large conference room is available, but it can only be booked for a minimum of two hours.\nM: That's fine. We'll need it until at least four anyway for the client presentation.",
+    "transcriptJa": "男性: こんにちは、明日の午後、2 時ごろに会議室を予約したいのですが。\n女性: かしこまりました。大会議室が空いていますが、最低 2 時間からの予約となります。\n男性: 問題ありません。どのみち顧客向けプレゼンで少なくとも 4 時までは使う予定なので。",
+    "questions": [
+      {
+        "id": "toeic-l-p3-sample-q1",
+        "number": 1,
+        "type": "multiple_choice",
+        "prompt": "Why does the man want to reserve the room?",
+        "options": [
+          "To interview a job candidate",
+          "To give a client presentation",
+          "To hold a training session",
+          "To celebrate a colleague's retirement"
+        ],
+        "answer": "To give a client presentation",
+        "explanation": "男性が「for the client presentation」と述べているため、顧客向けプレゼンが目的。",
+        "skillTag": "main_idea"
+      }
+    ]
+  },
+  {
+    "id": "toeic-l-p4-sample",
+    "exam": "toeic",
+    "skill": "listening",
+    "practiceType": "part-4",
+    "title": "Part 4 — Talks #1 (テスト用)",
+    "description": "説明文問題のサンプル（1 問）。音声は後日アップロード予定。",
+    "difficulty": "medium",
+    "timeLimitSec": 120,
+    "playLimitInTest": 1,
+    "transcript": "Attention, passengers. The 3:15 express train to Central Station has been delayed by approximately twenty minutes due to signal maintenance on the line. We apologize for the inconvenience. Passengers who need to make a connection should speak with a staff member at the information desk on platform two.",
+    "transcriptJa": "乗客の皆様にお知らせします。3 時 15 分発、セントラル駅行き特急列車は、線路上の信号設備点検のため約 20 分遅れております。ご不便をおかけし申し訳ございません。乗り換えが必要なお客様は、2 番ホームの案内所の係員にお声がけください。",
+    "questions": [
+      {
+        "id": "toeic-l-p4-sample-q1",
+        "number": 1,
+        "type": "multiple_choice",
+        "prompt": "Why is the train delayed?",
+        "options": [
+          "Because of bad weather",
+          "Because of signal maintenance",
+          "Because of a staff shortage",
+          "Because of an accident"
+        ],
+        "answer": "Because of signal maintenance",
+        "explanation": "「due to signal maintenance on the line」と説明されているため、信号設備点検が理由。",
+        "skillTag": "detail"
+      }
+    ]
+  }
+]

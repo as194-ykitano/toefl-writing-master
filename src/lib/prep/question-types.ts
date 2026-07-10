@@ -260,6 +260,44 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     labelJa: "3 文書の読解",
     description: "関連する 3 つの文書を読み比べて設問に回答",
   },
+
+  // ---- TOEIC Listening（箱のみ先行。各パート 1 問のテスト用データあり・現状 Coming Soon） ----
+  {
+    id: "part-1",
+    exam: "toeic",
+    skill: "listening",
+    label: "Part 1",
+    labelJa: "写真描写問題",
+    description: "1 枚の写真を最も適切に描写する説明文を選ぶ",
+    comingSoon: true,
+  },
+  {
+    id: "part-2",
+    exam: "toeic",
+    skill: "listening",
+    label: "Part 2",
+    labelJa: "応答問題",
+    description: "質問・発言に対して最も適切な応答を選ぶ",
+    comingSoon: true,
+  },
+  {
+    id: "part-3",
+    exam: "toeic",
+    skill: "listening",
+    label: "Part 3",
+    labelJa: "会話問題",
+    description: "2〜3 人の会話を聞いて設問に回答",
+    comingSoon: true,
+  },
+  {
+    id: "part-4",
+    exam: "toeic",
+    skill: "listening",
+    label: "Part 4",
+    labelJa: "説明文問題",
+    description: "アナウンス・スピーチなどの説明文を聞いて設問に回答",
+    comingSoon: true,
+  },
 ];
 
 export function getPracticeTypes(exam: ExamId, skill: SkillId): PracticeTypeInfo[] {

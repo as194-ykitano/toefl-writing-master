@@ -34,6 +34,7 @@ async function loadJson<T>(key: string, loader: () => Promise<{ default: unknown
 
 const loaders = {
   toeicReading: () => import("./data/toeic-reading-sets.json"),
+  toeicListening: () => import("./data/toeic-listening-sets.json"),
   ieltsReading: () => import("./data/ielts-reading-sets.json"),
   ieltsListening: () => import("./data/ielts-listening-sets.json"),
   ieltsSpeaking: () => import("./data/ielts-speaking-sets.json"),
@@ -134,14 +135,15 @@ export async function getReadingSet(exam: ExamId, setId: string): Promise<Readin
 
 // ---- Listening ----
 
+const LISTENING_LOADERS: Record<ExamId, () => Promise<{ default: unknown }>> = {
+  ielts: loaders.ieltsListening,
+  toefl: loaders.toeflListening,
+  toeic: loaders.toeicListening,
+};
+
 export async function getListeningSets(exam: ExamId): Promise<ListeningSet[]> {
   const mock = LISTENING_SETS.filter((s) => s.exam === exam);
-  // TOEIC は初回スコープで Reading のみ（Listening データ未整備）
-  if (exam === "toeic") return mock;
-  const imported = await loadJson<ListeningSet[]>(
-    `${exam}-listening`,
-    exam === "ielts" ? loaders.ieltsListening : loaders.toeflListening
-  );
+  const imported = await loadJson<ListeningSet[]>(`${exam}-listening`, LISTENING_LOADERS[exam]);
   return [...imported, ...mock];
 }
 

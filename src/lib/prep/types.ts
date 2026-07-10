@@ -13,11 +13,11 @@ export const EXAM_LABELS: Record<ExamId, string> = {
   toeic: "TOEIC",
 };
 
-/** その試験で対応している技能。TOEIC は初回スコープで Reading のみ。 */
+/** その試験で対応している技能。TOEIC は Reading + Listening（Listening は現状 Coming Soon）。 */
 export const EXAM_SKILLS: Record<ExamId, SkillId[]> = {
   toefl: ["reading", "listening", "speaking", "writing"],
   ielts: ["reading", "listening", "speaking", "writing"],
-  toeic: ["reading"],
+  toeic: ["reading", "listening"],
 };
 
 export const SKILL_LABELS: Record<SkillId, string> = {

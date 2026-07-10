@@ -135,7 +135,7 @@ export default function HomePage() {
   const name = user?.displayName;
   const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
 
-  // その試験で対応している技能タブのみ表示（TOEIC は Reading のみ）
+  // その試験で対応している技能タブのみ表示（TOEIC は Reading + Listening）
   const visibleTabs = useMemo(
     () => SKILL_TABS.filter((t) => EXAM_SKILLS[activeExam].includes(t.skill)),
     [activeExam]
