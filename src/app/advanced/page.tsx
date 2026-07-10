@@ -22,29 +22,20 @@ export default function AdvancedHubPage() {
         {
           style: "banner",
           title: "Writing トレーニング",
-          description: "AI 添削つきの応用ライティング練習（既存機能）",
+          description: "AI 添削つきの応用ライティング練習",
           banners: [
             {
               label: "動画を教材にしたライティング",
               title: "YouTube Writing",
               subtitle: "好きな動画で要約・意見ライティング",
               badges: ["AI添削", "添削無制限"],
-              href: "/youtuber-dashboard",
+              href: "/advanced/youtube",
               tone: "amber",
               pattern: "letters",
               patternText: "YOUTUBE",
               progress: 0,
             },
-            {
-              label: "自由記述トレーニング",
-              title: "Free Writing",
-              subtitle: "試験形式に縛られない自由なライティング",
-              badges: ["AI添削", "添削無制限"],
-              href: "/basic-dashboard",
-              tone: "violet",
-              pattern: "grid",
-              progress: 0,
-            },
+            // Free Writing は新仕様では一時的に非表示（旧 /basic-dashboard は残置）
           ],
         },
         {
