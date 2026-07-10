@@ -12,15 +12,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import {
-  BookOpenCheck,
-  CalendarDays,
   ClipboardCheck,
   ChevronsLeft,
   ChevronsRight,
-  GraduationCap,
   Home,
   LayoutDashboard,
-  Lightbulb,
   LogOut,
   LucideIcon,
   Menu,
@@ -29,6 +25,7 @@ import {
   User,
   X,
 } from "lucide-react";
+import { useExam } from "@/contexts/ExamContext";
 import {
   Dialog,
   DialogContent,
@@ -60,58 +57,44 @@ interface NavGroup {
   items: NavItem[];
 }
 
-const NAV_GROUPS: NavGroup[] = [
-  {
-    items: [
-      { href: "/home", label: "ホーム", icon: Home, activeFor: ["/home"] },
-      {
-        href: "/overview",
-        label: "ダッシュボード",
-        icon: LayoutDashboard,
-        activeFor: ["/overview", "/results"],
-      },
-      { href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] },
-      // 「復習」「学習プラン」は次フェーズ（ダッシュボード拡充）まで一時的に非表示
-      { href: "/review", label: "復習", icon: BookOpenCheck, activeFor: ["/review"], hidden: true },
-      { href: "/study-plan", label: "学習プラン", icon: CalendarDays, activeFor: ["/study-plan"], hidden: true },
-    ],
-  },
-  {
-    title: "コース",
-    items: [
-      {
-        href: "/toefl",
-        label: "TOEFL",
-        icon: GraduationCap,
-        activeFor: ["/toefl", "/practice/toefl", "/toefl-tasks", "/toefl-dashboard", "/toefl-essays"],
-      },
-      {
-        href: "/ielts",
-        label: "IELTS",
-        icon: GraduationCap,
-        activeFor: ["/ielts", "/practice/ielts", "/ielts-tasks", "/ielts-dashboard", "/ielts-essays"],
-      },
-      {
-        href: "/advanced",
-        label: "Advanced",
-        icon: Lightbulb,
-        activeFor: ["/advanced", "/youtuber-tasks", "/youtuber-dashboard", "/youtuber-essays"],
-      },
-    ],
-  },
-  {
-    title: "その他",
-    items: [
-      {
-        href: "/training-selection",
-        label: "Writing 添削（旧トップ）",
-        icon: PenLine,
-        activeFor: ["/training-selection"],
-      },
-      { href: "/profile", label: "プロフィール", icon: User, activeFor: ["/profile"] },
-    ],
-  },
-];
+// ナビは左上ドロップダウンの選択（試験種別）に連動して構築する。
+// コース切替はドロップダウンが担うため、サイドバーの「コース」グループは廃止。
+// Advanced 選択時はダッシュボード・模試を非対応として表示しない。
+function buildNavGroups(exam: string): NavGroup[] {
+  const isAdvanced = exam === "advanced";
+  const top: NavItem[] = [
+    {
+      href: isAdvanced ? "/advanced" : "/home",
+      label: "ホーム",
+      icon: Home,
+      activeFor: isAdvanced ? ["/advanced", "/home"] : ["/home"],
+    },
+  ];
+  if (!isAdvanced) {
+    top.push({
+      href: "/overview",
+      label: "ダッシュボード",
+      icon: LayoutDashboard,
+      activeFor: ["/overview", "/results"],
+    });
+    top.push({ href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] });
+  }
+  return [
+    { items: top },
+    {
+      title: "その他",
+      items: [
+        {
+          href: "/training-selection",
+          label: "Writing 添削（旧トップ）",
+          icon: PenLine,
+          activeFor: ["/training-selection"],
+        },
+        { href: "/profile", label: "プロフィール", icon: User, activeFor: ["/profile"] },
+      ],
+    },
+  ];
+}
 
 interface PrepShellProps {
   children: ReactNode;
@@ -154,10 +137,12 @@ function NavLinks({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
+  const { exam } = useExam();
+  const navGroups = buildNavGroups(exam);
 
   return (
     <nav className="flex-1 overflow-y-auto py-3 px-2.5 space-y-4">
-      {NAV_GROUPS.map((group, gi) => (
+      {navGroups.map((group, gi) => (
         <div key={group.title ?? gi}>
           {group.title && !collapsed && (
             <div className="px-3 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">

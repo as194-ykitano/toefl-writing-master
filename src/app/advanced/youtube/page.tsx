@@ -3,45 +3,38 @@
 // Advanced: YouTube Writing（新仕様）
 // 好きな YouTube 動画を選び、その要約 / 意見を英語で書いて AI 添削を受ける。
 //   検索/URL → 動画選択 → 字幕（貼り付け or 自動取得）→ 要約/意見を記述 → 提出 → AI 添削
-// 既存の YouTube API（search / video-info / transcript）と analyze-youtuber を再利用し、
-// 文法添削は共通の GrammarCorrectionExercise で「自分で直す」形式に。
+// 添削結果は localStorage に保存し、/advanced/youtube/result/[id] で後から見返せる。
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft,
+  ArrowRight,
   CheckCircle2,
+  History,
   Lightbulb,
   Loader2,
   Search,
   Send,
-  Sparkles,
   Youtube,
 } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import GrammarCorrectionExercise from "@/components/prep/GrammarCorrectionExercise";
 import SubmitQuiz from "@/components/prep/SubmitQuiz";
-import { writingCorrectionsToItems } from "@/lib/prep/grammar";
-import { WritingGrammarCorrection } from "@/lib/prep/types";
+import YouTubeFeedbackView from "@/components/prep/YouTubeFeedbackView";
+import {
+  loadYouTubeResults,
+  newYouTubeResultId,
+  saveYouTubeResult,
+  YouTuberFeedback,
+  YouTubeTaskType,
+  YouTubeWritingResult,
+} from "@/lib/prep/youtube-store";
 import type { YouTubeVideo } from "@/lib/types";
 
 type Phase = "search" | "compose" | "analyzing" | "result";
-type TaskType = "summary" | "opinion";
-
-interface QualityBlock {
-  goodPoints: string[];
-  improvements: string[];
-  suggestions: string[];
-}
-interface YouTuberFeedback {
-  summaryQuality?: QualityBlock;
-  opinionQuality?: QualityBlock;
-  grammarCorrections?: { corrections?: WritingGrammarCorrection[] };
-  sampleAnswer?: string;
-}
 
 /** YouTube URL / ID から videoId を抽出 */
 function extractVideoId(input: string): string | null {
@@ -61,19 +54,24 @@ export default function YouTubeWritingPage() {
   const [video, setVideo] = useState<YouTubeVideo | null>(null);
   const [transcript, setTranscript] = useState("");
   const [fetchingTranscript, setFetchingTranscript] = useState(false);
-  const [taskType, setTaskType] = useState<TaskType>("summary");
+  const [taskType, setTaskType] = useState<YouTubeTaskType>("summary");
   const [essay, setEssay] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<YouTuberFeedback | null>(null);
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const [history, setHistory] = useState<YouTubeWritingResult[]>([]);
 
   const wordCount = useMemo(() => essay.trim().split(/\s+/).filter(Boolean).length, [essay]);
+
+  useEffect(() => {
+    setHistory(loadYouTubeResults());
+  }, []);
 
   // ---- 検索 ----
   const runSearch = async () => {
     const q = query.trim();
     if (!q) return;
     setSearchError(null);
-    // URL / ID が貼られた場合は video-info で1件取得
     const vid = extractVideoId(q);
     setSearching(true);
     try {
@@ -104,6 +102,7 @@ export default function YouTubeWritingPage() {
     setTranscript((v.description ?? "").replace(/\s+/g, " ").trim());
     setEssay("");
     setFeedback(null);
+    setSavedId(null);
     setSubmitError(null);
     setPhase("compose");
     void autoFetchTranscript(v.id);
@@ -143,6 +142,25 @@ export default function YouTubeWritingPage() {
       });
       const json = (await res.json()) as YouTuberFeedback & { error?: string };
       if (!res.ok) throw new Error(json?.error ?? "添削に失敗しました");
+
+      // 結果を保存（後から見返せる）
+      const id = newYouTubeResultId();
+      const result: YouTubeWritingResult = {
+        id,
+        videoId: video.id,
+        videoTitle: video.title,
+        videoThumbnail: video.thumbnailUrl,
+        videoUrl: video.videoUrl,
+        channelTitle: video.channelTitle,
+        taskType,
+        essay,
+        wordCount,
+        finishedAt: new Date().toISOString(),
+        feedback: json,
+      };
+      saveYouTubeResult(result);
+      setHistory(loadYouTubeResults());
+      setSavedId(id);
       setFeedback(json);
       setPhase("result");
     } catch (e) {
@@ -158,6 +176,8 @@ export default function YouTubeWritingPage() {
     setQuery("");
     setEssay("");
     setFeedback(null);
+    setSavedId(null);
+    setHistory(loadYouTubeResults());
   };
 
   return (
@@ -225,6 +245,38 @@ export default function YouTubeWritingPage() {
                 </button>
               ))}
             </div>
+
+            {/* これまでの添削結果 */}
+            {history.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                  <History className="w-4 h-4 text-gray-400" /> これまでの添削結果
+                </h2>
+                <p className="mt-1 text-xs text-gray-500">クリックすると詳細を見返せます。</p>
+                <div className="mt-3 space-y-2.5">
+                  {history.slice(0, 10).map((r) => (
+                    <Link
+                      key={r.id}
+                      href={`/advanced/youtube/result/${r.id}`}
+                      className="flex items-center gap-3 bg-white rounded-xl border border-gray-200/70 p-3 hover:border-gray-300 hover:shadow-sm transition-all"
+                    >
+                      {r.videoThumbnail && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={r.videoThumbnail} alt="" className="w-24 h-14 rounded-lg object-cover flex-shrink-0" />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-semibold text-gray-900 truncate">{r.videoTitle}</div>
+                        <div className="text-xs text-gray-400 mt-0.5">
+                          {r.taskType === "summary" ? "Summary" : "Opinion"} ・{" "}
+                          {new Date(r.finishedAt).toLocaleDateString("ja-JP")} ・ {r.wordCount} words
+                        </div>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -238,7 +290,6 @@ export default function YouTubeWritingPage() {
               <ArrowLeft className="w-4 h-4" /> 動画を選び直す
             </button>
 
-            {/* 動画情報 */}
             <div className="bg-white rounded-2xl border border-gray-200 p-4 flex gap-4">
               {video.thumbnailUrl && (
                 <Image
@@ -264,16 +315,13 @@ export default function YouTubeWritingPage() {
               </div>
             </div>
 
-            {/* タスクタイプ */}
             <div className="flex gap-2">
-              {(["summary", "opinion"] as TaskType[]).map((t) => (
+              {(["summary", "opinion"] as YouTubeTaskType[]).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTaskType(t)}
                   className={`flex-1 rounded-xl border px-4 py-3 text-left transition-all ${
-                    taskType === t
-                      ? "border-eg bg-eg-faint"
-                      : "border-gray-200/70 bg-white hover:border-gray-300"
+                    taskType === t ? "border-eg bg-eg-faint" : "border-gray-200/70 bg-white hover:border-gray-300"
                   }`}
                 >
                   <div className="text-sm font-semibold text-gray-900">
@@ -286,7 +334,6 @@ export default function YouTubeWritingPage() {
               ))}
             </div>
 
-            {/* 字幕 */}
             <div className="bg-white rounded-2xl border border-gray-200 p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="text-xs font-semibold text-gray-500">
@@ -306,7 +353,6 @@ export default function YouTubeWritingPage() {
               />
             </div>
 
-            {/* 回答 */}
             <div className="bg-white rounded-2xl border border-gray-200 p-4 flex flex-col">
               <div className="flex items-center justify-between mb-2">
                 <div className="text-sm font-semibold text-gray-700">
@@ -349,121 +395,35 @@ export default function YouTubeWritingPage() {
 
         {/* ---- 結果フェーズ ---- */}
         {phase === "result" && feedback && (
-          <YouTubeResult
-            feedback={feedback}
-            essay={essay}
-            taskType={taskType}
-            onRetry={() => setPhase("compose")}
-            onNew={resetAll}
-          />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-emerald-600">
+                <CheckCircle2 className="w-5 h-5" />
+                <h2 className="text-base font-semibold text-gray-900">添削結果</h2>
+              </div>
+              {savedId && (
+                <Link
+                  href={`/advanced/youtube/result/${savedId}`}
+                  className="text-xs font-medium text-eg-deep hover:text-eg-dark inline-flex items-center gap-1"
+                >
+                  この結果のページを開く <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              )}
+            </div>
+
+            <YouTubeFeedbackView feedback={feedback} essay={essay} taskType={taskType} />
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Button variant="outline" onClick={() => setPhase("compose")}>
+                <Lightbulb className="w-4 h-4 mr-1.5" /> 書き直す
+              </Button>
+              <Button className="bg-eg hover:bg-eg-dark text-black" onClick={resetAll}>
+                別の動画で書く
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </PrepShell>
-  );
-}
-
-// 「本文（例：'...'）」形式のアイテムを、本文と例文に分離して読みやすく表示する
-function splitExample(text: string): { main: string; example?: string } {
-  const m = text.match(/^([\s\S]*?)（例[:：]\s*([\s\S]*?)）\s*$/);
-  if (m) return { main: m[1].trim().replace(/[、,]\s*$/, ""), example: m[2].trim() };
-  return { main: text.trim() };
-}
-
-const TONE_STYLE = {
-  good: { head: "text-emerald-700", bar: "bg-emerald-400", card: "border-emerald-100 bg-emerald-50/40", ex: "border-emerald-300", label: "良かった点" },
-  bad: { head: "text-orange-700", bar: "bg-orange-400", card: "border-orange-100 bg-orange-50/40", ex: "border-orange-300", label: "改善点" },
-  tip: { head: "text-blue-700", bar: "bg-blue-400", card: "border-blue-100 bg-blue-50/40", ex: "border-blue-300", label: "提案" },
-} as const;
-
-function QualitySection({ items, tone }: { items: string[]; tone: keyof typeof TONE_STYLE }) {
-  if (!items || items.length === 0) return null;
-  const s = TONE_STYLE[tone];
-  return (
-    <div>
-      <div className="flex items-center gap-2 mb-2.5">
-        <span className={`w-1 h-4 rounded-full ${s.bar}`} />
-        <h4 className={`text-sm font-semibold ${s.head}`}>{s.label}</h4>
-        <span className="text-[11px] text-gray-400">{items.length}</span>
-      </div>
-      <div className="space-y-2">
-        {items.map((it, i) => {
-          const { main, example } = splitExample(it);
-          return (
-            <div key={i} className={`rounded-xl border p-3 ${s.card}`}>
-              <p className="text-sm text-gray-800 leading-relaxed">{main}</p>
-              {example && (
-                <p className={`mt-1.5 pl-2.5 border-l-2 ${s.ex} text-xs text-gray-500 italic leading-relaxed`}>
-                  例: {example}
-                </p>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function YouTubeResult({
-  feedback,
-  essay,
-  taskType,
-  onRetry,
-  onNew,
-}: {
-  feedback: YouTuberFeedback;
-  essay: string;
-  taskType: TaskType;
-  onRetry: () => void;
-  onNew: () => void;
-}) {
-  const quality = taskType === "summary" ? feedback.summaryQuality : feedback.opinionQuality;
-  const items = writingCorrectionsToItems(feedback.grammarCorrections?.corrections ?? []);
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 text-emerald-600">
-        <CheckCircle2 className="w-5 h-5" />
-        <h2 className="text-base font-semibold text-gray-900">添削結果</h2>
-      </div>
-
-      {quality && (
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5">
-          <QualitySection items={quality.goodPoints} tone="good" />
-          <QualitySection items={quality.improvements} tone="bad" />
-          <QualitySection items={quality.suggestions} tone="tip" />
-        </div>
-      )}
-
-      {/* 文法修正（自分で直す） */}
-      {items.length > 0 && (
-        <GrammarCorrectionExercise
-          items={items}
-          sourceText={essay}
-          heading="エラー修正ドリル — 自分で直してみましょう"
-        />
-      )}
-
-      {/* 解答例 */}
-      {feedback.sampleAnswer && (
-        <div className="bg-white rounded-2xl border border-violet-100 p-6">
-          <h3 className="text-base font-semibold text-violet-700 mb-2 flex items-center gap-2">
-            <Sparkles className="w-4.5 h-4.5" /> 解答例
-          </h3>
-          <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">
-            {feedback.sampleAnswer}
-          </p>
-        </div>
-      )}
-
-      <div className="flex flex-wrap gap-3 pt-2">
-        <Button variant="outline" onClick={onRetry}>
-          <Lightbulb className="w-4 h-4 mr-1.5" /> 書き直す
-        </Button>
-        <Button className="bg-eg hover:bg-eg-dark text-black" onClick={onNew}>
-          別の動画で書く
-        </Button>
-      </div>
-    </div>
   );
 }

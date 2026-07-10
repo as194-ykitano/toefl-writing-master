@@ -7,6 +7,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   BookOpen,
@@ -103,8 +104,14 @@ function TypeCard({
 export default function HomePage() {
   const { user } = useAuth();
   const { exam } = useExam();
+  const router = useRouter();
   const name = user?.displayName;
   const activeExam: ExamId = exam === "ielts" ? "ielts" : "toefl";
+
+  // Advanced 選択時はホームではなく Advanced ハブを表示する
+  useEffect(() => {
+    if (exam === "advanced") router.replace("/advanced");
+  }, [exam, router]);
 
   const [skill, setSkill] = useState<SkillId>("reading");
   const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});

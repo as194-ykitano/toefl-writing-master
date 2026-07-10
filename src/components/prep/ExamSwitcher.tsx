@@ -6,7 +6,7 @@
 // EXAM_OPTIONS に 1 行足すだけで候補が増える（TOEIC などは comingSoon）。
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Check, ChevronDown, Lock } from "lucide-react";
 import { useExam, EXAM_OPTIONS } from "@/contexts/ExamContext";
 import { CategoryId } from "@/lib/prep/types";
@@ -21,6 +21,7 @@ function isCategoryId(value: string): value is CategoryId {
 
 export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { exam, setExam } = useExam();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -41,11 +42,20 @@ export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
     };
   }, [open]);
 
-  const handleSelect = (id: string, href: string, comingSoon?: boolean) => {
-    if (comingSoon) return;
-    if (isCategoryId(id)) setExam(id);
+  const handleSelect = (id: string, comingSoon?: boolean) => {
+    if (comingSoon || !isCategoryId(id)) return;
+    setExam(id);
     setOpen(false);
-    router.push(href);
+    // 切替でコンテンツ（Home / ダッシュボードなど）が連動するよう、
+    // 基本は現在のページに留まる。ただし試験⇄Advanced の往来だけは適切なトップへ移動する。
+    const onAdvanced = pathname?.startsWith("/advanced") ?? false;
+    if (id === "advanced") {
+      if (!onAdvanced) router.push("/advanced");
+    } else if (onAdvanced) {
+      // Advanced 領域から TOEFL / IELTS に切り替えたらホームへ
+      router.push("/home");
+    }
+    // それ以外（Home ⇄ ダッシュボードなど試験系ページ内）はそのまま留まり、内容だけ切り替わる
   };
 
   return (
@@ -78,7 +88,7 @@ export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
                 role="option"
                 aria-selected={active}
                 disabled={opt.comingSoon}
-                onClick={() => handleSelect(opt.id, opt.href, opt.comingSoon)}
+                onClick={() => handleSelect(opt.id, opt.comingSoon)}
                 className={`flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left transition-colors ${
                   opt.comingSoon
                     ? "cursor-not-allowed opacity-50"
