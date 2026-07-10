@@ -166,7 +166,129 @@ export interface BuildSentenceSet {
   items: BuildSentenceItem[];
 }
 
-export type WritingPracticeSet = EmailWritingSet | BuildSentenceSet;
+// ---- エッセイ型 Writing 演習セット（IELTS Task 1/2, TOEFL Academic Discussion） ----
+//
+// 旧 Writing Masters 版（openai.ts の analyzeIELTSEssay / analyzeTOEFLAcademicDiscussion）
+// の深い添削を、新 Writing UI・新データ構造に合わせて扱うための型。
+
+/** 添削ルーブリックの種別（採点項目・スコア上限の切り替えに使う） */
+export type WritingRubricKind =
+  | "ielts-task1"
+  | "ielts-task2"
+  | "toefl-academic-discussion"
+  | "toefl-email";
+
+/** TOEFL Academic Discussion の議論内容 */
+export interface DiscussionContent {
+  professor: string;
+  student1: string;
+  student2: string;
+  question: string;
+  professorName?: string;
+  student1Name?: string;
+  student2Name?: string;
+}
+
+/**
+ * IELTS Task 1 / Task 2 / TOEFL Academic Discussion 共通のエッセイ型演習セット。
+ * 旧 Writing Masters 版と同等の深さで AI 添削し、結果ページで見返す。
+ */
+export interface EssayWritingSet {
+  id: string;
+  exam: ExamId;
+  skill: "writing";
+  practiceType: "task-1" | "task-2" | "academic-discussion";
+  /** 採点ルーブリックの種別 */
+  rubric: WritingRubricKind;
+  title: string;
+  description?: string;
+  difficulty: "easy" | "medium" | "hard";
+  timeLimitSec: number;
+  /** 問題文（プロンプト本文。改行区切り、箇条書きは「・」付き） */
+  promptText: string;
+  promptJa?: string;
+  /** IELTS Task 1 の図表画像 URL（任意） */
+  imageUrl?: string;
+  /** TOEFL Academic Discussion の議論内容 */
+  discussion?: DiscussionContent;
+  /** 語数の目安 */
+  minWords?: number;
+  targetWords?: number;
+  sampleAnswer?: string;
+}
+
+export type WritingPracticeSet = EmailWritingSet | BuildSentenceSet | EssayWritingSet;
+
+// ---- Writing 添削フィードバック（旧 Writing Masters 版を新仕様へ移植） ----
+
+export interface WritingGrammarCorrection {
+  original: string;
+  corrected: string;
+  explanation: string;
+  /** 誤りを含む文全体 */
+  context: string;
+  /** 本文中の開始・終了インデックス（インラインハイライト用） */
+  startIndex: number;
+  endIndex: number;
+}
+
+/** 観点別スコア（ラベル付き） */
+export interface WritingScoreItem {
+  label: string;
+  score: number;
+  /** スコア上限（IELTS=9 / TOEFL=5） */
+  max: number;
+}
+
+export interface WritingSpecificSuggestion {
+  title?: string;
+  description?: string;
+  implementation?: string;
+  example?: string;
+  reasoning?: string;
+}
+
+/** 統合された Writing 添削結果 */
+export interface WritingFeedback {
+  overall: string;
+  strengths: string[];
+  improvements: string[];
+  /** 観点別スコア */
+  scoreItems: WritingScoreItem[];
+  /** 総合スコア（表示用） */
+  score: number;
+  scoreMax: number;
+  /** 総合スコアのラベル（例: "推定 Band" / "推定スコア"） */
+  scoreLabel: string;
+  topicDevelopment?: { goodPoints: string[]; improvements: string[] };
+  generalDescription?: { goodPoints: string[]; improvements: string[] };
+  specificSuggestions?: Array<string | WritingSpecificSuggestion>;
+  grammarCorrections: WritingGrammarCorrection[];
+  /** Write an Email など: 要件ごとの達成状況 */
+  requirementsCheck?: string[];
+  /** 1 ランク上に改善した英語の全文（改善版） */
+  improvedVersion?: string;
+  /** 解答例 */
+  sampleAnswer?: string;
+  /** 添削エラー時のメッセージ */
+  error?: string;
+}
+
+/** localStorage に保存する添削結果レコード（後から見返す用） */
+export interface WritingResult {
+  id: string;
+  exam: ExamId;
+  setId: string;
+  practiceType: string;
+  rubric: WritingRubricKind;
+  title: string;
+  /** 提出した本文 */
+  content: string;
+  wordCount: number;
+  durationSec: number;
+  finishedAt: string; // ISO
+  feedback: WritingFeedback;
+}
 
 // ---- セッション（演習の記録） ----
 

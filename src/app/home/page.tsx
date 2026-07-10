@@ -9,11 +9,21 @@ import { useAuth } from "@/contexts/AuthContext";
 import PrepShell from "@/components/prep/PrepShell";
 import BannerCard from "@/components/prep/BannerCard";
 
-const QUICK_LINKS = [
+interface QuickLink {
+  href: string;
+  icon: typeof PenLine;
+  title: string;
+  description: string;
+  color: string;
+  /** 次フェーズまで一時的に非表示（削除ではなく hide） */
+  hidden?: boolean;
+}
+
+const QUICK_LINKS: QuickLink[] = [
   {
     href: "/training-selection",
     icon: PenLine,
-    title: "Writing 添削",
+    title: "Writing 添削（旧トップ）",
     description: "従来の AI 添削トップを開く",
     color: "text-eg-dark bg-eg-soft",
   },
@@ -24,12 +34,14 @@ const QUICK_LINKS = [
     description: "推定スコアと学習状況",
     color: "text-blue-600 bg-blue-50",
   },
+  // 「復習」「学習プラン」は次フェーズ（ダッシュボード拡充）まで一時的に非表示
   {
     href: "/review",
     icon: BookOpenCheck,
     title: "復習",
     description: "間違えた問題をやり直す",
     color: "text-violet-600 bg-violet-50",
+    hidden: true,
   },
   {
     href: "/study-plan",
@@ -37,6 +49,7 @@ const QUICK_LINKS = [
     title: "学習プラン",
     description: "今週やるべきことを確認",
     color: "text-emerald-600 bg-emerald-50",
+    hidden: true,
   },
 ];
 
@@ -102,7 +115,7 @@ export default function HomePage() {
 
         <h2 className="text-base font-bold text-gray-900 mt-10">クイックアクセス</h2>
         <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {QUICK_LINKS.map((link) => (
+          {QUICK_LINKS.filter((link) => !link.hidden).map((link) => (
             <Link
               key={link.href}
               href={link.href}

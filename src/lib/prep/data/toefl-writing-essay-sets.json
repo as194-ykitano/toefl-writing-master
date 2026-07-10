@@ -1,0 +1,98 @@
+[
+  {
+    "id": "toefl-w-academic-discussion-ad-1",
+    "exam": "toefl",
+    "skill": "writing",
+    "practiceType": "academic-discussion",
+    "rubric": "toefl-academic-discussion",
+    "title": "Academic Discussion — リモートワークの影響",
+    "description": "教授と2人の学生のディスカッションを読み、自分の意見を投稿する（10分・100〜130語）",
+    "difficulty": "medium",
+    "timeLimitSec": 600,
+    "minWords": 100,
+    "targetWords": 130,
+    "promptText": "Your professor is teaching a class on society and work. Read the discussion and write a post responding to the professor's question. In your response, state your own opinion and support it with reasons and examples. Refer to the other students' ideas where relevant.",
+    "promptJa": "教授が社会と働き方についての授業をしています。ディスカッションを読み、教授の質問に対する投稿を書いてください。自分の意見を述べ、理由と具体例で支えてください。必要に応じて他の学生の意見にも触れましょう。",
+    "discussion": {
+      "professor": "Today we're discussing the impact of remote work on society. Remote work has become increasingly common, especially after the pandemic. Let's explore both the positive and negative aspects of this trend. Do you believe the benefits of remote work outweigh the challenges, or vice versa? Please explain your position with specific examples.",
+      "student1": "I think remote work is mostly positive. It gives people more flexibility and work-life balance. My parents both work from home now, and they can spend more time with family. Also, it reduces commuting time and environmental pollution.",
+      "student2": "But I see some problems with remote work. It can be isolating and make collaboration harder. In my internship, I noticed that team communication was more difficult when everyone was working from different locations. Also, not everyone has a good home office setup.",
+      "question": "Do you believe the benefits of remote work outweigh the challenges, or vice versa?",
+      "professorName": "Doctor Gupta",
+      "student1Name": "Kelly",
+      "student2Name": "Andrew"
+    }
+  },
+  {
+    "id": "toefl-w-academic-discussion-ad-2",
+    "exam": "toefl",
+    "skill": "writing",
+    "practiceType": "academic-discussion",
+    "rubric": "toefl-academic-discussion",
+    "title": "Academic Discussion — AIの教育への影響",
+    "description": "AI技術が教育に与える影響について、意見を投稿する（10分・100〜130語）",
+    "difficulty": "hard",
+    "timeLimitSec": 600,
+    "minWords": 100,
+    "targetWords": 130,
+    "promptText": "Your professor is teaching a class on technology and education. Read the discussion and write a post responding to the professor's question. In your response, state your own opinion and support it with reasons and examples. Refer to the other students' ideas where relevant.",
+    "promptJa": "教授がテクノロジーと教育についての授業をしています。ディスカッションを読み、教授の質問に対する投稿を書いてください。自分の意見を述べ、理由と具体例で支えてください。",
+    "discussion": {
+      "professor": "Artificial intelligence is rapidly changing education. AI tools like personalized learning systems are becoming more common in classrooms. How do you think AI will change education in the next decade? What are the most important benefits and challenges we should consider? Please provide specific examples to support your viewpoint.",
+      "student1": "AI can make education more personalized and efficient. For example, AI tutors can adapt to each student's learning pace and style. This could help students who struggle with traditional teaching methods. Also, AI can grade assignments quickly, giving teachers more time to focus on actual teaching.",
+      "student2": "I'm concerned about the downsides. Students might become too dependent on AI and lose critical thinking skills. There's also the issue of academic integrity - students could use AI to cheat on assignments. Plus, not all schools have access to the latest AI technology, which could widen educational inequality.",
+      "question": "How do you think AI will change education in the next decade, and what benefits and challenges should we consider?",
+      "professorName": "Professor Johnson",
+      "student1Name": "Sarah",
+      "student2Name": "Michael"
+    }
+  },
+  {
+    "id": "toefl-w-academic-discussion-ad-3",
+    "exam": "toefl",
+    "skill": "writing",
+    "practiceType": "academic-discussion",
+    "rubric": "toefl-academic-discussion",
+    "title": "Academic Discussion — ソーシャルメディアの影響",
+    "description": "ソーシャルメディアが社会に与える影響について、意見を投稿する（10分・100〜130語）",
+    "difficulty": "easy",
+    "timeLimitSec": 600,
+    "minWords": 100,
+    "targetWords": 130,
+    "promptText": "Your professor is teaching a class on media and society. Read the discussion and write a post responding to the professor's question. In your response, state your own opinion and support it with reasons and examples. Refer to the other students' ideas where relevant.",
+    "promptJa": "教授がメディアと社会についての授業をしています。ディスカッションを読み、教授の質問に対する投稿を書いてください。自分の意見を述べ、理由と具体例で支えてください。",
+    "discussion": {
+      "professor": "Social media has become an integral part of our daily lives, especially for young people. Do you think social media has a more positive or negative impact on society overall? What specific changes would you suggest to make social media better for everyone? Please explain your reasoning with concrete examples.",
+      "student1": "Social media has many benefits. It helps people stay connected with friends and family, especially those who live far away. It also allows people to share their experiences and learn about different cultures. During the pandemic, social media was crucial for maintaining social connections.",
+      "student2": "However, social media also has serious problems. It can spread misinformation and fake news very quickly. Many people compare themselves to others on social media, which can lead to anxiety and depression. Also, cyberbullying is a major issue, especially among teenagers.",
+      "question": "Do you think social media has a more positive or negative impact on society overall, and what would you change?",
+      "professorName": "Doctor Williams",
+      "student1Name": "Emma",
+      "student2Name": "David"
+    }
+  },
+  {
+    "id": "toefl-w-academic-discussion-ad-4",
+    "exam": "toefl",
+    "skill": "writing",
+    "practiceType": "academic-discussion",
+    "rubric": "toefl-academic-discussion",
+    "title": "Academic Discussion — 気候変動への対策",
+    "description": "気候変動への最も効果的な対策について、意見を投稿する（10分・100〜130語）",
+    "difficulty": "hard",
+    "timeLimitSec": 600,
+    "minWords": 100,
+    "targetWords": 130,
+    "promptText": "Your professor is teaching a class on environmental policy. Read the discussion and write a post responding to the professor's question. In your response, state your own opinion and support it with reasons and examples. Refer to the other students' ideas where relevant.",
+    "promptJa": "教授が環境政策についての授業をしています。ディスカッションを読み、教授の質問に対する投稿を書いてください。自分の意見を述べ、理由と具体例で支えてください。",
+    "discussion": {
+      "professor": "Climate change is one of the most pressing challenges of our time. What do you think is the most effective approach to addressing climate change - individual actions, government policies, or corporate responsibility? Why do you believe this approach would be most successful? Please provide specific examples to support your argument.",
+      "student1": "I believe individual actions are crucial for fighting climate change. If everyone makes small changes like using public transportation, reducing meat consumption, and conserving energy, the collective impact would be significant. Personal responsibility drives larger systemic changes.",
+      "student2": "While individual actions are important, I think government policies and corporate responsibility are more effective. Individual efforts alone won't be enough to meet climate goals. We need strong regulations, carbon taxes, and corporate accountability to create real change on a large scale.",
+      "question": "What is the most effective approach to addressing climate change, and why?",
+      "professorName": "Professor Chen",
+      "student1Name": "Lisa",
+      "student2Name": "James"
+    }
+  }
+]

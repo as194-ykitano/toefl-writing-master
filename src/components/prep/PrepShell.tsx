@@ -47,6 +47,11 @@ interface NavItem {
   icon: LucideIcon;
   /** このいずれかで始まるパスならアクティブ扱い */
   activeFor: string[];
+  /**
+   * 一時的に非表示にする項目（削除ではなく hide）。
+   * 次フェーズでダッシュボード側の実装が整ったら false に戻すだけで復活できる。
+   */
+  hidden?: boolean;
 }
 
 interface NavGroup {
@@ -65,8 +70,9 @@ const NAV_GROUPS: NavGroup[] = [
         activeFor: ["/overview", "/results"],
       },
       { href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] },
-      { href: "/review", label: "復習", icon: BookOpenCheck, activeFor: ["/review"] },
-      { href: "/study-plan", label: "学習プラン", icon: CalendarDays, activeFor: ["/study-plan"] },
+      // 「復習」「学習プラン」は次フェーズ（ダッシュボード拡充）まで一時的に非表示
+      { href: "/review", label: "復習", icon: BookOpenCheck, activeFor: ["/review"], hidden: true },
+      { href: "/study-plan", label: "学習プラン", icon: CalendarDays, activeFor: ["/study-plan"], hidden: true },
     ],
   },
   {
@@ -159,7 +165,7 @@ function NavLinks({
           )}
           {group.title && collapsed && <div className="mx-3 mb-2 border-t border-gray-100" />}
           <div className="space-y-0.5">
-            {group.items.map((item) => {
+            {group.items.filter((item) => !item.hidden).map((item) => {
               const active = isActive(pathname, item);
               return (
                 <Link

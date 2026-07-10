@@ -98,7 +98,6 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Writing Task 1",
     labelJa: "グラフ・図表の描写",
     description: "20 分・150 語以上。AI 添削つき",
-    href: "/ielts-tasks",
     badge: "AI添削",
   },
   {
@@ -108,7 +107,6 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Writing Task 2",
     labelJa: "エッセイライティング",
     description: "40 分・250 語以上。AI 添削つき",
-    href: "/ielts-tasks",
     badge: "AI添削",
   },
 
@@ -218,7 +216,6 @@ export const PRACTICE_TYPES: PracticeTypeInfo[] = [
     label: "Academic Discussion",
     labelJa: "ディスカッション投稿",
     description: "教授の質問に対して意見を投稿する（10 分・100〜130 語）。AI 添削つき",
-    href: "/toefl-tasks",
     badge: "AI添削",
   },
 ];

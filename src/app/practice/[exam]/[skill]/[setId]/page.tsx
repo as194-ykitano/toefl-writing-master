@@ -10,7 +10,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ReadingPractice from "@/components/prep/ReadingPractice";
 import ListeningPractice from "@/components/prep/ListeningPractice";
 import SpeakingPractice from "@/components/prep/SpeakingPractice";
-import EmailWritingPractice from "@/components/prep/EmailWritingPractice";
+import EssayWritingPractice from "@/components/prep/EssayWritingPractice";
 import BuildSentencePractice from "@/components/prep/BuildSentencePractice";
 import {
   getListeningSet,
@@ -71,11 +71,12 @@ function PracticePlayer() {
   if (skill === "listening" && listeningSet) return <ListeningPractice set={listeningSet} mode={mode} />;
   if (skill === "speaking" && speakingSet) return <SpeakingPractice set={speakingSet} mode={mode} />;
   if (skill === "writing" && writingSet) {
-    return writingSet.practiceType === "write-an-email" ? (
-      <EmailWritingPractice set={writingSet} mode={mode} />
-    ) : (
-      <BuildSentencePractice set={writingSet} mode={mode} />
-    );
+    if (writingSet.practiceType === "build-a-sentence") {
+      return <BuildSentencePractice set={writingSet} mode={mode} />;
+    }
+    // Write an Email / IELTS Task 1・2 / Academic Discussion は
+    // 旧 Writing Masters 版と同等の深い添削フロー（EssayWritingPractice）へ
+    return <EssayWritingPractice set={writingSet} mode={mode} />;
   }
 
   return (

@@ -40,6 +40,8 @@ const loaders = {
   toeflListening: () => import("./data/toefl-listening-sets.json"),
   toeflSpeaking: () => import("./data/toefl-speaking-sets.json"),
   toeflWriting: () => import("./data/toefl-writing-sets.json"),
+  toeflWritingEssay: () => import("./data/toefl-writing-essay-sets.json"),
+  ieltsWriting: () => import("./data/ielts-writing-sets.json"),
 };
 
 // ---- Storage 音声・画像の URL 解決 ----
@@ -163,8 +165,16 @@ export async function getSpeakingSet(exam: ExamId, setId: string): Promise<Speak
 // ---- Writing（TOEFL 新形式の演習セット） ----
 
 export async function getWritingSets(exam: ExamId): Promise<WritingPracticeSet[]> {
-  if (exam !== "toefl") return [];
-  return loadJson<WritingPracticeSet[]>("toefl-writing", loaders.toeflWriting);
+  if (exam === "ielts") {
+    // IELTS Writing Task 1 / Task 2（エッセイ型）
+    return loadJson<WritingPracticeSet[]>("ielts-writing", loaders.ieltsWriting);
+  }
+  // TOEFL: Academic Discussion（エッセイ型）+ 既存の Build a Sentence / Write an Email
+  const [essays, base] = await Promise.all([
+    loadJson<WritingPracticeSet[]>("toefl-writing-essay", loaders.toeflWritingEssay),
+    loadJson<WritingPracticeSet[]>("toefl-writing", loaders.toeflWriting),
+  ]);
+  return [...essays, ...base];
 }
 
 export async function getWritingSet(

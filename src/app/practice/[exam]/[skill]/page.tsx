@@ -31,7 +31,8 @@ import {
   getWritingSets,
 } from "@/lib/prep/data-source";
 import { getPracticeType, getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
-import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId } from "@/lib/prep/types";
+import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId, WritingResult } from "@/lib/prep/types";
+import { loadWritingResultsByExam } from "@/lib/prep/writing-store";
 
 interface SetSummary {
   id: string;
@@ -216,6 +217,49 @@ function SetCard({
   );
 }
 
+// ---- Writing 添削履歴（後から見返す導線） ----
+
+function WritingHistory({ exam }: { exam: ExamId }) {
+  const [results, setResults] = useState<WritingResult[]>([]);
+
+  useEffect(() => {
+    setResults(loadWritingResultsByExam(exam));
+  }, [exam]);
+
+  if (results.length === 0) return null;
+
+  return (
+    <div className="mt-10">
+      <h2 className="text-base font-bold text-gray-900">これまでの添削結果</h2>
+      <p className="mt-1 text-xs text-gray-500">
+        提出した Writing の添削結果です。クリックすると詳細を見返せます。
+      </p>
+      <div className="mt-4 space-y-2.5">
+        {results.slice(0, 10).map((r) => (
+          <Link
+            key={r.id}
+            href={`/writing-result/${r.id}`}
+            className="flex items-center justify-between gap-3 bg-white rounded-xl border border-gray-200/70 px-4 py-3 hover:border-gray-300 hover:shadow-sm transition-all"
+          >
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-gray-900 truncate">{r.title}</div>
+              <div className="text-xs text-gray-400 mt-0.5">
+                {new Date(r.finishedAt).toLocaleDateString("ja-JP")} ・ {r.wordCount} words
+              </div>
+            </div>
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <span className="text-sm font-bold text-eg-dark">
+                {r.feedback.score.toFixed(r.feedback.scoreMax === 9 ? 1 : 2)}
+              </span>
+              <span className="text-[11px] text-gray-400">/ {r.feedback.scoreMax}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function SkillPageInner() {
   const params = useParams<{ exam: string; skill: string }>();
   const searchParams = useSearchParams();
@@ -346,6 +390,8 @@ function SkillPageInner() {
           )}
         </>
       )}
+
+      {skillId === "writing" && <WritingHistory exam={examId} />}
     </div>
   );
 }

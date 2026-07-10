@@ -1,0 +1,63 @@
+[
+  {
+    "id": "ielts-w-task1-t1-1",
+    "exam": "ielts",
+    "skill": "writing",
+    "practiceType": "task-1",
+    "rubric": "ielts-task1",
+    "title": "Writing Task 1 — 住宅所有率の推移",
+    "description": "折れ線グラフの主要傾向を150語以上で説明する（20分）",
+    "difficulty": "medium",
+    "timeLimitSec": 1200,
+    "minWords": 150,
+    "targetWords": 180,
+    "promptText": "You should spend about 20 minutes on this task.\n\nThe chart below shows the percentage of households that owned their homes in three different countries between 1980 and 2020.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.\n\n[Figure: Home ownership rate (%) — Country A rose from 55% (1980) to 68% (2020); Country B stayed near 60% throughout; Country C fell from 65% (1980) to 48% (2020).]",
+    "promptJa": "3か国の1980〜2020年の持ち家率（%）を示すグラフです。主要な特徴を選んで報告し、必要に応じて比較しながら150語以上でまとめてください（20分）。",
+    "sampleAnswer": "The line graph illustrates changes in the proportion of households owning their homes in three countries from 1980 to 2020.\n\nOverall, home ownership rose steadily in Country A, remained stable in Country B, and declined in Country C, so that by 2020 the three figures had converged and then diverged in a new order.\n\nIn 1980, Country C had the highest ownership rate at around 65%, followed by Country A at 55% and Country B at 60%. Over the following four decades, Country A increased consistently, reaching about 68% in 2020 and becoming the highest of the three. In contrast, Country C experienced a continuous fall to roughly 48%, the lowest figure by the end of the period. Country B, meanwhile, fluctuated only slightly, staying close to 60% throughout.\n\nThe most striking feature is the reversal between Countries A and C, whose positions were effectively swapped over the period."
+  },
+  {
+    "id": "ielts-w-task1-t1-2",
+    "exam": "ielts",
+    "skill": "writing",
+    "practiceType": "task-1",
+    "rubric": "ielts-task1",
+    "title": "Writing Task 1 — 交通手段の利用割合",
+    "description": "棒グラフのデータを比較しながら150語以上で説明する（20分）",
+    "difficulty": "medium",
+    "timeLimitSec": 1200,
+    "minWords": 150,
+    "targetWords": 180,
+    "promptText": "You should spend about 20 minutes on this task.\n\nThe bar chart below shows the main means of transport used to travel to work in a European city in 2000 and 2020.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.\n\n[Figure: Share of commuters (%) — Car: 50% (2000) → 38% (2020); Public transport: 25% → 34%; Bicycle: 10% → 20%; Walking: 15% → 8%.]",
+    "promptJa": "あるヨーロッパの都市で2000年と2020年に通勤に使われた主要な交通手段の割合を示す棒グラフです。主要な特徴を選んで比較しながら150語以上でまとめてください（20分）。"
+  },
+  {
+    "id": "ielts-w-task2-t2-1",
+    "exam": "ielts",
+    "skill": "writing",
+    "practiceType": "task-2",
+    "rubric": "ielts-task2",
+    "title": "Writing Task 2 — 大学教育は無償にすべきか",
+    "description": "意見型エッセイ。立場を明確にし理由と例で論じる（40分・250語以上）",
+    "difficulty": "hard",
+    "timeLimitSec": 2400,
+    "minWords": 250,
+    "targetWords": 290,
+    "promptText": "You should spend about 40 minutes on this task.\n\nSome people believe that university education should be free for all students, while others think students should pay for their own studies.\n\nDiscuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    "promptJa": "大学教育はすべての学生に無償であるべきだという意見と、学生が自分で学費を負担すべきだという意見があります。両方の見解を論じ、あなた自身の意見を述べてください（40分・250語以上）。"
+  },
+  {
+    "id": "ielts-w-task2-t2-2",
+    "exam": "ielts",
+    "skill": "writing",
+    "practiceType": "task-2",
+    "rubric": "ielts-task2",
+    "title": "Writing Task 2 — リモートワークの是非",
+    "description": "賛否型エッセイ。立場を明確にして論じる（40分・250語以上）",
+    "difficulty": "hard",
+    "timeLimitSec": 2400,
+    "minWords": 250,
+    "targetWords": 290,
+    "promptText": "You should spend about 40 minutes on this task.\n\nIn many countries, an increasing number of people work from home rather than in a traditional office.\n\nDo the advantages of this trend outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    "promptJa": "多くの国で、従来のオフィスではなく在宅で働く人が増えています。この傾向の利点は欠点を上回りますか。理由と具体例を挙げて250語以上で論じてください（40分）。"
+  }
+]
