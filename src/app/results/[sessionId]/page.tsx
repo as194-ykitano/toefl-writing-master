@@ -13,15 +13,16 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
   ArrowRight,
+  BookOpen,
   Bot,
   CheckCircle2,
   Headphones,
   ListChecks,
   Loader2,
+  MessageSquarePlus,
   Mic,
-  RotateCcw,
   Send,
-  Sparkles,
+  X,
   XCircle,
 } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";
@@ -56,6 +57,32 @@ function answerText(value: string | string[] | null | undefined): string {
 
 function pct(ratio: number): number {
   return Math.round(ratio * 100);
+}
+
+// ---- 本文ハイライト → チャットに追加（EG admin Practice Training 相当）----
+
+type SelectionRect = { top: number; left: number; width: number; height: number };
+
+// これらの要素上での選択は「Add to Chat」の対象外にする（ボタン等の操作を妨げない）
+const CHAT_SELECTION_INTERACTIVE_SELECTOR = [
+  "button",
+  "input",
+  "textarea",
+  "select",
+  "audio",
+  "video",
+  "iframe",
+  "a",
+  "[role='button']",
+].join(",");
+
+function getElementFromNode(node: Node | null): Element | null {
+  if (!node) return null;
+  return node instanceof Element ? node : node.parentElement;
+}
+
+function isNodeWithinInteractive(node: Node | null): boolean {
+  return Boolean(getElementFromNode(node)?.closest(CHAT_SELECTION_INTERACTIVE_SELECTOR));
 }
 
 // =====================================================================
@@ -94,38 +121,46 @@ function QuestionReviewCard({
   return (
     <div
       className={`rounded-xl border p-5 ${
-        correct ? "border-emerald-200 bg-emerald-50/40" : "border-red-200 bg-red-50/40"
+        correct
+          ? "border-emerald-200 bg-emerald-50/40 dark:border-emerald-500/30 dark:bg-emerald-500/10"
+          : "border-red-200 bg-red-50/40 dark:border-red-500/30 dark:bg-red-500/10"
       }`}
     >
       <div className="flex items-start gap-3">
         {correct ? (
-          <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+          <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
         ) : (
-          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+          <XCircle className="w-5 h-5 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
         )}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-bold text-gray-900">Q{index + 1}</span>
+            <span className="text-sm font-bold text-gray-900 dark:text-gray-100">Q{index + 1}</span>
             {question.reference && (
-              <span className="text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded px-1.5 py-0.5">
+              <span className="text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded px-1.5 py-0.5 dark:bg-white/10 dark:border-white/15 dark:text-gray-300">
                 {question.reference}
               </span>
             )}
           </div>
-          <p className="mt-1.5 text-sm text-gray-800 leading-relaxed whitespace-pre-line">
+          <p className="mt-1.5 text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
             {question.prompt}
           </p>
 
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-            <div className="bg-white rounded-lg border border-gray-200/70 px-3 py-2">
-              <div className="text-[11px] font-medium text-gray-400">あなたの答え</div>
-              <div className={`font-medium ${correct ? "text-emerald-700" : "text-red-600"}`}>
+            <div className="bg-white rounded-lg border border-gray-200/70 px-3 py-2 dark:bg-white/5 dark:border-white/10">
+              <div className="text-[11px] font-medium text-gray-400 dark:text-gray-500">あなたの答え</div>
+              <div
+                className={`font-medium ${
+                  correct
+                    ? "text-emerald-700 dark:text-emerald-300"
+                    : "text-red-600 dark:text-red-400"
+                }`}
+              >
                 {answerText(userAnswer)}
               </div>
             </div>
-            <div className="bg-white rounded-lg border border-gray-200/70 px-3 py-2">
-              <div className="text-[11px] font-medium text-gray-400">正解</div>
-              <div className="font-medium text-gray-900">{answerText(question.answer)}</div>
+            <div className="bg-white rounded-lg border border-gray-200/70 px-3 py-2 dark:bg-white/5 dark:border-white/10">
+              <div className="text-[11px] font-medium text-gray-400 dark:text-gray-500">正解</div>
+              <div className="font-medium text-gray-900 dark:text-gray-100">{answerText(question.answer)}</div>
             </div>
           </div>
 
@@ -140,18 +175,18 @@ function QuestionReviewCard({
                     key={option}
                     className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-xs ${
                       isCorrectOption
-                        ? "border-emerald-300 bg-emerald-50"
+                        ? "border-emerald-300 bg-emerald-50 dark:border-emerald-500/40 dark:bg-emerald-500/10"
                         : isSelected
-                          ? "border-red-300 bg-red-50"
-                          : "border-gray-200 bg-white"
+                          ? "border-red-300 bg-red-50 dark:border-red-500/40 dark:bg-red-500/10"
+                          : "border-gray-200 bg-white dark:border-white/10 dark:bg-white/5"
                     }`}
                   >
-                    <span className="text-gray-800 leading-relaxed flex-1">{option}</span>
+                    <span className="text-gray-800 dark:text-gray-200 leading-relaxed flex-1">{option}</span>
                     <span className="flex items-center gap-1.5 flex-shrink-0">
                       {isCorrectOption && (
-                        <span className="text-[10px] font-semibold text-emerald-600">Correct</span>
+                        <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Correct</span>
                       )}
-                      {isSelected && <span className="text-[10px] text-gray-400">You</span>}
+                      {isSelected && <span className="text-[10px] text-gray-400 dark:text-gray-500">You</span>}
                     </span>
                   </div>
                 );
@@ -268,22 +303,45 @@ const CHAT_SUGGESTIONS = [
   "本文の重要語彙を5つ教えて",
 ];
 
-function ChatPanel({ context }: { context: string }) {
+interface AttachedSelection {
+  id: string;
+  text: string;
+}
+
+function ChatPanel({
+  context,
+  attachedSelections,
+  setAttachedSelections,
+}: {
+  context: string;
+  attachedSelections: AttachedSelection[];
+  setAttachedSelections: React.Dispatch<React.SetStateAction<AttachedSelection[]>>;
+}) {
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    // 初回マウント（メッセージ 0 件）では走らせない。
+    // scrollIntoView はページ全体をチャット末尾へスクロールさせてしまい、
+    // 開いた直後に中央へ飛ぶ原因になるため、会話が始まってからのみ実行する。
+    if (messages.length === 0) return;
+    endRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages, loading]);
 
   const send = async (text: string) => {
-    const content = text.trim();
-    if (!content || loading) return;
+    const trimmed = text.trim();
+    const hasAttachments = attachedSelections.length > 0;
+    if ((!trimmed && !hasAttachments) || loading) return;
+    const attachmentBlock = hasAttachments
+      ? "【選択した本文】\n\n" + attachedSelections.map((a) => a.text).join("\n\n---\n\n") + "\n\n"
+      : "";
+    const content = attachmentBlock + (trimmed || "上記の部分について教えて");
     const next = [...messages, { role: "user" as const, content }];
     setMessages(next);
     setInput("");
+    setAttachedSelections([]);
     setLoading(true);
     try {
       const res = await fetch("/api/prep-chat", {
@@ -306,29 +364,34 @@ function ChatPanel({ context }: { context: string }) {
     setLoading(false);
   };
 
+  const removeAttached = (id: string) =>
+    setAttachedSelections((prev) => prev.filter((a) => a.id !== id));
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] min-h-[420px]">
-      <div className="flex items-center gap-2 px-5 py-4 border-b border-gray-100">
-        <div className="w-7 h-7 rounded-lg bg-eg flex items-center justify-center">
-          <Bot className="w-4 h-4 text-black" />
+    <div className="glass-card rounded-2xl flex flex-col lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] min-h-[520px] overflow-hidden">
+      <div className="flex items-center gap-2.5 px-5 py-4 border-b border-gray-100 dark:border-white/10">
+        <div className="w-8 h-8 rounded-lg bg-eg flex items-center justify-center flex-shrink-0">
+          <Bot className="w-4.5 h-4.5 text-black" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 text-sm">AI コーチに質問</div>
-          <div className="text-[11px] text-gray-400">本文・設問・解説をふまえて答えます</div>
+          <div className="font-bold text-gray-900 dark:text-gray-50 text-sm">KAIに質問</div>
+          <div className="text-[11px] text-gray-400 dark:text-gray-500">
+            本文をドラッグで選ぶと質問に添付できます
+          </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
         {messages.length === 0 && (
           <div className="space-y-2">
-            <p className="text-xs text-gray-400">
-              わからなかった単語や、解説で納得できない部分を聞いてみましょう。
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              わからなかった単語や、解説で納得できない部分を KAI に聞いてみましょう。
             </p>
             {CHAT_SUGGESTIONS.map((s) => (
               <button
                 key={s}
                 onClick={() => send(s)}
-                className="block w-full text-left text-xs text-eg-deep bg-eg-faint hover:bg-eg-soft border border-eg-soft rounded-lg px-3 py-2 transition-colors"
+                className="block w-full text-left text-xs text-eg-deep bg-eg-faint hover:bg-eg-soft border border-eg-soft rounded-lg px-3 py-2 transition-colors dark:text-amber-300 dark:border-eg/20"
               >
                 {s}
               </button>
@@ -338,10 +401,10 @@ function ChatPanel({ context }: { context: string }) {
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
-              className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line ${
+              className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line ${
                 m.role === "user"
                   ? "bg-eg text-black rounded-br-md"
-                  : "bg-gray-100 text-gray-800 rounded-bl-md"
+                  : "bg-gray-100 text-gray-800 rounded-bl-md dark:bg-white/10 dark:text-gray-100"
               }`}
             >
               {m.content}
@@ -350,8 +413,9 @@ function ChatPanel({ context }: { context: string }) {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-2xl rounded-bl-md px-3.5 py-2.5">
+            <div className="bg-gray-100 dark:bg-white/10 rounded-2xl rounded-bl-md px-3.5 py-2.5 flex items-center gap-2">
               <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+              <span className="text-xs text-gray-400 dark:text-gray-500">KAI が考え中...</span>
             </div>
           </div>
         )}
@@ -363,22 +427,48 @@ function ChatPanel({ context }: { context: string }) {
           e.preventDefault();
           send(input);
         }}
-        className="flex items-center gap-2 px-4 py-3 border-t border-gray-100"
+        className="px-4 py-3 border-t border-gray-100 dark:border-white/10 space-y-2"
       >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="質問を入力..."
-          className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-eg/50 focus:border-eg"
-        />
-        <button
-          type="submit"
-          disabled={loading || !input.trim()}
-          className="p-2.5 rounded-xl bg-eg hover:bg-eg-dark text-black disabled:opacity-40"
-          aria-label="送信"
-        >
-          <Send className="w-4 h-4" />
-        </button>
+        {attachedSelections.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {attachedSelections.map((a) => (
+              <span
+                key={a.id}
+                className="inline-flex items-center gap-1.5 rounded-full bg-eg-faint border border-eg-soft px-2.5 py-1 text-xs text-gray-700 dark:bg-eg/10 dark:border-eg/20 dark:text-gray-200"
+                title={a.text}
+              >
+                <BookOpen className="w-3 h-3 flex-shrink-0 text-eg-deep dark:text-amber-300" />
+                <span className="max-w-[160px] truncate">
+                  {a.text.length > 20 ? a.text.slice(0, 20) + "…" : a.text}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeAttached(a.id)}
+                  className="flex-shrink-0 rounded p-0.5 hover:bg-black/10 dark:hover:bg-white/10"
+                  aria-label="削除"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="質問を入力..."
+            className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white/70 focus:outline-none focus:ring-2 focus:ring-eg/50 focus:border-eg dark:bg-white/5 dark:border-white/15 dark:text-gray-100 dark:placeholder:text-gray-500"
+          />
+          <button
+            type="submit"
+            disabled={loading || (!input.trim() && attachedSelections.length === 0)}
+            className="p-2.5 rounded-xl bg-eg hover:bg-eg-dark text-black disabled:opacity-40 flex-shrink-0"
+            aria-label="送信"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
       </form>
     </div>
   );
@@ -507,8 +597,8 @@ function SpeakingFeedbackCard({
 
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
             {feedback.strengths.length > 0 && (
-              <div className="bg-emerald-50/60 rounded-lg border border-emerald-100 px-4 py-3">
-                <div className="text-[11px] font-semibold text-emerald-700 mb-1.5">良かった点</div>
+              <div className="bg-emerald-50/60 rounded-lg border border-emerald-100 px-4 py-3 dark:bg-emerald-500/10 dark:border-emerald-500/25">
+                <div className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 mb-1.5">良かった点</div>
                 <ul className="space-y-1">
                   {feedback.strengths.map((s) => (
                     <li key={s} className="text-xs text-gray-700 leading-relaxed flex gap-1.5">
@@ -519,7 +609,7 @@ function SpeakingFeedbackCard({
               </div>
             )}
             {feedback.improvements.length > 0 && (
-              <div className="bg-eg-faint rounded-lg border border-eg-soft px-4 py-3">
+              <div className="bg-eg-faint rounded-lg border border-eg-soft px-4 py-3 dark:border-eg/20">
                 <div className="text-[11px] font-semibold text-eg-deep mb-1.5">改善ポイント</div>
                 <ul className="space-y-1">
                   {feedback.improvements.map((s) => (
@@ -533,11 +623,11 @@ function SpeakingFeedbackCard({
           </div>
 
           {feedback.improvedVersion && (
-            <div className="mt-3 bg-violet-50/60 rounded-lg border border-violet-100 px-4 py-3">
-              <div className="text-[11px] font-semibold text-violet-700 mb-1">
+            <div className="mt-3 bg-violet-50/60 rounded-lg border border-violet-100 px-4 py-3 dark:bg-violet-500/10 dark:border-violet-500/25">
+              <div className="text-[11px] font-semibold text-violet-700 dark:text-violet-300 mb-1">
                 ワンランク上の言い直し例
               </div>
-              <p className="text-sm text-gray-800 leading-relaxed italic">{feedback.improvedVersion}</p>
+              <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed italic">{feedback.improvedVersion}</p>
             </div>
           )}
 
@@ -628,14 +718,14 @@ function RepeatFeedbackCard({
     <div
       className={`rounded-xl border p-5 ${
         feedback.error
-          ? "border-gray-200 bg-white"
+          ? "border-gray-200 bg-white dark:border-white/10"
           : good
-            ? "border-emerald-200 bg-emerald-50/40"
-            : "border-orange-200 bg-orange-50/30"
+            ? "border-emerald-200 bg-emerald-50/40 dark:border-emerald-500/30 dark:bg-emerald-500/10"
+            : "border-orange-200 bg-orange-50/30 dark:border-orange-500/30 dark:bg-orange-500/10"
       }`}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-bold text-gray-900">文 {index + 1}</span>
+        <span className="text-sm font-bold text-gray-900 dark:text-gray-100">文 {index + 1}</span>
         {!feedback.error && (
           <>
             <span className="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-full px-2.5 py-0.5 tabular-nums">
@@ -689,7 +779,66 @@ export default function ResultReportPage() {
   const [recordingUrls, setRecordingUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
+  // 本文ハイライト → チャットに追加
+  const [selectionForChat, setSelectionForChat] = useState<string | null>(null);
+  const [selectionRect, setSelectionRect] = useState<SelectionRect | null>(null);
+  const [attachedSelections, setAttachedSelections] = useState<AttachedSelection[]>([]);
+  const selectionScopeRef = useRef<HTMLDivElement>(null);
+
   const sampleReport: MockReport | null = SAMPLE_REPORTS.find((r) => r.id === sessionId) ?? null;
+
+  // ドラッグで本文を選択したら「チャットに追加」ボタンを出す（スコープ内のテキストのみ）
+  useEffect(() => {
+    const handler = () => {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed) return;
+      const text = sel.toString().trim();
+      const range = sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
+      const scope = selectionScopeRef.current;
+      if (!text || !range || !scope) {
+        setSelectionForChat(null);
+        setSelectionRect(null);
+        return;
+      }
+      const within =
+        scope.contains(range.startContainer) && scope.contains(range.endContainer);
+      if (
+        !within ||
+        isNodeWithinInteractive(range.startContainer) ||
+        isNodeWithinInteractive(range.endContainer)
+      ) {
+        setSelectionForChat(null);
+        setSelectionRect(null);
+        return;
+      }
+      const r = range.getBoundingClientRect();
+      setSelectionForChat(text);
+      setSelectionRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+    };
+    document.addEventListener("mouseup", handler);
+    return () => document.removeEventListener("mouseup", handler);
+  }, []);
+
+  // 選択が解除されたらボタンを隠す
+  useEffect(() => {
+    const onChange = () => {
+      const sel = window.getSelection();
+      if ((!sel || sel.toString().trim() === "") && (selectionForChat || selectionRect)) {
+        setSelectionForChat(null);
+        setSelectionRect(null);
+      }
+    };
+    document.addEventListener("selectionchange", onChange);
+    return () => document.removeEventListener("selectionchange", onChange);
+  }, [selectionForChat, selectionRect]);
+
+  const addSelectionToChat = () => {
+    if (!selectionForChat) return;
+    setAttachedSelections((prev) => [...prev, { id: `att-${Date.now()}`, text: selectionForChat }]);
+    window.getSelection()?.removeAllRanges();
+    setSelectionForChat(null);
+    setSelectionRect(null);
+  };
 
   useEffect(() => {
     if (sampleReport) {
@@ -836,27 +985,27 @@ export default function ResultReportPage() {
 
   return (
     <PrepShell>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-5">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8 py-6 space-y-5">
         <div>
           <div className="text-xs font-semibold tracking-wide text-eg-deep uppercase">
             {EXAM_LABELS[session.exam]} {SKILL_LABELS[session.skill]} — Result
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">{session.setTitle}</h1>
-          <p className="text-sm text-gray-400 mt-0.5">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mt-1">{session.setTitle}</h1>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
             {new Date(session.finishedAt).toLocaleString("ja-JP")} に完了
           </p>
         </div>
 
         {/* ---- スコアサマリー ---- */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col items-center justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="glass-card rounded-2xl p-6 flex flex-col items-center justify-center">
             {isRepeat ? (
               <>
-                <div className="text-xs font-medium text-gray-400 mb-3">平均一致率</div>
+                <div className="text-xs font-medium text-gray-400 dark:text-gray-500 mb-3">平均一致率</div>
                 <ScoreGauge
                   value={avgRatio * 100}
                   max={100}
-                  label={`${pct(avgRatio)}%`}
+                  format={(v) => `${Math.round(v)}%`}
                   subLabel={`タスクスコア ${avgItemScore.toFixed(1)} / 5`}
                   colorClass="stroke-eg"
                 />
@@ -864,11 +1013,11 @@ export default function ResultReportPage() {
             ) : isSpeaking ? (
               speakingAvgBand !== null ? (
                 <>
-                  <div className="text-xs font-medium text-gray-400 mb-3">推定 Band（AI）</div>
+                  <div className="text-xs font-medium text-gray-400 dark:text-gray-500 mb-3">推定 Band（KAI）</div>
                   <ScoreGauge
                     value={speakingAvgBand}
                     max={speakingMax}
-                    label={speakingAvgBand.toFixed(1)}
+                    format={(v) => v.toFixed(1)}
                     subLabel={`/ ${speakingMax}（${speakingBands.length} タスク平均）`}
                     colorClass="stroke-eg"
                   />
@@ -876,16 +1025,16 @@ export default function ResultReportPage() {
               ) : (
                 <div className="flex flex-col items-center py-6">
                   <CheckCircle2 className="w-12 h-12 text-emerald-500 mb-3" />
-                  <div className="font-semibold text-gray-900">提出完了</div>
+                  <div className="font-semibold text-gray-900 dark:text-gray-100">提出完了</div>
                 </div>
               )
             ) : (
               <>
-                <div className="text-xs font-medium text-gray-400 mb-3">正答率</div>
+                <div className="text-xs font-medium text-gray-400 dark:text-gray-500 mb-3">正答率</div>
                 <ScoreGauge
                   value={accuracy * 100}
                   max={100}
-                  label={`${pct(accuracy)}%`}
+                  format={(v) => `${Math.round(v)}%`}
                   subLabel={`${session.correctCount} / ${session.totalCount} 問`}
                   colorClass="stroke-eg"
                 />
@@ -893,33 +1042,21 @@ export default function ResultReportPage() {
             )}
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-              <ListChecks className="w-5 h-5 text-blue-600" />
+          <div className="glass-card rounded-2xl p-5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 dark:bg-blue-500/15">
+              <ListChecks className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <div className="text-xs text-gray-400">{isSpeaking ? "回答タスク数" : "正答数"}</div>
-              <div className="text-xl font-bold text-gray-900 tabular-nums">
+              <div className="text-xs text-gray-400 dark:text-gray-500">
+                {isSpeaking ? "回答タスク数" : "正答数"}
+              </div>
+              <div className="text-xl font-bold text-gray-900 dark:text-gray-50 tabular-nums">
                 {isSpeaking
                   ? `${speakingFeedback.length} / ${session.results.length}`
                   : `${session.correctCount} / ${session.totalCount}`}
               </div>
-              <div className="text-[11px] text-gray-400 mt-0.5">所要時間 {durationMin} 分</div>
+              <div className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">所要時間 {durationMin} 分</div>
             </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-eg-faint to-orange-50 rounded-2xl border border-eg-soft p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-4 h-4 text-eg-dark" />
-              <span className="text-xs font-semibold text-gray-700">スコアについて</span>
-            </div>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              {isRepeat
-                ? "実際の TOEFL では各文が 0〜5 点で採点され、7 文の平均が Listen and Repeat のタスクスコアになります（Interview と合わせて Speaking Band 1〜6 に換算）。"
-                : isSpeaking
-                  ? "Band は AI による参考推定です。実際の採点は複数タスクの平均と専門の採点基準に基づきます。"
-                  : "Band 換算は 40 問構成のフルテストを前提とした統計処理のため、練習セットでは正答率を表示しています。Band 判定は模試機能（開発予定）で行います。"}
-            </p>
           </div>
         </div>
 
@@ -955,16 +1092,16 @@ export default function ResultReportPage() {
           </section>
         )}
 
-        {/* ---- Reading / Listening: 教材 + 解答結果 + AI チャット ---- */}
+        {/* ---- Reading / Listening: 教材 + 解答結果 + KAI チャット ---- */}
         {!isSpeaking && questions.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-            <div className="lg:col-span-2 space-y-5">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] gap-5 items-start">
+            <div ref={selectionScopeRef} className="min-w-0 space-y-5 select-text">
               <MaterialCard readingSet={readingSet} listeningSet={listeningSet} />
 
               <section>
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold text-gray-900">解答結果</h2>
-                  <span className="text-xs text-gray-400">
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">解答結果</h2>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
                     {session.correctCount} / {session.totalCount} 問正解
                   </span>
                 </div>
@@ -986,29 +1123,47 @@ export default function ResultReportPage() {
               </section>
             </div>
 
-            <ChatPanel context={chatContext} />
+            <ChatPanel
+              context={chatContext}
+              attachedSelections={attachedSelections}
+              setAttachedSelections={setAttachedSelections}
+            />
+          </div>
+        )}
+
+        {/* 本文ハイライト時の「チャットに追加」フローティングボタン */}
+        {selectionForChat && selectionRect && (
+          <div
+            className="fixed z-50 -translate-x-1/2"
+            style={{
+              left: selectionRect.left + selectionRect.width / 2,
+              top: Math.max(8, selectionRect.top - 44),
+            }}
+          >
+            <button
+              onClick={addSelectionToChat}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 text-white text-xs font-semibold px-3 py-2 shadow-lg border border-gray-700 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:border-white/20 dark:hover:bg-white"
+            >
+              <MessageSquarePlus className="w-4 h-4" />
+              チャットに追加
+            </button>
           </div>
         )}
 
         {/* ---- アクション ---- */}
+        {/* NOTE: 復習リスト（/review）への導線は現在 hide 中。
+            復習ページを再開する場合は、!isSpeaking && totalCount > correctCount の
+            条件で /review へのボタンをここに復活させる。 */}
         <div className="flex flex-wrap gap-3 pt-2">
-          {!isSpeaking && session.totalCount > session.correctCount && (
-            <Link
-              href="/review"
-              className="inline-flex items-center gap-2 rounded-xl bg-eg hover:bg-eg-dark text-black text-sm font-semibold px-5 py-3 transition-colors"
-            >
-              <RotateCcw className="w-4 h-4" /> 間違えた問題を復習リストへ
-            </Link>
-          )}
           <Link
             href={`/practice/${session.exam}/${session.skill}`}
-            className="inline-flex items-center gap-2 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-5 py-3 transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-5 py-3 transition-colors dark:bg-white/5 dark:border-white/15 dark:text-gray-200 dark:hover:border-white/30"
           >
             もう一度解く
           </Link>
           <Link
             href="/overview"
-            className="inline-flex items-center gap-2 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-5 py-3 transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-5 py-3 transition-colors dark:bg-white/5 dark:border-white/15 dark:text-gray-200 dark:hover:border-white/30"
           >
             ダッシュボードへ <ArrowRight className="w-4 h-4" />
           </Link>
