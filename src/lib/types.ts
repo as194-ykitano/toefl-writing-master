@@ -168,6 +168,30 @@ export interface Reminder {
   days: string[];
 }
 
+/** 学習者の属性（オンボーディングで取得） */
+export type LearnerStatus =
+  | "junior_high" // 中学生
+  | "high_school" // 高校生
+  | "university" // 大学生・専門学校生
+  | "working" // 社会人
+  | "other"; // その他
+
+/** オンボーディングで取得するプロフィール情報 */
+export interface OnboardingProfile {
+  /** 現在の学年・立場 */
+  learnerStatus: LearnerStatus;
+  /** 英語を学ぶ理由（自由記述） */
+  learningReason: string;
+  /** 対策する試験 */
+  targetExam: "toefl" | "ielts" | "toeic";
+  /** 目標スコア（試験基準の数値。IELTS は 6.5 等の小数もあり得る） */
+  targetScore?: number;
+  /** 目標達成の時期（yyyy-mm 目安。ISO 文字列） */
+  targetDate?: string;
+  /** オンボーディング完了フラグ */
+  completedAt?: string; // ISO string
+}
+
 export interface UserProfile {
   uid: string;
   email: string;
@@ -179,6 +203,8 @@ export interface UserProfile {
   studySessions: StudySession[];
   totalStudyTime: number;
   reminder?: Reminder;
+  /** オンボーディングで取得した属性・目標 */
+  onboarding?: OnboardingProfile;
 }
 
 // 単語・フレーズの型定義

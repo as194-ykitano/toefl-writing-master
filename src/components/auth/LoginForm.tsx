@@ -86,12 +86,18 @@ export default function LoginForm() {
           {loading ? '処理中...' : 'ログイン'}
         </Button>
 
-        <div className="text-center">
+        <div className="text-center space-y-2">
           <Link
             href="/reset-password"
             className="text-sm text-blue-600 hover:underline block w-full"
           >
             パスワードをお忘れの方はこちら
+          </Link>
+          <Link
+            href="/signup"
+            className="text-sm text-blue-600 hover:underline block w-full"
+          >
+            アカウントをお持ちでない方はこちら（新規登録）
           </Link>
         </div>
       </form>

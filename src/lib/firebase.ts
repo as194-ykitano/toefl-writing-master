@@ -3,7 +3,7 @@ console.log('FIREBASE_API_KEY:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc, Timestamp, deleteDoc, query, where, setDoc, orderBy } from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword, signOut, User, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, User, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
 import { Task, Essay, EssayFeedback, UserProfile, LearningGoals, VocabularyItem, BasicEssay, YouTuberTask, YouTuberEssay, YouTubeVideo, TOEFLAcademicDiscussionFeedback } from './types';
@@ -398,6 +398,38 @@ export const signIn = async (email: string, password: string) => {
       throw new Error('譛牙柑縺ｪ繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ繧貞・蜉帙＠縺ｦ縺上□縺輔＞縲・');
     } else {
       throw new Error('繝ｭ繧ｰ繧､繝ｳ荳ｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆縲・');
+    }
+  }
+};
+
+// 新規アカウント作成（ユーザー自身によるサインアップ）
+// パスワードはユーザーが決めた値がそのままログイン情報になる。
+// 作成後に確認メール（メアド確認用）を自動送信する。パスワード自体はメール送信しない（Firebase 仕様）。
+export const signUp = async (email: string, password: string) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    // Firestore にユーザープロフィールを作成
+    await createUserProfile(user);
+    // メアド確認メールを送信（任意確認：未確認でも利用可能）
+    try {
+      await sendEmailVerification(user);
+    } catch (verifyError) {
+      // 確認メール送信に失敗してもサインアップ自体は成立させる
+      console.error('Error sending verification email:', verifyError);
+    }
+    return user;
+  } catch (error) {
+    console.error('Error signing up:', error);
+    const authError = error as FirebaseAuthError;
+    if (authError.code === 'auth/email-already-in-use') {
+      throw new Error('このメールアドレスは既に登録されています。ログインしてください。');
+    } else if (authError.code === 'auth/invalid-email') {
+      throw new Error('有効なメールアドレスを入力してください。');
+    } else if (authError.code === 'auth/weak-password') {
+      throw new Error('パスワードは6文字以上で入力してください。');
+    } else {
+      throw new Error('アカウント作成中にエラーが発生しました。');
     }
   }
 };
