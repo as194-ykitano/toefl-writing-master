@@ -1162,7 +1162,11 @@ export default function ResultReportPage() {
             条件で /review へのボタンをここに復活させる。 */}
         <div className="flex flex-wrap gap-3 pt-2">
           <Link
-            href={`/practice/${session.exam}/${session.skill}`}
+            href={
+              session.practiceType
+                ? `/practice/${session.exam}/${session.skill}?type=${session.practiceType}`
+                : "/home"
+            }
             className="inline-flex items-center gap-2 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-5 py-3 transition-colors dark:bg-white/5 dark:border-white/15 dark:text-gray-200 dark:hover:border-white/30"
           >
             もう一度解く

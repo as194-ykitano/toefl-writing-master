@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useExam } from "@/contexts/ExamContext";
 import PrepShell from "@/components/prep/PrepShell";
 import { getSkillStats } from "@/lib/prep/data-source";
+import { useCompletedCounts } from "@/lib/prep/use-completion";
 import { getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
 import { EXAM_LABELS, EXAM_SKILLS, ExamId, SkillId } from "@/lib/prep/types";
 
@@ -74,14 +75,17 @@ function TypeCard({
   exam,
   skill,
   setCount,
+  completedCount,
 }: {
   type: PracticeTypeInfo;
   exam: ExamId;
   skill: SkillId;
   setCount: number;
+  completedCount: number;
 }) {
   const disabled = type.comingSoon || (!type.href && setCount === 0);
   const href = type.href ?? `/practice/${exam}/${skill}?type=${type.id}`;
+  const allDone = setCount > 0 && completedCount >= setCount;
 
   const inner = (
     <>
@@ -90,16 +94,18 @@ function TypeCard({
           <ListChecks className="w-4.5 h-4.5" />
         </div>
         {disabled ? (
-          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-1">
+          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-1 dark:bg-gray-800 dark:text-gray-500">
             <Clock className="w-3 h-3" /> 準備中
           </span>
-        ) : type.badge ? (
-          <span className="text-[10px] font-medium text-eg-deep bg-eg-soft rounded-full px-2 py-1">
-            {type.badge}
-          </span>
         ) : setCount > 0 ? (
-          <span className="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-1">
-            {setCount} セット
+          <span
+            className={`text-[10px] font-medium rounded-full px-2 py-1 ${
+              allDone
+                ? "text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10"
+                : "text-gray-400 bg-gray-50 dark:text-gray-500 dark:bg-gray-800"
+            }`}
+          >
+            {completedCount}/{setCount} 解答済み
           </span>
         ) : null}
       </div>
@@ -171,6 +177,7 @@ export default function HomePage() {
     };
   }, [activeExam, skill]);
 
+  const completedCounts = useCompletedCounts(activeExam, skill);
   const types = useMemo(() => getPracticeTypes(activeExam, skill), [activeExam, skill]);
   const activeTab = SKILL_TABS.find((t) => t.skill === skill)!;
 
@@ -234,19 +241,13 @@ export default function HomePage() {
         </div>
 
         {/* 選択中技能の問題タイプ一覧 */}
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-6">
           <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">
             {EXAM_LABELS[activeExam]} {activeTab.title} の問題タイプ
             {questionCount > 0 && (
               <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">合計 {questionCount} 問</span>
             )}
           </h2>
-          <Link
-            href={`/practice/${activeExam}/${skill}`}
-            className="inline-flex items-center gap-1 text-xs font-medium text-eg-deep hover:text-eg-dark"
-          >
-            すべて見る <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
         </div>
 
         {types.length === 0 ? (
@@ -266,6 +267,7 @@ export default function HomePage() {
                   exam={activeExam}
                   skill={skill}
                   setCount={typeCounts[type.id] ?? 0}
+                  completedCount={completedCounts[type.id] ?? 0}
                 />
               </div>
             ))}

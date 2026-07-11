@@ -9,15 +9,13 @@
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
-  ArrowRight,
   BookOpen,
   ChevronLeft,
   Clock,
   GraduationCap,
   Headphones,
-  ListChecks,
   Mic,
   PenLine,
   Play,
@@ -26,11 +24,10 @@ import PrepShell from "@/components/prep/PrepShell";
 import {
   getListeningSets,
   getReadingSets,
-  getSkillStats,
   getSpeakingSets,
   getWritingSets,
 } from "@/lib/prep/data-source";
-import { getPracticeType, getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
+import { getPracticeType, getPracticeTypes } from "@/lib/prep/question-types";
 import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId, WritingResult } from "@/lib/prep/types";
 import { loadWritingResultsByExam } from "@/lib/prep/writing-store";
 
@@ -110,67 +107,6 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
   return [];
 }
 
-// ---- 問題タイプカード ----
-
-function TypeCard({
-  type,
-  exam,
-  skill,
-  setCount,
-}: {
-  type: PracticeTypeInfo;
-  exam: ExamId;
-  skill: SkillId;
-  setCount: number;
-}) {
-  const disabled = type.comingSoon || (!type.href && setCount === 0);
-  const href = type.href ?? `/practice/${exam}/${skill}?type=${type.id}`;
-
-  const inner = (
-    <>
-      <div className="flex items-start justify-between gap-2">
-        <div className="w-10 h-10 rounded-xl bg-eg-soft text-eg-dark flex items-center justify-center">
-          <ListChecks className="w-5 h-5" />
-        </div>
-        {disabled ? (
-          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-1">
-            <Clock className="w-3 h-3" /> 準備中
-          </span>
-        ) : type.badge ? (
-          <span className="text-[10px] font-medium text-eg-deep bg-eg-soft rounded-full px-2 py-1">
-            {type.badge}
-          </span>
-        ) : (
-          <span className="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-1">
-            {setCount > 0 ? `${setCount} セット` : ""}
-          </span>
-        )}
-      </div>
-      <div className="mt-3 font-semibold text-gray-900 text-sm">{type.label}</div>
-      <p className="mt-0.5 text-xs text-gray-500">{type.labelJa}</p>
-      {type.description && (
-        <p className="mt-1 text-xs text-gray-400 leading-relaxed flex-1">{type.description}</p>
-      )}
-      {!disabled && (
-        <div className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-eg-deep group-hover:text-eg-dark">
-          開く <ArrowRight className="w-3 h-3" />
-        </div>
-      )}
-    </>
-  );
-
-  const cardClass = `group bg-white rounded-xl border p-5 flex flex-col transition-all ${
-    disabled ? "border-gray-100 opacity-70" : "border-gray-200/70 hover:border-gray-300 hover:shadow-sm"
-  }`;
-
-  if (disabled) return <div className={cardClass}>{inner}</div>;
-  return (
-    <Link href={href} className={cardClass}>
-      {inner}
-    </Link>
-  );
-}
-
 // ---- 問題セットカード ----
 
 function SetCard({
@@ -198,7 +134,7 @@ function SetCard({
       <div className="mt-4 flex flex-wrap gap-3">
         <Link
           href={`/practice/${exam}/${skill}/${set.id}?mode=practice`}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-eg hover:bg-eg-dark text-black text-sm font-semibold px-4 py-2.5 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-white border border-eg text-eg-deep hover:bg-eg-soft hover:border-eg-dark text-sm font-semibold px-4 py-2.5 transition-colors"
         >
           <Play className="w-4 h-4" /> 練習モード
         </Link>
@@ -263,8 +199,8 @@ function WritingHistory({ exam }: { exam: ExamId }) {
 function SkillPageInner() {
   const params = useParams<{ exam: string; skill: string }>();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [sets, setSets] = useState<SetSummary[]>([]);
-  const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   const exam = params.exam;
@@ -272,17 +208,22 @@ function SkillPageInner() {
   const valid = isExamId(exam) && isSkillId(skill);
   const typeParam = searchParams.get("type");
 
+  // 問題タイプ一覧は Home と重複するため廃止。タイプ未選択でこのページに来た場合は
+  // Home へ戻す（?type= 付きのセット一覧のみをこのページで扱う）。
+  useEffect(() => {
+    if (!valid) return;
+    if (!typeParam && getPracticeTypes(exam as ExamId, skill as SkillId).length > 0) {
+      router.replace("/home");
+    }
+  }, [valid, exam, skill, typeParam, router]);
+
   useEffect(() => {
     if (!valid) return;
     const examId = exam as ExamId;
     const skillId = skill as SkillId;
     const load = async () => {
-      const [loaded, stats] = await Promise.all([
-        loadSets(examId, skillId),
-        getSkillStats(examId, skillId),
-      ]);
+      const loaded = await loadSets(examId, skillId);
       setSets(loaded);
-      setTypeCounts(stats.typeCounts);
       setLoading(false);
     };
     load();
@@ -312,17 +253,14 @@ function SkillPageInner() {
     ? sets.filter((s) => s.practiceType === selectedType.id)
     : sets;
 
-  // タイプ未定義のセット（モックデータなど）— タイプ一覧の下に表示
-  const untypedSets = sets.filter((s) => !s.practiceType);
-
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
       <Link
-        href={selectedType ? `/practice/${exam}/${skill}` : `/home`}
+        href="/home"
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-5"
       >
         <ChevronLeft className="w-4 h-4" />
-        {selectedType ? `${SKILL_LABELS[skillId]} のタイプ一覧に戻る` : "ホームに戻る"}
+        ホームに戻る
       </Link>
 
       <div className="flex items-center gap-3">
@@ -360,33 +298,8 @@ function SkillPageInner() {
           )}
         </div>
       ) : (
-        // ---- 問題タイプ一覧 ----
-        <>
-          <h2 className="mt-8 text-base font-bold text-gray-900">問題タイプ別演習</h2>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {types.map((type) => (
-              <TypeCard
-                key={type.id}
-                type={type}
-                exam={examId}
-                skill={skillId}
-                setCount={typeCounts[type.id] ?? 0}
-              />
-            ))}
-          </div>
-
-          {untypedSets.length > 0 && skillId !== "writing" && (
-            <>
-              <h2 className="mt-10 text-base font-bold text-gray-900">その他の問題セット</h2>
-              <p className="mt-1 text-xs text-gray-500">複数の問題タイプを含む総合演習セット</p>
-              <div className="mt-4 space-y-4">
-                {untypedSets.map((set) => (
-                  <SetCard key={set.id} set={set} exam={examId} skill={skillId} />
-                ))}
-              </div>
-            </>
-          )}
-        </>
+        // タイプ未選択（Home と重複するため表示せず、上の useEffect で Home へリダイレクト）
+        <div className="text-center py-12 text-gray-400 text-sm">読み込み中...</div>
       )}
 
       {skillId === "writing" && <WritingHistory exam={examId} />}
