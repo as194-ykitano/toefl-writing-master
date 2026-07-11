@@ -21,7 +21,7 @@ export default function LoginPage() {
       <AuthThemeToggle />
       <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Writing Master</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Prep Master</h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">ログインして学習を始めましょう</p>
         </div>
         <LoginForm />

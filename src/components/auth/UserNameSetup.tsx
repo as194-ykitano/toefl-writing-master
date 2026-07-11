@@ -131,7 +131,7 @@ export default function UserNameSetup() {
             <span className="w-9 h-9 rounded-full bg-eg-deep text-white flex items-center justify-center font-bold">
               EG
             </span>
-            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Writing Master</span>
+            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Prep Master</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50 leading-tight">
             あなたについて

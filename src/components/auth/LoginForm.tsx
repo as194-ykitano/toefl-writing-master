@@ -34,7 +34,7 @@ export default function LoginForm() {
           if (!user.displayName || user.displayName.trim() === '') {
             router.push('/user-name-setup');
           } else {
-            router.push('/training-selection');
+            router.push('/home');
           }
         }
       }

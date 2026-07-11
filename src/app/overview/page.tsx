@@ -44,11 +44,39 @@ import {
   WritingResult,
 } from "@/lib/prep/types";
 
-const SKILL_META: { skill: SkillId; label: string; icon: typeof BookOpen; color: string }[] = [
-  { skill: "reading", label: "Reading", icon: BookOpen, color: "#3b82f6" },
-  { skill: "listening", label: "Listening", icon: Headphones, color: "#8b5cf6" },
-  { skill: "speaking", label: "Speaking", icon: Mic, color: "#f97316" },
-  { skill: "writing", label: "Writing", icon: PenLine, color: "#10b981" },
+// ダーク時の見え方はホーム（app/home）の技能バーに合わせる。
+// ライトはベタ塗り（color）、ダークは塗らず外枠＋淡色ティントで表現する。
+const SKILL_META: {
+  skill: SkillId;
+  label: string;
+  icon: typeof BookOpen;
+  color: string;
+  darkBorder: string;
+  darkTint: string;
+  darkTitle: string;
+  darkSub: string;
+  darkIcon: string;
+}[] = [
+  {
+    skill: "reading", label: "Reading", icon: BookOpen, color: "#3b82f6",
+    darkBorder: "dark:border-blue-500/70", darkTint: "dark:bg-blue-500/10",
+    darkTitle: "dark:text-blue-200", darkSub: "dark:text-blue-200/70", darkIcon: "dark:text-blue-400",
+  },
+  {
+    skill: "listening", label: "Listening", icon: Headphones, color: "#8b5cf6",
+    darkBorder: "dark:border-violet-500/70", darkTint: "dark:bg-violet-500/10",
+    darkTitle: "dark:text-violet-200", darkSub: "dark:text-violet-200/70", darkIcon: "dark:text-violet-400",
+  },
+  {
+    skill: "speaking", label: "Speaking", icon: Mic, color: "#f97316",
+    darkBorder: "dark:border-orange-500/70", darkTint: "dark:bg-orange-500/10",
+    darkTitle: "dark:text-orange-200", darkSub: "dark:text-orange-200/70", darkIcon: "dark:text-orange-400",
+  },
+  {
+    skill: "writing", label: "Writing", icon: PenLine, color: "#10b981",
+    darkBorder: "dark:border-emerald-500/70", darkTint: "dark:bg-emerald-500/10",
+    darkTitle: "dark:text-emerald-200", darkSub: "dark:text-emerald-200/70", darkIcon: "dark:text-emerald-400",
+  },
 ];
 
 const PERIODS: PeriodKey[] = ["7d", "30d", "90d", "all"];
@@ -241,20 +269,37 @@ export default function OverviewPage() {
               <button
                 key={m.skill}
                 onClick={() => setSkill(m.skill)}
-                className={`rounded-xl border p-3 text-left transition-all ${
+                className={`relative overflow-hidden rounded-xl border p-3 text-left transition-all ${
                   active
-                    ? "border-transparent text-white shadow-md"
-                    : "border-gray-200/70 bg-white hover:border-gray-300"
+                    ? `border-transparent text-white shadow-md ${m.darkBorder} ${m.darkTint} dark:shadow-none`
+                    : "border-gray-200/70 bg-white hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:border-gray-600"
                 }`}
-                style={active ? { backgroundColor: m.color } : undefined}
               >
-                <div className="flex items-center gap-1.5">
-                  <Icon className={`w-4 h-4 ${active ? "text-white" : "text-gray-400"}`} />
-                  <span className={`text-sm font-bold ${active ? "text-white" : "text-gray-900"}`}>
+                {active && (
+                  // ライトはベタ塗り、ダークでは塗らず外枠の色で表現する
+                  <span
+                    className="absolute inset-0 dark:hidden"
+                    style={{ backgroundColor: m.color }}
+                    aria-hidden
+                  />
+                )}
+                <div className="relative flex items-center gap-1.5">
+                  <Icon
+                    className={`w-4 h-4 ${active ? `text-white ${m.darkIcon}` : "text-gray-400"}`}
+                  />
+                  <span
+                    className={`text-sm font-bold ${
+                      active ? `text-white ${m.darkTitle}` : "text-gray-900 dark:text-gray-100"
+                    }`}
+                  >
                     {m.label}
                   </span>
                 </div>
-                <div className={`mt-1 text-[11px] ${active ? "text-white/85" : "text-gray-400"}`}>
+                <div
+                  className={`relative mt-1 text-[11px] ${
+                    active ? `text-white/85 ${m.darkSub}` : "text-gray-400"
+                  }`}
+                >
                   {agg.attempts > 0 ? `${agg.attempts} 回` : "データなし"}
                 </div>
               </button>

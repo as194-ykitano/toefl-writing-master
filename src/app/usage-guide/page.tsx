@@ -18,7 +18,7 @@ export default function UsageGuidePage() {
   const sections = [
     {
       id: 'introduction',
-      title: 'まずはじめに - Writing Master',
+      title: 'まずはじめに - Prep Master',
       icon: Play,
       color: 'blue',
       video: '<div style="position: relative; padding-bottom: 49.11366006256517%; height: 0;"><iframe src="https://www.loom.com/embed/c82d1ccc18a04103a6693fc09488758b?sid=a838c7b6-0039-415f-92fc-f73e1b8dedf5" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>'
@@ -69,7 +69,7 @@ export default function UsageGuidePage() {
             使い方ガイド
           </h1>
           <p className="text-gray-500 text-sm font-light mb-2">
-            Writing Masterの各機能の使い方を動画で確認できます
+            Prep Masterの各機能の使い方を動画で確認できます
           </p>
           <p className="text-gray-400 text-xs">
             カードのどこをクリックしても動画を確認できます
