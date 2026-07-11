@@ -37,6 +37,7 @@ import {
 import { useExam } from "@/contexts/ExamContext";
 import {
   EXAM_LABELS,
+  EXAM_SKILLS,
   ExamId,
   PracticeSessionResult,
   SkillId,
@@ -74,10 +75,23 @@ export default function OverviewPage() {
   const [sessions, setSessions] = useState<PracticeSessionResult[]>([]);
   const [writingResults, setWritingResults] = useState<WritingResult[]>([]);
 
+  // その試験で対応している技能のみタブ表示（TOEIC は Reading + Listening のみ）
+  const visibleSkills = useMemo(
+    () => SKILL_META.filter((m) => EXAM_SKILLS[activeExam].includes(m.skill)),
+    [activeExam]
+  );
+
   // 技能・試験を切り替えたら問題タイプ選択をリセット（自動で最初のデータあり項目を選ぶ）
   useEffect(() => {
     setSelectedType(null);
   }, [skill, exam]);
+
+  // 試験を切り替えたとき、選択中の技能がその試験に無ければ先頭の技能へ戻す
+  useEffect(() => {
+    if (!EXAM_SKILLS[activeExam].includes(skill)) {
+      setSkill(EXAM_SKILLS[activeExam][0]);
+    }
+  }, [activeExam, skill]);
 
   useEffect(() => {
     setWritingResults(loadWritingResults());
@@ -214,9 +228,12 @@ export default function OverviewPage() {
           </div>
         )}
 
-        {/* 技能タブ */}
-        <div className="grid grid-cols-4 gap-2">
-          {SKILL_META.map((m) => {
+        {/* 技能タブ（試験ごとに対応技能のみ表示） */}
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: `repeat(${visibleSkills.length}, minmax(0, 1fr))` }}
+        >
+          {visibleSkills.map((m) => {
             const active = m.skill === skill;
             const Icon = m.icon;
             const agg = data.bySkill[m.skill];
