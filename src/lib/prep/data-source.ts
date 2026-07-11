@@ -94,6 +94,23 @@ async function resolveListeningAssets(set: ListeningSet): Promise<ListeningSet> 
   }
 }
 
+/**
+ * 管理画面など、個別取得APIでも生徒画面と同じ音声・画像URLを表示するための補完処理。
+ * bundled JSON はアセット本体ではなく asset-paths JSON に Storage path を持つため、
+ * 編集前に必ず同じ解決処理を通す。
+ */
+export async function resolveManagedPracticeSetAssets(
+  set: ManagedPracticeSet
+): Promise<ManagedPracticeSet> {
+  if (set.skill === "listening") {
+    return resolveListeningAssets(set as ListeningSet);
+  }
+  if (set.skill === "speaking") {
+    return resolveSpeakingAssets(set as SpeakingSet);
+  }
+  return set;
+}
+
 async function resolveSpeakingAssets(set: SpeakingSet): Promise<SpeakingSet> {
   if (set.exam !== "toefl") return set;
   try {
@@ -122,10 +139,62 @@ const READING_LOADERS: Record<ExamId, () => Promise<{ default: unknown }>> = {
   toeic: loaders.toeicReading,
 };
 
-export async function getReadingSets(exam: ExamId): Promise<ReadingSet[]> {
+export type ManagedPracticeSet = ReadingSet | ListeningSet | SpeakingSet | WritingPracticeSet;
+
+type PracticeSetOverride = {
+  exam: ExamId;
+  skill: SkillId;
+  sourceId: string;
+  isPublished: boolean;
+  data?: ManagedPracticeSet;
+};
+
+async function applyPracticeSetOverrides<T extends ManagedPracticeSet>(
+  exam: ExamId,
+  skill: SkillId,
+  baseSets: T[]
+): Promise<T[]> {
+  try {
+    if (typeof window === "undefined") return baseSets;
+    const response = await fetch(`/api/practice-set-overrides?exam=${exam}&skill=${skill}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error(`override API returned ${response.status}`);
+    const result = await response.json() as { overrides?: PracticeSetOverride[] };
+    const overrides = result.overrides ?? [];
+    const byId = new Map(baseSets.map((set) => [set.id, set]));
+
+    for (const override of overrides) {
+      if (!override.sourceId) continue;
+      if (!override.isPublished) {
+        byId.delete(override.sourceId);
+        continue;
+      }
+      if (override.data) {
+        byId.set(override.sourceId, {
+          ...override.data,
+          id: override.sourceId,
+          exam,
+          skill,
+        } as T);
+      }
+    }
+    return [...byId.values()];
+  } catch (error) {
+    // Existing JSON remains usable while signed out, offline, or before rules are deployed.
+    console.warn("Practice set overrides could not be loaded; using bundled JSON.", error);
+    return baseSets;
+  }
+}
+
+export async function getStaticReadingSets(exam: ExamId): Promise<ReadingSet[]> {
   const mock = READING_SETS.filter((s) => s.exam === exam);
   const imported = await loadJson<ReadingSet[]>(`${exam}-reading`, READING_LOADERS[exam]);
   return [...imported, ...mock];
+}
+
+export async function getReadingSets(exam: ExamId): Promise<ReadingSet[]> {
+  return applyPracticeSetOverrides(exam, "reading", await getStaticReadingSets(exam));
 }
 
 export async function getReadingSet(exam: ExamId, setId: string): Promise<ReadingSet | null> {
@@ -141,10 +210,14 @@ const LISTENING_LOADERS: Record<ExamId, () => Promise<{ default: unknown }>> = {
   toeic: loaders.toeicListening,
 };
 
-export async function getListeningSets(exam: ExamId): Promise<ListeningSet[]> {
+export async function getStaticListeningSets(exam: ExamId): Promise<ListeningSet[]> {
   const mock = LISTENING_SETS.filter((s) => s.exam === exam);
   const imported = await loadJson<ListeningSet[]>(`${exam}-listening`, LISTENING_LOADERS[exam]);
   return [...imported, ...mock];
+}
+
+export async function getListeningSets(exam: ExamId): Promise<ListeningSet[]> {
+  return applyPracticeSetOverrides(exam, "listening", await getStaticListeningSets(exam));
 }
 
 export async function getListeningSet(exam: ExamId, setId: string): Promise<ListeningSet | null> {
@@ -155,7 +228,7 @@ export async function getListeningSet(exam: ExamId, setId: string): Promise<List
 
 // ---- Speaking ----
 
-export async function getSpeakingSets(exam: ExamId): Promise<SpeakingSet[]> {
+export async function getStaticSpeakingSets(exam: ExamId): Promise<SpeakingSet[]> {
   const mock = SPEAKING_SETS.filter((s) => s.exam === exam);
   // TOEIC は初回スコープで Reading のみ（Speaking データ未整備）
   if (exam === "toeic") return mock;
@@ -166,6 +239,10 @@ export async function getSpeakingSets(exam: ExamId): Promise<SpeakingSet[]> {
   return [...imported, ...mock];
 }
 
+export async function getSpeakingSets(exam: ExamId): Promise<SpeakingSet[]> {
+  return applyPracticeSetOverrides(exam, "speaking", await getStaticSpeakingSets(exam));
+}
+
 export async function getSpeakingSet(exam: ExamId, setId: string): Promise<SpeakingSet | null> {
   const sets = await getSpeakingSets(exam);
   const set = sets.find((s) => s.id === setId) ?? null;
@@ -174,7 +251,7 @@ export async function getSpeakingSet(exam: ExamId, setId: string): Promise<Speak
 
 // ---- Writing（TOEFL 新形式の演習セット） ----
 
-export async function getWritingSets(exam: ExamId): Promise<WritingPracticeSet[]> {
+export async function getStaticWritingSets(exam: ExamId): Promise<WritingPracticeSet[]> {
   // TOEIC は初回スコープで Reading のみ（Writing データ未整備）
   if (exam === "toeic") return [];
   if (exam === "ielts") {
@@ -187,6 +264,21 @@ export async function getWritingSets(exam: ExamId): Promise<WritingPracticeSet[]
     loadJson<WritingPracticeSet[]>("toefl-writing", loaders.toeflWriting),
   ]);
   return [...essays, ...base];
+}
+
+export async function getWritingSets(exam: ExamId): Promise<WritingPracticeSet[]> {
+  return applyPracticeSetOverrides(exam, "writing", await getStaticWritingSets(exam));
+}
+
+export async function getAllStaticPracticeSets(): Promise<ManagedPracticeSet[]> {
+  const exams: ExamId[] = ["toefl", "ielts", "toeic"];
+  const groups = await Promise.all(exams.flatMap((exam) => [
+    getStaticReadingSets(exam),
+    getStaticListeningSets(exam),
+    getStaticSpeakingSets(exam),
+    getStaticWritingSets(exam),
+  ]));
+  return groups.flat() as ManagedPracticeSet[];
 }
 
 export async function getWritingSet(

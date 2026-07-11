@@ -177,6 +177,56 @@
 .dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.16); }
 .dark .bg-blue-50\/70 { background-color: rgba(59, 130, 246, 0.16); }
 
+/* =========================================================================
+   グラス（すりガラス）カード
+   -------------------------------------------------------------------------
+   半透明 + backdrop-blur で、背景がうっすら透ける質感を出す。
+   bg-white 等を使わずこのクラス単体で面の見た目を完結させる（ダーク再マップと
+   競合しないようにするため）。
+   ========================================================================= */
+.glass-card {
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 28px rgba(17, 24, 39, 0.06);
+}
+.dark .glass-card {
+  background: rgba(40, 40, 46, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.32);
+}
+/* グラスカード内で「一段沈んだ」ヘッダー等に使う薄い面 */
+.dark .glass-card :where(.glass-inner-border) { border-color: rgba(255, 255, 255, 0.08); }
+
+/* =========================================================================
+   数値カウントアップ完了時のグロー
+   ========================================================================= */
+@keyframes count-glow {
+  0% { text-shadow: 0 0 0 rgba(255, 145, 0, 0); }
+  35% { text-shadow: 0 0 20px rgba(255, 145, 0, 0.75); }
+  100% { text-shadow: 0 0 0 rgba(255, 145, 0, 0); }
+}
+.count-glow {
+  animation: count-glow 0.9s ease-out;
+}
+
+/* =========================================================================
+   積み上げ棒グラフ: 下からニュッと伸びる
+   ========================================================================= */
+@keyframes bar-grow-up {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+.bar-grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bar-grow-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow { animation: none; }
+}
+
 /* 色の切替を滑らかに */
 body {
   transition: background-color 0.2s ease, color 0.2s ease;

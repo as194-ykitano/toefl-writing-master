@@ -97,7 +97,7 @@ export function MiniLineChart({
           y1={padTop + innerH * f}
           y2={padTop + innerH * f}
           stroke="currentColor"
-          className="text-gray-100"
+          className="text-gray-100 dark:text-white/[0.06]"
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
         />
@@ -191,6 +191,151 @@ export function MiniBarChart({ points, max, color = "#3b82f6", height = 120 }: C
             fill={color}
             opacity={p.value > 0 ? 0.85 : 0.12}
           />
+        );
+      })}
+    </svg>
+  );
+}
+
+// ---- 積み上げ棒グラフ（学習時間の内訳・週次） ----
+
+interface StackedSegment {
+  key: string;
+  color: string;
+  /** 積み上げる値（秒） */
+  value: number;
+}
+
+interface StackedBar {
+  label: string;
+  weekday?: string;
+  segments: StackedSegment[];
+}
+
+interface StackedBarChartProps {
+  bars: StackedBar[];
+  /** 縦軸の最大値（秒）。未指定なら各バー合計の最大 */
+  max?: number;
+  height?: number;
+  /** グリッド線に添える目盛りラベル（秒 → 文字列） */
+  tickFormat?: (sec: number) => string;
+}
+
+export function StackedBarChart({
+  bars,
+  max,
+  height = 220,
+  tickFormat,
+}: StackedBarChartProps) {
+  const totals = bars.map((b) => b.segments.reduce((a, s) => a + s.value, 0));
+  const maxV = max ?? Math.max(1, ...totals);
+  const padL = tickFormat ? 46 : 12;
+  const padR = 12;
+  const padTop = 12;
+  const padBottom = 34;
+  const VB_W = 720;
+  const innerW = VB_W - padL - padR;
+  const innerH = height - padTop - padBottom;
+  const slot = innerW / bars.length;
+  const barW = Math.min(48, slot * 0.6);
+
+  const ticks = [0, 0.25, 0.5, 0.75, 1];
+
+  // 色ごとにグラス調の縦グラデーションを用意する（上=濃いめ / 下=薄め）
+  const uniqueColors = Array.from(
+    new Set(bars.flatMap((b) => b.segments.map((s) => s.color)))
+  );
+  const gradId = (c: string) => `bargrad-${c.replace(/[^a-z0-9]/gi, "")}`;
+
+  return (
+    <svg viewBox={`0 0 ${VB_W} ${height}`} className="w-full h-auto">
+      <defs>
+        {uniqueColors.map((c) => (
+          <linearGradient key={c} id={gradId(c)} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={c} stopOpacity={0.92} />
+            <stop offset="100%" stopColor={c} stopOpacity={0.5} />
+          </linearGradient>
+        ))}
+      </defs>
+      {/* グリッド + 目盛り */}
+      {ticks.map((f) => {
+        const y = padTop + innerH * (1 - f);
+        return (
+          <g key={f}>
+            <line
+              x1={padL}
+              x2={VB_W - padR}
+              y1={y}
+              y2={y}
+              stroke="currentColor"
+              className="text-gray-100 dark:text-gray-800"
+              strokeWidth={1}
+              vectorEffect="non-scaling-stroke"
+            />
+            {tickFormat && (
+              <text
+                x={padL - 8}
+                y={y + 3}
+                textAnchor="end"
+                className="fill-gray-400 dark:fill-gray-500"
+                fontSize={11}
+              >
+                {tickFormat(maxV * f)}
+              </text>
+            )}
+          </g>
+        );
+      })}
+      {bars.map((bar, bi) => {
+        const cx = padL + slot * bi + slot / 2;
+        const x = cx - barW / 2;
+        let acc = 0;
+        return (
+          <g key={bi}>
+            {/* 積み上げ本体（1日分をまとめて下から伸ばす） */}
+            <g className="bar-grow" style={{ animationDelay: `${bi * 55}ms` }}>
+              {bar.segments.map((seg) => {
+                const h = (seg.value / maxV) * innerH;
+                if (h <= 0) return null;
+                const y = padTop + innerH - acc - h;
+                acc += h;
+                const isTop = acc >= (totals[bi] / maxV) * innerH - 0.5;
+                return (
+                  <rect
+                    key={seg.key}
+                    x={x}
+                    y={y}
+                    width={barW}
+                    height={h}
+                    fill={`url(#${gradId(seg.color)})`}
+                    rx={isTop ? Math.min(3, barW / 2) : 0}
+                  />
+                );
+              })}
+            </g>
+            {/* 曜日ラベル */}
+            <text
+              x={cx}
+              y={height - 16}
+              textAnchor="middle"
+              className="fill-gray-500 dark:fill-gray-400"
+              fontSize={12}
+              fontWeight={600}
+            >
+              {bar.label}
+            </text>
+            {bar.weekday && (
+              <text
+                x={cx}
+                y={height - 3}
+                textAnchor="middle"
+                className="fill-gray-300 dark:fill-gray-600"
+                fontSize={10}
+              >
+                {bar.weekday}
+              </text>
+            )}
+          </g>
         );
       })}
     </svg>

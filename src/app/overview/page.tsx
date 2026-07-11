@@ -28,6 +28,8 @@ import { loadSessions } from "@/lib/prep/session-store";
 import { loadWritingResults } from "@/lib/prep/writing-store";
 import { getListeningSets, getReadingSets, getSpeakingSets } from "@/lib/prep/data-source";
 import { getPracticeTypes } from "@/lib/prep/question-types";
+import { formatActivityScore, usePrepActivity } from "@/lib/prep/use-activity";
+import Reveal from "@/components/prep/Reveal";
 import {
   buildDashboardData,
   PERIOD_LABELS,
@@ -192,6 +194,19 @@ export default function OverviewPage() {
   const effectiveTypeLabel =
     (effectiveType && typeEntries.find((t) => t.id === effectiveType)?.label) || null;
 
+  // 最近の演習は選択中の技能・問題タイプに連動させる
+  const { items: activityItems } = usePrepActivity(activeExam);
+  const recentItems = useMemo(
+    () =>
+      activityItems
+        .filter(
+          (it) =>
+            it.skill === skill && (!effectiveType || it.practiceType === effectiveType)
+        )
+        .slice(0, 6),
+    [activityItems, skill, effectiveType]
+  );
+
   const totals = data.totals;
 
   const summaryCards = [
@@ -218,20 +233,22 @@ export default function OverviewPage() {
     <PrepShell>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         {/* ヘッダー + 期間選択 */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-3 duration-700">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">学習ダッシュボード</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              {EXAM_LABELS[activeExam]} の学習データ（このブラウザの演習・添削履歴から集計）
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">データ推移</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              {EXAM_LABELS[activeExam]} のスコア推移（このブラウザの演習・添削履歴から集計）
             </p>
           </div>
-          <div className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 p-0.5">
+          <div className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 p-0.5 dark:bg-gray-800">
             {PERIODS.map((p) => (
               <button
                 key={p}
                 onClick={() => setPeriod(p)}
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  period === p ? "bg-white text-eg-deep shadow-sm" : "text-gray-500 hover:text-gray-700"
+                  period === p
+                    ? "bg-white text-eg-deep shadow-sm dark:bg-gray-700 dark:text-eg"
+                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 }`}
               >
                 {PERIOD_LABELS[p]}
@@ -308,15 +325,15 @@ export default function OverviewPage() {
         </div>
 
         {/* 平均スコア推移（選択中の問題タイプに応じて変化） */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <Reveal className="glass-card rounded-2xl p-6">
           <div className="flex items-start justify-between gap-3 mb-3">
             <div>
-              <h2 className="font-semibold text-gray-900">
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100">
                 {effectiveTypeLabel
                   ? `${effectiveTypeLabel} の推移`
                   : `${skillMeta.label} の平均スコア推移`}
               </h2>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                 {skill === "reading" || skill === "listening"
                   ? "正答率（%）の推移"
                   : skill === "speaking"
@@ -343,11 +360,13 @@ export default function OverviewPage() {
               skill === "reading" || skill === "listening" ? `${Math.round(v)}` : `${Math.round(v * 10) / 10}`
             }
           />
-        </div>
+        </Reveal>
 
         {/* 問題タイプ別（クリックで上のグラフを切替） */}
-        <div>
-          <h2 className="font-semibold text-gray-900 mb-3">{skillMeta.label} の問題タイプ別</h2>
+        <Reveal delay={80}>
+          <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
+            {skillMeta.label} の問題タイプ別
+          </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {typeEntries.map((t) => {
               const has = !!(t.agg && t.agg.attempts > 0 && t.agg.avgScore !== null);
@@ -359,29 +378,34 @@ export default function OverviewPage() {
                   disabled={!has}
                   className={`rounded-xl border p-3.5 text-left transition-all ${
                     active
-                      ? "border-transparent bg-white shadow-sm"
+                      ? "border-transparent bg-white shadow-sm dark:bg-gray-800"
                       : has
-                        ? "border-gray-200/70 bg-white hover:border-gray-300 hover:shadow-sm"
-                        : "border-gray-100 bg-gray-50/50 cursor-default"
+                        ? "border-gray-200/70 bg-white hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600"
+                        : "border-gray-100 bg-gray-50/50 cursor-default dark:border-gray-800 dark:bg-gray-900/30"
                   }`}
                   style={active ? { boxShadow: `0 0 0 2px ${skillMeta.color}` } : undefined}
                 >
-                  <div className="text-[11px] text-gray-500 leading-tight truncate" title={t.label}>
+                  <div
+                    className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight truncate"
+                    title={t.label}
+                  >
                     {t.label}
-                    <span className="text-gray-400"> ({t.agg?.attempts ?? 0})</span>
+                    <span className="text-gray-400 dark:text-gray-500"> ({t.agg?.attempts ?? 0})</span>
                   </div>
                   {has ? (
-                    <div className="mt-1 text-base font-bold text-gray-900 tabular-nums">
+                    <div className="mt-1 text-base font-bold text-gray-900 dark:text-gray-100 tabular-nums">
                       {formatScore(skill, t.agg!.avgScore!, t.agg!.scoreMax)}
                     </div>
                   ) : (
-                    <div className="mt-1 text-sm font-medium text-gray-300">データなし</div>
+                    <div className="mt-1 text-sm font-medium text-gray-300 dark:text-gray-600">
+                      データなし
+                    </div>
                   )}
                 </button>
               );
             })}
           </div>
-        </div>
+        </Reveal>
 
         {/* アクティビティ系列（解答した問題数 / 学習時間 / 文法ミス数の推移）
             表示する内容・見た目を再検討するまで一時的に非表示。 */}
@@ -411,72 +435,64 @@ export default function OverviewPage() {
           </div>
         )}
 
-        {/* 最近の演習 / 未接続項目の注記 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <History className="w-4 h-4 text-blue-600" />
-              <h2 className="font-semibold text-gray-900">最近の演習</h2>
+        {/* 最近の演習（選択中の技能・問題タイプに連動） / 未接続項目の注記 */}
+        <Reveal delay={80} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 glass-card rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-1">
+              <History className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100">最近の演習</h2>
             </div>
-            {sessions.filter((s) => s.exam === activeExam).length === 0 &&
-            writingResults.filter((w) => w.exam === activeExam).length === 0 ? (
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
+              {skillMeta.label}
+              {effectiveTypeLabel ? ` ・ ${effectiveTypeLabel}` : ""} の履歴
+            </p>
+            {recentItems.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-sm text-gray-400 mb-4">まだ演習履歴がありません</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500 mb-4">
+                  この技能・問題タイプの演習履歴はまだありません
+                </p>
                 <Link href="/home" className="inline-flex items-center gap-1.5 text-sm font-medium text-eg-deep hover:text-eg-dark">
-                  最初の演習を始める <ArrowRight className="w-3.5 h-3.5" />
+                  演習を始める <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             ) : (
-              <div className="space-y-2.5">
-                {[...sessions.filter((s) => s.exam === activeExam).map((s) => ({
-                  id: s.id,
-                  title: s.setTitle,
-                  date: s.finishedAt,
-                  href: `/results/${s.id}`,
-                  right: s.totalCount > 0 ? `${s.correctCount}/${s.totalCount}` : "提出済み",
-                })), ...writingResults.filter((w) => w.exam === activeExam).map((w) => ({
-                  id: w.id,
-                  title: w.title,
-                  date: w.finishedAt,
-                  href: `/writing-result/${w.id}`,
-                  right: `${w.feedback.score.toFixed(w.feedback.scoreMax === 9 ? 1 : 2)}/${w.feedback.scoreMax}`,
-                }))]
-                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                  .slice(0, 6)
-                  .map((r) => (
-                    <Link
-                      key={r.id}
-                      href={r.href}
-                      className="flex items-center justify-between gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">{r.title}</div>
-                        <div className="text-xs text-gray-400 mt-0.5">
-                          {new Date(r.date).toLocaleDateString("ja-JP")}
-                        </div>
+              <div className="space-y-1">
+                {recentItems.map((r) => (
+                  <Link
+                    key={r.id}
+                    href={r.href}
+                    className="flex items-center justify-between gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors dark:hover:bg-gray-800/60"
+                  >
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                        {r.title}
                       </div>
-                      <span className="flex-shrink-0 text-sm font-semibold text-gray-700 tabular-nums">
-                        {r.right}
-                      </span>
-                    </Link>
-                  ))}
+                      <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                        {new Date(r.finishedAt).toLocaleDateString("ja-JP")}
+                      </div>
+                    </div>
+                    <span className="flex-shrink-0 text-sm font-semibold text-gray-700 dark:text-gray-200 tabular-nums">
+                      {formatActivityScore(r)}
+                    </span>
+                  </Link>
+                ))}
               </div>
             )}
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="glass-card rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-3">
               <CalendarClock className="w-4 h-4 text-gray-400" />
-              <h2 className="font-semibold text-gray-900">データについて</h2>
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100">データについて</h2>
             </div>
-            <ul className="space-y-2 text-xs text-gray-500 leading-relaxed">
+            <ul className="space-y-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
               <li>・集計はこのブラウザの演習・添削履歴（localStorage）に基づきます。</li>
               <li>・スコアは技能ごとに尺度が異なります（R/L=正答率、Speaking=推定バンド、Writing=添削スコア）。</li>
-              <li>・語彙ミスの集計は現在準備中です（語彙トラッキング実装後に接続）。</li>
+              <li>・全履歴の一覧は「学習履歴」、学習時間の内訳は「学習時間」で確認できます。</li>
               <li>・端末・ブラウザをまたいだ集計は将来のサーバー同期で対応予定です。</li>
             </ul>
           </div>
-        </div>
+        </Reveal>
       </div>
     </PrepShell>
   );

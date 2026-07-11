@@ -99,23 +99,23 @@ function MockHub() {
   return (
     <PrepShell>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-        <div>
+        <div className="animate-in fade-in slide-in-from-bottom-3 duration-700">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Mock Test</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-50">Mock Test</h1>
             <span className="text-[10px] font-semibold text-eg-deep bg-eg-soft rounded px-1.5 py-0.5">
               実力診断
             </span>
           </div>
-          <p className="mt-1.5 text-sm text-gray-500 max-w-2xl leading-relaxed">
+          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed">
             本番形式で Reading・Listening・Speaking を通しで受験し、セクション別スコアと総合スコアの
             推定、弱点分析レポートを受け取れます。（Writing は AI 添削つきの個別演習でトレーニングできます）
           </p>
         </div>
 
         {/* ---- 設定パネル ---- */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
+        <div className="glass-card rounded-2xl p-6 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both [animation-delay:80ms]">
           <div>
-            <div className="text-sm font-semibold text-gray-700 mb-3">試験を選ぶ</div>
+            <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">試験を選ぶ</div>
             <div className="grid grid-cols-2 gap-3">
               {(["toefl", "ielts"] as ExamId[]).map((e) => (
                 <button
@@ -127,8 +127,8 @@ function MockHub() {
                       : "border-gray-200 hover:border-gray-300 bg-white"
                   }`}
                 >
-                  <div className="font-semibold text-gray-900 text-sm">{EXAM_LABELS[e]}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">
+                  <div className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{EXAM_LABELS[e]}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     {e === "toefl" ? "Band 1–6 / 各技能 30 点換算" : "Band 1.0–9.0"}
                   </div>
                 </button>
@@ -137,42 +137,42 @@ function MockHub() {
           </div>
 
           <div>
-            <div className="text-sm font-semibold text-gray-700 mb-3">種別を選ぶ</div>
+            <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">種別を選ぶ</div>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setVariant("mini")}
                 className={`rounded-xl border px-4 py-3 text-left transition-all ${
                   variant === "mini"
-                    ? "border-eg bg-eg-faint"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    ? "border-eg bg-eg-faint dark:bg-eg/10"
+                    : "border-gray-200 hover:border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600"
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <Timer className="w-4 h-4 text-violet-600" />
-                  <span className="font-semibold text-gray-900 text-sm">Mini Mock</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Mini Mock</span>
                 </div>
-                <div className="text-xs text-gray-500 mt-1">各技能 1 セクションで素早く診断</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">各技能 1 セクションで素早く診断</div>
               </button>
               <button
                 onClick={() => setVariant("full")}
                 className={`rounded-xl border px-4 py-3 text-left transition-all ${
                   variant === "full"
-                    ? "border-eg bg-eg-faint"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    ? "border-eg bg-eg-faint dark:bg-eg/10"
+                    : "border-gray-200 hover:border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600"
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <ClipboardList className="w-4 h-4 text-blue-600" />
-                  <span className="font-semibold text-gray-900 text-sm">Full Mock</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Full Mock</span>
                 </div>
-                <div className="text-xs text-gray-500 mt-1">通し受験でより安定した推定</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">通し受験でより安定した推定</div>
               </button>
             </div>
           </div>
 
-          <div className="rounded-xl bg-gradient-to-br from-eg-faint to-orange-50 border border-eg-soft px-4 py-3 flex items-start gap-2">
-            <Sparkles className="w-4 h-4 text-eg-dark mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-gray-600 leading-relaxed">
+          <div className="rounded-xl bg-gradient-to-br from-eg-faint to-orange-50 border border-eg-soft px-4 py-3 flex items-start gap-2 dark:from-eg/10 dark:to-orange-500/5 dark:border-eg/20">
+            <Sparkles className="w-4 h-4 text-eg-dark dark:text-eg mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
               構成: {variantInfo.sections}（Reading / Listening / Speaking）／目安時間: {variantInfo.time}。
               スコアは練習用の参考推定です（正式な Band 判定は本番受験でのみ確定します）。
             </p>
@@ -199,33 +199,34 @@ function MockHub() {
 
         {/* ---- 過去のレポート ---- */}
         {reports.length > 0 && (
-          <section>
+          <section className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both [animation-delay:160ms]">
             <div className="flex items-center gap-2 mb-3">
               <History className="w-4 h-4 text-gray-400" />
-              <h2 className="text-base font-bold text-gray-900">これまでの模試</h2>
+              <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">これまでの模試</h2>
             </div>
             <div className="space-y-2">
-              {reports.map((r) => (
+              {reports.map((r, i) => (
                 <Link
                   key={r.id}
                   href={`/mock/report/${r.id}`}
-                  className="flex items-center gap-4 bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm px-4 py-3 transition-all"
+                  style={{ animationDelay: `${200 + i * 50}ms` }}
+                  className="flex items-center gap-4 bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5 px-4 py-3 transition-all dark:bg-gray-900/60 dark:border-gray-800 dark:hover:border-gray-700 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both"
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-semibold text-gray-900 truncate">{r.title}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">
+                    <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{r.title}</div>
+                    <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                       {new Date(r.finishedAt).toLocaleString("ja-JP")}
                     </div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="text-lg font-bold text-eg-deep tabular-nums">
+                    <div className="text-lg font-bold text-eg-deep dark:text-eg tabular-nums">
                       {r.exam === "ielts" ? r.overallScore.toFixed(1) : r.overallScore}
                     </div>
-                    <div className="text-[10px] text-gray-400">
+                    <div className="text-[10px] text-gray-400 dark:text-gray-500">
                       {r.exam === "ielts" ? "Band" : `/ ${r.overallMax}`}
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0" />
                 </Link>
               ))}
             </div>

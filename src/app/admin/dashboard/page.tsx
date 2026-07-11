@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
-import { Plus, Edit, Trash2, Eye, EyeOff, Users, FileText, BarChart3, AlertTriangle, LogOut, ImageIcon, Play } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, EyeOff, Users, FileText, BarChart3, AlertTriangle, LogOut, ImageIcon, Play, Database } from "lucide-react";
 import { isAdmin } from '@/lib/utils';
 import { AdminUser, TrainingPermission } from '@/lib/types';
 
@@ -377,7 +377,7 @@ export default function AdminDashboard() {
         {/* 管理機能への遷移ボタン */}
         <div className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/admin/users')}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/admin/user-management')}>
               <CardContent className="p-6">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -386,6 +386,20 @@ export default function AdminDashboard() {
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900">ユーザー管理</h3>
                     <p className="text-sm text-gray-600">ユーザーの権限設定とエッセイ管理</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/admin/practice-sets')}>
+              <CardContent className="p-6">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                    <Database className="h-6 w-6 text-amber-700" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-gray-900">演習セット管理</h3>
+                    <p className="text-sm text-gray-600">問題セットの追加・編集・公開設定</p>
                   </div>
                 </div>
               </CardContent>

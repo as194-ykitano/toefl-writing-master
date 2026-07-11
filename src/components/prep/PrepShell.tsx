@@ -16,8 +16,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
   BookOpen,
+  Clock,
   Home,
-  LayoutDashboard,
+  LineChart,
+  ListChecks,
   LogOut,
   LucideIcon,
   Menu,
@@ -77,9 +79,21 @@ function buildNavGroups(exam: string): NavGroup[] {
   if (!isAdvanced) {
     top.push({
       href: "/overview",
-      label: "ダッシュボード",
-      icon: LayoutDashboard,
+      label: "データ推移",
+      icon: LineChart,
       activeFor: ["/overview", "/results"],
+    });
+    top.push({
+      href: "/history",
+      label: "学習履歴",
+      icon: ListChecks,
+      activeFor: ["/history"],
+    });
+    top.push({
+      href: "/study-time",
+      label: "学習時間",
+      icon: Clock,
+      activeFor: ["/study-time"],
     });
     top.push({ href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] });
   }

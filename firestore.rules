@@ -57,6 +57,13 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // 新しい演習セット管理。通常画面は公開用APIを経由し、
+    // Firestoreを直接読む場合も非公開データは管理者だけに限定する。
+    match /practiceSets/{setId} {
+      allow read: if request.auth != null && (resource.data.isPublished == true || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
     // リーディングパッセージ - 認証されたユーザーが読み取り可能、管理者のみが作成・更新・削除可能
     match /readingPassages/{passageId} {
       allow read: if request.auth != null;

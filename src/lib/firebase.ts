@@ -392,14 +392,18 @@ export const signIn = async (email: string, password: string) => {
   } catch (error) {
     console.error('Error signing in:', error);
     const authError = error as FirebaseAuthError;
-    if (authError.code === 'auth/user-not-found') {
-      throw new Error('繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ縺ｾ縺溘・繝代せ繝ｯ繝ｼ繝峨′豁｣縺励￥縺ゅｊ縺ｾ縺帙ｓ縲・');
-    } else if (authError.code === 'auth/wrong-password') {
-      throw new Error('繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ縺ｾ縺溘・繝代せ繝ｯ繝ｼ繝峨′豁｣縺励￥縺ゅｊ縺ｾ縺帙ｓ縲・');
+    if (
+      authError.code === 'auth/user-not-found' ||
+      authError.code === 'auth/wrong-password' ||
+      authError.code === 'auth/invalid-credential'
+    ) {
+      throw new Error('メールアドレスまたはパスワードが正しくありません。');
+    } else if (authError.code === 'auth/user-disabled') {
+      throw new Error('このアカウントは利用停止中です。管理者にお問い合わせください。');
     } else if (authError.code === 'auth/invalid-email') {
-      throw new Error('譛牙柑縺ｪ繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ繧貞・蜉帙＠縺ｦ縺上□縺輔＞縲・');
+      throw new Error('有効なメールアドレスを入力してください。');
     } else {
-      throw new Error('繝ｭ繧ｰ繧､繝ｳ荳ｭ縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆縲・');
+      throw new Error('ログイン中にエラーが発生しました。');
     }
   }
 };

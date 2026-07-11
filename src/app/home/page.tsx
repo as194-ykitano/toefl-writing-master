@@ -14,7 +14,7 @@ import {
   ClipboardCheck,
   Clock,
   Headphones,
-  LayoutDashboard,
+  LineChart,
   Lightbulb,
   ListChecks,
   Mic,
@@ -103,10 +103,10 @@ function TypeCard({
           </span>
         ) : null}
       </div>
-      <div className="mt-2.5 font-semibold text-gray-900 text-sm">{type.label}</div>
-      <p className="mt-0.5 text-xs text-gray-500">{type.labelJa}</p>
+      <div className="mt-2.5 font-semibold text-gray-900 dark:text-gray-100 text-sm">{type.label}</div>
+      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{type.labelJa}</p>
       {type.description && (
-        <p className="mt-1 text-[11px] text-gray-400 leading-relaxed flex-1">{type.description}</p>
+        <p className="mt-1 text-[11px] text-gray-400 dark:text-gray-500 leading-relaxed flex-1">{type.description}</p>
       )}
       {!disabled && (
         <div className="mt-2.5 inline-flex items-center gap-1 text-xs font-medium text-eg-deep group-hover:gap-1.5 transition-all">
@@ -116,8 +116,10 @@ function TypeCard({
     </>
   );
 
-  const cardClass = `group bg-white rounded-xl border p-4 flex flex-col transition-all ${
-    disabled ? "border-gray-100 opacity-70" : "border-gray-200/70 hover:border-gray-300 hover:shadow-sm"
+  const cardClass = `group bg-white rounded-xl border p-4 flex flex-col transition-all dark:bg-gray-900/60 ${
+    disabled
+      ? "border-gray-100 opacity-70 dark:border-gray-800"
+      : "border-gray-200/70 hover:border-gray-300 hover:shadow-sm hover:-translate-y-0.5 dark:border-gray-700 dark:hover:border-gray-600"
   }`;
 
   if (disabled) return <div className={cardClass}>{inner}</div>;
@@ -175,26 +177,29 @@ export default function HomePage() {
   return (
     <PrepShell>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-          {name ? `こんにちは、${name} さん` : "こんにちは"}
-        </h1>
-        <p className="mt-1.5 text-sm text-gray-500">
-          {EXAM_LABELS[activeExam]} の4技能を、練習・診断・復習・AI添削までひとつのアプリで。
-        </p>
+        <div className="animate-in fade-in slide-in-from-bottom-3 duration-700">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-50">
+            {name ? `こんにちは、${name} さん` : "こんにちは"}
+          </h1>
+          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">
+            {EXAM_LABELS[activeExam]} の4技能を、練習・診断・復習・AI添削までひとつのアプリで。
+          </p>
+        </div>
 
         {/* 横長の技能バー（押すと下にその技能の問題タイプが並ぶ） */}
         <div className="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          {visibleTabs.map((tab) => {
+          {visibleTabs.map((tab, i) => {
             const active = tab.skill === skill;
             const Icon = tab.icon;
             return (
               <button
                 key={tab.skill}
                 onClick={() => setSkill(tab.skill)}
-                className={`relative overflow-hidden rounded-xl border p-4 text-left transition-all ${
+                style={{ animationDelay: `${i * 70}ms` }}
+                className={`relative overflow-hidden rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both ${
                   active
                     ? `border-transparent text-white shadow-md ${tab.darkBorder} ${tab.darkTint} dark:shadow-none`
-                    : "border-gray-200/70 bg-white hover:border-gray-300 hover:shadow-sm"
+                    : "border-gray-200/70 bg-white hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600"
                 }`}
               >
                 {active && (
@@ -210,7 +215,7 @@ export default function HomePage() {
                   />
                   <span
                     className={`text-sm font-bold ${
-                      active ? `text-white ${tab.darkTitle}` : "text-gray-900"
+                      active ? `text-white ${tab.darkTitle}` : "text-gray-900 dark:text-gray-100"
                     }`}
                   >
                     {tab.title}
@@ -218,7 +223,7 @@ export default function HomePage() {
                 </span>
                 <span
                   className={`relative mt-1.5 block text-[11px] leading-snug ${
-                    active ? `text-white/85 ${tab.darkDesc}` : "text-gray-400"
+                    active ? `text-white/85 ${tab.darkDesc}` : "text-gray-400 dark:text-gray-500"
                   }`}
                 >
                   {tab.description}
@@ -230,10 +235,10 @@ export default function HomePage() {
 
         {/* 選択中技能の問題タイプ一覧 */}
         <div className="mt-6 flex items-center justify-between">
-          <h2 className="text-base font-bold text-gray-900">
+          <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">
             {EXAM_LABELS[activeExam]} {activeTab.title} の問題タイプ
             {questionCount > 0 && (
-              <span className="ml-2 text-xs font-medium text-gray-400">合計 {questionCount} 問</span>
+              <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">合計 {questionCount} 問</span>
             )}
           </h2>
           <Link
@@ -245,58 +250,54 @@ export default function HomePage() {
         </div>
 
         {types.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-gray-100 bg-white py-10 text-center text-sm text-gray-400">
+          <div className="mt-4 rounded-xl border border-gray-100 bg-white py-10 text-center text-sm text-gray-400 dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-500">
             この技能の問題タイプは準備中です
           </div>
         ) : (
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {types.map((type) => (
-              <TypeCard
+          <div key={skill} className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {types.map((type, i) => (
+              <div
                 key={type.id}
-                type={type}
-                exam={activeExam}
-                skill={skill}
-                setCount={typeCounts[type.id] ?? 0}
-              />
+                style={{ animationDelay: `${i * 45}ms` }}
+                className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both"
+              >
+                <TypeCard
+                  type={type}
+                  exam={activeExam}
+                  skill={skill}
+                  setCount={typeCounts[type.id] ?? 0}
+                />
+              </div>
             ))}
           </div>
         )}
 
         {/* その他の導線 */}
-        <h2 className="text-base font-bold text-gray-900 mt-10">その他</h2>
+        <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 mt-10">その他</h2>
         <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Link href="/mock" className="bg-white rounded-xl border border-gray-200/70 p-4 hover:border-gray-300 hover:shadow-sm transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 text-amber-600 bg-amber-50">
-              <ClipboardCheck className="w-4.5 h-4.5" />
-            </div>
-            <div className="text-sm font-semibold text-gray-900">模試・実力診断</div>
-            <div className="text-xs text-gray-400 mt-0.5 leading-relaxed">現在地を測定</div>
-          </Link>
-          <Link href="/overview" className="bg-white rounded-xl border border-gray-200/70 p-4 hover:border-gray-300 hover:shadow-sm transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 text-blue-600 bg-blue-50">
-              <LayoutDashboard className="w-4.5 h-4.5" />
-            </div>
-            <div className="text-sm font-semibold text-gray-900">ダッシュボード</div>
-            <div className="text-xs text-gray-400 mt-0.5 leading-relaxed">学習データを確認</div>
-          </Link>
-          <Link href="/advanced" className="bg-white rounded-xl border border-gray-200/70 p-4 hover:border-gray-300 hover:shadow-sm transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 text-teal-600 bg-teal-50">
-              <Lightbulb className="w-4.5 h-4.5" />
-            </div>
-            <div className="text-sm font-semibold text-gray-900">Advanced</div>
-            <div className="text-xs text-gray-400 mt-0.5 leading-relaxed">YouTube・自由記述</div>
-          </Link>
-          <Link href="/training-selection" className="bg-white rounded-xl border border-gray-200/70 p-4 hover:border-gray-300 hover:shadow-sm transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 text-eg-dark bg-eg-soft">
-              <PenLine className="w-4.5 h-4.5" />
-            </div>
-            <div className="text-sm font-semibold text-gray-900">Writing 添削（旧トップ）</div>
-            <div className="text-xs text-gray-400 mt-0.5 leading-relaxed">従来の AI 添削</div>
-          </Link>
+          {[
+            { href: "/mock", icon: ClipboardCheck, tint: "text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-500/10", title: "模試・実力診断", desc: "現在地を測定" },
+            { href: "/overview", icon: LineChart, tint: "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-500/10", title: "データ推移", desc: "学習データを確認" },
+            { href: "/advanced", icon: Lightbulb, tint: "text-teal-600 bg-teal-50 dark:text-teal-400 dark:bg-teal-500/10", title: "Advanced", desc: "YouTube・自由記述" },
+            { href: "/training-selection", icon: PenLine, tint: "text-eg-dark bg-eg-soft dark:text-eg dark:bg-eg/10", title: "Writing 添削（旧トップ）", desc: "従来の AI 添削" },
+          ].map((c, i) => (
+            <Link
+              key={c.href}
+              href={c.href}
+              style={{ animationDelay: `${i * 50}ms` }}
+              className="bg-white rounded-xl border border-gray-200/70 p-4 hover:border-gray-300 hover:shadow-sm hover:-translate-y-0.5 transition-all dark:bg-gray-900/60 dark:border-gray-700 dark:hover:border-gray-600 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both"
+            >
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 ${c.tint}`}>
+                <c.icon className="w-4.5 h-4.5" />
+              </div>
+              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{c.title}</div>
+              <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-relaxed">{c.desc}</div>
+            </Link>
+          ))}
         </div>
 
-        <p className="mt-12 text-center text-[11px] text-gray-400">
-          Prep Master — Supported by <span className="font-semibold text-eg-dark">English Gym</span>
+        <p className="mt-12 text-center text-[11px] text-gray-400 dark:text-gray-500">
+          Prep Master — Supported by <span className="font-semibold text-eg-dark dark:text-eg">English Gym</span>
         </p>
       </div>
     </PrepShell>

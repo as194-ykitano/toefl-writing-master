@@ -7,8 +7,12 @@
 import { Fragment, ReactNode } from "react";
 
 function renderInline(text: string): ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  const parts = text.split(/(!\[[^\]]*\]\(https?:\/\/[^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g);
   return parts.map((part, i) => {
+    const image = part.match(/^!\[([^\]]*)\]\((https?:\/\/[^)]+)\)$/);
+    if (image) {
+      return <img key={i} src={image[2]} alt={image[1] || "Uploaded image"} className="my-4 max-h-[520px] max-w-full rounded-lg border object-contain" />;
+    }
     if (part.startsWith("**") && part.endsWith("**")) {
       return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
