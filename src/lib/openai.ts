@@ -143,6 +143,7 @@ export interface EssayFeedback {
       context: string;
       startIndex: number;
       endIndex: number;
+      category?: string;
     }>;
   };
   scaledScore?: number;
@@ -189,6 +190,7 @@ export interface IELTSEssayFeedback {
       context: string;
       startIndex: number;
       endIndex: number;
+      category?: string;
     }>;
   };
   scaledScore?: number;
@@ -569,7 +571,8 @@ ${essayText}
         explanation: correction.explanation,
         context: correction.fullSentence || correction.context || '',
         startIndex: correction.startIndex,
-        endIndex: correction.endIndex
+        endIndex: correction.endIndex,
+        category: correction.category,
       })) || []
     };
 
@@ -902,7 +905,8 @@ Essay Info:
         explanation: correction.explanation,
         context: correction.fullSentence || correction.context || '',
         startIndex: correction.startIndex,
-        endIndex: correction.endIndex
+        endIndex: correction.endIndex,
+        category: correction.category,
       })) || []
     };
 
@@ -935,6 +939,7 @@ export interface BasicEssayFeedback {
       context: string;
       startIndex: number;
       endIndex: number;
+      category?: string;
     }>;
   };
   suggestions: string[];
@@ -1182,7 +1187,8 @@ Essay Info:
         explanation: correction.explanation,
         context: correction.fullSentence || correction.context || '',
         startIndex: correction.startIndex,
-        endIndex: correction.endIndex
+        endIndex: correction.endIndex,
+        category: correction.category,
       })) || []
     };
 

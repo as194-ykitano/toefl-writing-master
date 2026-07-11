@@ -212,7 +212,7 @@ export default function GrammarCorrectionExercise({
           key={key++}
           onClick={() => setIndex(r.itemIndex)}
           title={items[r.itemIndex].category || "文法エラー"}
-          className={`rounded px-0.5 mx-px align-baseline transition-colors ${
+          className={`rounded px-0.5 mx-px align-baseline transition-colors text-black ${
             solved
               ? "bg-emerald-100 border-b-2 border-emerald-400"
               : active
@@ -266,13 +266,13 @@ export default function GrammarCorrectionExercise({
 
       {/* 全文（ハイライト箇所を押すと下の修正パネルが切り替わる） */}
       {sourceText && (
-        <div className="mb-4 rounded-xl border border-gray-100 bg-gray-50/60 p-4 text-sm leading-[2] text-gray-700">
+        <div className="mb-4 rounded-xl border border-gray-100 bg-gray-50/60 p-4 text-sm leading-[2] text-gray-700 dark:bg-white/5 dark:border-white/10 dark:text-gray-200">
           {renderSource()}
         </div>
       )}
 
       {/* 修正パネル */}
-      <div className={`rounded-xl border p-4 ${done && state === "correct" ? "border-emerald-200 bg-emerald-50/40" : "border-gray-200 bg-white"}`}>
+      <div className={`rounded-xl border p-4 ${done && state === "correct" ? "border-emerald-200 bg-emerald-50/40 dark:border-emerald-500/30 dark:bg-emerald-500/10" : "border-gray-200 bg-white dark:border-white/10"}`}>
         <div className="flex items-center justify-between gap-2 mb-2">
           <span className="text-xs font-semibold text-eg-deep">ハイライトされたエラーを修正</span>
           {item.category && (
@@ -292,7 +292,7 @@ export default function GrammarCorrectionExercise({
               return (
                 <>
                   {item.context.slice(0, idx)}
-                  <span className={`rounded px-0.5 ${st.mark}`}>{item.mistake}</span>
+                  <span className={`rounded px-0.5 text-black ${st.mark}`}>{item.mistake}</span>
                   {item.context.slice(idx + item.mistake.length)}
                 </>
               );
@@ -310,10 +310,10 @@ export default function GrammarCorrectionExercise({
           disabled={done}
           className={`w-full rounded-lg border px-3 py-2.5 text-sm font-medium outline-none transition-colors ${
             state === "correct"
-              ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+              ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-500/40 dark:bg-emerald-500/15 dark:text-emerald-200"
               : tried
-                ? "border-rose-300 bg-rose-50 text-rose-800 focus:border-rose-400"
-                : "border-gray-300 bg-white text-gray-900 focus:border-eg"
+                ? "border-rose-300 bg-rose-50 text-rose-800 focus:border-rose-400 dark:border-rose-500/40 dark:bg-rose-500/15 dark:text-rose-200"
+                : "border-gray-300 bg-white text-gray-900 focus:border-eg dark:border-white/15 dark:bg-white/5 dark:text-gray-100"
           }`}
           placeholder="正しい英文を入力"
         />
@@ -324,11 +324,11 @@ export default function GrammarCorrectionExercise({
           </div>
         )}
         {state !== "correct" && tried && (
-          <div className="mt-3 rounded-lg bg-rose-50 border border-rose-100 px-3 py-2 text-sm text-rose-700">
+          <div className="mt-3 rounded-lg bg-rose-50 border border-rose-100 px-3 py-2 text-sm text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/25 dark:text-rose-200">
             <div className="flex items-center gap-1.5 font-medium">
               <X className="w-4 h-4" /> もう一度試してみましょう
             </div>
-            <p className="mt-1 text-xs text-rose-600/90">
+            <p className="mt-1 text-xs text-rose-600/90 dark:text-rose-300/80">
               ヒント: {item.category ? `${item.category}に注目。` : ""}
               正解は {item.correction.length} 文字、最初の文字は「{item.correction.charAt(0)}」です。
             </p>
@@ -336,19 +336,19 @@ export default function GrammarCorrectionExercise({
         )}
 
         {done && (
-          <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3">
+          <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 dark:border-white/10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <div className="text-[11px] font-semibold text-rose-500 mb-0.5">MISTAKE</div>
-                <div className="text-sm text-gray-700">{item.mistake}</div>
+                <div className="text-[11px] font-semibold text-rose-500 dark:text-rose-400 mb-0.5">MISTAKE</div>
+                <div className="text-sm text-gray-700 dark:text-gray-300">{item.mistake}</div>
               </div>
               <div>
-                <div className="text-[11px] font-semibold text-emerald-600 mb-0.5">CORRECT</div>
-                <div className="text-sm font-medium text-gray-900">{item.correction}</div>
+                <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mb-0.5">CORRECT</div>
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.correction}</div>
               </div>
             </div>
             {item.explanation && (
-              <p className="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-600 leading-relaxed">
+              <p className="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-600 leading-relaxed dark:text-gray-400">
                 {item.explanation}
               </p>
             )}

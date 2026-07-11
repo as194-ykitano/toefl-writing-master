@@ -120,7 +120,8 @@ function QuestionReviewCard({
 
   return (
     <div
-      className={`rounded-xl border p-5 ${
+      style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+      className={`rounded-xl border p-5 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both ${
         correct
           ? "border-emerald-200 bg-emerald-50/40 dark:border-emerald-500/30 dark:bg-emerald-500/10"
           : "border-red-200 bg-red-50/40 dark:border-red-500/30 dark:bg-red-500/10"
@@ -230,12 +231,12 @@ function MaterialCard({
   if (!readingSet && !listeningSet) return null;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+    <div className="glass-card rounded-2xl p-6 animate-in fade-in slide-in-from-bottom-3 duration-500">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-        <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+        <h2 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
           {listeningSet ? (
             <>
-              <Headphones className="w-4 h-4 text-violet-500" /> 音声とスクリプト
+              <Headphones className="w-4 h-4 text-violet-500 dark:text-violet-400" /> 音声とスクリプト
             </>
           ) : (
             <>本文（{readingSet?.passageTitle}）</>
@@ -539,7 +540,10 @@ function SpeakingFeedbackCard({
   const [openSample, setOpenSample] = useState<string | null>(null);
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5">
+    <div
+      style={{ animationDelay: `${Math.min(index, 6) * 80}ms` }}
+      className="rounded-xl border border-gray-200 bg-white p-5 dark:border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both"
+    >
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-bold text-gray-900">Task {index + 1}</span>
         {task?.label && (
@@ -716,7 +720,8 @@ function RepeatFeedbackCard({
 
   return (
     <div
-      className={`rounded-xl border p-5 ${
+      style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+      className={`rounded-xl border p-5 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both ${
         feedback.error
           ? "border-gray-200 bg-white dark:border-white/10"
           : good
@@ -997,7 +1002,8 @@ export default function ResultReportPage() {
         </div>
 
         {/* ---- スコアサマリー ---- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-3 duration-500">
+
           <div className="glass-card rounded-2xl p-6 flex flex-col items-center justify-center">
             {isRepeat ? (
               <>

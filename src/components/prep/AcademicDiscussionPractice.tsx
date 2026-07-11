@@ -12,6 +12,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GraduationCap, Loader2, Send, User } from "lucide-react";
+import GrammarQuizWhileWaiting from "@/components/prep/GrammarQuizWhileWaiting";
 import { Button } from "@/components/ui/button";
 import { ExamTopBar, usePracticeTimer } from "./exam-ui";
 import {
@@ -319,6 +320,9 @@ export default function AcademicDiscussionPractice({ set, mode }: Props) {
           </div>
         </div>
       </div>
+
+      {/* AI 添削の待ち時間に文法クイズを表示 */}
+      {submitting && <GrammarQuizWhileWaiting />}
     </div>
   );
 }

@@ -6,6 +6,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Bot, CheckCircle2, Loader2, Send } from "lucide-react";
+import GrammarQuizWhileWaiting from "@/components/prep/GrammarQuizWhileWaiting";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ExamTopBar } from "./exam-ui";
@@ -252,6 +253,9 @@ export default function EmailWritingPractice({ set, mode }: EmailWritingPractice
           )}
         </div>
       </div>
+
+      {/* AI 添削の待ち時間に文法クイズを表示 */}
+      {submitting && <GrammarQuizWhileWaiting />}
     </div>
   );
 }

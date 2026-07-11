@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Send } from "lucide-react";
+import GrammarQuizWhileWaiting from "@/components/prep/GrammarQuizWhileWaiting";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ExamTopBar, usePracticeTimer } from "./exam-ui";
@@ -171,6 +172,9 @@ export default function EssayWritingPractice({ set, mode }: EssayWritingPractice
           />
         </div>
       )}
+
+      {/* AI 添削の待ち時間に文法クイズを表示 */}
+      {submitting && <GrammarQuizWhileWaiting />}
     </div>
   );
 }
