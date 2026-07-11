@@ -43,6 +43,8 @@ try {
 }
 
 export const auth = getAuth(app);
+// 確認メール・パスワードリセットメールを日本語テンプレートで送信する
+auth.languageCode = 'ja';
 export const db = getFirestore(app);
 
 // Initialize Firebase Storage

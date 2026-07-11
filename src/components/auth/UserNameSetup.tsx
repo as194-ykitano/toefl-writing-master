@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useExam } from '@/contexts/ExamContext';
 import { auth, db } from '@/lib/firebase';
+import AuthThemeToggle from '@/components/auth/AuthThemeToggle';
 import type { LearnerStatus, OnboardingProfile } from '@/lib/types';
 
 type ErrorWithMessage = {
@@ -32,8 +32,20 @@ const EXAM_OPTIONS: { value: OnboardingProfile['targetExam']; label: string; sco
   { value: 'toeic', label: 'TOEIC', scoreHint: '例: 800（10〜990）' },
 ];
 
-const selectClass =
-  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
+const fieldClass =
+  'flex h-12 w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 text-base text-gray-900 dark:text-gray-100 outline-none transition-all focus:border-eg-deep focus:ring-2 focus:ring-eg-deep/20';
+
+/** ラベル＋中身をまとめ、順番にふわっと出すためのラッパー */
+function Field({ children, delay }: { children: React.ReactNode; delay: number }) {
+  return (
+    <div
+      className="space-y-2 animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default function UserNameSetup() {
   const [fullName, setFullName] = useState('');
@@ -109,80 +121,105 @@ export default function UserNameSetup() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-lg space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">あなたについて教えてください</h1>
-          <p className="mt-2 text-gray-600">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 flex flex-col items-center px-4 py-16 sm:py-24">
+      <AuthThemeToggle />
+
+      <div className="w-full max-w-2xl">
+        {/* 見出し（大きめ・中央） */}
+        <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="inline-flex items-center gap-2 mb-6">
+            <span className="w-9 h-9 rounded-full bg-eg-deep text-white flex items-center justify-center font-bold">
+              EG
+            </span>
+            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Writing Master</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50 leading-tight">
+            あなたについて
+            <br className="sm:hidden" />
+            教えてください
+          </h1>
+          <p className="mt-5 text-base sm:text-lg text-gray-500 dark:text-gray-400 max-w-md mx-auto">
             あなたに合った学習プランを作るため、いくつか質問させてください。
           </p>
         </div>
 
-        <Card className="w-full p-6">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">お名前</Label>
-              <Input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                placeholder="山田 太郎"
-                autoFocus
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <Field delay={100}>
+            <Label htmlFor="fullName" className="text-base font-semibold text-gray-800 dark:text-gray-200">
+              お名前
+            </Label>
+            <Input
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              placeholder="山田 太郎"
+              autoFocus
+              className="h-12 rounded-xl px-4 text-base"
+            />
+          </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="learnerStatus">現在の学年・立場</Label>
-              <select
-                id="learnerStatus"
-                className={selectClass}
-                value={learnerStatus}
-                onChange={(e) => setLearnerStatus(e.target.value as LearnerStatus)}
-                required
-              >
-                <option value="" disabled>
-                  選択してください
+          <Field delay={200}>
+            <Label htmlFor="learnerStatus" className="text-base font-semibold text-gray-800 dark:text-gray-200">
+              現在の学年・立場
+            </Label>
+            <select
+              id="learnerStatus"
+              className={fieldClass}
+              value={learnerStatus}
+              onChange={(e) => setLearnerStatus(e.target.value as LearnerStatus)}
+              required
+            >
+              <option value="" disabled>
+                選択してください
+              </option>
+              {STATUS_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
                 </option>
-                {STATUS_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+              ))}
+            </select>
+          </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="learningReason">英語を学ぶ理由</Label>
-              <Textarea
-                id="learningReason"
-                value={learningReason}
-                onChange={(e) => setLearningReason(e.target.value)}
-                required
-                placeholder="例: 海外大学院への出願のため／仕事で英語を使うため など"
-              />
-            </div>
+          <Field delay={300}>
+            <Label htmlFor="learningReason" className="text-base font-semibold text-gray-800 dark:text-gray-200">
+              英語を学ぶ理由
+            </Label>
+            <Textarea
+              id="learningReason"
+              value={learningReason}
+              onChange={(e) => setLearningReason(e.target.value)}
+              required
+              placeholder="例: 海外大学院への出願のため／仕事で英語を使うため など"
+              className="min-h-[110px] rounded-xl px-4 py-3 text-base"
+            />
+          </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="targetExam">対策する試験</Label>
-              <select
-                id="targetExam"
-                className={selectClass}
-                value={targetExam}
-                onChange={(e) => setTargetExam(e.target.value as OnboardingProfile['targetExam'])}
-              >
-                {EXAM_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <Field delay={400}>
+            <Label htmlFor="targetExam" className="text-base font-semibold text-gray-800 dark:text-gray-200">
+              対策する試験
+            </Label>
+            <select
+              id="targetExam"
+              className={fieldClass}
+              value={targetExam}
+              onChange={(e) => setTargetExam(e.target.value as OnboardingProfile['targetExam'])}
+            >
+              {EXAM_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </Field>
 
+          <Field delay={500}>
+            <Label className="text-base font-semibold text-gray-800 dark:text-gray-200">
+              目標スコアと時期（任意）
+            </Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="targetScore">目標スコア（任意）</Label>
+              <div>
                 <Input
                   id="targetScore"
                   type="number"
@@ -190,29 +227,40 @@ export default function UserNameSetup() {
                   value={targetScore}
                   onChange={(e) => setTargetScore(e.target.value)}
                   placeholder={scoreHint}
+                  className="h-12 rounded-xl px-4 text-base"
                 />
-                <p className="text-xs text-gray-500">{scoreHint}</p>
+                <p className="mt-1.5 text-xs text-gray-400">{scoreHint}</p>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="targetDate">目標時期（任意）</Label>
+              <div>
                 <Input
                   id="targetDate"
                   type="month"
                   value={targetDate}
                   onChange={(e) => setTargetDate(e.target.value)}
+                  className="h-12 rounded-xl px-4 text-base"
                 />
-                <p className="text-xs text-gray-500">いつまでに達成したいか</p>
+                <p className="mt-1.5 text-xs text-gray-400">いつまでに達成したいか</p>
               </div>
             </div>
+          </Field>
 
-            {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+          {error && (
+            <div className="text-red-500 text-sm text-center animate-in fade-in duration-300">{error}</div>
+          )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+          <div
+            className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700"
+            style={{ animationDelay: '600ms' }}
+          >
+            <Button
+              type="submit"
+              className="w-full h-auto py-3.5 text-base font-semibold rounded-xl transition-transform hover:scale-[1.01] active:scale-[0.99]"
+              disabled={loading}
+            >
               {loading ? '保存中...' : '学習を始める'}
             </Button>
-          </form>
-        </Card>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import LoginForm from '@/components/auth/LoginForm';
+import AuthThemeToggle from '@/components/auth/AuthThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -16,11 +17,12 @@ export default function LoginPage() {
   }, [user, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <AuthThemeToggle />
+      <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Writing Master</h1>
-          <p className="mt-2 text-gray-600">ログインして学習を始めましょう</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Writing Master</h1>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">ログインして学習を始めましょう</p>
         </div>
         <LoginForm />
       </div>
