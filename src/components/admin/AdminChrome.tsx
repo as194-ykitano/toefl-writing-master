@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Database, ExternalLink, LayoutDashboard, Moon, ShieldCheck, Sun, Users } from "lucide-react";
+import { Database, ExternalLink, Home, LayoutDashboard, Moon, ShieldCheck, Sun, Users } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { isAdmin } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -53,6 +53,8 @@ export function AdminChrome({ children }: { children: React.ReactNode }) {
         })}
         <p className="px-3 pb-2 pt-6 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Legacy</p>
         <Link href="/admin/dashboard" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition-colors hover:bg-slate-900 hover:text-white"><ExternalLink className="h-4 w-4" />旧ダッシュボード</Link>
+        <p className="px-3 pb-2 pt-6 text-[11px] font-semibold uppercase tracking-wider text-slate-500">User App</p>
+        <Link href="/home" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 transition-colors hover:bg-slate-900 hover:text-white"><Home className="h-4 w-4" />ユーザー画面へ</Link>
       </nav>
       <div className="border-t border-slate-800 p-3"><button onClick={toggleTheme} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-300 hover:bg-slate-900 hover:text-white">{theme === "dark" ? <Sun className="h-4 w-4"/> : <Moon className="h-4 w-4"/>}{theme === "dark" ? "ライトモード" : "ダークモード"}</button></div>
     </aside>

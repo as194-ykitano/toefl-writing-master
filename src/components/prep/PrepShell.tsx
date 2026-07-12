@@ -26,6 +26,7 @@ import {
   Moon,
   PenLine,
   Sparkles,
+  ShieldCheck,
   Sun,
   User,
   X,
@@ -42,6 +43,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import ExamSwitcher from "@/components/prep/ExamSwitcher";
+import { isAdmin } from "@/lib/utils";
 
 const SIDEBAR_COLLAPSED_KEY = "prep_sidebar_collapsed_v1";
 
@@ -66,7 +68,7 @@ interface NavGroup {
 // ナビは左上ドロップダウンの選択（試験種別）に連動して構築する。
 // コース切替はドロップダウンが担うため、サイドバーの「コース」グループは廃止。
 // Advanced 選択時はダッシュボード・模試を非対応として表示しない。
-function buildNavGroups(exam: string): NavGroup[] {
+function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
   const isAdvanced = exam === "advanced";
   const top: NavItem[] = [
     {
@@ -97,7 +99,7 @@ function buildNavGroups(exam: string): NavGroup[] {
     });
     top.push({ href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] });
   }
-  return [
+  const groups: NavGroup[] = [
     { items: top },
     {
       title: "その他",
@@ -118,6 +120,18 @@ function buildNavGroups(exam: string): NavGroup[] {
       ],
     },
   ];
+  if (userIsAdmin) {
+    groups.push({
+      title: "管理者",
+      items: [{
+        href: "/admin",
+        label: "Admin画面へ",
+        icon: ShieldCheck,
+        activeFor: ["/admin"],
+      }],
+    });
+  }
+  return groups;
 }
 
 interface PrepShellProps {
@@ -162,7 +176,8 @@ function NavLinks({
 }) {
   const pathname = usePathname();
   const { exam } = useExam();
-  const navGroups = buildNavGroups(exam);
+  const { user } = useAuth();
+  const navGroups = buildNavGroups(exam, isAdmin(user?.email ?? null));
 
   return (
     <nav className="flex-1 overflow-y-auto py-3 px-2.5 space-y-4">
