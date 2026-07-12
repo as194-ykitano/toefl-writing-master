@@ -28,6 +28,8 @@ import { getSkillStats } from "@/lib/prep/data-source";
 import { useCompletedCounts } from "@/lib/prep/use-completion";
 import { getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
 import { EXAM_LABELS, EXAM_SKILLS, ExamId, SkillId } from "@/lib/prep/types";
+import { practiceTypeFeatureKey } from "@/lib/prep/feature-availability";
+import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
 
 interface SkillTab {
   skill: SkillId;
@@ -77,14 +79,16 @@ function TypeCard({
   skill,
   setCount,
   completedCount,
+  forceComingSoon,
 }: {
   type: PracticeTypeInfo;
   exam: ExamId;
   skill: SkillId;
   setCount: number;
   completedCount: number;
+  forceComingSoon?: boolean;
 }) {
-  const disabled = type.comingSoon || (!type.href && setCount === 0);
+  const disabled = (forceComingSoon ?? type.comingSoon ?? false) || (!type.href && setCount === 0);
   const href = type.href ?? `/practice/${exam}/${skill}?type=${type.id}`;
   const allDone = setCount > 0 && completedCount >= setCount;
 
@@ -166,6 +170,7 @@ function HomeTour() {
 export default function HomePage() {
   const { user } = useAuth();
   const { exam } = useExam();
+  const availability = useFeatureAvailability();
   const router = useRouter();
   const name = user?.displayName;
   const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
@@ -207,6 +212,10 @@ export default function HomePage() {
   const completedCounts = useCompletedCounts(activeExam, skill);
   const types = useMemo(() => getPracticeTypes(activeExam, skill), [activeExam, skill]);
   const activeTab = SKILL_TABS.find((t) => t.skill === skill)!;
+
+  if (availability.courses[activeExam]) {
+    return <PrepShell><div className="mx-auto max-w-3xl px-4 py-20 text-center"><div className="rounded-2xl border bg-white px-6 py-16 dark:border-gray-800 dark:bg-gray-900"><Clock className="mx-auto h-10 w-10 text-gray-400"/><h1 className="mt-5 text-2xl font-bold">{EXAM_LABELS[activeExam]}</h1><p className="mt-2 text-gray-500">このコースは現在準備中です。別のコースを選択してください。</p><span className="mt-5 inline-block rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Coming Soon</span></div></div></PrepShell>;
+  }
 
   return (
     <PrepShell>
@@ -298,6 +307,7 @@ export default function HomePage() {
                   skill={skill}
                   setCount={typeCounts[type.id] ?? 0}
                   completedCount={completedCounts[type.id] ?? 0}
+                  forceComingSoon={availability.practiceTypes[practiceTypeFeatureKey(activeExam,skill,type.id)]}
                 />
               </div>
             ))}
@@ -308,12 +318,19 @@ export default function HomePage() {
         <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 mt-10">その他</h2>
         <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { href: "/mock", icon: ClipboardCheck, tint: "text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-500/10", title: "模試・実力診断", desc: "現在地を測定" },
+            { href: "/mock", disabled: availability.courses.mock, icon: ClipboardCheck, tint: "text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-500/10", title: "模試・実力診断", desc: "現在地を測定" },
             { href: "/overview", icon: LineChart, tint: "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-500/10", title: "データ推移", desc: "学習データを確認" },
             { href: "/advanced", icon: Lightbulb, tint: "text-teal-600 bg-teal-50 dark:text-teal-400 dark:bg-teal-500/10", title: "Advanced", desc: "YouTube・自由記述" },
             { href: "/training-selection", icon: PenLine, tint: "text-eg-dark bg-eg-soft dark:text-eg dark:bg-eg/10", title: "Writing 添削（旧トップ）", desc: "従来の AI 添削" },
           ].map((c, i) => (
-            <Link
+            c.disabled ? <div
+              key={c.href}
+              className="relative rounded-xl border border-gray-100 bg-white p-4 opacity-65 dark:border-gray-800 dark:bg-gray-900/60"
+            >
+              <span className="absolute right-3 top-3 rounded-full bg-gray-100 px-2 py-1 text-[10px] text-gray-500 dark:bg-gray-800">Coming Soon</span>
+              <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${c.tint}`}><c.icon className="h-4.5 w-4.5"/></div>
+              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{c.title}</div><div className="mt-0.5 text-xs text-gray-400">{c.desc}</div>
+            </div> : <Link
               key={c.href}
               href={c.href}
               style={{ animationDelay: `${i * 50}ms` }}

@@ -32,12 +32,14 @@ import {
   pickMockSections,
 } from "@/lib/prep/mock-test";
 import { loadMockReports, saveMockRun } from "@/lib/prep/mock-store";
+import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
 
 function isExamId(v: string | null): v is ExamId {
   return v === "toefl" || v === "ielts";
 }
 
 function MockHub() {
+  const availability = useFeatureAvailability();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [exam, setExam] = useState<ExamId>(
@@ -95,6 +97,10 @@ function MockHub() {
         : { sections: "Reading / Listening を各 2 セクション", time: "約 60〜75 分" },
     [variant]
   );
+
+  if (availability.courses.mock) {
+    return <PrepShell><div className="mx-auto max-w-3xl px-4 py-20 text-center"><div className="rounded-2xl border bg-white px-6 py-16 dark:border-gray-800 dark:bg-gray-900"><Timer className="mx-auto h-10 w-10 text-gray-400"/><h1 className="mt-5 text-2xl font-bold">Mock Test</h1><p className="mt-2 text-gray-500">現在準備中です。公開までしばらくお待ちください。</p><span className="mt-5 inline-block rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Coming Soon</span></div></div></PrepShell>;
+  }
 
   return (
     <PrepShell>

@@ -10,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Check, ChevronDown, Lock } from "lucide-react";
 import { useExam, EXAM_OPTIONS } from "@/contexts/ExamContext";
 import { CategoryId } from "@/lib/prep/types";
+import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
 
 interface ExamSwitcherProps {
   className?: string;
@@ -25,6 +26,7 @@ export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { exam, setExam } = useExam();
+  const availability = useFeatureAvailability();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -84,15 +86,16 @@ export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
           </div>
           {EXAM_OPTIONS.map((opt) => {
             const active = opt.id === exam;
+            const comingSoon = availability.courses[opt.id] ?? opt.comingSoon ?? false;
             return (
               <button
                 key={opt.id}
                 role="option"
                 aria-selected={active}
-                disabled={opt.comingSoon}
-                onClick={() => handleSelect(opt.id, opt.comingSoon)}
+                disabled={comingSoon}
+                onClick={() => handleSelect(opt.id, comingSoon)}
                 className={`flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left transition-colors ${
-                  opt.comingSoon
+                  comingSoon
                     ? "cursor-not-allowed opacity-50"
                     : active
                       ? "bg-eg-soft"
@@ -107,7 +110,7 @@ export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
                     <span className="block text-[11px] text-gray-400 truncate">{opt.sublabel}</span>
                   )}
                 </span>
-                {opt.comingSoon ? (
+                {comingSoon ? (
                   <Lock className="w-3.5 h-3.5 text-gray-300 flex-shrink-0" />
                 ) : active ? (
                   <Check className="w-4 h-4 text-eg-dark flex-shrink-0" />

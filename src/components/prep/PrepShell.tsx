@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   Sun,
   User,
+  Video,
   X,
 } from "lucide-react";
 import { useExam } from "@/contexts/ExamContext";
@@ -78,6 +79,12 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
       activeFor: isAdvanced ? ["/advanced", "/home"] : ["/home"],
     },
   ];
+  top.push({
+    href: "/video-courses",
+    label: "コンテンツ",
+    icon: Video,
+    activeFor: ["/video-courses"],
+  });
   if (!isAdvanced) {
     top.push({
       href: "/overview",
@@ -123,12 +130,20 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
   if (userIsAdmin) {
     groups.push({
       title: "管理者",
-      items: [{
-        href: "/admin",
-        label: "Admin画面へ",
-        icon: ShieldCheck,
-        activeFor: ["/admin"],
-      }],
+      items: [
+        {
+          href: "/admin/video-courses",
+          label: "動画コース管理",
+          icon: Video,
+          activeFor: ["/admin/video-courses"],
+        },
+        {
+          href: "/admin",
+          label: "Admin画面へ",
+          icon: ShieldCheck,
+          activeFor: ["/admin"],
+        },
+      ],
     });
   }
   return groups;

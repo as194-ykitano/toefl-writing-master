@@ -417,3 +417,69 @@ export interface TOEFLAcademicDiscussionEssay {
   timeSpent?: number; // 秒単位
   wordCount?: number;
 } 
+// ─── Video courses (english-gym-admin から移植) ───
+// Firestore: videoCourses, videoCourseModules, videoCourseLessons, videoCourseProgress
+
+/** Firestore Timestamp 互換の最小型（移植元と同一形状） */
+export type FirebaseTimestamp = {
+  toDate: () => Date
+  seconds: number
+  nanoseconds: number
+}
+
+export type PracticeItemEmbeddedVideo = {
+  provider: "youtube" | "loom" | "riverside" | "spotify"
+  /** Embed URL or watch URL (will be normalized to embed when rendering) */
+  url: string
+}
+
+export const VIDEO_COURSES_COLLECTION = "videoCourses"
+export const VIDEO_COURSE_MODULES_COLLECTION = "videoCourseModules"
+export const VIDEO_COURSE_LESSONS_COLLECTION = "videoCourseLessons"
+export const VIDEO_COURSE_PROGRESS_COLLECTION = "videoCourseProgress"
+
+export type VideoCourseVisibility = "coach_clients" | "all_students"
+export type VideoCourseOwnerRole = "coach" | "admin"
+export type VideoCourseLessonContentType = "video" | "text"
+
+export type VideoCourse = {
+  id: string
+  title: string
+  description: string
+  thumbnailUrl: string
+  /** Firebase UID of the course creator (coach or admin). */
+  ownerId: string
+  ownerRole: VideoCourseOwnerRole
+  visibility: VideoCourseVisibility
+  published: boolean
+  order: number
+  createdAt: FirebaseTimestamp
+  updatedAt: FirebaseTimestamp
+}
+
+export type VideoCourseModule = {
+  id: string
+  courseId: string
+  title: string
+  order: number
+}
+
+export type VideoCourseLesson = {
+  id: string
+  courseId: string
+  moduleId: string
+  title: string
+  order: number
+  contentType: VideoCourseLessonContentType
+  /** Markdown body: description under video, or full text lesson */
+  body: string
+  embeddedVideo?: PracticeItemEmbeddedVideo
+}
+
+export type VideoCourseProgress = {
+  id: string
+  studentUid: string
+  courseId: string
+  completedLessonIds: string[]
+  updatedAt: FirebaseTimestamp
+}
