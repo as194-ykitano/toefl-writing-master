@@ -11,15 +11,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   BookOpen,
-  ClipboardCheck,
+  CalendarDays,
   Clock,
   Headphones,
-  LineChart,
-  Lightbulb,
   ListChecks,
   Mic,
   PenLine,
+  Target,
 } from "lucide-react";
+import { doc, getDoc } from "firebase/firestore";
 import { useAuth } from "@/contexts/AuthContext";
 import { useExam } from "@/contexts/ExamContext";
 import PrepShell from "@/components/prep/PrepShell";
@@ -30,6 +30,7 @@ import { getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
 import { EXAM_LABELS, EXAM_SKILLS, ExamId, SkillId } from "@/lib/prep/types";
 import { practiceTypeFeatureKey } from "@/lib/prep/feature-availability";
 import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
+import { db } from "@/lib/firebase";
 
 interface SkillTab {
   skill: SkillId;
@@ -91,11 +92,12 @@ function TypeCard({
   const disabled = (forceComingSoon ?? type.comingSoon ?? false) || (!type.href && setCount === 0);
   const href = type.href ?? `/practice/${exam}/${skill}?type=${type.id}`;
   const allDone = setCount > 0 && completedCount >= setCount;
+  const iconColor:Record<SkillId,string>={reading:"bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400",listening:"bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400",speaking:"bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400",writing:"bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"};
 
   const inner = (
     <>
       <div className="flex items-start justify-between gap-2">
-        <div className="w-9 h-9 rounded-lg bg-eg-soft text-eg-dark flex items-center justify-center">
+        <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconColor[skill]}`}>
           <ListChecks className="w-4.5 h-4.5" />
         </div>
         {disabled ? (
@@ -174,6 +176,9 @@ export default function HomePage() {
   const router = useRouter();
   const name = user?.displayName;
   const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
+  const [profileGoals,setProfileGoals]=useState<{targetScore:string;nextExam:{exam:ExamId;date:string;targetScore:string}|null}>({targetScore:"",nextExam:null});
+
+  useEffect(()=>{if(!user)return;let active=true;getDoc(doc(db,"users",user.uid)).then(s=>{if(!active)return;const d=s.data()||{},o=d.onboarding||{},plans=Array.isArray(d.examPlans)?d.examPlans:[];const dated=plans.filter((p:{date?:string})=>p.date).sort((a:{date:string},b:{date:string})=>a.date.localeCompare(b.date));const next=(dated.find((p:{date:string})=>p.date>=new Date().toISOString().slice(0,10))||plans.find((p:{date?:string})=>!p.date)||null) as {exam:ExamId;date:string;targetScore:string}|null;setProfileGoals({targetScore:o.targetScore!=null?String(o.targetScore):"",nextExam:next})}).catch(()=>undefined);return()=>{active=false}},[user]);
 
   // その試験で対応している技能タブのみ表示（TOEIC は Reading + Listening）
   const visibleTabs = useMemo(
@@ -188,7 +193,7 @@ export default function HomePage() {
 
   const [skill, setSkill] = useState<SkillId>("reading");
   const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});
-  const [questionCount, setQuestionCount] = useState(0);
+  const [skillQuestionCounts,setSkillQuestionCounts]=useState<Partial<Record<SkillId,number>>>({});
 
   // 試験を切り替えたとき、選択中の技能がその試験に無ければ先頭の技能へ戻す
   useEffect(() => {
@@ -202,16 +207,18 @@ export default function HomePage() {
     getSkillStats(activeExam, skill).then((s) => {
       if (cancelled) return;
       setTypeCounts(s.typeCounts);
-      setQuestionCount(s.questionCount);
     });
     return () => {
       cancelled = true;
     };
   }, [activeExam, skill]);
 
+  useEffect(()=>{let cancelled=false;Promise.all(EXAM_SKILLS[activeExam].map(async current=>[current,(await getSkillStats(activeExam,current)).questionCount] as const)).then(entries=>{if(!cancelled)setSkillQuestionCounts(Object.fromEntries(entries))});return()=>{cancelled=true}},[activeExam]);
+
   const completedCounts = useCompletedCounts(activeExam, skill);
   const types = useMemo(() => getPracticeTypes(activeExam, skill), [activeExam, skill]);
-  const activeTab = SKILL_TABS.find((t) => t.skill === skill)!;
+  const daysUntilExam=profileGoals.nextExam?.date?Math.ceil((new Date(`${profileGoals.nextExam.date}T00:00:00`).getTime()-new Date(new Date().toDateString()).getTime())/86400000):null;
+  const countdownLabel=daysUntilExam===null?"未定":daysUntilExam===0?"今日":daysUntilExam>0?`あと ${daysUntilExam} 日`:"受験日経過";
 
   if (availability.courses[activeExam]) {
     return <PrepShell><div className="mx-auto max-w-3xl px-4 py-20 text-center"><div className="rounded-2xl border bg-white px-6 py-16 dark:border-gray-800 dark:bg-gray-900"><Clock className="mx-auto h-10 w-10 text-gray-400"/><h1 className="mt-5 text-2xl font-bold">{EXAM_LABELS[activeExam]}</h1><p className="mt-2 text-gray-500">このコースは現在準備中です。別のコースを選択してください。</p><span className="mt-5 inline-block rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Coming Soon</span></div></div></PrepShell>;
@@ -223,13 +230,12 @@ export default function HomePage() {
         <HomeTour />
       </Suspense>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        <div className="animate-in fade-in slide-in-from-bottom-3 duration-700">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-50">
-            {name ? `こんにちは、${name} さん` : "こんにちは"}
-          </h1>
-          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">
-            {EXAM_LABELS[activeExam]} の4技能を、練習・診断・復習・AI添削までひとつのアプリで。
-          </p>
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(500px,1.2fr)] lg:items-stretch">
+          <div className="flex flex-col justify-center animate-in fade-in slide-in-from-bottom-3 duration-700"><h1 className="text-xl font-bold text-gray-900 dark:text-gray-50 sm:text-2xl">{name?`こんにちは、${name} さん`:"こんにちは"}</h1></div>
+          <div className="grid gap-3 sm:grid-cols-[0.8fr_1.2fr]">
+            <Link href="/profile" style={{animationDelay:"100ms"}} className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600 animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"><div className="flex items-center justify-between"><div className="grid h-9 w-9 place-items-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"><Target className="h-4.5 w-4.5"/></div><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-xs text-gray-400">目標スコア</p><p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">{profileGoals.targetScore||"未定"}</p></div></Link>
+            <Link href="/profile" style={{animationDelay:"180ms"}} className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600 animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"><div className="flex items-center justify-between"><p className="flex items-center gap-2 text-xs text-gray-400"><CalendarDays className="h-4 w-4 text-amber-500"/>次回受験まで</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">{countdownLabel}</p><p className="mt-1 text-xs text-gray-500">{profileGoals.nextExam?<>{EXAM_LABELS[profileGoals.nextExam.exam]||profileGoals.nextExam.exam.toUpperCase()} ・ {profileGoals.nextExam.date?profileGoals.nextExam.date.replace(/-/g,"/"):"日付未定"}{profileGoals.nextExam.targetScore?` ・ 目標 ${profileGoals.nextExam.targetScore}`:""}</>:"試験・日付・目標はプロフィールで登録"}</p></div></Link>
+          </div>
         </div>
 
         {/* 横長の技能バー（押すと下にその技能の問題タイプが並ぶ） */}
@@ -266,6 +272,7 @@ export default function HomePage() {
                   >
                     {tab.title}
                   </span>
+                  <span className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold ${active?"bg-white/20 text-white dark:bg-white/10":"bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"}`}>{skillQuestionCounts[tab.skill]??0} 問</span>
                 </span>
                 <span
                   className={`relative mt-1.5 block text-[11px] leading-snug ${
@@ -279,22 +286,12 @@ export default function HomePage() {
           })}
         </div>
 
-        {/* 選択中技能の問題タイプ一覧 */}
-        <div className="mt-6">
-          <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">
-            {EXAM_LABELS[activeExam]} {activeTab.title} の問題タイプ
-            {questionCount > 0 && (
-              <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">合計 {questionCount} 問</span>
-            )}
-          </h2>
-        </div>
-
         {types.length === 0 ? (
-          <div data-tour="types" className="mt-4 rounded-xl border border-gray-100 bg-white py-10 text-center text-sm text-gray-400 dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-500">
+          <div data-tour="types" className="mt-6 rounded-xl border border-gray-100 bg-white py-10 text-center text-sm text-gray-400 dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-500">
             この技能の問題タイプは準備中です
           </div>
         ) : (
-          <div key={skill} data-tour="types" className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div key={skill} data-tour="types" className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {types.map((type, i) => (
               <div
                 key={type.id}
@@ -313,37 +310,6 @@ export default function HomePage() {
             ))}
           </div>
         )}
-
-        {/* その他の導線 */}
-        <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 mt-10">その他</h2>
-        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { href: "/mock", disabled: availability.courses.mock, icon: ClipboardCheck, tint: "text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-500/10", title: "模試・実力診断", desc: "現在地を測定" },
-            { href: "/overview", icon: LineChart, tint: "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-500/10", title: "データ推移", desc: "学習データを確認" },
-            { href: "/advanced", icon: Lightbulb, tint: "text-teal-600 bg-teal-50 dark:text-teal-400 dark:bg-teal-500/10", title: "Advanced", desc: "YouTube・自由記述" },
-            { href: "/training-selection", icon: PenLine, tint: "text-eg-dark bg-eg-soft dark:text-eg dark:bg-eg/10", title: "Writing 添削（旧トップ）", desc: "従来の AI 添削" },
-          ].map((c, i) => (
-            c.disabled ? <div
-              key={c.href}
-              className="relative rounded-xl border border-gray-100 bg-white p-4 opacity-65 dark:border-gray-800 dark:bg-gray-900/60"
-            >
-              <span className="absolute right-3 top-3 rounded-full bg-gray-100 px-2 py-1 text-[10px] text-gray-500 dark:bg-gray-800">Coming Soon</span>
-              <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${c.tint}`}><c.icon className="h-4.5 w-4.5"/></div>
-              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{c.title}</div><div className="mt-0.5 text-xs text-gray-400">{c.desc}</div>
-            </div> : <Link
-              key={c.href}
-              href={c.href}
-              style={{ animationDelay: `${i * 50}ms` }}
-              className="bg-white rounded-xl border border-gray-200/70 p-4 hover:border-gray-300 hover:shadow-sm hover:-translate-y-0.5 transition-all dark:bg-gray-900/60 dark:border-gray-700 dark:hover:border-gray-600 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both"
-            >
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 ${c.tint}`}>
-                <c.icon className="w-4.5 h-4.5" />
-              </div>
-              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{c.title}</div>
-              <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-relaxed">{c.desc}</div>
-            </Link>
-          ))}
-        </div>
 
         <p className="mt-12 text-center text-[11px] text-gray-400 dark:text-gray-500">
           Prep Master — Supported by <span className="font-semibold text-eg-dark dark:text-eg">English Gym</span>

@@ -37,10 +37,20 @@ const srcApp = admin.initializeApp(
   { credential: admin.credential.applicationDefault(), projectId: SRC_PROJECT },
   "src"
 )
-const dstApp = admin.initializeApp(
-  { credential: admin.credential.applicationDefault(), projectId: DST_PROJECT },
-  "dst"
-)
+
+// 移行先(toefl)の認証: TOEFL_SA_KEY にサービスアカウント鍵JSONのパスを渡すとそれを使用。
+// 未指定なら ADC にフォールバック（ADC が toefl の権限を持たない場合は PERMISSION_DENIED）。
+let dstCredential
+if (process.env.TOEFL_SA_KEY) {
+  const saPath = process.env.TOEFL_SA_KEY
+  const sa = require(require("path").resolve(saPath))
+  dstCredential = admin.credential.cert(sa)
+  console.log(`移行先の認証: サービスアカウント鍵 (${saPath})`)
+} else {
+  dstCredential = admin.credential.applicationDefault()
+  console.log("移行先の認証: ADC（TOEFL_SA_KEY 未指定）")
+}
+const dstApp = admin.initializeApp({ credential: dstCredential, projectId: DST_PROJECT }, "dst")
 const src = srcApp.firestore()
 const dst = dstApp.firestore()
 

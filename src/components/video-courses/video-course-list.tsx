@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Plus, Search } from "lucide-react"
+import { ArrowDown, ArrowUp, Plus, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,6 +19,7 @@ import {
   listVideoCourseLessons,
   listVideoCoursesForAdmin,
   listVideoCoursesForCoach,
+  updateVideoCourse,
   VIDEO_COURSE_PLATFORM_CREATOR_LABEL,
 } from "@/lib/video-course-queries"
 
@@ -46,6 +47,7 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
   const [creating, setCreating] = useState(false)
   const [query, setQuery] = useState("")
   const [detailsCourseId, setDetailsCourseId] = useState<string | null>(null)
+  const [reordering, setReordering] = useState(false)
 
   const listHref = mode === "admin" ? "/admin/video-courses" : "/coach/video-courses"
 
@@ -122,6 +124,47 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
       return hay.includes(q)
     })
   }, [rows, query])
+
+  // 表示順の入れ替え。隣接コースと位置を交換し、全体を 1..N で振り直して永続化する。
+  // （移行データには order の同値が存在するため、値交換ではなく index 基準で連番を振り直す）
+  // 検索中は並びが崩れるため無効化する（filtered と rows の並びが一致する前提）。
+  const moveCourse = async (courseId: string, direction: "up" | "down") => {
+    if (reordering) return
+    const ordered = [...rows].sort((a, b) => a.course.order - b.course.order)
+    const idx = ordered.findIndex((r) => r.course.id === courseId)
+    if (idx < 0) return
+    const swapIdx = direction === "up" ? idx - 1 : idx + 1
+    if (swapIdx < 0 || swapIdx >= ordered.length) return
+
+    // 対象と隣を入れ替えた新しい並び
+    const next = [...ordered]
+    ;[next[idx], next[swapIdx]] = [next[swapIdx]!, next[idx]!]
+
+    // 新しい連番（1 始まり）。order が変わるものだけ Firestore を更新。
+    const updates: { id: string; order: number }[] = []
+    next.forEach((r, i) => {
+      const newOrder = i + 1
+      if (r.course.order !== newOrder) updates.push({ id: r.course.id, order: newOrder })
+    })
+    if (updates.length === 0) return
+
+    setReordering(true)
+    try {
+      await Promise.all(updates.map((u) => updateVideoCourse(u.id, { order: u.order })))
+      // 楽観的更新（再読込を待たずに並びを反映）
+      const newOrderById = new Map(next.map((r, i) => [r.course.id, i + 1]))
+      setRows((prev) =>
+        [...prev]
+          .map((r) => ({
+            ...r,
+            course: { ...r.course, order: newOrderById.get(r.course.id) ?? r.course.order },
+          }))
+          .sort((x, y) => x.course.order - y.course.order)
+      )
+    } finally {
+      setReordering(false)
+    }
+  }
 
   const handleNew = async () => {
     if (!user?.uid) return
@@ -223,10 +266,12 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
         <p className="text-center text-sm text-muted-foreground">No courses match your search.</p>
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map(({ course: c, lessonCount, completedCount, firstLessonId, ownerDisplayLabel }) => {
+          {filtered.map(({ course: c, lessonCount, completedCount, firstLessonId, ownerDisplayLabel }, i) => {
             const previewHref = firstLessonId
               ? `${editorBasePath}/${c.id}/lessons/${firstLessonId}`
               : `${editorBasePath}/${c.id}`
+            const isSearching = query.trim().length > 0
+            const canReorder = mode === "admin" && !isSearching
             return (
               <VideoCourseCatalogCard
                 key={c.id}
@@ -237,15 +282,45 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
                 totalLessons={lessonCount > 0 ? lessonCount : undefined}
                 creatorLabel={mode === "admin" ? ownerDisplayLabel : undefined}
                 footer={
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    className="w-full"
-                    onClick={() => setDetailsCourseId(c.id)}
-                  >
-                    Course settings
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    {canReorder ? (
+                      <div className="flex shrink-0 items-center gap-1">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={reordering || i === 0}
+                          onClick={() => void moveCourse(c.id, "up")}
+                          title="上へ移動"
+                          aria-label={`${c.title} を上へ移動`}
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={reordering || i === filtered.length - 1}
+                          onClick={() => void moveCourse(c.id, "down")}
+                          title="下へ移動"
+                          aria-label={`${c.title} を下へ移動`}
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : null}
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      className="min-w-0 flex-1"
+                      onClick={() => setDetailsCourseId(c.id)}
+                    >
+                      コース設定
+                    </Button>
+                  </div>
                 }
               />
             )

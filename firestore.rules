@@ -3,8 +3,9 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // 管理者のメールアドレスリスト
     function isAdmin() {
-      return request.auth != null && 
+      return request.auth != null &&
         request.auth.token.email in [
+          'info@english-gym.org', // 管理者（本番）
           'admin@gmail.com',    // 管理者のメールアドレス
           'admin@example.com',  // 管理者のメールアドレスをここに追加
           'ykita@example.com'   // あなたのメールアドレスを追加
@@ -87,6 +88,31 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == resource.data.userId;
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // ─── 動画コース（english-gym-admin から移植）───
+    // コース本体: 公開コースは認証ユーザーが閲覧可、下書きや作成・編集は管理者のみ
+    match /videoCourses/{courseId} {
+      allow read: if request.auth != null && (resource.data.published == true || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+    // モジュール・レッスン: 認証ユーザーが閲覧可、編集は管理者のみ
+    // （公開判定は親コースの published に依存。非公開コースの詳細はアプリ側で辿らない）
+    match /videoCourseModules/{moduleId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if isAdmin();
+    }
+    match /videoCourseLessons/{lessonId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if isAdmin();
+    }
+    // 学習進捗: 本人のみ読み書き可（ドキュメントIDは {uid}__{courseId}、studentUid フィールド保持）
+    match /videoCourseProgress/{progressId} {
+      allow read: if request.auth != null &&
+        (resource == null || resource.data.studentUid == request.auth.uid);
+      allow create, update: if request.auth != null &&
+        request.resource.data.studentUid == request.auth.uid;
+      allow delete: if isAdmin();
     }
   }
 }
