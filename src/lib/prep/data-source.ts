@@ -57,6 +57,35 @@ interface ToeflAssetPaths {
   speaking: Record<string, Record<string, string>>;
 }
 
+export interface ManagedPracticeSetAssetPaths {
+  audioPath?: string;
+  imagePath?: string;
+}
+
+/** Storage URLの解決をブラウザで行う画面向けに、元のStorage pathを返す。 */
+export async function getManagedPracticeSetAssetPaths(
+  set: ManagedPracticeSet
+): Promise<ManagedPracticeSetAssetPaths> {
+  if (set.skill !== "listening") return {};
+  try {
+    if (set.exam === "ielts") {
+      const paths = await loadJson<IeltsAssetPaths>("ielts-assets", () =>
+        import("./data/ielts-asset-paths.json")
+      );
+      return paths[set.id] ?? {};
+    }
+    if (set.exam === "toefl") {
+      const paths = await loadJson<ToeflAssetPaths>("toefl-assets", () =>
+        import("./data/toefl-asset-paths.json")
+      );
+      return { audioPath: paths.listening[set.id] };
+    }
+  } catch {
+    // URLがデータ本体にある場合はそのまま利用できるため、path解決失敗は空で返す。
+  }
+  return {};
+}
+
 async function getDownloadUrlSafe(storagePath: string): Promise<string | undefined> {
   try {
     const [{ storage }, { getDownloadURL, ref }] = await Promise.all([

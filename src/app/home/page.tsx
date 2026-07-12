@@ -5,9 +5,9 @@
 // 横長の技能バー（Reading / Listening / Speaking / Writing）を押すと、
 // その下にその技能の問題タイプがずらっと並ぶ（画像2枚目のイメージ）。
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   BookOpen,
@@ -23,6 +23,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useExam } from "@/contexts/ExamContext";
 import PrepShell from "@/components/prep/PrepShell";
+import OnboardingTour, { hasSeenTour } from "@/components/prep/OnboardingTour";
 import { getSkillStats } from "@/lib/prep/data-source";
 import { useCompletedCounts } from "@/lib/prep/use-completion";
 import { getPracticeTypes, PracticeTypeInfo } from "@/lib/prep/question-types";
@@ -136,6 +137,32 @@ function TypeCard({
   );
 }
 
+// 初回ログイン時の使い方ツアーの起動制御。
+// - 初回（未既読）は自動表示
+// - 使い方ガイドからの再表示は ?tour=1 で起動
+function HomeTour() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const forced = searchParams.get("tour") === "1";
+    if (forced) {
+      setOpen(true);
+      // URL をきれいに戻す（履歴を汚さない）
+      router.replace("/home");
+      return;
+    }
+    if (!hasSeenTour()) {
+      // レイアウト確定後に開始
+      const t = window.setTimeout(() => setOpen(true), 400);
+      return () => window.clearTimeout(t);
+    }
+  }, [searchParams, router]);
+
+  return <OnboardingTour open={open} onClose={() => setOpen(false)} />;
+}
+
 export default function HomePage() {
   const { user } = useAuth();
   const { exam } = useExam();
@@ -183,6 +210,9 @@ export default function HomePage() {
 
   return (
     <PrepShell>
+      <Suspense fallback={null}>
+        <HomeTour />
+      </Suspense>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div className="animate-in fade-in slide-in-from-bottom-3 duration-700">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-50">
@@ -194,7 +224,7 @@ export default function HomePage() {
         </div>
 
         {/* 横長の技能バー（押すと下にその技能の問題タイプが並ぶ） */}
-        <div className="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5" data-tour="skills">
           {visibleTabs.map((tab, i) => {
             const active = tab.skill === skill;
             const Icon = tab.icon;
@@ -251,11 +281,11 @@ export default function HomePage() {
         </div>
 
         {types.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-gray-100 bg-white py-10 text-center text-sm text-gray-400 dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-500">
+          <div data-tour="types" className="mt-4 rounded-xl border border-gray-100 bg-white py-10 text-center text-sm text-gray-400 dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-500">
             この技能の問題タイプは準備中です
           </div>
         ) : (
-          <div key={skill} className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div key={skill} data-tour="types" className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {types.map((type, i) => (
               <div
                 key={type.id}

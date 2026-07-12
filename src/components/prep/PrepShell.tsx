@@ -167,7 +167,7 @@ function NavLinks({
   return (
     <nav className="flex-1 overflow-y-auto py-3 px-2.5 space-y-4">
       {navGroups.map((group, gi) => (
-        <div key={group.title ?? gi}>
+        <div key={group.title ?? gi} data-tour={gi === 0 ? "nav-data" : undefined}>
           {group.title && !collapsed && (
             <div className="px-3 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
               {group.title}
@@ -182,6 +182,7 @@ function NavLinks({
                   key={item.href}
                   href={item.href}
                   onClick={onNavigate}
+                  data-tour={item.href === "/usage-guide" ? "nav-guide" : undefined}
                   title={collapsed ? item.label : undefined}
                   className={`flex items-center gap-3 rounded-full text-sm transition-colors ${
                     collapsed ? "justify-center px-0 py-2.5" : "px-3.5 py-2.5"
@@ -297,7 +298,7 @@ export default function PrepShell({ children, showNav = true, requireAuth = true
             </button>
             <BrandMark />
             {/* 画面左上の試験切替ドロップダウン。選択でその試験の Home / ハブへ */}
-            <div className="pl-2 ml-1 border-l border-gray-200">
+            <div className="pl-2 ml-1 border-l border-gray-200" data-tour="exam">
               <ExamSwitcher />
             </div>
           </div>

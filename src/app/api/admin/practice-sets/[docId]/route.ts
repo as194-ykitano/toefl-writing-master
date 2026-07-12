@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { requireAdmin } from "@/lib/admin-api";
 import { adminDb } from "@/lib/firebase-admin";
-import { getAllStaticPracticeSets, resolveManagedPracticeSetAssets } from "@/lib/prep/data-source";
+import { getAllStaticPracticeSets, getManagedPracticeSetAssetPaths, resolveManagedPracticeSetAssets } from "@/lib/prep/data-source";
 import { normalizePracticeSet, practiceSetDocumentId } from "@/lib/prep/practice-set-admin";
 
 type Context = { params: Promise<{ docId: string }> };
@@ -13,14 +13,21 @@ export async function GET(request: NextRequest, context: Context) {
   const { docId } = await context.params;
   const existing = await adminDb.collection("practiceSets").doc(docId).get();
   if (existing.exists && existing.data()?.data) {
-    const data = await resolveManagedPracticeSetAssets(existing.data()?.data);
-    return NextResponse.json({ data, source: existing.data()?.source ?? "custom", isPublished: existing.data()?.isPublished === true });
+    const rawData = existing.data()?.data;
+    const [data, assetPaths] = await Promise.all([
+      resolveManagedPracticeSetAssets(rawData),
+      getManagedPracticeSetAssetPaths(rawData),
+    ]);
+    return NextResponse.json({ data, assetPaths, source: existing.data()?.source ?? "custom", isPublished: existing.data()?.isPublished === true });
   }
   const staticSets = await getAllStaticPracticeSets();
   const data = staticSets.find((set) => practiceSetDocumentId(set.exam, set.skill, set.id) === docId);
   if (!data) return NextResponse.json({ error: "演習セットが見つかりません。" }, { status: 404 });
-  const resolvedData = await resolveManagedPracticeSetAssets(data);
-  return NextResponse.json({ data: resolvedData, source: "static", isPublished: existing.exists ? existing.data()?.isPublished !== false : true });
+  const [resolvedData, assetPaths] = await Promise.all([
+    resolveManagedPracticeSetAssets(data),
+    getManagedPracticeSetAssetPaths(data),
+  ]);
+  return NextResponse.json({ data: resolvedData, assetPaths, source: "static", isPublished: existing.exists ? existing.data()?.isPublished !== false : true });
 }
 
 export async function PUT(request: NextRequest, context: Context) {

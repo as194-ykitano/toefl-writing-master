@@ -1,11 +1,13 @@
 "use client";
 
-import { GraduationCap, Users, FileText, Video, Play } from "lucide-react";
+import { GraduationCap, Users, FileText, Video, Play, Compass } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import PrepShell from "@/components/prep/PrepShell";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function UsageGuidePage() {
+  const router = useRouter();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [videoAspectRatio, setVideoAspectRatio] = useState<string>("56.25%"); // デフォルトは16:9
@@ -82,6 +84,15 @@ export default function UsageGuidePage() {
           <p className="text-gray-400 dark:text-gray-500 text-xs">
             カードのどこをクリックしても動画を確認できます
           </p>
+
+          {/* 初回ツアーの再表示 */}
+          <button
+            onClick={() => router.push("/home?tour=1")}
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-eg/40 bg-eg-soft px-4 py-2 text-sm font-semibold text-eg-deep hover:bg-eg/10 transition-colors dark:border-eg/40 dark:bg-eg/10 dark:text-eg"
+          >
+            <Compass className="w-4 h-4" />
+            使い方ツアーをもう一度見る
+          </button>
         </div>
 
         {/* セクション一覧 */}
