@@ -11,13 +11,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   BookOpen,
-  CalendarDays,
   Clock,
   Headphones,
   ListChecks,
   Mic,
   PenLine,
-  Target,
+  Sparkles,
 } from "lucide-react";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuth } from "@/contexts/AuthContext";
@@ -73,6 +72,13 @@ const SKILL_TABS: SkillTab[] = [
     darkTitle: "dark:text-emerald-200", darkDesc: "dark:text-emerald-200/70", darkIcon: "dark:text-emerald-400",
   },
 ];
+
+// 目標達成の時期（yyyy-mm もしくは ISO 文字列）を「yyyy年M月」へ整形する
+function formatTargetPeriod(raw: string): string {
+  const m = raw.match(/^(\d{4})-(\d{2})/);
+  if (!m) return "";
+  return `${m[1]}年${Number(m[2])}月`;
+}
 
 function TypeCard({
   type,
@@ -176,9 +182,20 @@ export default function HomePage() {
   const router = useRouter();
   const name = user?.displayName;
   const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
-  const [profileGoals,setProfileGoals]=useState<{targetScore:string;nextExam:{exam:ExamId;date:string;targetScore:string}|null}>({targetScore:"",nextExam:null});
+  // 時間帯で変わる挨拶と当日の日付は、SSR とのズレを避けるためマウント後に確定する
+  const [greeting, setGreeting] = useState("こんにちは");
+  const [todayLabel, setTodayLabel] = useState("");
+  useEffect(() => {
+    const now = new Date();
+    const h = now.getHours();
+    setGreeting(h < 5 ? "こんばんは" : h < 11 ? "おはようございます" : h < 18 ? "こんにちは" : "こんばんは");
+    setTodayLabel(
+      now.toLocaleDateString("ja-JP", { month: "long", day: "numeric", weekday: "short" })
+    );
+  }, []);
+  const [profileGoals,setProfileGoals]=useState<{targetScore:string;targetPeriod:string;nextExam:{exam:ExamId;date:string;targetScore:string}|null}>({targetScore:"",targetPeriod:"",nextExam:null});
 
-  useEffect(()=>{if(!user)return;let active=true;getDoc(doc(db,"users",user.uid)).then(s=>{if(!active)return;const d=s.data()||{},o=d.onboarding||{},plans=Array.isArray(d.examPlans)?d.examPlans:[];const dated=plans.filter((p:{date?:string})=>p.date).sort((a:{date:string},b:{date:string})=>a.date.localeCompare(b.date));const next=(dated.find((p:{date:string})=>p.date>=new Date().toISOString().slice(0,10))||plans.find((p:{date?:string})=>!p.date)||null) as {exam:ExamId;date:string;targetScore:string}|null;setProfileGoals({targetScore:o.targetScore!=null?String(o.targetScore):"",nextExam:next})}).catch(()=>undefined);return()=>{active=false}},[user]);
+  useEffect(()=>{if(!user)return;let active=true;getDoc(doc(db,"users",user.uid)).then(s=>{if(!active)return;const d=s.data()||{},o=d.onboarding||{},plans=Array.isArray(d.examPlans)?d.examPlans:[];const dated=plans.filter((p:{date?:string})=>p.date).sort((a:{date:string},b:{date:string})=>a.date.localeCompare(b.date));const next=(dated.find((p:{date:string})=>p.date>=new Date().toISOString().slice(0,10))||plans.find((p:{date?:string})=>!p.date)||null) as {exam:ExamId;date:string;targetScore:string}|null;const rawTarget=(o.targetDate||d.learningGoals?.targetDate||"") as string;setProfileGoals({targetScore:o.targetScore!=null?String(o.targetScore):"",targetPeriod:formatTargetPeriod(rawTarget),nextExam:next})}).catch(()=>undefined);return()=>{active=false}},[user]);
 
   // その試験で対応している技能タブのみ表示（TOEIC は Reading + Listening）
   const visibleTabs = useMemo(
@@ -230,13 +247,33 @@ export default function HomePage() {
         <HomeTour />
       </Suspense>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(500px,1.2fr)] lg:items-stretch">
-          <div className="flex flex-col justify-center animate-in fade-in slide-in-from-bottom-3 duration-700"><h1 className="text-xl font-bold text-gray-900 dark:text-gray-50 sm:text-2xl">{name?`こんにちは、${name} さん`:"こんにちは"}</h1></div>
-          <div className="grid gap-3 sm:grid-cols-[0.8fr_1.2fr]">
-            <Link href="/profile" style={{animationDelay:"100ms"}} className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600 animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"><div className="flex items-center justify-between"><div className="grid h-9 w-9 place-items-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"><Target className="h-4.5 w-4.5"/></div><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-xs text-gray-400">目標スコア</p><p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">{profileGoals.targetScore||"未定"}</p></div></Link>
-            <Link href="/profile" style={{animationDelay:"180ms"}} className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/60 dark:hover:border-gray-600 animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"><div className="flex items-center justify-between"><p className="flex items-center gap-2 text-xs text-gray-400"><CalendarDays className="h-4 w-4 text-amber-500"/>次回受験まで</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">{countdownLabel}</p><p className="mt-1 text-xs text-gray-500">{profileGoals.nextExam?<>{EXAM_LABELS[profileGoals.nextExam.exam]||profileGoals.nextExam.exam.toUpperCase()} ・ {profileGoals.nextExam.date?profileGoals.nextExam.date.replace(/-/g,"/"):"日付未定"}{profileGoals.nextExam.targetScore?` ・ 目標 ${profileGoals.nextExam.targetScore}`:""}</>:"試験・日付・目標はプロフィールで登録"}</p></div></Link>
+        <section className="relative overflow-hidden rounded-2xl border border-eg/15 bg-gradient-to-br from-eg-faint via-white to-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] animate-in fade-in slide-in-from-bottom-3 duration-700 dark:border-gray-800 dark:from-eg/[0.06] dark:via-gray-900/60 dark:to-gray-900/60 sm:p-6">
+          {/* 右上に淡いブランドグロー（唯一の装飾） */}
+          <span aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-eg/10 blur-3xl dark:bg-eg/[0.07]" />
+          <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(460px,1.15fr)] lg:items-center">
+            {/* 挨拶：左端のアクセントストライプが「あなた専用の場所」を示す */}
+            <div className="flex items-stretch gap-3.5">
+              <span aria-hidden className="mt-0.5 w-1 shrink-0 rounded-full bg-gradient-to-b from-eg to-eg-dark" />
+              <div className="min-w-0">
+                <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500">
+                  <Sparkles className="h-3.5 w-3.5 text-eg" />
+                  {todayLabel || " "}
+                </p>
+                <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50 sm:text-[26px]">
+                  {greeting}{name ? <>、<span className="text-eg-deep dark:text-eg">{name}</span> さん</> : ""}
+                </h1>
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-eg-soft px-2.5 py-1 text-xs font-medium text-eg-deep dark:bg-eg/10">
+                  {EXAM_LABELS[activeExam]} 対策中
+                </p>
+              </div>
+            </div>
+            {/* 目標サマリー：白地カードで地のグラデから浮かせる */}
+            <div className="grid gap-3 sm:grid-cols-[0.85fr_1.15fr]">
+              <Link href="/profile" className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">目標スコア</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{profileGoals.targetScore||"未定"}</p><p className="mt-0.5 text-[11px] text-gray-400">{profileGoals.targetPeriod?`${profileGoals.targetPeriod}までに`:"目標時期は未設定"}</p></div></Link>
+              <Link href="/profile" className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">次回受験まで</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">{countdownLabel}</p><p className="mt-1 text-xs text-gray-500">{profileGoals.nextExam?<>{EXAM_LABELS[profileGoals.nextExam.exam]||profileGoals.nextExam.exam.toUpperCase()} ・ {profileGoals.nextExam.date?profileGoals.nextExam.date.replace(/-/g,"/"):"日付未定"}{profileGoals.nextExam.targetScore?` ・ 目標 ${profileGoals.nextExam.targetScore}`:""}</>:"試験・日付・目標はプロフィールで登録"}</p></div></Link>
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* 横長の技能バー（押すと下にその技能の問題タイプが並ぶ） */}
         <div className="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5" data-tour="skills">
