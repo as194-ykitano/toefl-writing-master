@@ -12,7 +12,7 @@ import { StackedBarChart } from "@/components/prep/charts";
 import Reveal from "@/components/prep/Reveal";
 import CountUp from "@/components/prep/CountUp";
 import { useExam } from "@/contexts/ExamContext";
-import { formatDuration, practiceTypeLabel, usePrepActivity } from "@/lib/prep/use-activity";
+import { formatDuration, practiceTypeEnglishLabel, usePrepActivity } from "@/lib/prep/use-activity";
 import { EXAM_LABELS, EXAM_SKILLS, ExamId, SkillId } from "@/lib/prep/types";
 
 type Mode = "skill" | "type";
@@ -113,8 +113,12 @@ export default function StudyTimePage() {
         ensure(it.skill, SKILL_LABEL[it.skill]).perDay[di] += it.durationSec;
       } else {
         const key = `${it.skill}:${it.practiceType}`;
-        const label = practiceTypeLabel(activeExam, it.skill, it.practiceType);
-        ensure(key, `${SKILL_LABEL[it.skill]}・${label}`).perDay[di] += it.durationSec;
+        const skillLabel = SKILL_LABEL[it.skill];
+        const typeLabel = practiceTypeEnglishLabel(activeExam, it.skill, it.practiceType);
+        const label = typeLabel.toLowerCase().startsWith(skillLabel.toLowerCase())
+          ? typeLabel
+          : `${skillLabel} ${typeLabel}`;
+        ensure(key, label).perDay[di] += it.durationSec;
       }
     }
 

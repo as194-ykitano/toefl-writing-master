@@ -195,7 +195,29 @@ export default function HomePage() {
   }, []);
   const [profileGoals,setProfileGoals]=useState<{targetScore:string;targetPeriod:string;nextExam:{exam:ExamId;date:string;targetScore:string}|null}>({targetScore:"",targetPeriod:"",nextExam:null});
 
-  useEffect(()=>{if(!user)return;let active=true;getDoc(doc(db,"users",user.uid)).then(s=>{if(!active)return;const d=s.data()||{},o=d.onboarding||{},plans=Array.isArray(d.examPlans)?d.examPlans:[];const dated=plans.filter((p:{date?:string})=>p.date).sort((a:{date:string},b:{date:string})=>a.date.localeCompare(b.date));const next=(dated.find((p:{date:string})=>p.date>=new Date().toISOString().slice(0,10))||plans.find((p:{date?:string})=>!p.date)||null) as {exam:ExamId;date:string;targetScore:string}|null;const rawTarget=(o.targetDate||d.learningGoals?.targetDate||"") as string;setProfileGoals({targetScore:o.targetScore!=null?String(o.targetScore):"",targetPeriod:formatTargetPeriod(rawTarget),nextExam:next})}).catch(()=>undefined);return()=>{active=false}},[user]);
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    getDoc(doc(db, "users", user.uid)).then((snapshot) => {
+      if (!active) return;
+      const data = snapshot.data() || {};
+      const onboarding = data.onboarding || {};
+      const sameCourseGoal = onboarding.targetExam === activeExam;
+      const plans = (Array.isArray(data.examPlans) ? data.examPlans : []).filter(
+        (plan: { exam?: ExamId }) => plan.exam === activeExam
+      );
+      const dated = plans.filter((plan: { date?: string }) => plan.date)
+        .sort((a: { date: string }, b: { date: string }) => a.date.localeCompare(b.date));
+      const next = (dated.find((plan: { date: string }) => plan.date >= new Date().toISOString().slice(0, 10)) || plans.find((plan: { date?: string }) => !plan.date) || null) as { exam: ExamId; date: string; targetScore: string } | null;
+      const rawTarget = sameCourseGoal ? (onboarding.targetDate || "") as string : "";
+      setProfileGoals({
+        targetScore: sameCourseGoal && onboarding.targetScore != null ? String(onboarding.targetScore) : "",
+        targetPeriod: formatTargetPeriod(rawTarget),
+        nextExam: next,
+      });
+    }).catch(() => undefined);
+    return () => { active = false; };
+  }, [user, activeExam]);
 
   // その試験で対応している技能タブのみ表示（TOEIC は Reading + Listening）
   const visibleTabs = useMemo(

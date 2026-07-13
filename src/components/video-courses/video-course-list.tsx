@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowDown, ArrowUp, Plus, Search } from "lucide-react"
+import { ArrowDown, ArrowUp, GripVertical, Plus, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -48,6 +48,8 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
   const [query, setQuery] = useState("")
   const [detailsCourseId, setDetailsCourseId] = useState<string | null>(null)
   const [reordering, setReordering] = useState(false)
+  const [draggedCourseId, setDraggedCourseId] = useState<string | null>(null)
+  const [courseDropTarget, setCourseDropTarget] = useState<{ id: string; position: "before" | "after" } | null>(null)
 
   const listHref = mode === "admin" ? "/admin/video-courses" : "/coach/video-courses"
 
@@ -166,6 +168,26 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
     }
   }
 
+  const dropCourse = async (targetId: string, position: "before" | "after") => {
+    if (!draggedCourseId || draggedCourseId === targetId || reordering) return
+    const ordered = [...rows].sort((a, b) => a.course.order - b.course.order)
+    const from = ordered.findIndex((row) => row.course.id === draggedCourseId)
+    if (from < 0 || !ordered.some((row) => row.course.id === targetId)) return
+    const next = [...ordered]
+    const [moved] = next.splice(from, 1)
+    const targetIndex = next.findIndex((row) => row.course.id === targetId)
+    next.splice(targetIndex + (position === "after" ? 1 : 0), 0, moved)
+    setReordering(true)
+    setRows(next.map((row, index) => ({ ...row, course: { ...row.course, order: index + 1 } })))
+    try {
+      await Promise.all(next.map((row, index) => updateVideoCourse(row.course.id, { order: index + 1 })))
+    } finally {
+      setReordering(false)
+      setDraggedCourseId(null)
+      setCourseDropTarget(null)
+    }
+  }
+
   const handleNew = async () => {
     if (!user?.uid) return
     setCreating(true)
@@ -273,6 +295,17 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
             const isSearching = query.trim().length > 0
             const canReorder = mode === "admin" && !isSearching
             return (
+              <div
+                key={c.id}
+                draggable={canReorder && !reordering}
+                onDragStart={(event) => { setDraggedCourseId(c.id); event.dataTransfer.effectAllowed = "move" }}
+                onDragOver={(event) => { if (canReorder) { event.preventDefault(); const rect = event.currentTarget.getBoundingClientRect(); setCourseDropTarget({ id: c.id, position: event.clientY < rect.top + rect.height / 2 ? "before" : "after" }) } }}
+                onDrop={(event) => { event.preventDefault(); if (courseDropTarget) void dropCourse(c.id, courseDropTarget.position) }}
+                onDragEnd={() => { setDraggedCourseId(null); setCourseDropTarget(null) }}
+                className={`relative rounded-xl transition ${draggedCourseId === c.id ? "opacity-50" : ""}`}
+              >
+              {courseDropTarget?.id === c.id && draggedCourseId !== c.id && <div className={`pointer-events-none absolute z-30 h-1 rounded-full bg-primary shadow-[0_0_0_3px_hsl(var(--background))] ${courseDropTarget.position === "before" ? "-top-2" : "-bottom-2"} left-1 right-1`} />}
+              {canReorder && <div className="pointer-events-none absolute left-2 top-2 z-20 rounded-md border bg-background/90 p-1.5 text-muted-foreground shadow-sm"><GripVertical className="h-4 w-4" /></div>}
               <VideoCourseCatalogCard
                 key={c.id}
                 course={c}
@@ -323,6 +356,7 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
                   </div>
                 }
               />
+              </div>
             )
           })}
         </div>

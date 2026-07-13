@@ -453,6 +453,8 @@ export type VideoCourse = {
   visibility: VideoCourseVisibility
   published: boolean
   order: number
+  /** Homeで選択中の試験・コース。未設定は全コース表示（既存データ互換）。 */
+  targetExams?: Array<"toefl" | "ielts" | "toeic" | "advanced">
   createdAt: FirebaseTimestamp
   updatedAt: FirebaseTimestamp
 }

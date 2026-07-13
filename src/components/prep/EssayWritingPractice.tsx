@@ -125,6 +125,7 @@ export default function EssayWritingPractice({ set, mode }: EssayWritingPractice
         id,
         exam: set.exam,
         setId: set.id,
+        mode,
         practiceType: set.practiceType,
         rubric,
         title: set.title,

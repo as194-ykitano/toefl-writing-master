@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { VideoCourseCatalogCard } from "@/components/video-courses/video-course-catalog-card";
 import { useAuth } from "@/lib/auth-context";
+import { useExam } from "@/contexts/ExamContext";
 import {
   fetchStudentVideoCourseCatalog,
   type StudentVideoCourseCatalogRow,
@@ -16,6 +17,7 @@ import {
 
 export default function StudentVideoCoursesPage() {
   const { user, studentData } = useAuth();
+  const { exam } = useExam();
   const coachUid = studentData?.coach;
   const [rows, setRows] = useState<StudentVideoCourseCatalogRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,12 +46,13 @@ export default function StudentVideoCoursesPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter(({ course, creatorLabel }) => {
+    const courseRows = rows.filter(({ course }) => !course.targetExams?.length || course.targetExams.includes(exam));
+    if (!q) return courseRows;
+    return courseRows.filter(({ course, creatorLabel }) => {
       const hay = [course.title, course.description, creatorLabel].join(" ").toLowerCase();
       return hay.includes(q);
     });
-  }, [rows, query]);
+  }, [rows, query, exam]);
 
   return (
     <PrepShell>
@@ -78,7 +81,7 @@ export default function StudentVideoCoursesPage() {
               <div key={i} className="aspect-[4/3] w-full animate-pulse rounded-xl bg-muted" />
             ))}
           </div>
-        ) : rows.length === 0 ? (
+        ) : rows.length === 0 || (filtered.length === 0 && !query.trim()) ? (
           <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/[0.08] via-card to-violet-500/[0.06] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.35)]">
             <CardHeader className="gap-4 pb-2">
               <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">

@@ -72,6 +72,7 @@ export function VideoCourseDetailsDialog({
   const [visibility, setVisibility] = useState<VideoCourseVisibility>("coach_clients")
   const [order, setOrder] = useState(0)
   const [thumbnailUrl, setThumbnailUrl] = useState("")
+  const [targetExams, setTargetExams] = useState<Array<"toefl" | "ielts" | "toeic" | "advanced">>([])
   const [savingMeta, setSavingMeta] = useState(false)
   const [deleteCourseOpen, setDeleteCourseOpen] = useState(false)
   const courseIdForDeleteRef = useRef<string | null>(null)
@@ -88,6 +89,7 @@ export function VideoCourseDetailsDialog({
       setVisibility(data.course.visibility)
       setOrder(data.course.order)
       setThumbnailUrl(data.course.thumbnailUrl)
+      setTargetExams(data.course.targetExams ?? [])
     },
     []
   )
@@ -141,6 +143,7 @@ export function VideoCourseDetailsDialog({
         published,
         visibility: mode === "admin" ? visibility : "coach_clients",
         order,
+        targetExams,
       })
       await refreshFieldsQuiet()
       onSaved?.()
@@ -237,6 +240,20 @@ export function VideoCourseDetailsDialog({
                 <Switch id={pubId} checked={published} onCheckedChange={setPublished} disabled={!canEditCourse} />
                 <Label htmlFor={pubId}>Published</Label>
               </div>
+              {mode === "admin" && (
+                <div className="space-y-2">
+                  <Label>表示する試験・コース</Label>
+                  <p className="text-xs text-muted-foreground">複数選択できます。未選択の場合はすべてに表示されます。</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {([['toefl','TOEFL'],['ielts','IELTS'],['toeic','TOEIC'],['advanced','Advanced']] as const).map(([id, label]) => (
+                      <label key={id} className="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm">
+                        <input type="checkbox" checked={targetExams.includes(id)} onChange={() => setTargetExams((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id])} disabled={!canEditCourse} />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label>Thumbnail</Label>
                 {courseId ? (

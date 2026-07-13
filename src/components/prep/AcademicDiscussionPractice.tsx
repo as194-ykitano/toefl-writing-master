@@ -140,6 +140,7 @@ export default function AcademicDiscussionPractice({ set, mode }: Props) {
         id,
         exam: set.exam,
         setId: set.id,
+        mode,
         practiceType: set.practiceType,
         rubric: set.rubric,
         title: set.title,

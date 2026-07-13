@@ -33,6 +33,7 @@ import SpeakingTranscriptView from "@/components/prep/SpeakingTranscriptView";
 import { SAMPLE_REPORTS } from "@/lib/prep/mock-data";
 import { getListeningSet, getReadingSet, getSpeakingSet } from "@/lib/prep/data-source";
 import { loadSession } from "@/lib/prep/session-store";
+import { cleanReadingTitle } from "@/lib/prep/display-title";
 import { loadRecordings, pruneOldRecordings } from "@/lib/prep/recording-store";
 import {
   EXAM_LABELS,
@@ -571,17 +572,20 @@ function SpeakingFeedbackCard({
       ) : (
         <>
           {feedback.fluency && (
-            <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <div className="mt-3 grid grid-cols-4 gap-1.5 rounded-xl border border-gray-100 bg-gray-50/70 p-2.5 lg:grid-cols-8 dark:border-white/10 dark:bg-white/5">
               {[
-                { label: "回答時間", value: `${feedback.fluency.durationSec} 秒` },
+                { label: "回答時間", value: `${feedback.fluency.durationSec}秒` },
                 { label: "発話速度", value: `${feedback.fluency.wpm} WPM` },
-                { label: "無音割合", value: `${Math.round(feedback.fluency.pauseRatio * 100)}%` },
-                { label: "長いポーズ", value: `${feedback.fluency.longPauses} 回` },
-                { label: "フィラー", value: `${feedback.fluency.fillerCount ?? 0} 回` },
-              ].map((m) => (
-                <div key={m.label} className="bg-gray-50 rounded-lg border border-gray-100 px-3 py-2">
-                  <div className="text-[10px] text-gray-400">{m.label}</div>
-                  <div className="text-sm font-bold text-gray-900 tabular-nums">{m.value}</div>
+                { label: "無音", value: `${Math.round(feedback.fluency.pauseRatio * 100)}%` },
+                { label: "長いポーズ", value: `${feedback.fluency.longPauses}回` },
+                { label: "フィラー", value: `${feedback.fluency.fillerCount ?? 0}回` },
+                { label: "単語繰り返し", value: `${feedback.fluency.wordRepetitionCount ?? 0}回` },
+                { label: "言い直し", value: `${(feedback.fluency.phraseRestartCount ?? 0) + (feedback.fluency.selfCorrectionCount ?? 0)}回` },
+                { label: "話し始め", value: `${feedback.fluency.startDelaySec ?? 0}秒` },
+              ].map((metric) => (
+                <div key={metric.label} className="min-w-0 rounded-lg bg-white px-2 py-2 dark:bg-gray-900/70">
+                  <div className="truncate text-[9px] text-gray-400">{metric.label}</div>
+                  <div className="truncate text-[11px] font-bold tabular-nums text-gray-900 dark:text-gray-100">{metric.value}</div>
                 </div>
               ))}
             </div>
@@ -592,6 +596,11 @@ function SpeakingFeedbackCard({
               speechWords={feedback.speechWords}
               fillerCount={feedback.fluency?.fillerCount}
               longPauses={feedback.fluency?.longPauses}
+              trailingPauseSec={feedback.fluency?.trailingPauseSec}
+              wordRepetitionCount={feedback.fluency?.wordRepetitionCount}
+              correctionCount={(feedback.fluency?.phraseRestartCount ?? 0) + (feedback.fluency?.selfCorrectionCount ?? 0)}
+              wordRepetitionIndexes={feedback.fluency?.wordRepetitionIndexes}
+              correctionIndexes={feedback.fluency?.correctionIndexes}
             />
           )}
 
@@ -635,13 +644,22 @@ function SpeakingFeedbackCard({
             </div>
           )}
 
-          {feedback.grammarCorrections && feedback.grammarCorrections.length > 0 && (
+          {feedback.transcript && (
             <div className="mt-3">
-              <GrammarCorrectionExercise
-                items={feedback.grammarCorrections}
-                sourceText={feedback.transcript}
-                heading="エラー修正ドリル — 自分で直してみましょう"
-              />
+              {feedback.grammarCorrections && feedback.grammarCorrections.length > 0 ? (
+                <GrammarCorrectionExercise
+                  items={feedback.grammarCorrections}
+                  sourceText={feedback.transcript}
+                  heading="エラー修正ドリル — 自分で直してみましょう"
+                />
+              ) : (
+                <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3 dark:border-emerald-500/25 dark:bg-emerald-500/10">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                    <CheckCircle2 className="h-4 w-4" /> 文法エラーチェック完了
+                  </div>
+                  <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">この回答では、修正ドリルにする明確な文法・語法のエラーは見つかりませんでした。</p>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -984,6 +1002,22 @@ export default function ResultReportPage() {
       ? Math.round((speakingBands.reduce((a, b) => a + b, 0) / speakingBands.length) * 2) / 2
       : null;
   const speakingMax = session.exam === "ielts" ? 9 : 6;
+  const isIeltsPart1Result = session.exam === "ielts" &&
+    (speakingSet?.practiceType === "part-1" || speakingSet?.practiceType === "full-practice");
+  const part1Fluencies = speakingFeedback.map((item) => item.fluency).filter((item): item is NonNullable<typeof item> => !!item);
+  const average = (values: number[]) => values.length
+    ? values.reduce((sum, value) => sum + value, 0) / values.length
+    : 0;
+  const part1Summary = {
+    duration: average(part1Fluencies.map((item) => item.durationSec)),
+    wpm: average(part1Fluencies.map((item) => item.wpm)),
+    silence: average(part1Fluencies.map((item) => item.pauseRatio)) * 100,
+    pauses: part1Fluencies.reduce((sum, item) => sum + item.longPauses, 0),
+    fillers: part1Fluencies.reduce((sum, item) => sum + (item.fillerCount ?? 0), 0),
+    repetitions: part1Fluencies.reduce((sum, item) => sum + (item.wordRepetitionCount ?? 0), 0),
+    corrections: part1Fluencies.reduce((sum, item) => sum + (item.phraseRestartCount ?? 0) + (item.selfCorrectionCount ?? 0), 0),
+    startDelay: average(part1Fluencies.map((item) => item.startDelaySec ?? 0)),
+  };
 
   const accuracy = session.totalCount > 0 ? session.correctCount / session.totalCount : 0;
   const durationMin = Math.max(1, Math.round(session.durationSec / 60));
@@ -995,7 +1029,7 @@ export default function ResultReportPage() {
           <div className="text-xs font-semibold tracking-wide text-eg-deep uppercase">
             {EXAM_LABELS[session.exam]} {SKILL_LABELS[session.skill]} — Result
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mt-1">{session.setTitle}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mt-1">{session.skill === "reading" ? cleanReadingTitle(session.setTitle) : session.setTitle}</h1>
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
             {new Date(session.finishedAt).toLocaleString("ja-JP")} に完了
           </p>
@@ -1076,6 +1110,31 @@ export default function ResultReportPage() {
               </h2>
             </div>
             <div className="space-y-4">
+              {isIeltsPart1Result && part1Fluencies.length > 0 && (
+                <div className="rounded-xl border border-violet-200 bg-violet-50/60 p-4 dark:border-violet-500/25 dark:bg-violet-500/10">
+                  <div className="mb-3 flex items-baseline justify-between gap-3">
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">Part 1 全{speakingFeedback.length}問のまとめ</h3>
+                    <span className="text-[10px] text-gray-400">時間・速度・無音・話し始めは平均、回数は合計</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-1.5 lg:grid-cols-8">
+                    {[
+                      { label: "平均回答時間", value: `${part1Summary.duration.toFixed(1)}秒` },
+                      { label: "平均発話速度", value: `${Math.round(part1Summary.wpm)} WPM` },
+                      { label: "平均無音", value: `${Math.round(part1Summary.silence)}%` },
+                      { label: "合計ポーズ", value: `${part1Summary.pauses}回` },
+                      { label: "合計フィラー", value: `${part1Summary.fillers}回` },
+                      { label: "合計繰り返し", value: `${part1Summary.repetitions}回` },
+                      { label: "合計言い直し", value: `${part1Summary.corrections}回` },
+                      { label: "平均話し始め", value: `${part1Summary.startDelay.toFixed(1)}秒` },
+                    ].map((metric) => (
+                      <div key={metric.label} className="min-w-0 rounded-lg border border-white/70 bg-white px-2 py-2 dark:border-white/10 dark:bg-gray-900/70">
+                        <div className="truncate text-[9px] text-gray-400">{metric.label}</div>
+                        <div className="truncate text-xs font-bold tabular-nums text-gray-900 dark:text-gray-100">{metric.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {speakingFeedback.map((feedback, i) =>
                 isRepeat ? (
                   <RepeatFeedbackCard

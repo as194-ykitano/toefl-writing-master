@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { detectSpeechDisfluencies } from "@/lib/prep/speaking-fluency";
 
 // Speaking 録音の解析:
 // 1. Whisper で文字起こし
@@ -192,13 +193,15 @@ export async function POST(request: Request) {
     const LONG_PAUSE = 1.0;
     let pauseSec = 0;
     let longPauses = 0;
+    let trailingPauseSec = 0;
     if (words.length > 0 && totalDurationSec > 0) {
       const gaps: number[] = [];
       gaps.push(words[0].start); // 出だしの沈黙
       for (let i = 1; i < words.length; i++) {
         gaps.push(words[i].start - words[i - 1].end);
       }
-      gaps.push(Math.max(0, totalDurationSec - words[words.length - 1].end)); // 末尾の沈黙
+      trailingPauseSec = Math.max(0, totalDurationSec - words[words.length - 1].end);
+      gaps.push(trailingPauseSec); // 末尾の沈黙
       for (const gap of gaps) {
         if (gap >= PAUSE_MIN) pauseSec += gap;
         if (gap >= LONG_PAUSE) longPauses += 1;
@@ -225,6 +228,7 @@ export async function POST(request: Request) {
       (transcript.toLowerCase().match(/\byou know\b/g)?.length ?? 0) +
       (transcript.toLowerCase().match(/\bi mean\b/g)?.length ?? 0);
     const fillerCount = fillerHits.length + phraseFillers;
+    const disfluencies = detectSpeechDisfluencies(transcript, words);
 
     const wordCount = words.length > 0 ? words.length : transcriptTokens.length;
     const fluency =
@@ -239,8 +243,10 @@ export async function POST(request: Request) {
             pauseRatio: Math.round((pauseSec / totalDurationSec) * 100) / 100,
             /** 1 秒以上のポーズの回数 */
             longPauses,
+            trailingPauseSec: Math.round(trailingPauseSec * 100) / 100,
             /** フィラーワード（um, uh, you know など）の回数 */
             fillerCount,
+            ...disfluencies,
           }
         : undefined;
 
@@ -303,6 +309,7 @@ ${scaleNote}
   ]
 }
 grammarCorrections は文字起こしに実在する明確な文法・語法の誤りだけを最大8件挙げてください（フィラーや言い淀みは対象外）。
+Part 1 や短い面接回答でも、回答が短いという理由だけで grammarCorrections を省略しないでください。各文を最後まで確認し、時制、冠詞、前置詞、主語と動詞の一致、単数・複数、語順、語法、不自然なコロケーションに修正すべき箇所があれば必ず個別に挙げてください。一方、本当に修正点がなければ空配列にしてください。
 重要: mistake は「誤っている最小限の語句（1〜4語程度）」にピンポイントで絞ってください。長い文全体や節をまるごと mistake にしないでください（学習者が直しやすいように、修正が必要な語だけを抜き出す）。correction も同じ範囲だけを直した最小限の語句にします。
 誤りが無ければ空配列にしてください。mistake と context は必ず文字起こしの文言をそのまま使い、context には mistake が部分文字列として含まれるようにしてください。`,
         },

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 // ダッシュボード用の軽量 SVG チャート（依存ライブラリなし）
 // ミニマルなトーンに合わせ、折れ線・棒のみを提供する。
 // 均等スケール（preserveAspectRatio 既定）で描画するため、点や線が歪まない。
@@ -7,6 +9,8 @@
 interface Point {
   label?: string;
   value: number;
+  title?: string;
+  submittedAt?: string;
 }
 
 interface ChartProps {
@@ -57,6 +61,7 @@ export function MiniLineChart({
   height = 150,
   format = (v) => String(Math.round(v * 10) / 10),
 }: ChartProps) {
+  const [hovered, setHovered] = useState<number | null>(null);
   if (points.length === 0) {
     return <EmptyChart height={height} />;
   }
@@ -112,19 +117,26 @@ export function MiniLineChart({
         strokeLinecap="round"
         vectorEffect="non-scaling-stroke"
       />
-      {showDots &&
-        points.map((p, i) => (
-          <circle
-            key={i}
-            cx={x(i)}
-            cy={y(p.value)}
-            r={3.5}
-            fill={color}
-            stroke="#fff"
-            strokeWidth={1.5}
-            vectorEffect="non-scaling-stroke"
-          />
-        ))}
+      {points.map((p, i) => {
+        const tooltipW = 340;
+        const tooltipH = 48 + Math.max(1, Math.ceil((p.title?.length ?? 4) / 38)) * 18;
+        const tooltipX = Math.max(8, Math.min(LINE_W - tooltipW - 8, x(i) - tooltipW / 2));
+        const tooltipY = y(p.value) > tooltipH + 18 ? y(p.value) - tooltipH - 12 : y(p.value) + 12;
+        return (
+          <g key={i} onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)} className="cursor-pointer">
+            <circle cx={x(i)} cy={y(p.value)} r={11} fill="transparent" />
+            <circle cx={x(i)} cy={y(p.value)} r={hovered === i ? 5 : showDots ? 3.5 : 2} fill={color} stroke="#fff" strokeWidth={showDots ? 1.5 : 0.75} vectorEffect="non-scaling-stroke" />
+            {hovered === i && (
+              <foreignObject x={tooltipX} y={tooltipY} width={tooltipW} height={tooltipH} className="pointer-events-none overflow-visible">
+                <div className="rounded-lg border border-gray-700 bg-gray-950/95 px-3 py-2 text-white shadow-xl">
+                  <div className="whitespace-normal break-words text-[12px] font-semibold leading-[18px]">{p.title || "演習結果"}</div>
+                  <div className="mt-0.5 text-[11px]"><span className="font-bold" style={{ color }}>{format(p.value)}</span>{p.submittedAt ? ` ・ ${p.submittedAt}` : ""}</div>
+                </div>
+              </foreignObject>
+            )}
+          </g>
+        );
+      })}
       {/* 値ラベルは最後の点のみ */}
       <text
         x={Math.min(LINE_W - padX, x(lastIdx) + (lastIdx === 0 ? 0 : 8))}

@@ -11,6 +11,7 @@
 // 未アップロード・権限エラー時は黙って未設定のまま返す（読み上げフォールバック）。
 
 import { LISTENING_SETS, READING_SETS, SPEAKING_SETS } from "./mock-data";
+import { cleanReadingTitle } from "./display-title";
 import {
   ExamId,
   ListeningSet,
@@ -223,7 +224,12 @@ export async function getStaticReadingSets(exam: ExamId): Promise<ReadingSet[]> 
 }
 
 export async function getReadingSets(exam: ExamId): Promise<ReadingSet[]> {
-  return applyPracticeSetOverrides(exam, "reading", await getStaticReadingSets(exam));
+  const sets = await applyPracticeSetOverrides(exam, "reading", await getStaticReadingSets(exam));
+  return sets.map((set) => ({
+    ...set,
+    title: cleanReadingTitle(set.title),
+    passageTitle: cleanReadingTitle(set.passageTitle),
+  }));
 }
 
 export async function getReadingSet(exam: ExamId, setId: string): Promise<ReadingSet | null> {

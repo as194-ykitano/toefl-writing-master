@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, CheckCircle2, Loader2, Mic, Send, Square, Volume2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, Mic, Send, Settings2, Square, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExamTopBar, formatTime } from "./exam-ui";
 import {
@@ -93,7 +93,7 @@ async function analyzeRecording(
             context: c.context?.trim() || c.mistake,
             category: c.category || undefined,
           }))
-      : undefined,
+      : [],
     speechWords: Array.isArray(json.speechWords)
       ? json.speechWords
           .filter(
@@ -120,8 +120,15 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   const [submitted, setSubmitted] = useState(false);
   const [analyzingIndex, setAnalyzingIndex] = useState(0);
   const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
+  const isIeltsPart1 = set.exam === "ielts" && (set.practiceType === "part-1" || set.practiceType === "full-practice");
+  const supportsInterviewSettings = set.practiceType === "take-an-interview" || (set.exam === "ielts" && ["part-1","part-3","full-practice"].includes(set.practiceType ?? ""));
+  const [configured,setConfigured]=useState(!supportsInterviewSettings);
+  const [answerDuration,setAnswerDuration]=useState(isIeltsPart1?30:(set.tasks[0]?.speakSec??45));
+  const [showQuestionText,setShowQuestionText]=useState(false);
+  const [questionRevealed,setQuestionRevealed]=useState(false);
   const [micLevel, setMicLevel] = useState(0);
   const questionAudioRef = useRef<HTMLAudioElement | null>(null);
+  const autoStartNextRef = useRef(false);
   const levelRafRef = useRef<number>(0);
 
   const pcmRecorderRef = useRef<PcmRecorder | null>(null);
@@ -144,6 +151,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   // フェーズ用カウントダウン
   useEffect(() => {
     if (phase !== "prep" && phase !== "recording") return;
+    if (phase === "prep" && questionAudioPlaying) return;
     if (countdown <= 0) {
       if (phase === "prep") {
         startRecording();
@@ -155,7 +163,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
     const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, countdown]);
+  }, [phase, countdown, questionAudioPlaying]);
 
   const cleanupStream = () => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -177,29 +185,40 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   };
 
   const playQuestionAudio = () => {
-    if (!task.audioUrl) return;
     questionAudioRef.current?.pause();
-    const audio = new Audio(task.audioUrl);
-    questionAudioRef.current = audio;
     setQuestionAudioPlaying(true);
-    audio.onended = () => setQuestionAudioPlaying(false);
-    audio.play().catch(() => setQuestionAudioPlaying(false));
+    if (task.audioUrl) {
+      const audio = new Audio(task.audioUrl);
+      questionAudioRef.current = audio;
+      audio.onended = () => setQuestionAudioPlaying(false);
+      audio.onerror = () => setQuestionAudioPlaying(false);
+      audio.play().catch(() => setQuestionAudioPlaying(false));
+      return;
+    }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const utterance=new SpeechSynthesisUtterance(task.prompt);
+      utterance.lang="en-US"; utterance.rate=0.92;
+      utterance.onend=()=>setQuestionAudioPlaying(false);
+      utterance.onerror=()=>setQuestionAudioPlaying(false);
+      window.speechSynthesis.speak(utterance);
+    } else setQuestionAudioPlaying(false);
   };
 
   useEffect(() => {
-    return () => questionAudioRef.current?.pause();
+    return () => {questionAudioRef.current?.pause();if(typeof window!=="undefined"&&"speechSynthesis" in window)window.speechSynthesis.cancel()};
   }, []);
 
   const startPrep = () => {
+    setQuestionRevealed(showQuestionText);
+    if (supportsInterviewSettings || task.audioUrl) playQuestionAudio();
     setPhase("prep");
-    setCountdown(task.prepSec);
-    // 質問音声つきタスク（TOEFL Interview / Listen and Repeat）は開始時に自動再生
-    if (task.audioUrl) playQuestionAudio();
+    setCountdown(isIeltsPart1?3:task.prepSec);
   };
 
   const startRecording = async () => {
     setPhase("recording");
-    setCountdown(task.speakSec);
+    setCountdown(supportsInterviewSettings?answerDuration:task.speakSec);
     setMicError(false);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -231,12 +250,28 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
       }
     }
     cleanupStream();
-    setPhase("review");
+    if (isIeltsPart1 && !isLastTask) {
+      autoStartNextRef.current = true;
+      setTaskIndex((i) => i + 1);
+      setPhase("ready");
+      setQuestionRevealed(showQuestionText);
+    } else {
+      setPhase("review");
+    }
   };
+
+  useEffect(() => {
+    if (!autoStartNextRef.current || phase !== "ready") return;
+    autoStartNextRef.current = false;
+    const timer = window.setTimeout(() => startPrep(), 450);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [taskIndex, phase]);
 
   const goNextTask = () => {
     setTaskIndex((i) => i + 1);
     setPhase("ready");
+    setQuestionRevealed(showQuestionText);
   };
 
   const retryTask = () => {
@@ -246,6 +281,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
       return next;
     });
     setPhase("ready");
+    setQuestionRevealed(showQuestionText);
   };
 
   const handleSubmit = async () => {
@@ -261,9 +297,9 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
 
     // 録音があるタスクを順番に AI 解析（進捗表示のため直列実行）
     const feedback: SpeakingTaskFeedback[] = [];
+    setAnalyzingIndex(0);
     for (let i = 0; i < recordedTasks.length; i++) {
       const t = recordedTasks[i];
-      setAnalyzingIndex(i + 1);
       try {
         feedback.push(await analyzeRecording(set, t.id, recordings[t.id]));
       } catch (error) {
@@ -276,6 +312,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
           error: error instanceof Error ? error.message : "解析に失敗しました",
         });
       }
+      setAnalyzingIndex(i + 1);
     }
 
     const session = {
@@ -318,7 +355,10 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
           </div>
           {/* 進捗バー（おおよその見た目。実際の完了で結果画面へ遷移） */}
           <div className="h-1.5 w-56 overflow-hidden rounded-full bg-gray-200">
-            <div className="h-full w-1/3 animate-pulse rounded-full bg-eg" />
+            <div
+              className="h-full rounded-full bg-eg transition-[width] duration-300 ease-out"
+              style={{ width: `${total > 0 ? (analyzingIndex / total) * 100 : 0}%` }}
+            />
           </div>
         </div>
 
@@ -330,6 +370,10 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
         </p>
       </div>
     );
+  }
+
+  if (!configured) {
+    return <div className="min-h-screen bg-gray-100"><ExamTopBar examLabel={EXAM_LABELS[set.exam]} title={set.title} mode={mode} elapsedSec={0} remainingSec={0} exitHref={exitHref}/><div className="mx-auto max-w-xl p-4 pt-10"><div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8"><div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-xl bg-eg-soft text-eg-deep"><Settings2 className="h-5 w-5"/></div><div><h1 className="text-xl font-bold text-gray-900">Speaking設定</h1><p className="text-sm text-gray-500">開始前に練習方法を選択してください。</p></div></div><div className="mt-7 space-y-6"><div><label className="text-sm font-semibold text-gray-800">1問あたりの録音時間</label><div className="mt-2 grid grid-cols-4 gap-2">{[20,30,40,45,60,90,120].map(sec=><button key={sec} onClick={()=>setAnswerDuration(sec)} className={`rounded-lg border px-2 py-2.5 text-sm font-semibold transition ${answerDuration===sec?"border-eg bg-eg-soft text-eg-deep":"border-gray-200 text-gray-600 hover:border-gray-300"}`}>{sec}秒</button>)}</div><p className="mt-2 text-xs text-gray-400">IELTS Part 1の推奨・初期値は30秒です。</p></div><div><p className="text-sm font-semibold text-gray-800">問題文の表示</p><div className="mt-2 grid grid-cols-2 gap-2"><button onClick={()=>setShowQuestionText(false)} className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-3 text-sm font-semibold transition ${!showQuestionText?"border-eg bg-eg-soft text-eg-deep":"border-gray-200 text-gray-600"}`}><EyeOff className="h-4 w-4"/>最初は非表示</button><button onClick={()=>setShowQuestionText(true)} className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-3 text-sm font-semibold transition ${showQuestionText?"border-eg bg-eg-soft text-eg-deep":"border-gray-200 text-gray-600"}`}><Eye className="h-4 w-4"/>最初から表示</button></div><p className="mt-2 text-xs text-gray-400">非表示を選んでも、回答中に表示できます。問題は音声で読み上げられます。</p></div><Button className="w-full bg-eg text-black hover:bg-eg-dark" size="lg" onClick={()=>{setQuestionRevealed(showQuestionText);setConfigured(true)}}>この設定で始める</Button></div></div></div></div>;
   }
 
   return (
@@ -389,9 +433,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
               </div>
             )}
           </div>
-          <p className="text-[15px] sm:text-base text-gray-900 font-medium leading-relaxed whitespace-pre-line">
-            {task.prompt}
-          </p>
+          {showQuestionText||questionRevealed||!supportsInterviewSettings?<p className="text-[15px] sm:text-base text-gray-900 font-medium leading-relaxed whitespace-pre-line">{task.prompt}</p>:<div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-5 text-center"><EyeOff className="mx-auto h-5 w-5 text-gray-400"/><p className="mt-2 text-sm text-gray-500">問題文は非表示です。開始すると音声で読み上げます。</p><button onClick={()=>setQuestionRevealed(true)} className="mt-3 text-xs font-semibold text-eg-deep hover:underline">問題文を表示</button></div>}
 
           {task.material && (phase === "ready" || phase === "prep") && (
             <div className="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-100 text-sm leading-relaxed text-gray-700 whitespace-pre-line">
@@ -412,7 +454,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
                   ) : (
                     <>回答時間 {task.speakSec} 秒（開始するとすぐに録音が始まります）</>
                   )}
-                  {task.audioUrl && (
+                  {(task.audioUrl||supportsInterviewSettings) && (
                     <>
                       <br />
                       開始すると質問音声が再生されます
@@ -425,7 +467,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
               </>
             )}
 
-            {(phase === "prep" || phase === "recording") && task.audioUrl && (
+            {(phase === "prep" || phase === "recording") && (task.audioUrl||supportsInterviewSettings) && (
               <button
                 onClick={playQuestionAudio}
                 disabled={questionAudioPlaying}

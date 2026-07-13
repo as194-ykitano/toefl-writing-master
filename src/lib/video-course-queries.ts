@@ -75,6 +75,10 @@ function docToCourse(id: string, data: DocumentData): VideoCourse {
     visibility: data.visibility === "all_students" ? "all_students" : "coach_clients",
     published: Boolean(data.published),
     order: typeof data.order === "number" ? data.order : 0,
+    targetExams: Array.isArray(data.targetExams)
+      ? data.targetExams.filter((value: unknown): value is "toefl" | "ielts" | "toeic" | "advanced" =>
+          value === "toefl" || value === "ielts" || value === "toeic" || value === "advanced")
+      : undefined,
     createdAt: tsToFirebaseTimestamp(data.createdAt),
     updatedAt: tsToFirebaseTimestamp(data.updatedAt ?? data.createdAt),
   }
@@ -124,6 +128,7 @@ export async function createVideoCourse(params: {
   visibility: VideoCourseVisibility
   published: boolean
   order: number
+  targetExams?: Array<"toefl" | "ielts" | "toeic" | "advanced">
 }): Promise<string> {
   const col = collection(db, VIDEO_COURSES_COLLECTION)
   const refDoc = await addDoc(col, {
@@ -135,6 +140,7 @@ export async function createVideoCourse(params: {
     visibility: params.visibility,
     published: params.published,
     order: params.order,
+    targetExams: params.targetExams ?? [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   })
@@ -150,6 +156,7 @@ export async function updateVideoCourse(
     visibility: VideoCourseVisibility
     published: boolean
     order: number
+    targetExams?: Array<"toefl" | "ielts" | "toeic" | "advanced">
   }>
 ): Promise<void> {
   const d = doc(db, VIDEO_COURSES_COLLECTION, courseId)
@@ -342,6 +349,7 @@ export async function updateVideoCourseLesson(
   patch: Partial<{
     title: string
     order: number
+    targetExams: Array<"toefl" | "ielts" | "toeic" | "advanced">
     contentType: VideoCourseLesson["contentType"]
     body: string
     embeddedVideo: PracticeItemEmbeddedVideo | null

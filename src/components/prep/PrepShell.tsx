@@ -79,12 +79,6 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
       activeFor: isAdvanced ? ["/advanced", "/home"] : ["/home"],
     },
   ];
-  top.push({
-    href: "/video-courses",
-    label: "コンテンツ",
-    icon: Video,
-    activeFor: ["/video-courses"],
-  });
   if (!isAdvanced) {
     top.push({
       href: "/overview",
@@ -104,7 +98,20 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
       icon: Clock,
       activeFor: ["/study-time"],
     });
+    top.push({
+      href: "/video-courses",
+      label: "コンテンツ",
+      icon: Video,
+      activeFor: ["/video-courses"],
+    });
     top.push({ href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] });
+  } else {
+    top.push({
+      href: "/video-courses",
+      label: "コンテンツ",
+      icon: Video,
+      activeFor: ["/video-courses"],
+    });
   }
   const groups: NavGroup[] = [
     { items: top },

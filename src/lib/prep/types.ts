@@ -310,6 +310,8 @@ export interface WritingResult {
   id: string;
   exam: ExamId;
   setId: string;
+  /** 演習時に選択したモード。旧データでは未設定。 */
+  mode?: PracticeMode;
   practiceType: string;
   rubric: WritingRubricKind;
   title: string;
@@ -363,8 +365,20 @@ export interface SpeakingTaskFeedback {
     pauseRatio: number;
     /** 1 秒以上のポーズの回数 */
     longPauses: number;
+    /** 最後の発話から録音終了までの無音（秒） */
+    trailingPauseSec?: number;
     /** フィラーワード（um, uh, you know など）の回数 */
     fillerCount?: number;
+    /** 単語の即時繰り返し（例: I I think） */
+    wordRepetitionCount?: number;
+    /** 2〜4語のフレーズ再開始（例: I want to, I want to） */
+    phraseRestartCount?: number;
+    /** I mean / or rather などの明示的な言い直し */
+    selfCorrectionCount?: number;
+    /** 録音開始から最初の発話までの秒数 */
+    startDelaySec?: number;
+    wordRepetitionIndexes?: number[];
+    correctionIndexes?: number[];
   };
   /** 解析に失敗した場合のエラーメッセージ */
   error?: string;

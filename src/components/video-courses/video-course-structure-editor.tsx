@@ -89,6 +89,9 @@ export function VideoCourseStructureEditor({
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null)
   const [lessonForm, setLessonForm] = useState(emptyLessonForm)
   const [manageModulesOpen, setManageModulesOpen] = useState(false)
+  const [draggedLessonId, setDraggedLessonId] = useState<string | null>(null)
+  const [lessonDropTarget, setLessonDropTarget] = useState<string | null>(null)
+  const [savingOrder, setSavingOrder] = useState(false)
 
   const doneIds = completedLessonIds ?? new Set<string>()
 
@@ -192,6 +195,34 @@ export function VideoCourseStructureEditor({
     if (!canEdit) return
     await deleteVideoCourseLesson(lessonId)
     await refresh()
+  }
+
+  const dropLesson = async (targetModuleId: string, targetLessonId?: string, position: "before" | "after" = "after") => {
+    if (!canEdit || !structure || !draggedLessonId || savingOrder) return
+    const dragged = structure.lessons.find((lesson) => lesson.id === draggedLessonId)
+    if (!dragged || dragged.id === targetLessonId) return
+    const grouped = new Map<string, VideoCourseLesson[]>()
+    for (const module of structure.modules) {
+      grouped.set(module.id, structure.lessons.filter((lesson) => lesson.moduleId === module.id && lesson.id !== dragged.id).sort((a, b) => a.order - b.order))
+    }
+    const target = grouped.get(targetModuleId) ?? []
+    const targetIndex = targetLessonId ? target.findIndex((lesson) => lesson.id === targetLessonId) : target.length
+    const insertAt = targetIndex < 0 ? target.length : targetIndex + (position === "after" ? 1 : 0)
+    target.splice(insertAt, 0, { ...dragged, moduleId: targetModuleId })
+    grouped.set(targetModuleId, target)
+    const nextLessons = structure.modules.flatMap((module) =>
+      (grouped.get(module.id) ?? []).map((lesson, index) => ({ ...lesson, moduleId: module.id, order: index + 1 }))
+    )
+    setStructure({ ...structure, lessons: nextLessons })
+    setSavingOrder(true)
+    try {
+      await Promise.all(nextLessons.map((lesson) => updateVideoCourseLesson(lesson.id, { moduleId: lesson.moduleId, order: lesson.order })))
+      await onStructureChangedRef.current?.()
+    } finally {
+      setSavingOrder(false)
+      setDraggedLessonId(null)
+      setLessonDropTarget(null)
+    }
   }
 
   if (loading) {
@@ -390,8 +421,13 @@ export function VideoCourseStructureEditor({
                 .filter((l) => l.moduleId === mod.id)
                 .sort((a, b) => a.order - b.order)
               return (
-                <div key={mod.id} className="space-y-2">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <div
+                  key={mod.id}
+                  className={`space-y-2 rounded-lg transition ${lessonDropTarget === `module:${mod.id}` ? "bg-primary/10 ring-2 ring-primary/40" : ""}`}
+                  onDragOver={(event) => { if (canEdit && draggedLessonId) { event.preventDefault(); setLessonDropTarget(`module:${mod.id}`) } }}
+                  onDrop={(event) => { event.preventDefault(); void dropLesson(mod.id) }}
+                >
+                  <p className="px-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                     Module {modIdx} — {mod.title}
                   </p>
                   <ul className="space-y-1.5">
@@ -403,7 +439,16 @@ export function VideoCourseStructureEditor({
                         const n = lessonNumberById.get(l.id) ?? 0
                         const done = doneIds.has(l.id)
                         return (
-                          <li key={l.id}>
+                          <li
+                            key={l.id}
+                            draggable={canEdit && !savingOrder}
+                            onDragStart={(event) => { setDraggedLessonId(l.id); event.dataTransfer.effectAllowed = "move" }}
+                            onDragOver={(event) => { if (canEdit) { event.preventDefault(); event.stopPropagation(); const rect = event.currentTarget.getBoundingClientRect(); const position = event.clientY < rect.top + rect.height / 2 ? "before" : "after"; setLessonDropTarget(`lesson:${l.id}:${position}`) } }}
+                            onDrop={(event) => { event.preventDefault(); event.stopPropagation(); const position = lessonDropTarget?.endsWith(":before") ? "before" : "after"; void dropLesson(mod.id, l.id, position) }}
+                            onDragEnd={() => { setDraggedLessonId(null); setLessonDropTarget(null) }}
+                            className={`relative ${draggedLessonId === l.id ? "opacity-45" : ""}`}
+                          >
+                            {lessonDropTarget?.startsWith(`lesson:${l.id}:`) && draggedLessonId !== l.id && <div className={`pointer-events-none absolute z-20 h-0.5 rounded-full bg-primary ${lessonDropTarget.endsWith(":before") ? "-top-1" : "-bottom-1"} left-1 right-1`} />}
                             <div
                               className={cn(
                                 "group flex items-stretch overflow-hidden rounded-xl border transition-colors",

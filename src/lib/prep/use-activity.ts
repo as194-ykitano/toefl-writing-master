@@ -16,6 +16,7 @@ import { loadWritingResults } from "./writing-store";
 import { getListeningSets, getReadingSets, getSpeakingSets } from "./data-source";
 import { PRACTICE_TYPES } from "./question-types";
 import { ExamId, PracticeSessionResult, SkillId, WritingResult } from "./types";
+import { cleanReadingTitle } from "./display-title";
 
 export interface ActivityItem {
   id: string;
@@ -33,6 +34,8 @@ export interface ActivityItem {
   scoreValue: number | null;
   scoreMax: number;
   href: string;
+  wpm?: number;
+  wordCount?: number;
 }
 
 function speakingScoreMax(exam: ExamId): number {
@@ -44,6 +47,15 @@ export function practiceTypeLabel(exam: ExamId, skill: SkillId, slug: string): s
   if (slug === "その他") return "その他";
   const t = PRACTICE_TYPES.find((p) => p.exam === exam && p.skill === skill && p.id === slug);
   return t ? t.labelJa || t.label : slug;
+}
+
+/** Practice一覧と同じ英語表記。学習時間などの短い分類名に使用する。 */
+export function practiceTypeEnglishLabel(exam: ExamId, skill: SkillId, slug: string): string {
+  if (slug === "その他") return "Other";
+  const type = PRACTICE_TYPES.find((item) =>
+    item.exam === exam && item.skill === skill && item.id === slug
+  );
+  return type?.label ?? slug;
 }
 
 export function avg(nums: number[]): number | null {
@@ -58,7 +70,7 @@ function sessionToItem(s: PracticeSessionResult): ActivityItem {
     exam: s.exam,
     skill: s.skill,
     practiceType: s.practiceType || "その他",
-    title: s.setTitle,
+    title: s.skill === "reading" ? cleanReadingTitle(s.setTitle) : s.setTitle,
     finishedAt: s.finishedAt,
     durationSec: s.durationSec,
     href: `/results/${s.id}`,
@@ -82,6 +94,8 @@ function sessionToItem(s: PracticeSessionResult): ActivityItem {
       totalCount: null,
       scoreValue: avg(bands),
       scoreMax: speakingScoreMax(s.exam),
+      wpm: avg((s.speakingFeedback ?? []).map((f) => f.fluency?.wpm).filter((v): v is number => typeof v === "number")) ?? undefined,
+      wordCount: (s.speakingFeedback ?? []).reduce((sum, f) => sum + f.transcript.trim().split(/\s+/).filter(Boolean).length, 0),
     };
   }
   return { ...base, correctCount: null, totalCount: null, scoreValue: null, scoreMax: 100 };
@@ -102,6 +116,7 @@ function writingToItem(w: WritingResult): ActivityItem {
     scoreValue: w.feedback.score,
     scoreMax: w.feedback.scoreMax,
     href: `/writing-result/${w.id}`,
+    wordCount: w.content.trim().split(/\s+/).filter(Boolean).length,
   };
 }
 

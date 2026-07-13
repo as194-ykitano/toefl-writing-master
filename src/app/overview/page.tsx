@@ -35,6 +35,7 @@ import {
   PERIOD_LABELS,
   PeriodKey,
   TypeAggregate,
+  periodStart,
 } from "@/lib/prep/dashboard-stats";
 import { useExam } from "@/contexts/ExamContext";
 import {
@@ -102,6 +103,7 @@ export default function OverviewPage() {
   const [period, setPeriod] = useState<PeriodKey>("30d");
   const [skill, setSkill] = useState<SkillId>("reading");
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [chartMetric, setChartMetric] = useState<"score" | "wpm" | "words">("score");
   const [sessions, setSessions] = useState<PracticeSessionResult[]>([]);
   const [writingResults, setWritingResults] = useState<WritingResult[]>([]);
 
@@ -114,6 +116,7 @@ export default function OverviewPage() {
   // 技能・試験を切り替えたら問題タイプ選択をリセット（自動で最初のデータあり項目を選ぶ）
   useEffect(() => {
     setSelectedType(null);
+    setChartMetric("score");
   }, [skill, exam]);
 
   // 試験を切り替えたとき、選択中の技能がその試験に無ければ先頭の技能へ戻す
@@ -185,17 +188,32 @@ export default function OverviewPage() {
   const effectiveType =
     selectedType && skillAgg.byType[selectedType] ? selectedType : firstWithData;
   const chartAgg = effectiveType ? skillAgg.byType[effectiveType] : null;
-  const chartPoints = (chartAgg ? chartAgg.points : skillAgg.points).map((p) => ({
-    label: p.date.slice(5).replace("-", "/"),
-    value: p.value,
-  }));
+  const { items: activityItems } = usePrepActivity(activeExam);
+  const rangeStart = periodStart(period);
+  const metricItems = activityItems
+    .filter((item) => item.skill === skill && (!effectiveType || item.practiceType === effectiveType))
+    .filter((item) => rangeStart === null || new Date(item.finishedAt).getTime() >= rangeStart)
+    .sort((a, b) => new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime());
+  const chartPoints = metricItems.flatMap((item) => {
+    const value = chartMetric === "score" ? item.scoreValue : chartMetric === "wpm" ? item.wpm : item.wordCount;
+    if (typeof value !== "number") return [];
+    const submitted = new Date(item.finishedAt);
+    return [{
+      label: `${submitted.getMonth() + 1}/${submitted.getDate()}`,
+      value,
+      title: item.title,
+      submittedAt: submitted.toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+    }];
+  });
   const chartScoreMax = chartAgg?.scoreMax ?? skillAgg.scoreMax;
   const chartAvg = chartAgg ? chartAgg.avgScore : skillAgg.avgScore;
+  const metricAverage = chartPoints.length > 0
+    ? chartPoints.reduce((sum, point) => sum + point.value, 0) / chartPoints.length
+    : null;
   const effectiveTypeLabel =
     (effectiveType && typeEntries.find((t) => t.id === effectiveType)?.label) || null;
 
   // 最近の演習は選択中の技能・問題タイプに連動させる
-  const { items: activityItems } = usePrepActivity(activeExam);
   const recentItems = useMemo(
     () =>
       activityItems
@@ -326,7 +344,7 @@ export default function OverviewPage() {
 
         {/* 平均スコア推移（選択中の問題タイプに応じて変化） */}
         <Reveal className="glass-card rounded-2xl p-6">
-          <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
             <div>
               <h2 className="font-semibold text-gray-900 dark:text-gray-100">
                 {effectiveTypeLabel
@@ -334,7 +352,7 @@ export default function OverviewPage() {
                   : `${skillMeta.label} の平均スコア推移`}
               </h2>
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-                {skill === "reading" || skill === "listening"
+                {chartMetric === "wpm" ? "平均WPMの推移" : chartMetric === "words" ? "発話・記述ワード数の推移" : skill === "reading" || skill === "listening"
                   ? "正答率（%）の推移"
                   : skill === "speaking"
                     ? "推定バンドの推移"
@@ -343,21 +361,32 @@ export default function OverviewPage() {
                 下のタイプを選ぶとグラフが切り替わります
               </p>
             </div>
-            {chartAvg !== null && (
+            <div className="flex items-start gap-3">
+              {(skill === "speaking" || skill === "writing") && (
+                <div className="inline-flex rounded-lg bg-gray-100 p-0.5 dark:bg-gray-800">
+                  {(["score", ...(skill === "speaking" ? ["wpm"] : []), "words"] as ("score" | "wpm" | "words")[]).map((metric) => (
+                    <button key={metric} onClick={() => setChartMetric(metric)} className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition ${chartMetric === metric ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white" : "text-gray-400"}`}>
+                      {metric === "score" ? "スコア" : metric === "wpm" ? "WPM" : "ワード数"}
+                    </button>
+                  ))}
+                </div>
+              )}
+            {(chartMetric === "score" ? chartAvg : metricAverage) !== null && (
               <div className="text-right">
                 <div className="text-xl font-bold tabular-nums" style={{ color: skillMeta.color }}>
-                  {formatScore(skill, chartAvg, chartScoreMax)}
+                  {chartMetric === "score" ? formatScore(skill, chartAvg!, chartScoreMax) : `${Math.round(metricAverage!)}${chartMetric === "wpm" ? " WPM" : " words"}`}
                 </div>
                 <div className="text-[10px] text-gray-400">平均</div>
               </div>
             )}
+            </div>
           </div>
           <MiniLineChart
             points={chartPoints}
-            max={skill === "reading" || skill === "listening" ? 100 : chartScoreMax}
+            max={chartMetric === "score" ? (skill === "reading" || skill === "listening" ? 100 : chartScoreMax) : undefined}
             color={skillMeta.color}
             format={(v) =>
-              skill === "reading" || skill === "listening" ? `${Math.round(v)}` : `${Math.round(v * 10) / 10}`
+              chartMetric === "wpm" ? `${Math.round(v)} WPM` : chartMetric === "words" ? `${Math.round(v)} words` : skill === "reading" || skill === "listening" ? `${Math.round(v)}%` : `${Math.round(v * 10) / 10} / ${chartScoreMax}`
             }
           />
         </Reveal>
@@ -436,8 +465,8 @@ export default function OverviewPage() {
         )}
 
         {/* 最近の演習（選択中の技能・問題タイプに連動） / 未接続項目の注記 */}
-        <Reveal delay={80} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 glass-card rounded-2xl p-6">
+        <Reveal delay={80}>
+          <div className="glass-card rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-1">
               <History className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <h2 className="font-semibold text-gray-900 dark:text-gray-100">最近の演習</h2>
@@ -480,18 +509,6 @@ export default function OverviewPage() {
             )}
           </div>
 
-          <div className="glass-card rounded-2xl p-6">
-            <div className="flex items-center gap-2 mb-3">
-              <CalendarClock className="w-4 h-4 text-gray-400" />
-              <h2 className="font-semibold text-gray-900 dark:text-gray-100">データについて</h2>
-            </div>
-            <ul className="space-y-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-              <li>・集計はこのブラウザの演習・添削履歴（localStorage）に基づきます。</li>
-              <li>・スコアは技能ごとに尺度が異なります（R/L=正答率、Speaking=推定バンド、Writing=添削スコア）。</li>
-              <li>・全履歴の一覧は「学習履歴」、学習時間の内訳は「学習時間」で確認できます。</li>
-              <li>・端末・ブラウザをまたいだ集計は将来のサーバー同期で対応予定です。</li>
-            </ul>
-          </div>
         </Reveal>
       </div>
     </PrepShell>

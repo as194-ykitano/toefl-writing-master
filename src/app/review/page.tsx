@@ -17,6 +17,7 @@ import PrepShell from "@/components/prep/PrepShell";
 import { Button } from "@/components/ui/button";
 import { getListeningSets, getReadingSets } from "@/lib/prep/data-source";
 import { loadSessions, markQuestionReviewed } from "@/lib/prep/session-store";
+import { cleanReadingTitle } from "@/lib/prep/display-title";
 import {
   EXAM_LABELS,
   ExamId,
@@ -86,7 +87,7 @@ export default function ReviewPage() {
             exam: session.exam,
             skill: session.skill,
             setId: session.setId,
-            setTitle: session.setTitle,
+            setTitle: session.skill === "reading" ? cleanReadingTitle(session.setTitle) : session.setTitle,
             question,
             userAnswer: r.userAnswer,
             finishedAt: session.finishedAt,

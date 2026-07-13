@@ -30,6 +30,8 @@ import {
 import { getPracticeType, getPracticeTypes } from "@/lib/prep/question-types";
 import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId, WritingResult } from "@/lib/prep/types";
 import { loadWritingResultsByExam } from "@/lib/prep/writing-store";
+import { loadSessions } from "@/lib/prep/session-store";
+import { cleanReadingTitle } from "@/lib/prep/display-title";
 
 interface SetSummary {
   id: string;
@@ -39,6 +41,8 @@ interface SetSummary {
   meta: string;
   practiceType?: string;
 }
+
+type ModeCounts = { practice: number; test: number };
 
 const SKILL_ICONS = { reading: BookOpen, listening: Headphones, speaking: Mic, writing: PenLine };
 
@@ -61,8 +65,8 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
     const list = await getReadingSets(exam);
     return list.map((s) => ({
       id: s.id,
-      title: s.title,
-      description: s.passageTitle !== s.title ? s.passageTitle : s.description,
+      title: cleanReadingTitle(s.title),
+      description: s.passageTitle !== s.title ? cleanReadingTitle(s.passageTitle) : s.description,
       difficulty: s.difficulty,
       meta: `${s.questions.length} 問 / ${Math.round(s.timeLimitSec / 60)} 分`,
       practiceType: s.practiceType,
@@ -113,21 +117,27 @@ function SetCard({
   set,
   exam,
   skill,
+  counts,
 }: {
   set: SetSummary;
   exam: ExamId;
   skill: SkillId;
+  counts: ModeCounts;
 }) {
   const difficulty = DIFFICULTY_LABELS[set.difficulty] ?? DIFFICULTY_LABELS.medium;
   return (
     <div className="bg-white rounded-2xl border border-gray-200/70 p-6 shadow-sm">
-      <div className="flex flex-wrap items-center gap-2 mb-2">
+      <div className="flex flex-wrap items-start gap-2 mb-2">
         <span className={`text-[11px] font-medium rounded-full px-2.5 py-1 ${difficulty.className}`}>
           {difficulty.label}
         </span>
         <span className="inline-flex items-center gap-1 text-[11px] text-gray-400">
           <Clock className="w-3 h-3" /> {set.meta}
         </span>
+        <div className="ml-auto flex items-center gap-1.5 text-[10px] font-medium tabular-nums">
+          <span className={`rounded-full px-2 py-1 ${counts.practice > 0 ? "bg-eg-soft text-eg-deep" : "bg-gray-100 text-gray-400"}`}>練習 {counts.practice}回</span>
+          <span className={`rounded-full px-2 py-1 ${counts.test > 0 ? "bg-blue-50 text-blue-700" : "bg-gray-100 text-gray-400"}`}>本番 {counts.test}回</span>
+        </div>
       </div>
       <h2 className="font-semibold text-gray-900">{set.title}</h2>
       {set.description && <p className="text-sm text-gray-500 mt-1">{set.description}</p>}
@@ -202,6 +212,7 @@ function SkillPageInner() {
   const router = useRouter();
   const [sets, setSets] = useState<SetSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [attemptCounts, setAttemptCounts] = useState<Record<string, ModeCounts>>({});
 
   const exam = params.exam;
   const skill = params.skill;
@@ -227,6 +238,23 @@ function SkillPageInner() {
       setLoading(false);
     };
     load();
+  }, [exam, skill, valid]);
+
+  useEffect(() => {
+    if (!valid) return;
+    const counts: Record<string, ModeCounts> = {};
+    const add = (setId: string, mode: "practice" | "test" | undefined) => {
+      const current = counts[setId] ?? { practice: 0, test: 0 };
+      current[mode === "test" ? "test" : "practice"] += 1;
+      counts[setId] = current;
+    };
+    loadSessions()
+      .filter((session) => session.exam === exam && session.skill === skill)
+      .forEach((session) => add(session.setId, session.mode));
+    if (skill === "writing") {
+      loadWritingResultsByExam(exam as ExamId).forEach((result) => add(result.setId, result.mode));
+    }
+    setAttemptCounts(counts);
   }, [exam, skill, valid]);
 
   if (!valid) {
@@ -294,7 +322,7 @@ function SkillPageInner() {
               問題セットがまだ登録されていません（実データ投入時にここへ表示されます）
             </div>
           ) : (
-            filteredSets.map((set) => <SetCard key={set.id} set={set} exam={examId} skill={skillId} />)
+            filteredSets.map((set) => <SetCard key={set.id} set={set} exam={examId} skill={skillId} counts={attemptCounts[set.id] ?? { practice: 0, test: 0 }} />)
           )}
         </div>
       ) : (
