@@ -7,6 +7,8 @@ app.yaml
 *.log
 output/plan/
 outputs/plans/
+outputs/guide-capture/
+.guide-browser-profile/
 out/
 tsconfig.tsbuildinfo
 

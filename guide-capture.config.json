@@ -1,0 +1,22 @@
+{
+  "hideSelectors": [
+    "input[type=email]",
+    "[data-guide-private]"
+  ],
+  "targets": [
+    { "guideId": "getting-started", "goal": "試験切り替え、ホーム、目標学習時間、技能別演習への入口を説明する", "views": [{ "name": "home", "route": "/home", "description": "ホーム全体" }] },
+    { "guideId": "toefl-reading", "goal": "TOEFL Readingの演習選択から開始までを説明する", "views": [{ "name": "practice-list", "route": "/practice/toefl/reading?type=complete-the-words", "description": "Complete the Wordsの演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "toefl-listening", "goal": "TOEFL Listeningの演習選択と音声問題の注意点を説明する", "views": [{ "name": "practice-list", "route": "/practice/toefl/listening?type=conversation", "description": "Conversationの演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "toefl-speaking", "goal": "TOEFL Speakingのタスク選択、マイク、録音、提出を説明する", "views": [{ "name": "practice-list", "route": "/practice/toefl/speaking?type=listen-and-repeat", "description": "Listen and Repeatの演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "toefl-writing", "goal": "TOEFL Writingのタスク選択、解答入力、提出、添削確認を説明する", "views": [{ "name": "practice-list", "route": "/practice/toefl/writing?type=build-a-sentence", "description": "Build a Sentenceの演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "ielts-reading", "goal": "IELTS ReadingのType別演習と回答時の注意点を説明する", "views": [{ "name": "practice-list", "route": "/practice/ielts/reading?type=multiple-choice", "description": "Multiple Choiceの演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "ielts-listening", "goal": "IELTS ListeningのType別演習と音声再生時の注意点を説明する", "views": [{ "name": "practice-list", "route": "/practice/ielts/listening?type=multiple-choice", "description": "Multiple Choiceの演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "ielts-speaking", "goal": "IELTS SpeakingのPart別練習、録音、提出を説明する", "views": [{ "name": "practice-list", "route": "/practice/ielts/speaking?type=part-1", "description": "Part 1の演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "ielts-writing", "goal": "IELTS Writing Task 1・2の選択、入力、添削確認を説明する", "views": [{ "name": "practice-list", "route": "/practice/ielts/writing?type=task-1", "description": "Writing Task 1の演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "toeic-reading", "goal": "TOEIC ReadingのPart別演習と復習方法を説明する", "views": [{ "name": "practice-list", "route": "/practice/toeic/reading?type=part-5", "description": "Part 5の演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "toeic-listening", "goal": "TOEIC ListeningのPart別演習と復習方法を説明する", "views": [{ "name": "practice-list", "route": "/practice/toeic/listening?type=part-1", "description": "Part 1の演習一覧", "waitForTextGone": "読み込み中..." }] },
+    { "guideId": "mock-tests", "goal": "模試の開始前、受験中、結果確認を説明する", "views": [{ "name": "mock-list", "route": "/mock", "description": "模試一覧" }] },
+    { "guideId": "learning-data", "goal": "学習時間、学習履歴、データ推移の違いと見方を説明する", "views": [{ "name": "study-time", "route": "/study-time", "description": "学習時間のグラフと表", "waitForTextGone": "読み込み中..." }, { "name": "history", "route": "/history", "description": "学習履歴", "waitForTextGone": "読み込み中..." }, { "name": "overview", "route": "/overview", "description": "データ推移" }] },
+    { "guideId": "video-courses", "goal": "動画コース、モジュール、レッスン、進捗の見方を説明する", "views": [{ "name": "course-list", "route": "/video-courses", "description": "動画コース一覧" }] }
+  ]
+}

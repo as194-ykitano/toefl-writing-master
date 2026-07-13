@@ -297,11 +297,11 @@ export default function HomePage() {
       <Suspense fallback={null}>
         <HomeTour />
       </Suspense>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <section className="relative overflow-hidden rounded-2xl border border-eg/15 bg-gradient-to-br from-eg-faint via-white to-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] animate-in fade-in slide-in-from-bottom-3 duration-700 dark:border-gray-800 dark:from-eg/[0.06] dark:via-gray-900/60 dark:to-gray-900/60 sm:p-6">
           {/* 右上に淡いブランドグロー（唯一の装飾） */}
           <span aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-eg/10 blur-3xl dark:bg-eg/[0.07]" />
-          <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(460px,1.15fr)] lg:items-center">
+          <div className="relative grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(600px,1.35fr)] lg:items-center">
             {/* 挨拶：左端のアクセントストライプが「あなた専用の場所」を示す */}
             <div className="flex items-stretch gap-3.5">
               <span aria-hidden className="mt-0.5 w-1 shrink-0 rounded-full bg-gradient-to-b from-eg to-eg-dark" />
@@ -320,9 +320,27 @@ export default function HomePage() {
             </div>
             {/* 目標サマリー：白地カードで地のグラデから浮かせる */}
             <div className="grid gap-3 sm:grid-cols-3">
-              <Link href="/profile" className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">目標スコア</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">{profileGoals.targetScore||"未定"}</p><p className="mt-0.5 text-[11px] text-gray-400">{profileGoals.targetPeriod?`${profileGoals.targetPeriod}までに`:"目標時期は未設定"}</p></div></Link>
-              <Link href="/profile" className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">次回受験まで</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-gray-900 dark:text-gray-100">{daysUntilExam!==null&&daysUntilExam>0?(<><span className="text-lg font-semibold text-gray-500 dark:text-gray-400">あと </span><span className="text-4xl font-extrabold tracking-tight">{daysUntilExam}</span><span className="text-lg font-semibold text-gray-500 dark:text-gray-400"> 日</span></>):(<span className="text-4xl font-extrabold tracking-tight">{countdownLabel}</span>)}</p><p className="mt-1 text-xs text-gray-500">{profileGoals.nextExam?<>{EXAM_LABELS[profileGoals.nextExam.exam]||profileGoals.nextExam.exam.toUpperCase()} ・ {profileGoals.nextExam.date?profileGoals.nextExam.date.replace(/-/g,"/"):"日付未定"}{profileGoals.nextExam.targetScore?` ・ 目標 ${profileGoals.nextExam.targetScore}`:""}</>:"試験・日付・目標はプロフィールで登録"}</p></div></Link>
-              <button type="button" onClick={()=>{setGoalInput(String(profileGoals.dailyStudyGoalMinutes));setGoalDialogOpen(true)}} className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 text-left transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">1日の学習目標</p><Target className="h-4 w-4 text-eg"/></div><div><p className="text-gray-900 dark:text-gray-100"><span className="text-4xl font-extrabold tracking-tight">{profileGoals.dailyStudyGoalMinutes}</span><span className="ml-1 text-lg font-semibold text-gray-500">分</span></p><p className="mt-1 text-xs text-gray-500">クリックして目標時間を変更</p></div></button>
+              <Link href="/profile" className="group min-h-[172px] rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600">
+                <div className="relative top-0.5 flex h-5 items-center justify-between"><p className="text-xs leading-none text-gray-400">目標スコア</p><ArrowRight className="h-4 w-4 shrink-0 text-gray-300 transition group-hover:translate-x-0.5"/></div>
+                <div className="mt-5">
+                  <p className="flex h-12 items-baseline text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">{profileGoals.targetScore||"未定"}</p>
+                  <p className="mt-1 min-h-10 text-xs leading-5 text-gray-500">{profileGoals.targetPeriod?`${profileGoals.targetPeriod}までに`:"目標時期は未設定"}</p>
+                </div>
+              </Link>
+              <Link href="/profile" className="group min-h-[172px] rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600">
+                <div className="relative top-0.5 flex h-5 items-center justify-between"><p className="text-xs leading-none text-gray-400">次回受験まで</p><ArrowRight className="h-4 w-4 shrink-0 text-gray-300 transition group-hover:translate-x-0.5"/></div>
+                <div className="mt-5">
+                  <p className="flex h-12 items-baseline text-gray-900 dark:text-gray-100">{daysUntilExam!==null&&daysUntilExam>0?(<><span className="text-lg font-semibold text-gray-500 dark:text-gray-400">あと </span><span className="text-4xl font-extrabold tracking-tight">{daysUntilExam}</span><span className="text-lg font-semibold text-gray-500 dark:text-gray-400"> 日</span></>):(<span className="text-4xl font-extrabold tracking-tight">{countdownLabel}</span>)}</p>
+                  <p className="mt-1 min-h-10 text-xs leading-5 text-gray-500">{profileGoals.nextExam?(<><span className="block">{EXAM_LABELS[profileGoals.nextExam.exam]||profileGoals.nextExam.exam.toUpperCase()} ・</span><span className="block whitespace-nowrap">{profileGoals.nextExam.date?profileGoals.nextExam.date.replace(/-/g,"/"):"日付未定"}{profileGoals.nextExam.targetScore?` ・ 目標 ${profileGoals.nextExam.targetScore}`:""}</span></>):"試験・日付・目標はプロフィールで登録"}</p>
+                </div>
+              </Link>
+              <button type="button" onClick={()=>{setGoalInput(String(profileGoals.dailyStudyGoalMinutes));setGoalDialogOpen(true)}} className="group min-h-[172px] rounded-xl border border-gray-200/70 bg-white p-4 text-left transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600">
+                <div className="flex h-5 items-center justify-between"><p className="text-xs leading-none text-gray-400">1日の学習目標</p><Target className="h-4 w-4 shrink-0 text-eg"/></div>
+                <div className="mt-5">
+                  <p className="relative -top-0.5 flex h-12 items-baseline text-gray-900 dark:text-gray-100"><span className="text-4xl font-extrabold tracking-tight">{profileGoals.dailyStudyGoalMinutes}</span><span className="ml-1 text-lg font-semibold text-gray-500">分</span></p>
+                  <p className="relative -top-0.5 mt-1 min-h-10 text-xs leading-5 text-gray-500">クリックして目標時間を変更</p>
+                </div>
+              </button>
             </div>
           </div>
         </section>
