@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Database, ExternalLink, Home, LayoutDashboard, Moon, Settings, ShieldCheck, Sun, Users, Video } from "lucide-react";
+import { BookOpen, Database, ExternalLink, Home, LayoutDashboard, Moon, Settings, ShieldCheck, Sun, Users, Video } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { isAdmin } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -17,6 +17,7 @@ const links = [
   { href: "/admin", label: "ダッシュボード", icon: LayoutDashboard },
   { href: "/admin/user-management", label: "ユーザー管理", icon: Users },
   { href: "/admin/practice-sets", label: "Practice", icon: Database },
+  { href: "/admin/guides", label: "使い方ガイド", icon: BookOpen },
   { href: "/admin/video-courses", label: "動画コース", icon: Video },
   { href: "/admin/availability", label: "公開設定", icon: Settings },
 ];

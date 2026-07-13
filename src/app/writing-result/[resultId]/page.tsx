@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   AlertCircle,
   ArrowLeft,
@@ -25,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { loadWritingResult } from "@/lib/prep/writing-store";
+import { auth } from "@/lib/firebase";
 import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import GrammarCorrectionExercise from "@/components/prep/GrammarCorrectionExercise";
 import Reveal from "@/components/prep/Reveal";
@@ -152,15 +153,38 @@ function PointList({
 
 export default function WritingResultPage() {
   const { resultId } = useParams<{ resultId: string }>();
+  const searchParams = useSearchParams();
+  const adminUid = searchParams.get("adminUid");
   const [result, setResult] = useState<WritingResult | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [growBars, setGrowBars] = useState(false);
   const version = usePrepDataVersion();
 
   useEffect(() => {
-    setResult(loadWritingResult(resultId));
-    setLoaded(true);
-  }, [resultId, version]);
+    if (!adminUid) {
+      setResult(loadWritingResult(resultId));
+      setLoaded(true);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error("管理者認証が必要です。");
+        const token = await currentUser.getIdToken();
+        const response = await fetch(`/api/admin/users/${adminUid}/learning-results/${resultId}?kind=writing`, { headers: { Authorization: `Bearer ${token}` } });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.error || "添削結果を取得できませんでした。");
+        if (!cancelled) setResult(body.result as WritingResult);
+      } catch (error) {
+        console.error(error);
+        if (!cancelled) setResult(null);
+      } finally {
+        if (!cancelled) setLoaded(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [adminUid, resultId, version]);
 
   // 観点別スコアの横棒バーを 0 → 値へ伸ばすアニメーション（初期表示時に一度だけ）
   useEffect(() => {

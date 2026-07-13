@@ -17,8 +17,9 @@ import {
   Mic,
   PenLine,
   Sparkles,
+  Target,
 } from "lucide-react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "@/contexts/AuthContext";
 import { useExam } from "@/contexts/ExamContext";
 import PrepShell from "@/components/prep/PrepShell";
@@ -30,6 +31,10 @@ import { EXAM_LABELS, EXAM_SKILLS, ExamId, SkillId } from "@/lib/prep/types";
 import { practiceTypeFeatureKey } from "@/lib/prep/feature-availability";
 import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
 import { db } from "@/lib/firebase";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface SkillTab {
   skill: SkillId;
@@ -193,7 +198,10 @@ export default function HomePage() {
       now.toLocaleDateString("ja-JP", { month: "long", day: "numeric", weekday: "short" })
     );
   }, []);
-  const [profileGoals,setProfileGoals]=useState<{targetScore:string;targetPeriod:string;nextExam:{exam:ExamId;date:string;targetScore:string}|null}>({targetScore:"",targetPeriod:"",nextExam:null});
+  const [profileGoals,setProfileGoals]=useState<{targetScore:string;targetPeriod:string;nextExam:{exam:ExamId;date:string;targetScore:string}|null;dailyStudyGoalMinutes:number}>({targetScore:"",targetPeriod:"",nextExam:null,dailyStudyGoalMinutes:60});
+  const [goalDialogOpen,setGoalDialogOpen]=useState(false);
+  const [goalInput,setGoalInput]=useState("60");
+  const [goalSaving,setGoalSaving]=useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -214,6 +222,7 @@ export default function HomePage() {
         targetScore: sameCourseGoal && onboarding.targetScore != null ? String(onboarding.targetScore) : "",
         targetPeriod: formatTargetPeriod(rawTarget),
         nextExam: next,
+        dailyStudyGoalMinutes: typeof data.dailyStudyGoalMinutes === "number" ? data.dailyStudyGoalMinutes : 60,
       });
     }).catch(() => undefined);
     return () => { active = false; };
@@ -259,6 +268,26 @@ export default function HomePage() {
   const daysUntilExam=profileGoals.nextExam?.date?Math.ceil((new Date(`${profileGoals.nextExam.date}T00:00:00`).getTime()-new Date(new Date().toDateString()).getTime())/86400000):null;
   const countdownLabel=daysUntilExam===null?"未定":daysUntilExam===0?"今日":daysUntilExam>0?`あと ${daysUntilExam} 日`:"受験日経過";
 
+  async function saveDailyGoal() {
+    if (!user) return;
+    const minutes = Number(goalInput);
+    if (!Number.isFinite(minutes) || minutes < 5 || minutes > 600) {
+      alert("1日の目標時間は5〜600分で入力してください。");
+      return;
+    }
+    try {
+      setGoalSaving(true);
+      const rounded = Math.round(minutes);
+      await updateDoc(doc(db, "users", user.uid), { dailyStudyGoalMinutes: rounded });
+      setProfileGoals((current) => ({ ...current, dailyStudyGoalMinutes: rounded }));
+      setGoalDialogOpen(false);
+    } catch {
+      alert("目標学習時間の保存に失敗しました。");
+    } finally {
+      setGoalSaving(false);
+    }
+  }
+
   if (availability.courses[activeExam]) {
     return <PrepShell><div className="mx-auto max-w-3xl px-4 py-20 text-center"><div className="rounded-2xl border bg-white px-6 py-16 dark:border-gray-800 dark:bg-gray-900"><Clock className="mx-auto h-10 w-10 text-gray-400"/><h1 className="mt-5 text-2xl font-bold">{EXAM_LABELS[activeExam]}</h1><p className="mt-2 text-gray-500">このコースは現在準備中です。別のコースを選択してください。</p><span className="mt-5 inline-block rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Coming Soon</span></div></div></PrepShell>;
   }
@@ -290,9 +319,10 @@ export default function HomePage() {
               </div>
             </div>
             {/* 目標サマリー：白地カードで地のグラデから浮かせる */}
-            <div className="grid gap-3 sm:grid-cols-[0.85fr_1.15fr]">
+            <div className="grid gap-3 sm:grid-cols-3">
               <Link href="/profile" className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">目標スコア</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">{profileGoals.targetScore||"未定"}</p><p className="mt-0.5 text-[11px] text-gray-400">{profileGoals.targetPeriod?`${profileGoals.targetPeriod}までに`:"目標時期は未設定"}</p></div></Link>
               <Link href="/profile" className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">次回受験まで</p><ArrowRight className="h-4 w-4 text-gray-300 transition group-hover:translate-x-0.5"/></div><div><p className="text-gray-900 dark:text-gray-100">{daysUntilExam!==null&&daysUntilExam>0?(<><span className="text-lg font-semibold text-gray-500 dark:text-gray-400">あと </span><span className="text-4xl font-extrabold tracking-tight">{daysUntilExam}</span><span className="text-lg font-semibold text-gray-500 dark:text-gray-400"> 日</span></>):(<span className="text-4xl font-extrabold tracking-tight">{countdownLabel}</span>)}</p><p className="mt-1 text-xs text-gray-500">{profileGoals.nextExam?<>{EXAM_LABELS[profileGoals.nextExam.exam]||profileGoals.nextExam.exam.toUpperCase()} ・ {profileGoals.nextExam.date?profileGoals.nextExam.date.replace(/-/g,"/"):"日付未定"}{profileGoals.nextExam.targetScore?` ・ 目標 ${profileGoals.nextExam.targetScore}`:""}</>:"試験・日付・目標はプロフィールで登録"}</p></div></Link>
+              <button type="button" onClick={()=>{setGoalInput(String(profileGoals.dailyStudyGoalMinutes));setGoalDialogOpen(true)}} className="group flex min-h-32 flex-col justify-between rounded-xl border border-gray-200/70 bg-white p-4 text-left transition hover:border-eg/40 hover:shadow-sm dark:border-gray-700 dark:bg-gray-900/70 dark:hover:border-gray-600"><div className="flex items-center justify-between"><p className="text-xs text-gray-400">1日の学習目標</p><Target className="h-4 w-4 text-eg"/></div><div><p className="text-gray-900 dark:text-gray-100"><span className="text-4xl font-extrabold tracking-tight">{profileGoals.dailyStudyGoalMinutes}</span><span className="ml-1 text-lg font-semibold text-gray-500">分</span></p><p className="mt-1 text-xs text-gray-500">クリックして目標時間を変更</p></div></button>
             </div>
           </div>
         </section>
@@ -374,6 +404,15 @@ export default function HomePage() {
           Prep Master — Supported by <span className="font-semibold text-eg-dark dark:text-eg">English Gym</span>
         </p>
       </div>
+      <Dialog open={goalDialogOpen} onOpenChange={setGoalDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader><DialogTitle>1日の学習目標</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2"><Label htmlFor="daily-study-goal">目標時間（分）</Label><Input id="daily-study-goal" type="number" min={5} max={600} step={5} value={goalInput} onChange={(event)=>setGoalInput(event.target.value)}/><p className="text-xs text-gray-500">5〜600分の範囲で設定できます。</p></div>
+            <div className="flex justify-end gap-2"><Button variant="outline" onClick={()=>setGoalDialogOpen(false)}>キャンセル</Button><Button disabled={goalSaving} onClick={saveDailyGoal}>{goalSaving?"保存中...":"保存"}</Button></div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </PrepShell>
   );
 }

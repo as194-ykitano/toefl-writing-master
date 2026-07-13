@@ -206,6 +206,8 @@ export interface UserProfile {
   progress?: Progress;
   studySessions: StudySession[];
   totalStudyTime: number;
+  /** 1日あたりの学習目標（分）。未設定時は60分。 */
+  dailyStudyGoalMinutes?: number;
   reminder?: Reminder;
   /** オンボーディングで取得した属性・目標 */
   onboarding?: OnboardingProfile;

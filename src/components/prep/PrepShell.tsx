@@ -125,10 +125,10 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
           activeFor: ["/training-selection"],
         },
         {
-          href: "/usage-guide",
+          href: "/guides",
           label: "使い方ガイド",
           icon: BookOpen,
-          activeFor: ["/usage-guide"],
+          activeFor: ["/guides"],
         },
         { href: "/profile", label: "プロフィール", icon: User, activeFor: ["/profile"] },
       ],
@@ -219,7 +219,7 @@ function NavLinks({
                   key={item.href}
                   href={item.href}
                   onClick={onNavigate}
-                  data-tour={item.href === "/usage-guide" ? "nav-guide" : undefined}
+                  data-tour={item.href === "/guides" ? "nav-guide" : undefined}
                   title={collapsed ? item.label : undefined}
                   className={`flex items-center gap-3 rounded-full text-sm transition-colors ${
                     collapsed ? "justify-center px-0 py-2.5" : "px-3.5 py-2.5"

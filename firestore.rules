@@ -73,6 +73,12 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // 新仕様の使い方ガイド。公開記事はログインユーザー、編集は管理者のみ。
+    match /guideArticles/{guideId} {
+      allow read: if request.auth != null && (resource.data.isPublished == true || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
     // リーディングパッセージ - 認証されたユーザーが読み取り可能、管理者のみが作成・更新・削除可能
     match /readingPassages/{passageId} {
       allow read: if request.auth != null;

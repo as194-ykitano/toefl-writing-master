@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { requireAdmin } from "@/lib/admin-api";
 import { adminAuth, adminDb } from "@/lib/firebase-admin";
+import {
+  buildAdminLearningAnalytics,
+  parsePracticeSessions,
+  parseWritingResults,
+  type PracticeCatalogItem,
+} from "@/lib/admin-learning-analytics";
+import { getAllStaticPracticeSets, type ManagedPracticeSet } from "@/lib/prep/data-source";
+import type { ExamId, SkillId } from "@/lib/prep/types";
 
 const ESSAY_COLLECTIONS = ["essays", "basicEssays", "youTuberEssays"] as const;
 
@@ -43,9 +51,17 @@ export async function GET(request: NextRequest, context: { params: Promise<{ uid
   const profileSnap = await adminDb.collection("users").doc(uid).get();
   const profile = (serialize(profileSnap.data() ?? {}) ?? {}) as Record<string, unknown>;
 
-  const essaySnaps = await Promise.all(
-    ESSAY_COLLECTIONS.map((name) => adminDb.collection("users").doc(uid).collection(name).get()),
-  );
+  const [essaySnaps, sessionSnap, writingSnap, staticSets, overrideSnap, courseSnap, moduleSnap, lessonSnap, courseProgressSnap] = await Promise.all([
+    Promise.all(ESSAY_COLLECTIONS.map((name) => adminDb.collection("users").doc(uid).collection(name).get())),
+    adminDb.collection("users").doc(uid).collection("appData").doc("prep_sessions_v1").get(),
+    adminDb.collection("users").doc(uid).collection("appData").doc("prep_writing_results_v1").get(),
+    getAllStaticPracticeSets(),
+    adminDb.collection("practiceSets").get(),
+    adminDb.collection("videoCourses").get(),
+    adminDb.collection("videoCourseModules").get(),
+    adminDb.collection("videoCourseLessons").get(),
+    adminDb.collection("videoCourseProgress").where("studentUid", "==", uid).get(),
+  ]);
   const essays: EssayRow[] = essaySnaps.flatMap((snap, index) =>
     snap.docs.map((doc): EssayRow => {
       const data = serialize(doc.data()) as Record<string, unknown>;
@@ -76,6 +92,92 @@ export async function GET(request: NextRequest, context: { params: Promise<{ uid
     lastSubmission: essays.length && typeof essays[0].submittedAt === "string" ? essays[0].submittedAt : null,
   };
 
+  const catalogMap = new Map<string, PracticeCatalogItem>();
+  const toCatalogItem = (set: ManagedPracticeSet): PracticeCatalogItem => ({
+    id: set.id,
+    exam: set.exam,
+    skill: set.skill,
+    practiceType: set.practiceType,
+    title: set.title,
+  });
+  for (const set of staticSets) {
+    catalogMap.set(`${set.exam}:${set.skill}:${set.id}`, toCatalogItem(set));
+  }
+  for (const doc of overrideSnap.docs) {
+    const override = doc.data() as {
+      sourceId?: string;
+      exam?: ExamId;
+      skill?: SkillId;
+      isPublished?: boolean;
+      data?: ManagedPracticeSet;
+    };
+    if (!override.sourceId || !override.exam || !override.skill) continue;
+    const key = `${override.exam}:${override.skill}:${override.sourceId}`;
+    if (override.isPublished === false) {
+      catalogMap.delete(key);
+    } else if (override.data) {
+      catalogMap.set(key, toCatalogItem({
+        ...override.data,
+        id: override.sourceId,
+        exam: override.exam,
+        skill: override.skill,
+      } as ManagedPracticeSet));
+    }
+  }
+
+  const sessions = parsePracticeSessions(sessionSnap.data()?.items);
+  const writingResults = parseWritingResults(writingSnap.data()?.items);
+  const learning = buildAdminLearningAnalytics(sessions, writingResults, [...catalogMap.values()]);
+
+  const coachUid = typeof profile.coach === "string" ? profile.coach : undefined;
+  const visibleCourses = courseSnap.docs.filter((doc) => {
+    const course = doc.data();
+    if (course.published !== true) return false;
+    return course.visibility === "all_students" ||
+      (course.visibility === "coach_clients" && coachUid && course.ownerId === coachUid);
+  });
+  const lessonIdsByCourse = new Map<string, Set<string>>();
+  for (const doc of lessonSnap.docs) {
+    const courseId = doc.data().courseId;
+    if (typeof courseId !== "string") continue;
+    const ids = lessonIdsByCourse.get(courseId) ?? new Set<string>();
+    ids.add(doc.id);
+    lessonIdsByCourse.set(courseId, ids);
+  }
+  const progressByCourse = new Map(courseProgressSnap.docs.map((doc) => {
+    const row = doc.data();
+    return [String(row.courseId ?? ""), Array.isArray(row.completedLessonIds) ? row.completedLessonIds.map(String) : []] as const;
+  }));
+  const courseProgress = visibleCourses.map((doc) => {
+    const course = doc.data();
+    const lessonIds = lessonIdsByCourse.get(doc.id) ?? new Set<string>();
+    const completed = (progressByCourse.get(doc.id) ?? []).filter((id) => lessonIds.has(id)).length;
+    const completedIds = new Set(progressByCourse.get(doc.id) ?? []);
+    const modules = moduleSnap.docs
+      .filter((moduleDoc) => moduleDoc.data().courseId === doc.id)
+      .sort((a, b) => Number(a.data().order ?? 0) - Number(b.data().order ?? 0))
+      .map((moduleDoc) => ({
+        moduleId: moduleDoc.id,
+        title: String(moduleDoc.data().title ?? "無題のモジュール"),
+        lessons: lessonSnap.docs
+          .filter((lessonDoc) => lessonDoc.data().courseId === doc.id && lessonDoc.data().moduleId === moduleDoc.id)
+          .sort((a, b) => Number(a.data().order ?? 0) - Number(b.data().order ?? 0))
+          .map((lessonDoc) => ({
+            lessonId: lessonDoc.id,
+            title: String(lessonDoc.data().title ?? "無題のレッスン"),
+            completed: completedIds.has(lessonDoc.id),
+          })),
+      }));
+    return {
+      courseId: doc.id,
+      title: String(course.title ?? "無題のコース"),
+      completedLessons: completed,
+      totalLessons: lessonIds.size,
+      percent: lessonIds.size ? Math.round((completed / lessonIds.size) * 100) : 0,
+      modules,
+    };
+  }).sort((a, b) => b.percent - a.percent || a.title.localeCompare(b.title, "ja"));
+
   return NextResponse.json({
     user: {
       uid: authRecord.uid,
@@ -94,10 +196,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ uid
       progress: profile.progress ?? null,
       studySessions: profile.studySessions ?? [],
       totalStudyTime: profile.totalStudyTime ?? 0,
+      dailyStudyGoalMinutes: typeof profile.dailyStudyGoalMinutes === "number" ? profile.dailyStudyGoalMinutes : 60,
       reminder: profile.reminder ?? null,
     },
     essays,
     stats,
+    learning,
+    courseProgress,
   });
 }
 

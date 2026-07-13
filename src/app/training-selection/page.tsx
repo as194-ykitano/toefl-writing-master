@@ -224,7 +224,7 @@ export default function TrainingSelectionPage() {
           })}
         </div>
 
-        {/* 使い方ガイドボタン */}
+        {/* 旧仕様の使い方ガイドボタン */}
         <div className="flex justify-center mt-8">
           <div 
             className="relative group cursor-pointer"

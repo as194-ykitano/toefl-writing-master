@@ -10,7 +10,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   BookOpen,
@@ -36,6 +36,7 @@ import { loadSession } from "@/lib/prep/session-store";
 import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import { cleanReadingTitle } from "@/lib/prep/display-title";
 import { loadRecordings, pruneOldRecordings } from "@/lib/prep/recording-store";
+import { auth } from "@/lib/firebase";
 import {
   EXAM_LABELS,
   ListeningSet,
@@ -795,7 +796,9 @@ function RepeatFeedbackCard({
 
 export default function ResultReportPage() {
   const params = useParams<{ sessionId: string }>();
+  const searchParams = useSearchParams();
   const sessionId = params.sessionId;
+  const adminUid = searchParams.get("adminUid");
   const [session, setSession] = useState<PracticeSessionResult | null>(null);
   const [readingSet, setReadingSet] = useState<ReadingSet | null>(null);
   const [listeningSet, setListeningSet] = useState<ListeningSet | null>(null);
@@ -870,10 +873,19 @@ export default function ResultReportPage() {
       setLoading(false);
       return;
     }
-    const s = loadSession(sessionId);
-    setSession(s);
     const urls: string[] = [];
     const load = async () => {
+      let s = loadSession(sessionId);
+      if (adminUid) {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error("管理者認証が必要です。");
+        const token = await currentUser.getIdToken();
+        const response = await fetch(`/api/admin/users/${adminUid}/learning-results/${sessionId}?kind=session`, { headers: { Authorization: `Bearer ${token}` } });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.error || "学習結果を取得できませんでした。");
+        s = body.result as PracticeSessionResult;
+      }
+      setSession(s);
       if (s && s.skill === "reading") {
         setReadingSet(await getReadingSet(s.exam, s.setId));
       } else if (s && s.skill === "listening") {
@@ -881,7 +893,7 @@ export default function ResultReportPage() {
       } else if (s && s.skill === "speaking") {
         setSpeakingSet(await getSpeakingSet(s.exam, s.setId));
         // 録音の聞き直し（IndexedDB から復元）
-        const blobs = await loadRecordings(sessionId);
+        const blobs = adminUid ? new Map<string, Blob>() : await loadRecordings(sessionId);
         const map: Record<string, string> = {};
         blobs.forEach((blob, taskId) => {
           const url = URL.createObjectURL(blob);
@@ -893,10 +905,10 @@ export default function ResultReportPage() {
       }
       setLoading(false);
     };
-    load();
+    load().catch((error) => { console.error(error); setSession(null); setLoading(false); });
     return () => urls.forEach((u) => URL.revokeObjectURL(u));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId, version]);
+  }, [adminUid, sessionId, version]);
 
   const questions = readingSet?.questions ?? listeningSet?.questions ?? [];
 
