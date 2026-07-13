@@ -32,6 +32,7 @@ import {
   YouTubeTaskType,
   YouTubeWritingResult,
 } from "@/lib/prep/youtube-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import type { YouTubeVideo } from "@/lib/types";
 
 type Phase = "search" | "compose" | "analyzing" | "result";
@@ -60,12 +61,13 @@ export default function YouTubeWritingPage() {
   const [feedback, setFeedback] = useState<YouTuberFeedback | null>(null);
   const [savedId, setSavedId] = useState<string | null>(null);
   const [history, setHistory] = useState<YouTubeWritingResult[]>([]);
+  const version = usePrepDataVersion();
 
   const wordCount = useMemo(() => essay.trim().split(/\s+/).filter(Boolean).length, [essay]);
 
   useEffect(() => {
     setHistory(loadYouTubeResults());
-  }, []);
+  }, [version]);
 
   // ---- 検索 ----
   const runSearch = async () => {

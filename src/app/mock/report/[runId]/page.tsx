@@ -23,6 +23,7 @@ import PrepShell from "@/components/prep/PrepShell";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ScoreGauge from "@/components/prep/ScoreGauge";
 import { loadMockReport } from "@/lib/prep/mock-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import { EXAM_LABELS, MockReport, SkillId } from "@/lib/prep/types";
 
 const SKILL_ICON: Record<SkillId, typeof BookOpen> = {
@@ -233,11 +234,12 @@ function MockReportLoader() {
   const params = useParams<{ runId: string }>();
   const [report, setReport] = useState<MockReport | null>(null);
   const [loading, setLoading] = useState(true);
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     setReport(loadMockReport(params.runId));
     setLoading(false);
-  }, [params.runId]);
+  }, [params.runId, version]);
 
   if (loading) {
     return (

@@ -70,13 +70,13 @@ export function ExamTopBar({ examLabel, title, mode, elapsedSec, remainingSec, e
   const timeWarning = mode === "test" && remainingSec <= 120;
 
   return (
-    <div className="sticky top-0 z-40 bg-slate-800 text-white">
+    <div className="sticky top-0 z-40 bg-[#7a4310] text-white">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <span className="text-[10px] font-semibold tracking-wider uppercase bg-white/10 rounded px-2 py-1 flex-shrink-0">
             {examLabel}
           </span>
-          <span className="text-sm text-slate-200 truncate">{title}</span>
+          <span className="text-sm text-white/90 truncate">{title}</span>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           <span
@@ -86,7 +86,7 @@ export function ExamTopBar({ examLabel, title, mode, elapsedSec, remainingSec, e
           >
             <Clock className="w-4 h-4" />
             {timeText}
-            <span className="hidden sm:inline text-[10px] text-slate-300 ml-1">
+            <span className="hidden sm:inline text-[10px] text-white/70 ml-1">
               {mode === "test" ? "残り時間" : "経過時間"}
             </span>
           </span>

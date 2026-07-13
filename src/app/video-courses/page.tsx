@@ -57,7 +57,7 @@ export default function StudentVideoCoursesPage() {
   return (
     <PrepShell>
       <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-3 duration-700 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">コンテンツ</h1>
             <p className="text-sm text-muted-foreground">動画コースを探す</p>
@@ -82,7 +82,7 @@ export default function StudentVideoCoursesPage() {
             ))}
           </div>
         ) : rows.length === 0 || (filtered.length === 0 && !query.trim()) ? (
-          <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/[0.08] via-card to-violet-500/[0.06] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.35)]">
+          <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/[0.08] via-card to-violet-500/[0.06] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.35)] animate-in fade-in slide-in-from-bottom-3 duration-700">
             <CardHeader className="gap-4 pb-2">
               <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
                 <span
@@ -106,17 +106,22 @@ export default function StudentVideoCoursesPage() {
           <p className="text-center text-sm text-muted-foreground">検索に一致するコースがありません。</p>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map(({ course, totalLessons, completedCount, creatorLabel }) => (
-              <VideoCourseCatalogCard
+            {filtered.map(({ course, totalLessons, completedCount, creatorLabel }, i) => (
+              <div
                 key={course.id}
-                course={course}
-                mainHref={`/video-courses/${course.id}`}
-                lessonCount={totalLessons}
-                completedCount={completedCount}
-                totalLessons={totalLessons}
-                creatorLabel={creatorLabel}
-                courseAudienceLabel={course.visibility === "coach_clients" ? "コーチ限定" : "全員"}
-              />
+                style={{ animationDelay: `${i * 60}ms` }}
+                className="animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both"
+              >
+                <VideoCourseCatalogCard
+                  course={course}
+                  mainHref={`/video-courses/${course.id}`}
+                  lessonCount={totalLessons}
+                  completedCount={completedCount}
+                  totalLessons={totalLessons}
+                  creatorLabel={creatorLabel}
+                  courseAudienceLabel={course.visibility === "coach_clients" ? "コーチ限定" : "全員"}
+                />
+              </div>
             ))}
           </div>
         )}

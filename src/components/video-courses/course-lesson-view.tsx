@@ -353,7 +353,7 @@ export function CourseLessonView({
               <span className="text-sm font-medium text-foreground">Progress</span>
               <span className="text-sm font-semibold tabular-nums text-primary">{progressPct}%</span>
             </div>
-            <Progress value={progressPct} className="mb-2 h-1.5" />
+            <Progress value={progressPct} className="mb-2 h-1.5" indicatorClassName="bg-eg" />
             <p className="text-xs text-muted-foreground">
               {completedCount} of {totalLessons} lessons completed
             </p>

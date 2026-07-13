@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadSessions } from "./session-store";
 import { loadWritingResults } from "./writing-store";
+import { usePrepDataVersion } from "./use-prep-data";
 import { getListeningSets, getReadingSets, getSpeakingSets } from "./data-source";
 import { PRACTICE_TYPES } from "./question-types";
 import { ExamId, PracticeSessionResult, SkillId, WritingResult } from "./types";
@@ -153,10 +154,11 @@ export function usePrepActivity(exam: ExamId): UseActivityResult {
   const [sessions, setSessions] = useState<PracticeSessionResult[]>([]);
   const [writingResults, setWritingResults] = useState<WritingResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     setWritingResults(loadWritingResults());
-  }, []);
+  }, [version]);
 
   // セッションを読み込み、practiceType が欠けている旧セッションはセット定義から補完
   useEffect(() => {
@@ -183,7 +185,7 @@ export function usePrepActivity(exam: ExamId): UseActivityResult {
     return () => {
       cancelled = true;
     };
-  }, [exam]);
+  }, [exam, version]);
 
   const items = useMemo(() => {
     const list: ActivityItem[] = [

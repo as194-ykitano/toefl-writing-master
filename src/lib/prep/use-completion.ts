@@ -18,10 +18,12 @@ import {
   getWritingSets,
 } from "./data-source";
 import { ExamId, SkillId } from "./types";
+import { usePrepDataVersion } from "./use-prep-data";
 
 /** 指定した試験・技能について practiceType slug → 解答済みセット数 を返す */
 export function useCompletedCounts(exam: ExamId, skill: SkillId): Record<string, number> {
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     let cancelled = false;
@@ -62,7 +64,7 @@ export function useCompletedCounts(exam: ExamId, skill: SkillId): Record<string,
     return () => {
       cancelled = true;
     };
-  }, [exam, skill]);
+  }, [exam, skill, version]);
 
   return counts;
 }

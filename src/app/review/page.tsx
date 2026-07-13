@@ -17,6 +17,7 @@ import PrepShell from "@/components/prep/PrepShell";
 import { Button } from "@/components/ui/button";
 import { getListeningSets, getReadingSets } from "@/lib/prep/data-source";
 import { loadSessions, markQuestionReviewed } from "@/lib/prep/session-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import { cleanReadingTitle } from "@/lib/prep/display-title";
 import {
   EXAM_LABELS,
@@ -58,6 +59,7 @@ export default function ReviewPage() {
   const [items, setItems] = useState<ReviewItem[]>([]);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     const load = async () => {
@@ -119,7 +121,7 @@ export default function ReviewPage() {
       setLoading(false);
     };
     load();
-  }, []);
+  }, [version]);
 
   const selected = useMemo(() => items.find((i) => i.key === selectedKey) ?? null, [items, selectedKey]);
 

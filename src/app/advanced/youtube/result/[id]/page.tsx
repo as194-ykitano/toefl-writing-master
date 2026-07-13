@@ -11,16 +11,18 @@ import { ArrowLeft, Youtube } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";
 import YouTubeFeedbackView from "@/components/prep/YouTubeFeedbackView";
 import { loadYouTubeResult, YouTubeWritingResult } from "@/lib/prep/youtube-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 
 export default function YouTubeResultPage() {
   const { id } = useParams<{ id: string }>();
   const [result, setResult] = useState<YouTubeWritingResult | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     setResult(loadYouTubeResult(id));
     setLoaded(true);
-  }, [id]);
+  }, [id, version]);
 
   if (!loaded) {
     return (

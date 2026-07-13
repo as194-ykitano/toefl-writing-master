@@ -32,6 +32,7 @@ import {
   pickMockSections,
 } from "@/lib/prep/mock-test";
 import { loadMockReports, saveMockRun } from "@/lib/prep/mock-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
 
 function isExamId(v: string | null): v is ExamId {
@@ -51,10 +52,11 @@ function MockHub() {
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reports, setReports] = useState<MockReport[]>([]);
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     setReports(loadMockReports());
-  }, []);
+  }, [version]);
 
   const start = async () => {
     if (starting) return;

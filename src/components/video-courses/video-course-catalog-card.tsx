@@ -94,7 +94,7 @@ export function VideoCourseCatalogCard({
               <span className="text-xs font-medium text-muted-foreground">Progress</span>
               <span className="text-sm font-semibold tabular-nums text-primary">{pct}%</span>
             </div>
-            <Progress value={pct} className="h-1.5" />
+            <Progress value={pct} className="h-1.5" indicatorClassName="bg-eg" />
             <p className="text-xs text-muted-foreground">
               {completedCount} of {totalLessons} lessons completed
             </p>

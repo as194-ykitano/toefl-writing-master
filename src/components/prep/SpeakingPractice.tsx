@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, Mic, Send, Settings2, Square, Volume2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Mic, Send, Settings2, Square, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExamTopBar, formatTime } from "./exam-ui";
 import {
@@ -22,7 +22,7 @@ import { newSessionId, saveSession } from "@/lib/prep/session-store";
 import { saveRecording } from "@/lib/prep/recording-store";
 import { PcmRecorder } from "@/lib/prep/audio-utils";
 import RecordingWaveform from "./RecordingWaveform";
-import SubmitQuiz from "./SubmitQuiz";
+import GrammarQuizWhileWaiting from "@/components/prep/GrammarQuizWhileWaiting";
 
 type Phase = "ready" | "prep" | "recording" | "review";
 
@@ -121,6 +121,8 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   const [analyzingIndex, setAnalyzingIndex] = useState(0);
   const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
   const isIeltsPart1 = set.exam === "ielts" && (set.practiceType === "part-1" || set.practiceType === "full-practice");
+  // Part 1 / Part 3 / フルは面接形式なので、毎問「開始」せず連続で回答できるようにする
+  const isIeltsContinuous = set.exam === "ielts" && ["part-1", "part-3", "full-practice"].includes(set.practiceType ?? "");
   const supportsInterviewSettings = set.practiceType === "take-an-interview" || (set.exam === "ielts" && ["part-1","part-3","full-practice"].includes(set.practiceType ?? ""));
   const [configured,setConfigured]=useState(!supportsInterviewSettings);
   const [answerDuration,setAnswerDuration]=useState(isIeltsPart1?30:(set.tasks[0]?.speakSec??45));
@@ -213,7 +215,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
     setQuestionRevealed(showQuestionText);
     if (supportsInterviewSettings || task.audioUrl) playQuestionAudio();
     setPhase("prep");
-    setCountdown(isIeltsPart1?3:task.prepSec);
+    setCountdown(isIeltsContinuous?3:task.prepSec);
   };
 
   const startRecording = async () => {
@@ -250,7 +252,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
       }
     }
     cleanupStream();
-    if (isIeltsPart1 && !isLastTask) {
+    if (isIeltsContinuous && !isLastTask) {
       autoStartNextRef.current = true;
       setTaskIndex((i) => i + 1);
       setPhase("ready");
@@ -340,34 +342,12 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   };
 
   if (submitted) {
+    // Writing の添削待ちと同じ仕組み・デザイン（全画面の文法クイズオーバーレイ）。
+    // Speaking は複数回答を順に添削するため「X / N 問完了」＋進捗バーを表示する。
     const total = Object.keys(recordings).length;
     return (
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center gap-6 px-4 py-10">
-        <div className="flex flex-col items-center gap-3">
-          <div className="flex items-center gap-2 text-eg-deep">
-            <Loader2 className="w-5 h-5 animate-spin" />
-            <span className="text-sm font-semibold">回答を採点しています…</span>
-          </div>
-          <div className="text-xs text-gray-500">
-            {total > 0
-              ? `文字起こしとフィードバックを生成中（${analyzingIndex} / ${total}）`
-              : "結果を保存しています"}
-          </div>
-          {/* 進捗バー（おおよその見た目。実際の完了で結果画面へ遷移） */}
-          <div className="h-1.5 w-56 overflow-hidden rounded-full bg-gray-200">
-            <div
-              className="h-full rounded-full bg-eg transition-[width] duration-300 ease-out"
-              style={{ width: `${total > 0 ? (analyzingIndex / total) * 100 : 0}%` }}
-            />
-          </div>
-        </div>
-
-        {/* 採点を待つ間の文法ミニクイズ（この間も英語学習できる） */}
-        <SubmitQuiz />
-
-        <p className="text-[11px] text-gray-400">
-          採点は 30 秒〜1 分程度かかることがあります。その間クイズで待ちましょう。
-        </p>
+      <div className="min-h-screen bg-gray-100">
+        <GrammarQuizWhileWaiting completed={analyzingIndex} total={total} />
       </div>
     );
   }

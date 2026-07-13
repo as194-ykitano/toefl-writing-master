@@ -33,6 +33,7 @@ import SpeakingTranscriptView from "@/components/prep/SpeakingTranscriptView";
 import { SAMPLE_REPORTS } from "@/lib/prep/mock-data";
 import { getListeningSet, getReadingSet, getSpeakingSet } from "@/lib/prep/data-source";
 import { loadSession } from "@/lib/prep/session-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import { cleanReadingTitle } from "@/lib/prep/display-title";
 import { loadRecordings, pruneOldRecordings } from "@/lib/prep/recording-store";
 import {
@@ -801,6 +802,7 @@ export default function ResultReportPage() {
   const [speakingSet, setSpeakingSet] = useState<SpeakingSet | null>(null);
   const [recordingUrls, setRecordingUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const version = usePrepDataVersion();
 
   // 本文ハイライト → チャットに追加
   const [selectionForChat, setSelectionForChat] = useState<string | null>(null);
@@ -894,7 +896,7 @@ export default function ResultReportPage() {
     load();
     return () => urls.forEach((u) => URL.revokeObjectURL(u));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId]);
+  }, [sessionId, version]);
 
   const questions = readingSet?.questions ?? listeningSet?.questions ?? [];
 

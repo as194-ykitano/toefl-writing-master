@@ -29,6 +29,7 @@ import { loadWritingResults } from "@/lib/prep/writing-store";
 import { getListeningSets, getReadingSets, getSpeakingSets } from "@/lib/prep/data-source";
 import { getPracticeTypes } from "@/lib/prep/question-types";
 import { formatActivityScore, usePrepActivity } from "@/lib/prep/use-activity";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import Reveal from "@/components/prep/Reveal";
 import {
   buildDashboardData,
@@ -106,6 +107,7 @@ export default function OverviewPage() {
   const [chartMetric, setChartMetric] = useState<"score" | "wpm" | "words">("score");
   const [sessions, setSessions] = useState<PracticeSessionResult[]>([]);
   const [writingResults, setWritingResults] = useState<WritingResult[]>([]);
+  const dataVersion = usePrepDataVersion();
 
   // その試験で対応している技能のみタブ表示（TOEIC は Reading + Listening のみ）
   const visibleSkills = useMemo(
@@ -128,7 +130,7 @@ export default function OverviewPage() {
 
   useEffect(() => {
     setWritingResults(loadWritingResults());
-  }, []);
+  }, [dataVersion]);
 
   // セッションを読み込み、practiceType が無い旧セッションはセット定義から補完する
   // （problem-type 別集計で「その他」に落ちてしまうのを防ぐ）
@@ -157,7 +159,7 @@ export default function OverviewPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeExam]);
+  }, [activeExam, dataVersion]);
 
   const data = useMemo(
     () => buildDashboardData({ exam: activeExam, period, sessions, writingResults }),

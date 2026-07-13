@@ -208,27 +208,21 @@ export function staffCanPreviewVideoCourse(
 }
 
 /**
- * Uses single-field equality queries only (no composite indexes), then filters and sorts in memory.
+ * 生徒に見せる公開コースを取得する。
+ * Firestore ルールは非管理者に published == true のドキュメントのみ読み取りを許可するため、
+ * クエリは必ず published == true で絞る（単一等価フィルタ＝複合インデックス不要）。
+ * visibility / owner の判定はメモリ上で行う。
  */
 export async function listVisibleVideoCoursesForStudent(coachUid: string | undefined): Promise<VideoCourse[]> {
   const col = collection(db, VIDEO_COURSES_COLLECTION)
   const out = new Map<string, VideoCourse>()
 
-  const qAll = query(col, where("visibility", "==", "all_students"))
-  const snapAll = await getDocs(qAll)
-  for (const d of snapAll.docs) {
+  const qPublished = query(col, where("published", "==", true))
+  const snap = await getDocs(qPublished)
+  for (const d of snap.docs) {
     const c = docToCourse(d.id, d.data())
-    if (c.published) out.set(d.id, c)
-  }
-
-  if (coachUid) {
-    const qCoach = query(col, where("ownerId", "==", coachUid))
-    const snapCoach = await getDocs(qCoach)
-    for (const d of snapCoach.docs) {
-      const c = docToCourse(d.id, d.data())
-      if (c.published && c.visibility === "coach_clients") {
-        out.set(d.id, c)
-      }
+    if (studentCanViewPublishedCourse(c, coachUid)) {
+      out.set(d.id, c)
     }
   }
 

@@ -25,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { loadWritingResult } from "@/lib/prep/writing-store";
+import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import GrammarCorrectionExercise from "@/components/prep/GrammarCorrectionExercise";
 import Reveal from "@/components/prep/Reveal";
 import CountUp from "@/components/prep/CountUp";
@@ -153,11 +154,21 @@ export default function WritingResultPage() {
   const { resultId } = useParams<{ resultId: string }>();
   const [result, setResult] = useState<WritingResult | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [growBars, setGrowBars] = useState(false);
+  const version = usePrepDataVersion();
 
   useEffect(() => {
     setResult(loadWritingResult(resultId));
     setLoaded(true);
-  }, [resultId]);
+  }, [resultId, version]);
+
+  // 観点別スコアの横棒バーを 0 → 値へ伸ばすアニメーション（初期表示時に一度だけ）
+  useEffect(() => {
+    if (!result) return;
+    setGrowBars(false);
+    const t = window.setTimeout(() => setGrowBars(true), 80);
+    return () => window.clearTimeout(t);
+  }, [result]);
 
   if (!loaded) {
     return (
@@ -235,7 +246,7 @@ export default function WritingResultPage() {
               </div>
             </div>
             <div className="sm:col-span-2 space-y-2.5">
-              {fb.scoreItems.map((item) => (
+              {fb.scoreItems.map((item, i) => (
                 <div key={item.label}>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600 dark:text-gray-300">{item.label}</span>
@@ -246,7 +257,10 @@ export default function WritingResultPage() {
                   <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden dark:bg-white/10">
                     <div
                       className="h-full bg-eg rounded-full transition-[width] duration-700 ease-out"
-                      style={{ width: `${Math.min(100, (item.score / item.max) * 100)}%` }}
+                      style={{
+                        width: growBars ? `${Math.min(100, (item.score / item.max) * 100)}%` : "0%",
+                        transitionDelay: `${i * 90}ms`,
+                      }}
                     />
                   </div>
                 </div>

@@ -1,25 +1,13 @@
 // 演習セッションの保存・読み込み
-// 骨格段階では localStorage に保存する。
-// 将来 Firestore に移行する場合もこのファイルの実装を差し替えるだけでよい
+// 保存領域はログインユーザー単位（user-scope 経由で Firestore 同期）。
 
 import { PracticeQuestion, PracticeSessionResult } from "./types";
+import { readStore, writeStore } from "./user-scope";
 
 const STORAGE_KEY = "prep_sessions_v1";
 
-function isBrowser(): boolean {
-  return typeof window !== "undefined";
-}
-
 export function loadSessions(): PracticeSessionResult[] {
-  if (!isBrowser()) return [];
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+  return readStore<PracticeSessionResult>(STORAGE_KEY);
 }
 
 export function loadSession(sessionId: string): PracticeSessionResult | null {
@@ -27,22 +15,20 @@ export function loadSession(sessionId: string): PracticeSessionResult | null {
 }
 
 export function saveSession(session: PracticeSessionResult): void {
-  if (!isBrowser()) return;
   const sessions = loadSessions().filter((s) => s.id !== session.id);
   sessions.unshift(session);
   // 直近 50 件まで保持
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions.slice(0, 50)));
+  writeStore(STORAGE_KEY, sessions.slice(0, 50));
 }
 
 export function markQuestionReviewed(sessionId: string, questionId: string): void {
-  if (!isBrowser()) return;
   const sessions = loadSessions();
   const session = sessions.find((s) => s.id === sessionId);
   if (!session) return;
   const reviewed = new Set(session.reviewedQuestionIds ?? []);
   reviewed.add(questionId);
   session.reviewedQuestionIds = Array.from(reviewed);
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+  writeStore(STORAGE_KEY, sessions);
 }
 
 // ---- 採点 ----

@@ -112,7 +112,14 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-export default function GrammarQuizWhileWaiting() {
+interface GrammarQuizWhileWaitingProps {
+  /** 複数回答を順に添削する場合の完了数（Speaking など）。未指定なら進捗バー非表示。 */
+  completed?: number;
+  /** 添削対象の総数。1 以上を指定すると「X / N 問完了」と進捗バーを表示。 */
+  total?: number;
+}
+
+export default function GrammarQuizWhileWaiting({ completed, total }: GrammarQuizWhileWaitingProps = {}) {
   const questions = useMemo(() => shuffle(QUESTION_BANK), []);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -153,6 +160,24 @@ export default function GrammarQuizWhileWaiting() {
             {correctCount} 正解
           </span>
         </div>
+
+        {/* 添削の進捗（複数回答を順に添削する場合のみ） */}
+        {typeof total === "number" && total > 0 && (
+          <div className="mt-3">
+            <div className="mb-1 flex items-center justify-between text-[11px] font-medium text-gray-500 dark:text-gray-400">
+              <span>添削の進捗</span>
+              <span className="tabular-nums">
+                {Math.min(completed ?? 0, total)} / {total} 問完了
+              </span>
+            </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-white/10">
+              <div
+                className="h-full rounded-full bg-eg transition-[width] duration-500 ease-out"
+                style={{ width: `${(Math.min(completed ?? 0, total) / total) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
 
         {/* 種別バッジ */}
         <div className="mt-4 mb-2">
