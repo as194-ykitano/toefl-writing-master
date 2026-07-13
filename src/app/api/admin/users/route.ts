@@ -32,6 +32,8 @@ export async function GET(request: NextRequest) {
       uid: record.uid,
       email: record.email ?? profile.email ?? "",
       displayName: record.displayName ?? profile.displayName ?? "",
+      lastNameRomaji: profile.lastNameRomaji ?? "",
+      firstNameRomaji: profile.firstNameRomaji ?? "",
       photoURL: record.photoURL ?? profile.photoURL ?? null,
       createdAt: iso(profile.createdAt) ?? record.metadata.creationTime,
       lastLoginAt: iso(profile.lastLoginAt) ?? record.metadata.lastSignInTime,

@@ -196,6 +196,10 @@ export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
+  /** 名前のフリガナ（ローマ字・名字） 例: Yamada */
+  lastNameRomaji?: string;
+  /** 名前のフリガナ（ローマ字・名前） 例: Taro */
+  firstNameRomaji?: string;
   photoURL: string | null;
   createdAt: string; // ISO string
   learningGoals?: LearningGoals;
@@ -237,6 +241,8 @@ export interface AdminUser {
   uid: string;
   email: string;
   displayName: string;
+  lastNameRomaji?: string;
+  firstNameRomaji?: string;
   photoURL: string | null;
   createdAt: string;
   lastLoginAt?: string;

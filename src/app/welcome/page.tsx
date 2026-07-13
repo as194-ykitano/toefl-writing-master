@@ -65,9 +65,9 @@ export default function WelcomePage() {
             </span>
           </div>
 
-          {/* 問題を解き始める → ホーム */}
+          {/* 問題を解き始める → ホーム（オンボーディング直後は使い方ツアーを強制起動） */}
           <Link
-            href="/home"
+            href="/home?tour=1"
             style={{ animationDelay: '300ms' }}
             className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 transition-all hover:border-emerald-300 dark:hover:border-emerald-500/60 hover:shadow-md hover:-translate-y-0.5 animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700"
           >

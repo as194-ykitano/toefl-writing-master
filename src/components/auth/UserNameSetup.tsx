@@ -49,9 +49,11 @@ function Field({ children, delay }: { children: React.ReactNode; delay: number }
 
 export default function UserNameSetup() {
   const [fullName, setFullName] = useState('');
+  const [lastNameRomaji, setLastNameRomaji] = useState('');
+  const [firstNameRomaji, setFirstNameRomaji] = useState('');
   const [learnerStatus, setLearnerStatus] = useState<LearnerStatus | ''>('');
   const [learningReason, setLearningReason] = useState('');
-  const [targetExam, setTargetExam] = useState<OnboardingProfile['targetExam']>('toefl');
+  const [targetExam, setTargetExam] = useState<OnboardingProfile['targetExam'] | ''>('');
   const [targetScore, setTargetScore] = useState('');
   const [targetDate, setTargetDate] = useState(''); // yyyy-mm
   const [error, setError] = useState('');
@@ -71,12 +73,26 @@ export default function UserNameSetup() {
       setError('お名前は2文字以上で入力してください');
       return;
     }
+    const last = lastNameRomaji.trim();
+    const first = firstNameRomaji.trim();
+    if (!last || !first) {
+      setError('お名前のローマ字（名字・名前）を入力してください');
+      return;
+    }
+    if (!/^[A-Za-z][A-Za-z' -]*$/.test(last) || !/^[A-Za-z][A-Za-z' -]*$/.test(first)) {
+      setError('ローマ字はアルファベットで入力してください');
+      return;
+    }
     if (!learnerStatus) {
       setError('現在の学年・立場を選択してください');
       return;
     }
     if (!learningReason.trim()) {
       setError('英語を学ぶ理由を入力してください');
+      return;
+    }
+    if (!targetExam) {
+      setError('対策する試験を選択してください');
       return;
     }
 
@@ -97,9 +113,14 @@ export default function UserNameSetup() {
           completedAt: new Date().toISOString(),
         };
 
+        // ローマ字を「先頭大文字」に整形して保存
+        const normalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+
         const userRef = doc(db, 'users', user.uid);
         await updateDoc(userRef, {
           displayName: trimmedName,
+          lastNameRomaji: normalize(last),
+          firstNameRomaji: normalize(first),
           onboarding,
         });
 
@@ -160,6 +181,40 @@ export default function UserNameSetup() {
             />
           </Field>
 
+          <Field delay={150}>
+            <Label className="text-base font-semibold text-gray-800 dark:text-gray-200">
+              お名前（ローマ字）
+            </Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Input
+                  id="lastNameRomaji"
+                  type="text"
+                  value={lastNameRomaji}
+                  onChange={(e) => setLastNameRomaji(e.target.value)}
+                  required
+                  placeholder="Yamada"
+                  autoComplete="off"
+                  className="h-12 rounded-xl px-4 text-base"
+                />
+                <p className="mt-1.5 text-xs text-gray-400">名字（例: Yamada）</p>
+              </div>
+              <div>
+                <Input
+                  id="firstNameRomaji"
+                  type="text"
+                  value={firstNameRomaji}
+                  onChange={(e) => setFirstNameRomaji(e.target.value)}
+                  required
+                  placeholder="Taro"
+                  autoComplete="off"
+                  className="h-12 rounded-xl px-4 text-base"
+                />
+                <p className="mt-1.5 text-xs text-gray-400">名前（例: Taro）</p>
+              </div>
+            </div>
+          </Field>
+
           <Field delay={200}>
             <Label htmlFor="learnerStatus" className="text-base font-semibold text-gray-800 dark:text-gray-200">
               現在の学年・立場
@@ -205,7 +260,11 @@ export default function UserNameSetup() {
               className={fieldClass}
               value={targetExam}
               onChange={(e) => setTargetExam(e.target.value as OnboardingProfile['targetExam'])}
+              required
             >
+              <option value="" disabled>
+                選択してください
+              </option>
               {EXAM_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>
                   {o.label}
@@ -237,7 +296,7 @@ export default function UserNameSetup() {
                   type="month"
                   value={targetDate}
                   onChange={(e) => setTargetDate(e.target.value)}
-                  className="h-12 rounded-xl px-4 text-base"
+                  className="h-12 rounded-xl px-4 text-base dark:[color-scheme:dark]"
                 />
                 <p className="mt-1.5 text-xs text-gray-400">いつまでに達成したいか</p>
               </div>

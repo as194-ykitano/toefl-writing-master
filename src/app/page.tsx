@@ -14,7 +14,7 @@ export default function HomePage() {
       if (user) {
         // 管理者かどうかをチェックして適切なダッシュボードにリダイレクト
         if (isAdmin(user.email)) {
-          router.push("/admin/dashboard");
+          router.push("/admin");
         } else {
           // ユーザーネームが未設定の場合は設定ページに遷移
           if (!user.displayName || user.displayName.trim() === '') {

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { Ban, CheckCircle2, KeyRound, Search, Trash2, UserPlus } from "lucide-react";
+import { ArrowDownAZ, ArrowDownWideNarrow, Ban, CheckCircle2, Eye, KeyRound, Search, Trash2, UserPlus } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { isAdmin } from "@/lib/utils";
 import type { AdminUser } from "@/lib/types";
@@ -20,6 +20,7 @@ export default function UserManagementPage() {
   const [loading, setLoading] = useState(true);
   const [busyUid, setBusyUid] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [sortKey, setSortKey] = useState<"createdAt" | "romaji">("createdAt");
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
   const [form, setForm] = useState({ displayName: "", email: "", password: "" });
@@ -50,8 +51,21 @@ export default function UserManagementPage() {
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return needle ? users.filter((user) => `${user.displayName} ${user.email}`.toLowerCase().includes(needle)) : users;
-  }, [query, users]);
+    const matched = needle
+      ? users.filter((user) => `${user.displayName} ${user.email} ${user.lastNameRomaji ?? ""} ${user.firstNameRomaji ?? ""}`.toLowerCase().includes(needle))
+      : [...users];
+    if (sortKey === "romaji") {
+      matched.sort((a, b) => {
+        const ra = `${a.lastNameRomaji ?? ""} ${a.firstNameRomaji ?? ""}`.trim().toLowerCase();
+        const rb = `${b.lastNameRomaji ?? ""} ${b.firstNameRomaji ?? ""}`.trim().toLowerCase();
+        // 未登録は末尾へ
+        if (!ra && rb) return 1;
+        if (ra && !rb) return -1;
+        return ra.localeCompare(rb);
+      });
+    }
+    return matched;
+  }, [query, users, sortKey]);
 
   async function createUser() {
     try {
@@ -113,8 +127,8 @@ export default function UserManagementPage() {
 
       <Card>
         <CardHeader className="flex-row items-center justify-between gap-4"><CardTitle>アカウント一覧</CardTitle><div className="relative w-full max-w-xs"><Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" /><Input className="pl-9" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="名前・メールで検索" /></div></CardHeader>
-        <CardContent><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="border-b text-left"><th className="p-3">ユーザー</th><th className="p-3">状態</th><th className="p-3">登録日</th><th className="p-3 text-right">操作</th></tr></thead><tbody>
-          {filtered.map((user) => <tr key={user.uid} className="border-b last:border-0"><td className="p-3"><div className="font-medium">{user.displayName || "名前未設定"}</div><div className="text-gray-500">{user.email}</div></td><td className="p-3"><Badge className={user.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>{user.isActive ? "利用中" : "利用停止"}</Badge></td><td className="p-3">{new Date(user.createdAt).toLocaleDateString("ja-JP")}</td><td className="p-3"><div className="flex justify-end gap-2"><Button variant="outline" size="sm" onClick={() => resetPassword(user)} title="パスワード再設定"><KeyRound className="h-4 w-4" /></Button><Button variant="outline" size="sm" disabled={busyUid === user.uid} onClick={() => toggleActive(user)}>{user.isActive ? <><Ban className="h-4 w-4" />利用停止</> : <><CheckCircle2 className="h-4 w-4" />再開</>}</Button><Button variant="outline" size="sm" className="text-red-600" disabled={busyUid === user.uid} onClick={() => setDeleteTarget(user)}><Trash2 className="h-4 w-4" />完全削除</Button></div></td></tr>)}
+        <CardContent><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="border-b text-left"><th className="p-3"><button className="flex items-center gap-1 font-medium hover:text-blue-600" onClick={() => setSortKey("romaji")} title="フリガナ順に並べ替え">ユーザー{sortKey === "romaji" && <ArrowDownAZ className="h-3.5 w-3.5" />}</button></th><th className="p-3">状態</th><th className="p-3"><button className="flex items-center gap-1 font-medium hover:text-blue-600" onClick={() => setSortKey("createdAt")} title="登録日順に並べ替え">登録日{sortKey === "createdAt" && <ArrowDownWideNarrow className="h-3.5 w-3.5" />}</button></th><th className="p-3 text-right">操作</th></tr></thead><tbody>
+          {filtered.map((user) => <tr key={user.uid} className="border-b last:border-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800" onClick={() => router.push(`/admin/user-management/${user.uid}`)}><td className="p-3"><div className="font-medium">{user.displayName || "名前未設定"}</div>{(user.lastNameRomaji || user.firstNameRomaji) && <div className="text-xs text-gray-400">{`${user.lastNameRomaji ?? ""} ${user.firstNameRomaji ?? ""}`.trim()}</div>}<div className="text-gray-500">{user.email}</div></td><td className="p-3"><Badge className={user.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>{user.isActive ? "利用中" : "利用停止"}</Badge></td><td className="p-3">{new Date(user.createdAt).toLocaleDateString("ja-JP")}</td><td className="p-3" onClick={(e) => e.stopPropagation()}><div className="flex justify-end gap-2"><Button variant="outline" size="sm" onClick={() => router.push(`/admin/user-management/${user.uid}`)} title="詳細を見る"><Eye className="h-4 w-4" /></Button><Button variant="outline" size="sm" onClick={() => resetPassword(user)} title="パスワード再設定"><KeyRound className="h-4 w-4" /></Button><Button variant="outline" size="sm" disabled={busyUid === user.uid} onClick={() => toggleActive(user)}>{user.isActive ? <><Ban className="h-4 w-4" />利用停止</> : <><CheckCircle2 className="h-4 w-4" />再開</>}</Button><Button variant="outline" size="sm" className="text-red-600" disabled={busyUid === user.uid} onClick={() => setDeleteTarget(user)}><Trash2 className="h-4 w-4" />完全削除</Button></div></td></tr>)}
         </tbody></table></div></CardContent>
       </Card>
     </div>
