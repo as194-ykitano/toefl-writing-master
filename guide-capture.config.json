@@ -1,0 +1,120 @@
+{
+  "hideSelectors": ["input[type=email]", "[data-guide-private]"],
+  "targets": [
+    {
+      "guideId": "getting-started",
+      "goal": "Homeの基本操作を説明する",
+      "views": [{
+        "name": "home", "route": "/home", "waitForSelector": "main",
+        "highlights": [
+          {"key":"exam-switcher","text":"TOEFL iBT","label":"試験を切り替える"},
+          {"key":"daily-goal","text":"1日の学習目標","label":"目標時間を設定する"},
+          {"key":"skill-card","text":"Reading","label":"技能を選ぶ"}
+        ]
+      }]
+    },
+    {
+      "guideId": "toefl-reading", "goal": "HomeからTOEFL Readingを選び、演習と結果を説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=toefl&guideSkill=reading","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Readingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/toefl/reading?type=complete-the-words","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習モード"},{"key":"test","text":"本番モード","label":"本番モード"}]},
+        {"name":"exercise","route":"/practice/toefl/reading/toefl-reading-01?mode=practice","waitForSelector":"[data-guide-target=reading-question]","highlights":[{"key":"passage","selector":"[data-guide-target=reading-passage]","label":"本文"},{"key":"question","selector":"[data-guide-target=reading-question]","label":"設問と選択肢"},{"key":"flag","selector":"[data-guide-target=review-flag]","label":"あとで見直す"},{"key":"navigation","selector":"[data-guide-target=question-navigation]","label":"問題移動と提出"}]},
+        {"name":"feedback-top","route":"/results/guide-toefl-reading","waitForSelector":"[data-guide-target=result-score]","settleMs":1800}
+      ]
+    },
+    {
+      "guideId": "toefl-listening", "goal": "HomeからTOEFL Listeningを選び、演習と結果を説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=toefl&guideSkill=listening","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Listeningの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/toefl/listening?type=conversation","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習モード"},{"key":"test","text":"本番モード","label":"本番モード"}]},
+        {"name":"exercise","route":"/practice/toefl/listening/toefl-listening-01?mode=practice","waitForSelector":"[data-guide-target=listening-question]","highlights":[{"key":"audio","selector":"[data-guide-target=audio-player]","label":"音声プレイヤー"},{"key":"notes","selector":"[data-guide-target=listening-notes]","label":"メモ"},{"key":"question","selector":"[data-guide-target=listening-question]","label":"設問と回答"},{"key":"navigation","selector":"[data-guide-target=question-navigation]","label":"問題移動と提出"}]},
+        {"name":"feedback-top","route":"/results/guide-toefl-listening","waitForSelector":"[data-guide-target=result-score]","settleMs":1800}
+      ]
+    },
+    {
+      "guideId": "toefl-speaking", "goal": "HomeからTOEFL Speakingを選び、演習・結果・エラー修正ドリルを説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=toefl&guideSkill=speaking","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Speakingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/toefl/speaking?type=listen-and-repeat","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習を始める"}]},
+        {"name":"settings","route":"/practice/toefl/speaking/toefl-speaking-01?mode=practice","waitForSelector":"h1:has-text('Speaking設定')","highlights":[{"key":"settings","text":"Speaking設定","label":"録音時間と問題表示"},{"key":"begin","text":"この設定で始める","label":"設定を確定"}]},
+        {"name":"exercise","route":"/practice/toefl/speaking/toefl-speaking-01?mode=practice","actions":[{"text":"この設定で始める"}],"waitForSelector":"[data-guide-target=speaking-task]","highlights":[{"key":"task","selector":"[data-guide-target=speaking-task]","label":"質問・準備・録音"},{"key":"start","selector":"[data-guide-target=speaking-start]","label":"録音を開始"}]},
+        {"name":"feedback-top","route":"/results/guide-toefl-speaking","waitForSelector":"[data-guide-target=result-score]","settleMs":1800},
+        {"name":"grammar-drill","route":"/results/guide-toefl-speaking","clipSelector":"[data-guide-target=grammar-drill]","waitForSelector":"[data-guide-target=grammar-drill]"}
+      ]
+    },
+    {
+      "guideId": "toefl-writing", "goal": "HomeからTOEFL Writingを選び、演習・添削・エラー修正ドリルを説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=toefl&guideSkill=writing","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Writingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/toefl/writing?type=academic-discussion","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習を始める"}]},
+        {"name":"exercise","route":"/practice/toefl/writing/toefl-w-QQVgxo8u3HRLVOx1xWdJ?mode=practice","waitForSelector":"[data-guide-target=writing-response]","highlights":[{"key":"prompt","selector":"[data-guide-target=writing-prompt]","label":"教授の設問"},{"key":"responses","selector":"[data-guide-target=student-responses]","label":"他の学生の回答"},{"key":"response","selector":"[data-guide-target=writing-response]","label":"回答・語数・提出"}]},
+        {"name":"feedback-top","route":"/writing-result/guide-toefl-writing","waitForSelector":"[data-guide-target=writing-score]","settleMs":1800},
+        {"name":"grammar-drill","route":"/writing-result/guide-toefl-writing","clipSelector":"[data-guide-target=grammar-drill]","waitForSelector":"[data-guide-target=grammar-drill]"}
+      ]
+    },
+    {
+      "guideId": "ielts-reading", "goal": "HomeからIELTS Academic Readingを選び、演習と結果を説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=ielts&guideSkill=reading","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Readingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/ielts/reading?type=multiple-choice","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習モード"},{"key":"test","text":"本番モード","label":"本番モード"}]},
+        {"name":"exercise","route":"/practice/ielts/reading/ielts-reading-01?mode=practice","waitForSelector":"[data-guide-target=reading-question]","highlights":[{"key":"passage","selector":"[data-guide-target=reading-passage]","label":"本文"},{"key":"question","selector":"[data-guide-target=reading-question]","label":"設問と回答規則"},{"key":"flag","selector":"[data-guide-target=review-flag]","label":"あとで見直す"},{"key":"navigation","selector":"[data-guide-target=question-navigation]","label":"問題移動と提出"}]},
+        {"name":"feedback-top","route":"/results/guide-ielts-reading","waitForSelector":"[data-guide-target=result-score]","settleMs":1800}
+      ]
+    },
+    {
+      "guideId": "ielts-listening", "goal": "HomeからIELTS Academic Listeningを選び、演習と結果を説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=ielts&guideSkill=listening","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Listeningの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/ielts/listening?type=multiple-choice","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習モード"},{"key":"test","text":"本番モード","label":"本番モード"}]},
+        {"name":"exercise","route":"/practice/ielts/listening/ielts-listening-01?mode=practice","waitForSelector":"[data-guide-target=listening-question]","highlights":[{"key":"audio","selector":"[data-guide-target=audio-player]","label":"音声プレイヤー"},{"key":"notes","selector":"[data-guide-target=listening-notes]","label":"メモ"},{"key":"question","selector":"[data-guide-target=listening-question]","label":"設問と回答"},{"key":"navigation","selector":"[data-guide-target=question-navigation]","label":"問題移動と提出"}]},
+        {"name":"feedback-top","route":"/results/guide-ielts-listening","waitForSelector":"[data-guide-target=result-score]","settleMs":1800}
+      ]
+    },
+    {
+      "guideId": "ielts-speaking", "goal": "HomeからIELTS Speakingを選び、演習・結果・エラー修正ドリルを説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=ielts&guideSkill=speaking","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Speakingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/ielts/speaking?type=part-1","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習を始める"}]},
+        {"name":"settings","route":"/practice/ielts/speaking/ielts-s-part-1-s-s1-1?mode=practice","waitForSelector":"h1:has-text('Speaking設定')","highlights":[{"key":"settings","text":"Speaking設定","label":"録音時間と問題表示"},{"key":"begin","text":"この設定で始める","label":"設定を確定"}]},
+        {"name":"exercise","route":"/practice/ielts/speaking/ielts-s-part-1-s-s1-1?mode=practice","actions":[{"text":"この設定で始める"}],"waitForSelector":"[data-guide-target=speaking-task]","highlights":[{"key":"task","selector":"[data-guide-target=speaking-task]","label":"質問・準備・録音"},{"key":"start","selector":"[data-guide-target=speaking-start]","label":"回答を開始"}]},
+        {"name":"feedback-top","route":"/results/guide-ielts-speaking","waitForSelector":"[data-guide-target=result-score]","settleMs":1800},
+        {"name":"grammar-drill","route":"/results/guide-ielts-speaking","clipSelector":"[data-guide-target=grammar-drill]","waitForSelector":"[data-guide-target=grammar-drill]"}
+      ]
+    },
+    {
+      "guideId": "ielts-writing", "goal": "HomeからIELTS Writingを選び、演習・添削・エラー修正ドリルを説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=ielts&guideSkill=writing","waitForSelector":"[data-guide-target=home-type-card]","highlights":[{"key":"home-type","selector":"[data-guide-target=home-type-card]","label":"Writingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/ielts/writing?type=task-2","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習を始める"}]},
+        {"name":"exercise","route":"/practice/ielts/writing/ielts-w-WSmmIOOLtCTQJPYch3dv?mode=practice","waitForSelector":"[data-guide-target=writing-response]","highlights":[{"key":"prompt","selector":"[data-guide-target=writing-prompt]","label":"問題文と条件"},{"key":"response","selector":"[data-guide-target=writing-response]","label":"回答・語数・提出"}]},
+        {"name":"feedback-top","route":"/writing-result/guide-ielts-writing","waitForSelector":"[data-guide-target=writing-score]","settleMs":1800},
+        {"name":"grammar-drill","route":"/writing-result/guide-ielts-writing","clipSelector":"[data-guide-target=grammar-drill]","waitForSelector":"[data-guide-target=grammar-drill]"}
+      ]
+    },
+    {
+      "guideId": "toeic-reading", "goal": "HomeからTOEIC Readingを選び、演習を説明する",
+      "views": [
+        {"name":"home-types","route":"/home?guideExam=toeic&guideSkill=reading","waitForSelector":"[data-tour=types]","highlights":[{"key":"home-type","selector":"[data-tour=types]","label":"Readingの問題タイプ"}]},
+        {"name":"practice-list","route":"/practice/toeic/reading?type=part-5","waitForTextGone":"読み込み中...","highlights":[{"key":"practice","text":"練習モード","label":"練習モード"},{"key":"test","text":"本番モード","label":"本番モード"}]},
+        {"name":"exercise","route":"/practice/toeic/reading/toeic-r-p5-mVehH9FJG3QlUjwjnFne?mode=practice","waitForSelector":"[data-guide-target=reading-question]","highlights":[{"key":"question","selector":"[data-guide-target=reading-question]","label":"設問と選択肢"},{"key":"flag","selector":"[data-guide-target=review-flag]","label":"あとで見直す"},{"key":"navigation","selector":"[data-guide-target=question-navigation]","label":"問題移動と提出"}]}
+      ]
+    },
+    {"guideId":"toeic-listening","goal":"Coming Soon","views":[]},
+    {"guideId":"mock-tests","goal":"Coming Soon","views":[]},
+    {
+      "guideId": "learning-data", "goal": "学習時間・履歴・IELTS Academic Readingのデータ推移を説明する",
+      "views": [
+        {"name":"study-time","route":"/study-time?guide=1&guideExam=ielts","waitForSelector":"[data-guide-target=study-chart] svg","settleMs":1800,"highlights":[{"key":"mode","selector":"[data-guide-target=study-mode]","label":"技能別・問題タイプ別"},{"key":"chart","selector":"[data-guide-target=study-chart]","label":"週次グラフ"},{"key":"table","selector":"[data-guide-target=study-table]","label":"日別内訳表"}]},
+        {"name":"history","route":"/history?guide=1&guideExam=ielts","waitForSelector":"[data-guide-target=history-list] li","highlights":[{"key":"filters","selector":"[data-guide-target=history-filters]","label":"技能フィルター"},{"key":"list","selector":"[data-guide-target=history-list]","label":"演習・添削履歴"}]},
+        {"name":"overview","route":"/overview?guide=1&guideExam=ielts","waitForSelector":"[data-guide-target=overview-chart] svg","settleMs":2200,"highlights":[{"key":"period","selector":"[data-guide-target=overview-period]","label":"集計期間"},{"key":"skills","selector":"[data-guide-target=overview-skills]","label":"技能切替"},{"key":"chart","selector":"[data-guide-target=overview-chart]","label":"スコア推移"},{"key":"types","selector":"[data-guide-target=overview-types]","label":"問題タイプ別"}]}
+      ]
+    },
+    {
+      "guideId": "video-courses", "goal": "コース一覧から実際のレッスン動画画面と完了操作を説明する",
+      "views": [
+        {"name":"course-list","route":"/video-courses?guide=1","waitForSelector":"[data-guide-target=course-card] img","settleMs":1500,"highlights":[{"key":"search","selector":"[data-guide-target=course-search]","label":"コース検索"},{"key":"card","selector":"[data-guide-target=course-card]","label":"コースを開く"}]},
+        {"name":"lesson","route":"/video-courses/guide-writing-course/lessons/guide-writing-lesson-2?guide=1","waitForSelector":"[data-guide-target=lesson-video]","settleMs":1500,"highlights":[{"key":"video","selector":"[data-guide-target=lesson-video]","label":"レッスン動画"},{"key":"sidebar","selector":"[data-guide-target=lesson-sidebar]","label":"モジュールとレッスン"},{"key":"complete","selector":"[data-guide-target=lesson-complete]","label":"完了にする"}]}
+      ]
+    }
+  ]
+}

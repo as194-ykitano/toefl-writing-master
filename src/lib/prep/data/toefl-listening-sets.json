@@ -1,0 +1,1119 @@
+[
+ {
+  "id": "toefl-l-academic-talk-lat-1",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "academic-talk",
+  "title": "LAT 1",
+  "description": "Listen to a talk in an art history class.",
+  "difficulty": "medium",
+  "timeLimitSec": 480,
+  "transcript": "Today I’d like to introduce Impressionism, a movement that began in late nineteenth-century France. At that time, traditional painters were expected to create carefully finished works that told stories from history or mythology. But cameras had just become popular, and photography could already record precise details. So Impressionist painters asked a different question: What if a painting captured a brief, changing moment instead?\nImpressionists often worked outdoors, painting quickly to follow shifting light and weather. I’ll focus on two features today: their brushwork and their use of color. Instead of smooth, invisible strokes, they used short, broken ones that remain clearly visible. From close up, a Monet landscape can look almost messy. But from a distance, those separate strokes blend together in the viewer’s eye—a process called optical mixing.\nColor was just as experimental. Rather than using black for shadows, painters placed cool blues or purples next to warmer yellows and oranges. This contrast made the scene appear brighter and more alive. If you look at Monet’s series of haystack paintings, for instance, each canvas shows the same object, but the colors and mood change dramatically with the time of day. In our next class, I’ll talk about how Impressionism influenced later modern art movements.",
+  "transcriptJa": "今日は、19世紀後半のフランスで始まった印象派（Impressionism）について紹介します。\n当時、伝統的な画家は、歴史や神話を題材にした、丁寧に仕上げられた作品を描くことが求められていました。\nしかしその頃、カメラが普及し始め、写真はすでに正確な細部を記録できるようになっていました。\nそこで印象派の画家たちは、別の問いを立てました。\n「一瞬で移り変わる瞬間を描いたらどうだろうか」と。\n印象派の画家たちはよく屋外で制作し、変化する光や天候に合わせて素早く描きました。\n今日は、その特徴の中でも筆使いと色の使い方の2点に注目します。\n滑らかで見えない筆致の代わりに、短く途切れた、はっきりと見える筆遣いを用いました。\n近くで見ると、クロード・モネの風景画は、ほとんど雑然として見えることもあります。\nしかし、少し離れて見ると、それぞれの筆の跡が目の中で混ざり合います。これを視覚混合（optical mixing）と呼びます。\n色使いも同じくらい実験的でした。\n影に黒を使う代わりに、青や紫のような寒色を、黄色やオレンジなどの暖色の隣に置きました。\nこうした対比によって、場面はより明るく、生き生きと見えるのです。\nたとえば、モネの「積みわら」の連作を見ると、描かれている対象は同じでも、時間帯によって色や雰囲気が大きく変わっていることが分かります。\n次回の授業では、印象派が後の近代美術運動にどのような影響を与えたかを扱います。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-academic-talk-lat-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main topic of the talk?",
+    "options": [
+     "The invention of photography in France",
+     "Different ways to prepare painting materials",
+     "Key characteristics of Impressionist painting",
+     "How museums decide which paintings to display"
+    ],
+    "answer": "Key characteristics of Impressionist painting",
+    "explanation": "この講義全体は、印象派絵画の特徴について説明しています。\n特に、\n・なぜ印象派が生まれたのか\n・どのような筆使いをしたのか\n・色の使い方にどんな特徴があるのか\nといったポイントが中心です。\n写真そのものの歴史（A）や、画材準備（B）、美術館の展示基準（D）は主題ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the professor mention photography at the beginning of the talk?",
+    "options": [
+     "To show why painters became interested in capturing brief moments",
+     "To argue that photography replaced traditional painting",
+     "To explain how Impressionists learned to mix their colors",
+     "To compare French photography with photography in other countries"
+    ],
+    "answer": "To show why painters became interested in capturing brief moments",
+    "explanation": "教授は写真について、印象派が生まれた背景を説明するために言及しています。\n写真が正確な描写を担うようになったことで、画家たちは\n「細部を正確に描く以外に、絵画にはどんな役割があるのか」\nと考えるようになりました。\nその結果、「一瞬の光や雰囲気を捉える」という印象派の発想につながった、という流れです。\n写真が絵画を置き換えた（B）とは言っていません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What does the professor say about Monet’s haystack paintings?",
+    "options": [
+     "They were all painted indoors from memory.",
+     "They show how the same subject looks under different conditions of light.",
+     "They were unpopular because the subject was not interesting.",
+     "They were the first paintings to use black for shadows."
+    ],
+    "answer": "They show how the same subject looks under different conditions of light.",
+    "explanation": "モネの積みわらの連作について、教授は\n「同じ対象でも、時間帯によって色や雰囲気が大きく変わる」\nことを示す例として挙げています。\n屋内制作（A）や不人気（C）、影に黒を使った（D）とは述べられていません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-1-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "What will the professor most likely discuss in the next class?",
+    "options": [
+     "Techniques for restoring damaged Impressionist paintings",
+     "How Impressionism affected later modern art movements",
+     "Why Impressionist painters stopped working outdoors",
+     "The economic lives of artists in nineteenth-century France"
+    ],
+    "answer": "How Impressionism affected later modern art movements",
+    "explanation": "講義の最後で、教授は\n“In our next class, I’ll talk about how Impressionism influenced later modern art movements.”\nと明確に予告しています。\nそのため、次回の内容は印象派が後の近代美術に与えた影響です。\n修復技術（A）や画家の経済事情（D）は示唆されていません。",
+    "skillTag": "academic-talk"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-academic-talk-lat-2",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "academic-talk",
+  "title": "LAT 2",
+  "description": "Listen to a talk in a sociology class.",
+  "difficulty": "medium",
+  "timeLimitSec": 480,
+  "transcript": "Today I’d like to talk about the digital divide. This term refers to the gap between people who can make full use of digital technologies and those who cannot. It is not only about whether someone owns a device. It also involves the speed and reliability of their internet connection and their level of digital skills.\nConsider a student who writes her papers on a small phone, using a limited data plan. Technically, she is “online,” but downloading large files or joining video classes is difficult. Her classmates, who have laptops and high-speed home connections, can access materials much more easily. So even within the same school, digital opportunities can be unevenly distributed.\nThe digital divide often mirrors existing social inequalities. Rural areas may lack broadband infrastructure; low-income households may share a single device; older adults may have fewer chances to develop digital literacy. These differences affect not only education and employment, but also participation in civic life, such as reading government information or completing online forms. Governments and community groups are experimenting with public Wi-Fi, inexpensive devices, and training programs to lessen these gaps. In our next class, we’ll examine several cities that have tried different strategies and evaluate how successful they have been.",
+  "transcriptJa": "今日はデジタル・ディバイド（digital divide）について話します。\nこれは、デジタル技術を十分に活用できる人と、そうでない人との間にある格差を指します。\n単に機器を持っているかどうかだけの問題ではありません。\nインターネット接続の速度や安定性、そしてデジタルスキルのレベルも関係します。\nたとえば、限られたデータ通信量の小さなスマートフォンでレポートを書く学生を考えてみてください。\n技術的には彼女は「オンライン」ですが、大きなファイルをダウンロードしたり、ビデオ授業に参加したりするのは困難です。\n一方、ノートパソコンと高速な家庭用インターネットを持つクラスメイトは、教材にずっと簡単にアクセスできます。\nつまり、同じ学校の中でも、デジタル上の機会は不均等に分配されている可能性があります。\nデジタル・ディバイドは、既存の社会的不平等を反映することがよくあります。\n地方ではブロードバンドの整備が不十分な場合があり、低所得世帯では1台の端末を共有していることもあります。\nまた、高齢者はデジタル・リテラシーを身につける機会が少ないことがあります。\nこうした違いは、教育や雇用だけでなく、行政情報を読んだり、オンラインの申請書を提出したりするといった、市民生活への参加にも影響します。\nこの格差を縮めるため、政府や地域団体は公衆Wi-Fi、低価格端末、研修プログラムなどを試みています。\n次回の授業では、こうした戦略を実施したいくつかの都市を取り上げ、その効果を評価します。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-academic-talk-lat-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main topic of the talk?",
+    "options": [
+     "Changes in social media habits among students",
+     "Inequality created by differences in access to digital technology",
+     "The invention and growth of the internet",
+     "How online universities design their courses"
+    ],
+    "answer": "Inequality created by differences in access to digital technology",
+    "explanation": "講義全体は、デジタル技術へのアクセスや利用能力の差が生み出す不平等について説明しています。\nデバイスの所有、通信環境、スキルといった複数の要因が重なって生じる「格差」が中心テーマです。\nSNSの変化（A）やインターネットの歴史（C）、オンライン大学の設計（D）は主題ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the professor describe the student who writes papers on her phone?",
+    "options": [
+     "To show that some students procrastinate on their assignments",
+     "To argue that smartphones will soon replace laptops",
+     "To illustrate that simply being “online” does not guarantee equal digital access",
+     "To complain about the cost of mobile data plans"
+    ],
+    "answer": "To illustrate that simply being “online” does not guarantee equal digital access",
+    "explanation": "この具体例は、「オンラインである＝十分にデジタル環境を使えている」ではないことを示すために使われています。\nスマートフォンを持っていても、通信量や画面サイズの制約により、学習機会は制限されます。\n先延ばし（A）やスマホがノートPCを置き換える主張（B）、料金への不満（D）が目的ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the talk, what is one effect of the digital divide?",
+    "options": [
+     "Some people have fewer opportunities to take part in public affairs.",
+     "People in rural areas rarely watch television.",
+     "Older adults are not interested in learning new skills.",
+     "Students lose their devices more often if they share them."
+    ],
+    "answer": "Some people have fewer opportunities to take part in public affairs.",
+    "explanation": "講義では、デジタル・ディバイドが教育・雇用だけでなく、市民生活への参加にも影響すると述べられています。\n具体的に、政府情報の閲覧やオンライン手続きが難しくなる例が挙げられています。\nテレビ視聴（B）や高齢者の関心の有無（C）、端末の紛失（D）については触れられていません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-2-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "What will the professor most likely discuss in the next class?",
+    "options": [
+     "Technical details of how wireless networks are built",
+     "Case studies of cities that tried to reduce the digital divide",
+     "Psychological effects of playing online games",
+     "The history of telephone communication"
+    ],
+    "answer": "Case studies of cities that tried to reduce the digital divide",
+    "explanation": "最後に\n“we’ll examine several cities that have tried different strategies and evaluate how successful they have been”\nと明確に述べられています。\nしたがって次回は、デジタル・ディバイド解消に取り組んだ都市の事例研究とその成果がテーマになります。\n技術的構造（A）やゲームの心理影響（C）、電話の歴史（D）ではありません。",
+    "skillTag": "academic-talk"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-academic-talk-lat-3",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "academic-talk",
+  "title": "LAT 3",
+  "description": "Listen to a talk in an economics class.",
+  "difficulty": "medium",
+  "timeLimitSec": 480,
+  "transcript": "Today I want to focus on the idea of opportunity cost. In economics, we assume that resources—time, money, even attention—are limited. Whenever we choose one option, we give up the chance to use those resources in another way. Opportunity cost refers to the value of the best alternative that we forgo. It is not just the explicit price we pay, but also the benefits we lose by not choosing something else.\nTake a student who is deciding between taking a paid campus job during the semester or joining a study-abroad program. The job provides a clear wage, and the program might not. Still, if the student stays home, the opportunity cost includes the language skills, professional contacts, and personal growth that could have been gained overseas. Even if no money changes hands, those benefits are part of the calculation.\nThe same logic applies to governments. Suppose a city spends a large share of its budget on building a new sports stadium. Officials may hope it will attract tourists, but that spending also means fewer funds for improving public transportation or maintaining schools. Understanding opportunity cost forces decision-makers to ask whether the project they choose is really more valuable than the alternatives they must postpone or abandon. In our next class, we’ll look at why people so often ignore opportunity costs and the decision biases that result.",
+  "transcriptJa": "今日は機会費用（opportunity cost）という考え方に注目します。\n経済学では、時間・お金・注意力といった資源は限られていると考えます。\nそのため、ある選択をするとき、私たちは必ず他の使い方をあきらめています。\n機会費用とは、あきらめた選択肢の中で最も価値の高いものの価値を指します。\nこれは実際に支払う金額だけでなく、別の選択をしなかったことで失われる利益も含みます。\nたとえば、学期中に有給の学内アルバイトをするか、留学プログラムに参加するかで迷っている学生を考えてみましょう。\n仕事には明確な給料がありますが、留学には必ずしもそれがありません。\nそれでも、もし学生が自国に残るなら、失われる機会費用には、海外で得られたはずの語学力、人脈、個人的成長が含まれます。\nお金のやり取りがなくても、これらの利益は計算に入れるべき要素なのです。\n同じ考え方は政府にも当てはまります。\nたとえば、ある都市が予算の大部分を新しいスタジアムの建設に使ったとします。\n観光客の誘致を期待するかもしれませんが、その分、公共交通の改善や学校の維持に使えるお金は減ります。\n機会費用を理解することは、選ばれた計画が、本当に先送りや中止された他の選択肢より価値があるのかを問い直すことにつながります。\n次回の授業では、人々がなぜ機会費用を無視しがちなのか、そしてそこから生じる意思決定のバイアスについて考察します。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-academic-talk-lat-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main topic of the talk?",
+    "options": [
+     "How students can avoid regretting their choices",
+     "Different methods for calculating a city’s budget",
+     "The concept of opportunity cost and how it guides decisions",
+     "Reasons why governments invest in sports facilities"
+    ],
+    "answer": "The concept of opportunity cost and how it guides decisions",
+    "explanation": "講義全体は、機会費用とは何か、そしてそれが意思決定にどのように役立つかを説明しています。\n定義 → 学生の例 → 政府の例、という流れで一貫して同じ概念を扱っています。\n後悔の話（A）や予算計算法（B）、スタジアム投資そのもの（D）が主題ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the professor describe the student choosing between a campus job and studying abroad?",
+    "options": [
+     "To show that opportunity cost includes benefits that do not involve direct payments",
+     "To argue that students should always choose study-abroad programs",
+     "To explain why part-time work usually leads to better career outcomes",
+     "To compare the living costs in different countries"
+    ],
+    "answer": "To show that opportunity cost includes benefits that do not involve direct payments",
+    "explanation": "この例の目的は、機会費用には現金収入以外の利益も含まれることを示すためです。\n留学を選ばなかった場合に失われる語学力や人脈、成長といった「見えにくい価値」が、機会費用になると説明しています。\n留学を勧めている（B）わけでも、仕事の有利さを論じている（C）わけでもありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-3-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What does the professor imply about the city that builds a sports stadium?",
+    "options": [
+     "The stadium will automatically solve its transportation problems.",
+     "Spending on the stadium reduces the money available for other public projects.",
+     "The city will be able to raise taxes instead of cutting other services.",
+     "The stadium has no effect on how the budget is distributed."
+    ],
+    "answer": "Spending on the stadium reduces the money available for other public projects.",
+    "explanation": "教授は、スタジアム建設に多くの予算を使うと、\n他の公共事業（交通や教育）に回せるお金が減ると示唆しています。\nこれこそが政府における機会費用の例です。\n問題が自動的に解決する（A）や、予算配分に影響がない（D）とは述べられていません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-3-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "What will the professor most likely discuss in the next class?",
+    "options": [
+     "Techniques for collecting data on household spending",
+     "Historical changes in government taxation systems",
+     "Psychological reasons people overlook opportunity costs in everyday life",
+     "Mathematical formulas for predicting the success of public projects"
+    ],
+    "answer": "Psychological reasons people overlook opportunity costs in everyday life",
+    "explanation": "最後に\n“why people so often ignore opportunity costs and the decision biases that result”\nと述べており、次回は人がなぜ機会費用を見落とすのか、その心理的要因や判断の偏りを扱うと分かります。\n数式（D）や税制の歴史（B）、家計調査（A）がテーマではありません。",
+    "skillTag": "academic-talk"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-academic-talk-lat-4",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "academic-talk",
+  "title": "LAT 4",
+  "description": "Listen to a talk in an environmental science class.",
+  "difficulty": "medium",
+  "timeLimitSec": 480,
+  "transcript": "Today I’d like to talk about the urban heat island effect. This term describes the tendency for densely built city areas to be several degrees warmer than nearby rural land. It is related to global climate change, but it is a more local phenomenon. In cities, dark roofs and asphalt streets have low albedo, meaning they absorb rather than reflect sunlight. At the same time, there are fewer trees and soils, so there is less shade and less evapotranspiration, the cooling that occurs when water evaporates from leaves and ground surfaces.\nImagine two neighborhoods on a summer afternoon. One is a downtown block with tall concrete buildings, wide asphalt parking lots, and very little vegetation. The other is a residential district with parks, ponds, and tree-lined streets. Even if the regions share the same air temperature forecast, the surfaces in the first neighborhood will be significantly hotter. Residents there may rely heavily on air-conditioning, which increases electricity demand and can worsen air pollution from power plants.\nBecause heat islands raise the risk of heat-related illness, many cities are searching for mitigation strategies. Some are requiring cool roofs coated with reflective materials; others are planting street trees and creating “pocket parks” on small vacant lots. These measures do not solve every climate problem, but they can lower local surface temperatures. In our next class, I’ll present several case studies comparing how effective different combinations of these strategies have been.",
+  "transcriptJa": "今日はヒートアイランド現象（urban heat island effect）について話します。\nこれは、建物が密集した都市部が、近くの農村地域よりも数度高温になる傾向を指します。\n地球温暖化と関係はありますが、より局所的な現象です。\n都市では、暗い色の屋根やアスファルト道路はアルベド（反射率）が低く、太陽光を反射せず吸収します。\nさらに、樹木や土壌が少ないため、日陰が減り、葉や地表から水が蒸発することで起こる冷却作用である蒸発散（evapotranspiration）も少なくなります。\n夏の午後に、2つの地域を想像してみてください。\n1つは、高いコンクリート建築、広いアスファルト駐車場、ほとんど緑のない都心部です。\nもう1つは、公園や池、街路樹のある住宅地です。\n天気予報上の気温が同じでも、前者の地表温度ははるかに高くなります。\nその結果、住民は冷房に強く依存し、電力需要が増え、発電所からの大気汚染が悪化する可能性があります。\nヒートアイランドは熱中症などのリスクを高めるため、多くの都市が緩和策（mitigation strategies）を模索しています。\n反射性の高い素材で塗ったクールルーフを義務づける都市もあれば、街路樹を植えたり、小さな空き地に「ポケットパーク」を作ったりする都市もあります。\nこれらの対策はすべての気候問題を解決するわけではありませんが、局所的な温度を下げる効果があります。\n次回の授業では、こうした戦略の組み合わせがどれほど効果的かを比較した事例研究を紹介します。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-academic-talk-lat-4-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main focus of the talk?",
+    "options": [
+     "Long-term trends in global climate change",
+     "Causes and consequences of the urban heat island effect",
+     "Technological advances in air-conditioning systems",
+     "Government emergency responses to heat waves"
+    ],
+    "answer": "Causes and consequences of the urban heat island effect",
+    "explanation": "講義は、ヒートアイランド現象の原因とその影響（結果）に焦点を当てています。\n前半で原因（低いアルベド、緑の少なさ）、中盤で結果（高温・冷房依存・汚染）、後半で対策に触れています。\n地球温暖化全体の長期傾向（A）や冷房技術（C）、緊急対応（D）が中心ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-4-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the professor compare two different neighborhoods on a summer afternoon?",
+    "options": [
+     "To argue that people should move from cities to rural areas",
+     "To show how differences in land cover lead to unequal heating within the same region",
+     "To explain why traffic is heavier in business districts than in residential districts",
+     "To illustrate that weather forecasts are often inaccurate for urban areas"
+    ],
+    "answer": "To show how differences in land cover lead to unequal heating within the same region",
+    "explanation": "2つの地域の対比は、同じ地域・同じ気温予報でも、土地利用の違いによって実際の暑さが異なることを示すためです。\n建物・アスファルト中心の区域と、緑の多い区域の差が、ヒートアイランドを生むことを具体的に説明しています。\n都市からの移住を勧めている（A）わけでも、交通や予報精度（C・D）の話でもありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-4-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the talk, which action would most directly help reduce the urban heat island effect in a city?",
+    "options": [
+     "Expanding subway lines to decrease car use",
+     "Installing reflective coatings on building roofs",
+     "Encouraging residents to buy more efficient air-conditioners",
+     "Building larger parking lots near downtown offices"
+    ],
+    "answer": "Installing reflective coatings on building roofs",
+    "explanation": "教授は、反射性素材で覆ったクールルーフを、直接的な緩和策の一例として挙げています。\nこれは、太陽光の吸収を減らし、表面温度を下げる方法です。\n地下鉄拡張（A）や高効率エアコン（C）は副次的効果にとどまり、\n駐車場拡大（D）はむしろ問題を悪化させます。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-4-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "What will the professor most likely discuss in the next class?",
+    "options": [
+     "Methods for measuring albedo in the laboratory",
+     "Psychological impacts of living in very hot environments",
+     "Case studies that evaluate different urban heat-island mitigation strategies",
+     "Historical records of temperature in major world cities"
+    ],
+    "answer": "Case studies that evaluate different urban heat-island mitigation strategies",
+    "explanation": "最後に\n“I’ll present several case studies comparing how effective different combinations of these strategies have been.”\nと明確に述べています。\nしたがって次回は、ヒートアイランド対策の効果を比較した事例研究がテーマです。\n実験室測定（A）や心理的影響（B）、歴史的気温記録（D）は予告されていません。",
+    "skillTag": "academic-talk"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-academic-talk-lat-5",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "academic-talk",
+  "title": "LAT 5",
+  "description": "Listen to a talk in a social psychology class.",
+  "difficulty": "medium",
+  "timeLimitSec": 480,
+  "transcript": "Today I’d like to discuss a concept called cognitive dissonance. In social psychology, this term refers to the mental discomfort people feel when their beliefs, attitudes, or actions do not match. Because that tension is unpleasant, people are motivated to reduce it—either by changing what they do or by reinterpreting what they have done. Cognitive dissonance is not the only way psychologists explain behavior, but it helps us understand why people sometimes act in ways that seem inconsistent with their own values.\nConsider someone who knows that smoking increases the risk of serious disease but continues to smoke. One way to reduce dissonance is to quit. Another is to downplay the conflict: a smoker might tell themselves that the statistics are exaggerated, or that they only smoke on weekends, so it is “not really that bad.” In consumer behavior, a student who buys an expensive gadget without a discount might later justify the purchase by thinking, “I needed it for my studies,” or by comparing it to an even more costly model and deciding they actually saved money. In both cases, beliefs shift to fit past actions.\nPublic campaigns sometimes try to use this process. For example, a health program may first ask people to write down reasons why they value an active lifestyle and to share those reasons in a group. Later, if they skip exercise, their behavior clashes with the image of themselves that they have publicly expressed. However, if a message demands extremely large changes—such as exercising every single day with no guidance—people may simply dismiss it as unrealistic and feel no obligation to change. In our next class, we’ll look at classic experiments that tested cognitive dissonance in the laboratory.",
+  "transcriptJa": "今日は認知的不協和（cognitive dissonance）という概念について話します。\n社会心理学においてこれは、人の信念・態度・行動が一致しないときに生じる心理的な不快感を指します。\nこの緊張は不快なため、人はそれを減らそうとして、行動を変えたり、過去の行動の意味を解釈し直したりします。\n認知的不協和は行動を説明する唯一の理論ではありませんが、人が自分の価値観と矛盾する行動を取る理由を理解する助けになります。\nたとえば、喫煙が重い病気のリスクを高めると知っていながら、喫煙を続ける人を考えてみてください。\n不協和を減らす一つの方法は、禁煙することです。\nもう一つは、矛盾を過小評価することです。統計は誇張されているとか、週末しか吸わないから「それほど悪くない」と考えるかもしれません。\n消費者行動でも同じことが起こります。\n割引なしで高価なガジェットを買った学生は、後になって\n「勉強に必要だった」と考えたり、もっと高い製品と比べて「実は節約した」と納得したりします。\nいずれの場合も、信念が行動に合わせて変化しています。\n公共キャンペーンは、この仕組みを利用することがあります。\nたとえば健康プログラムでは、まず「なぜ自分は活動的な生活を大切にしているのか」を書き出し、グループで共有させます。\nその後で運動をサボると、自分が公に表明した自己イメージと行動が衝突します。\nただし、「毎日必ず運動しなさい」といった極端な要求では、人は非現実的だと感じ、変わる義務を感じなくなることもあります。\n次回の授業では、認知的不協和を実験室で検証した古典的研究を取り上げます。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-academic-talk-lat-5-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main focus of the talk?",
+    "options": [
+     "The historical development of public campaigns about smoking and health",
+     "A psychological process people use to reduce conflicts between their beliefs and actions",
+     "Several research methods for measuring people’s attitudes in surveys and interviews",
+     "Ways in which companies use price discounts to shape customers’ purchasing decisions"
+    ],
+    "answer": "A psychological process people use to reduce conflicts between their beliefs and actions",
+    "explanation": "講義全体の焦点は、信念・態度・行動の不一致によって生じる不快感を、人がどのように解消しようとするかという心理過程です。\n定義 → 個人の例 → 消費行動 → 公共政策への応用、という流れで一貫して認知的不協和を説明しています。\n喫煙キャンペーンの歴史（A）や調査方法（C）、値引き戦略（D）が中心ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-5-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the professor talk about the student who buys an expensive gadget?",
+    "options": [
+     "To illustrate that students often face financial stress when they make large purchases",
+     "To suggest that young consumers should be more careful when they compare product prices",
+     "To demonstrate how people sometimes change their beliefs to make past choices feel acceptable",
+     "To compare the experience of shopping online with the experience of shopping in physical stores"
+    ],
+    "answer": "To demonstrate how people sometimes change their beliefs to make past choices feel acceptable",
+    "explanation": "この例は、人が過去の選択を正当化するために信念を変えることがあると示すために使われています。\n「必要だった」「実は得をした」と考えることで、不協和を減らしているのです。\n金銭的ストレス（A）や価格比較の注意喚起（B）、購入方法の違い（D）が目的ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-5-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the talk, which action best illustrates how public programs can apply cognitive dissonance?",
+    "options": [
+     "Giving people free fitness trackers so they can monitor their steps and heart rate each day",
+     "Asking people to write and share personal reasons for valuing an active lifestyle in a group setting",
+     "Distributing detailed leaflets that list the medical dangers of being physically inactive or unfit",
+     "Offering temporary discounts on gym memberships during busy seasons when motivation is low"
+    ],
+    "answer": "Asking people to write and share personal reasons for valuing an active lifestyle in a group setting",
+    "explanation": "人に自分の価値観を文章化し、他者の前で共有させることで、その自己イメージと行動の不一致が生じやすくなります。\nこれが不協和を生み、行動変容を促すという仕組みです。\n単なる情報提供（C）や物品配布（A）、割引（D）よりも、心理的プロセスに直接働きかけています。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-5-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "What will the professor most likely discuss in the next class?",
+    "options": [
+     "Classic laboratory studies that examined cognitive dissonance in controlled settings",
+     "New survey techniques for measuring people’s exercise habits over long periods",
+     "The development of modern advertising strategies that use emotional persuasion",
+     "Government statistics on smoking rates and levels of physical activity in adults"
+    ],
+    "answer": "Classic laboratory studies that examined cognitive dissonance in controlled settings",
+    "explanation": "最後に\n“we’ll look at classic experiments that tested cognitive dissonance in the laboratory”\nと述べているため、次回のテーマは認知的不協和を検証した古典的な実験研究です。\n調査技法（B）や広告戦略（C）、政府統計（D）は予告されていません。",
+    "skillTag": "academic-talk"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-academic-talk-lat-6",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "academic-talk",
+  "title": "LAT 6",
+  "description": "Listen to a talk in a behavioral economics class.",
+  "difficulty": "medium",
+  "timeLimitSec": 480,
+  "transcript": "Today I’d like to introduce the idea of loss aversion, a key concept in what is known as prospect theory. In traditional economics, people were often described as rational decision-makers who simply compare possible outcomes and choose the one with the highest overall value. Prospect theory suggests something different: on average, people react more strongly to losing a certain amount than to gaining the same amount. In other words, a loss of fifty dollars typically feels more painful than a gain of fifty dollars feels pleasant.\nOne classic experiment asked students whether they would accept a simple coin toss. If the coin landed on tails, they would lose ten dollars from their own money. To make the gamble attractive, the researchers gradually increased the amount the students could win when the coin landed on heads. Many participants refused the gamble until the possible gain reached twenty or even thirty dollars, which shows that they needed a larger potential win to balance a smaller possible loss. This pattern has been repeated in many studies.\nLoss aversion helps explain why people hold on to losing investments or hesitate to switch phone plans, even when the new option is clearly cheaper. It also matters for public policy. For example, presenting a health program as “avoiding a loss in future income due to illness” can be more persuasive than framing the exact same program as “gaining extra income by staying healthy.” In our next class, we’ll examine how policymakers design nudges that use this tendency in everyday choices.",
+  "transcriptJa": "今日は、損失回避（loss aversion）という考え方を紹介します。これは、プロスペクト理論の中核となる概念です。\n伝統的な経済学では、人は合理的に結果を比較し、最も価値の高い選択をすると考えられてきました。\nしかしプロスペクト理論は、平均的に見ると、人は同じ金額でも「得」をするより「損」をすることに、より強く反応すると示しています。\nつまり、50ドルの損失は、50ドルの利益よりも強い苦痛として感じられるのです。\nある古典的な実験では、学生に単純なコイントスを受け入れるかどうかを尋ねました。\n裏が出たら10ドル失い、表が出たらお金を得るという条件です。\n研究者が表のときにもらえる金額を徐々に増やしていくと、多くの学生は、20ドルや30ドルもらえる可能性がない限り、この賭けを拒否しました。\nこれは、小さな損失を受け入れるためには、より大きな利益が必要になることを示しています。\nこの結果は、多くの研究で繰り返し確認されています。\n損失回避は、赤字の投資をなかなか手放せなかったり、明らかに安いプランがあっても携帯料金を切り替えなかったりする行動を説明します。\nまた、公共政策にも関係します。\nたとえば健康プログラムを、「健康でいることで収入が増える」と説明するよりも、\n「病気によって将来の収入を失うのを防ぐ」と説明したほうが、同じ内容でも説得力が高くなる場合があります。\n次回の授業では、政策立案者がこの傾向を利用した**ナッジ（行動をそっと促す仕組み）**を、日常の選択の中でどのように設計しているかを見ていきます。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-academic-talk-lat-6-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main focus of the talk?",
+    "options": [
+     "The historical development of theories about risk in economics and finance",
+     "Emotional factors that influence people’s decisions in a wide range of situations",
+     "The concept of loss aversion and its consequences for the way people make choices",
+     "Research methods used to measure attitudes toward money and financial gambling"
+    ],
+    "answer": "The concept of loss aversion and its consequences for the way people make choices",
+    "explanation": "講義の中心は、損失回避という概念そのものと、それが意思決定にどのような影響を与えるかです。\n定義 → 実験 → 日常行動 → 公共政策への応用、という流れで一貫しています。\n経済理論の歴史（A）や調査手法（D）が主題ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-6-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the professor describe the coin-toss experiment with students?",
+    "options": [
+     "To criticize the way universities pay participants for taking part in research studies",
+     "To demonstrate that many people require larger possible gains to accept relatively small losses",
+     "To show that students do not understand probability when they are making financial decisions",
+     "To compare the behavior of students with the behavior of professional investors in markets"
+    ],
+    "answer": "To demonstrate that many people require larger possible gains to accept relatively small losses",
+    "explanation": "この実験例は、人が小さな損失を受け入れるためには、それを上回る大きな利益を必要とすることを示すために使われています。\n同額の得と損が心理的に対称ではない、という損失回避の核心を具体的に示しています。\n学生の理解力（C）や研究報酬（A）を批判する目的ではありません。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-6-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the talk, which health message best applies the idea of loss aversion?",
+    "options": [
+     "“Join our fitness program and gain extra energy for your daily activities.”",
+     "“Participate in our classes and improve your physical strength over time.”",
+     "“Take part in our program to avoid losing future income because of preventable illness.”",
+     "“Enroll in our course and learn how to increase your chances of long-term success.”"
+    ],
+    "answer": "“Take part in our program to avoid losing future income because of preventable illness.”",
+    "explanation": "講義では、「将来失うものを避ける」形でメッセージを提示するほうが効果的だと述べています。\n将来の収入を「失わずに済む」と表現することで、損失への敏感さに訴えかけています。\n単なる利益の強調（A・B・D）よりも、損失回避を直接活用しています。",
+    "skillTag": "academic-talk"
+   },
+   {
+    "id": "toefl-l-academic-talk-lat-6-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "What will the professor most likely discuss in the next class?",
+    "options": [
+     "Specific policy tools that use nudges based on loss aversion in real-world decisions",
+     "Mathematical formulas for calculating the value of financial gains and losses",
+     "Historical case studies of governments that ignored psychological research on risk",
+     "Laboratory techniques for measuring changes in brain activity during decision-making"
+    ],
+    "answer": "Specific policy tools that use nudges based on loss aversion in real-world decisions",
+    "explanation": "最後に、\n“we’ll examine how policymakers design nudges that use this tendency”\nと述べられているため、次回は損失回避を利用した具体的な政策的ナッジがテーマです。\n数式（B）や脳活動測定（D）、歴史事例（C）は予告されていません。",
+    "skillTag": "academic-talk"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-announcement-lta-1",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "announcement",
+  "title": "LTA 1",
+  "description": "Listen to an announcement in a campus library.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Attention, everyone. This is a quick announcement about a workshop next Wednesday at 3 p.m. in Room 204 of the main library. We will be hosting a session on how to find academic articles and use online databases effectively. The workshop is free and open to all students, but seating is limited. If you’re interested, please sign up at the information desk before Friday so we can reserve a spot for you.",
+  "transcriptJa": "みなさん、ご注目ください。これは、来週水曜日の午後3時にメインライブラリーの204号室で行われるワークショップについての簡単なお知らせです。\n学術論文の探し方と、オンラインデータベースを効果的に使う方法についてのセッションを行います。\nこのワークショップは無料で、すべての学生が参加できますが、座席数には限りがあります。興味がある方は、席を確保するために金曜日までにインフォメーションデスクで申し込みをしてください。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-announcement-lta-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the announcement?",
+    "options": [
+     "To report a change in library hours",
+     "To inform students about a library skills workshop",
+     "To explain new rules for using study rooms",
+     "To advertise a paid tutoring program"
+    ],
+    "answer": "To inform students about a library skills workshop",
+    "explanation": "・ポイントは「全体で何を伝えたいか」です。冒頭で a quick announcement about a workshop（ワークショップのお知らせ）と言っており、その後も\n・日時：next Wednesday at 3 p.m.\n・場所：Room 204 of the main library\n・内容：how to find academic articles / use online databases effectively\n・参加条件：free and open to all students\n・申込み方法：sign up … before Friday\nと、ワークショップの情報だけが並んでいます。\nしたがって目的は「図書館関連のスキルワークショップの案内」です。\n(A) 営業時間の変更、(C) 自習室ルール、(D) 有料チュータリングの宣伝は、本文に根拠がありません。",
+    "skillTag": "announcement"
+   },
+   {
+    "id": "toefl-l-announcement-lta-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the man mention that seating is limited?",
+    "options": [
+     "To discourage students from attending the workshop",
+     "To explain why the workshop will be held in the library",
+     "To compare this workshop with other campus events",
+     "To encourage students to register in advance"
+    ],
+    "answer": "To encourage students to register in advance",
+    "explanation": "seating is limited（席に限りがある）と言う理由は、「だから早めに申し込んでね」につなげるためです。実際に続けて\nIf you’re interested, please sign up … before Friday so we can reserve a spot for you.\n（興味があるなら金曜までに申し込んで。席を確保するから）\nと述べています。\nつまり「席が少ない → 事前登録が必要」という因果関係です。\n(A) 参加を discourge（やめさせる）なら、申し込みを促しません。\n(B) 開催場所の理由説明ではなく、席確保の話です。\n(C) 他イベントとの比較もしていません。",
+    "skillTag": "announcement"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-announcement-lta-2",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "announcement",
+  "title": "LTA 2",
+  "description": "Listen to an announcement in a university cafeteria.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Good morning, everyone. I’d like to let you know about a change to our lunch service this Friday. Because we’ll be hosting a special cultural food fair in the main dining hall, the regular lunch menu will only be available in the smaller East Wing cafeteria from noon to two p.m. Meal plan cards will still be accepted as usual. If you plan to eat here on Friday, please go directly to the East Wing during that time.",
+  "transcriptJa": "みなさん、おはようございます。今週金曜日のランチサービスについての変更をお知らせします。\nメインの食堂で特別な文化フードフェアを開催するため、通常のランチメニューは、正午から午後2時までの間、東ウイングの小さなカフェテリアのみで提供されます。\nミールプランのカードは、これまで通り使用できます。\n金曜日にここで昼食を取る予定の方は、その時間帯に東ウイングへ直接行ってください。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-announcement-lta-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the announcement?",
+    "options": [
+     "To cancel lunch service for the day",
+     "To inform students about a temporary change in the lunch location",
+     "To introduce a new meal plan system",
+     "To advertise a discount on cafeteria meals"
+    ],
+    "answer": "To inform students about a temporary change in the lunch location",
+    "explanation": "このアナウンスの中心は、金曜日だけランチの提供場所が変わるという点です。\n冒頭で a change to our lunch service this Friday（金曜日のランチサービスの変更）と言い、その理由として\nBecause we’ll be hosting a special cultural food fair\nと説明しています。\n内容はすべて「どこで通常のランチが食べられるか」「いつ利用できるか」に集中しています。\nしたがって目的は、一時的なランチ提供場所の変更を知らせることです。\n中止（A）や新制度（C）、割引（D）の話は出ていません。",
+    "skillTag": "announcement"
+   },
+   {
+    "id": "toefl-l-announcement-lta-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What should students do if they want a regular lunch on Friday?",
+    "options": [
+     "Buy food at an off-campus restaurant",
+     "Come earlier than noon to the main dining hall",
+     "Go to the East Wing cafeteria between noon and two p.m.",
+     "Use cash instead of their meal plan cards"
+    ],
+    "answer": "Go to the East Wing cafeteria between noon and two p.m.",
+    "explanation": "通常のランチメニューについて、\nthe regular lunch menu will only be available in the smaller East Wing cafeteria from noon to two p.m.\nと明確に述べられています。\nつまり、金曜日に普段通りのランチを食べたい場合は、\n正午〜午後2時の間に東ウイングのカフェテリアへ行く必要があります。\n現金利用（D）や早く来ること（B）、学外に行くこと（A）は必要ありません。",
+    "skillTag": "announcement"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-announcement-lta-3",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "announcement",
+  "title": "LTA 3",
+  "description": "Listen to an announcement at the campus fitness center.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Good afternoon, everyone. I’d like to make a brief announcement about the fitness center schedule this coming Tuesday. The entire facility will be closed from nine a.m. until four p.m. for a mandatory safety inspection of all exercise equipment. During this time, no group classes will be held, and the weight room and cardio area will not be available. I’m sorry for the short notice. If you still want to work out on Tuesday, please use the gym in the Physical Education Building or the outdoor running track, which will remain open as usual.",
+  "transcriptJa": "みなさん、こんにちは。\n来週火曜日のフィットネスセンターの利用時間について、簡単なお知らせがあります。\nすべての運動器具の安全点検（義務）のため、フィットネスセンター全体は午前9時から午後4時まで閉鎖されます。\nこの時間帯は、グループクラスは行われず、ウエイトルームと有酸素運動エリアも利用できません。\n直前のお知らせになり申し訳ありません。\n火曜日にどうしても運動したい場合は、体育館（Physical Education Building）内のジム、または屋外のランニングトラックを利用してください。これらは通常どおり開いています。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-announcement-lta-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the announcement?",
+    "options": [
+     "To explain new gym rules",
+     "To announce a one-day closure and alternatives",
+     "To advertise a safety workshop",
+     "To ask for student volunteers"
+    ],
+    "answer": "To announce a one-day closure and alternatives",
+    "explanation": "このアナウンスの目的は、火曜日にフィットネスセンターが一時的に閉鎖されることと、その代替手段を知らせることです。\n本文では、\n・閉鎖日時：closed from nine a.m. until four p.m.\n・理由：mandatory safety inspection\n・利用不可：no group classes / weight room and cardio area\n・代替案：use the gym in the Physical Education Building or the outdoor running track\nと、閉鎖の情報と代わりに利用できる施設の説明がセットで述べられています。\n新ルールの説明（A）や、安全講習の宣伝（C）、ボランティア募集（D）ではありません。",
+    "skillTag": "announcement"
+   },
+   {
+    "id": "toefl-l-announcement-lta-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What should students do if they want to exercise on Tuesday?",
+    "options": [
+     "Skip their workout",
+     "Use other campus facilities that are open",
+     "Request a refund",
+     "Wait for an evening session at the fitness center"
+    ],
+    "answer": "Use other campus facilities that are open",
+    "explanation": "スピーカーは、運動したい人への具体的な指示として、\nplease use the gym in the Physical Education Building or the outdoor running track\nと述べています。\nつまり、通常のフィットネスセンター以外で、開いている学内施設を使うのが正解です。\n夜のセッションを待つ（D）や、運動をやめる（A）、返金を求める（C）必要はありません。",
+    "skillTag": "announcement"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-announcement-lta-4",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "announcement",
+  "title": "LTA 4",
+  "description": "Listen to an announcement on campus.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Attention all students. I’d like to let you know about a brief interruption to the campus Wi-Fi this Saturday morning. From eight to eleven a.m., the network will be offline while our IT staff upgrades the system. During that time, you won’t be able to access online courses or email on campus. If you have assignments due, please download any materials you need in advance, or use the computer lab at the city library downtown, which will not be affected.",
+  "transcriptJa": "学生のみなさん、ご注意ください。\n今週土曜日の朝に発生する、学内Wi-Fiの一時停止についてお知らせします。\n午前8時から11時まで、ITスタッフによるシステムのアップグレード作業のため、ネットワークは停止します。\nこの時間帯は、学内ではオンライン授業やメールにアクセスできません。\nもし提出期限のある課題がある場合は、必要な資料を事前にダウンロードしておくか、影響を受けない市内ダウンタウンの市立図書館にあるコンピュータ室を利用してください。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-announcement-lta-4-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the announcement?",
+    "options": [
+     "To introduce new online classes",
+     "To warn about a short Wi-Fi outage and how to prepare",
+     "To explain how to set up student email",
+     "To advertise the city library"
+    ],
+    "answer": "To warn about a short Wi-Fi outage and how to prepare",
+    "explanation": "このアナウンスの目的は、学内Wi-Fiが短時間使えなくなることと、その際に学生が取るべき対応を伝えることです。\n冒頭で a brief interruption to the campus Wi-Fi（Wi-Fiの一時停止）と言い、続けて\n・停止時間：From eight to eleven a.m.\n・理由：our IT staff upgrades the system\n・影響：you won’t be able to access online courses or email\nと説明しています。さらに、事前準備や代替手段にも触れています。\n新しい授業の紹介（A）やメール設定の説明（C）、図書館の宣伝（D）が目的ではありません。",
+    "skillTag": "announcement"
+   },
+   {
+    "id": "toefl-l-announcement-lta-4-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What does the speaker suggest for students who have assignments due?",
+    "options": [
+     "Start new courses during the outage",
+     "Turn off their email accounts",
+     "Get needed files early or work off campus",
+     "Delay submitting their work"
+    ],
+    "answer": "Get needed files early or work off campus",
+    "explanation": "スピーカーは、課題がある学生に対して\nplease download any materials you need in advance, or use the computer lab at the city library downtown\nと具体的に指示しています。\nつまり、\n・必要なファイルを事前に用意しておく\n・学外で使える施設（市立図書館）を利用する\nという2つの選択肢を示しています。\n課題を遅らせる（D）ことや、メールを停止する（B）、新しい授業を始める（A）とは言っていません。",
+    "skillTag": "announcement"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-announcement-lta-5",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "announcement",
+  "title": "LTA 5",
+  "description": "Listen to an announcement on campus.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Attention, students. I’d like to let you know about a change to the campus shuttle this Friday evening. Because of road construction near the main gate, the regular “Blue Line” bus will not stop there after six p.m. Instead, it will pick up and drop off passengers at the west parking lot next to the gym. Please check the updated timetable online before you travel on Friday night.",
+  "transcriptJa": "学生のみなさん、ご注意ください。\n今週金曜日の夜のキャンパスシャトルバスについて変更のお知らせがあります。\n正門付近で道路工事が行われるため、通常の「ブルーライン」のバスは、午後6時以降は正門に停車しません。\nその代わりに、ジム横の西側駐車場で乗降することになります。\n金曜日の夜に利用する予定の方は、出発前に最新の時刻表をオンラインで確認してください。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-announcement-lta-5-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the announcement?",
+    "options": [
+     "To report a traffic accident nearby",
+     "To advertise weekend campus events",
+     "To explain new parking rules",
+     "To announce a temporary shuttle change"
+    ],
+    "answer": "To announce a temporary shuttle change",
+    "explanation": "このアナウンスは、金曜日の夜に限ってキャンパスシャトルの運行方法が変わることを伝えるものです。\n冒頭で a change to the campus shuttle this Friday evening と明確に述べられており、続けて\n・理由：road construction near the main gate\n・影響：will not stop there after six p.m.\n・代替場所：west parking lot next to the gym\nと、一時的な変更内容が説明されています。\n事故の報告（A）、イベント案内（B）、駐車ルールの説明（C）ではありません。",
+    "skillTag": "announcement"
+   },
+   {
+    "id": "toefl-l-announcement-lta-5-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What are students advised to do?",
+    "options": [
+     "Check the new evening bus times",
+     "Avoid using buses on Friday",
+     "Drive their own cars instead",
+     "Wait until service returns Monday"
+    ],
+    "answer": "Check the new evening bus times",
+    "explanation": "最後に、スピーカーは\nPlease check the updated timetable online before you travel on Friday night.\nと指示しています。\nこれは、変更後の夕方以降の時刻表を事前に確認するよう勧めているという意味です。\nバス利用を避ける（B）や車で来る（C）、月曜まで待つ（D）必要はありません。",
+    "skillTag": "announcement"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-announcement-lta-6",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "announcement",
+  "title": "LTA 6",
+  "description": "Listen to an announcement on campus.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Attention, everyone. I have an announcement about the student health center this Thursday. Because of unexpected maintenance in the main building, all flu shot appointments after 1 p.m. will be moved to Room 109 in the Science Hall. Your appointment times will stay the same, but you’ll need to check in at the new location. Please arrive a few minutes early so we can keep the schedule on time.",
+  "transcriptJa": "みなさん、ご注意ください。\n今週木曜日の学生ヘルスセンターについてのお知らせです。\n本館で予期せぬメンテナンスが行われるため、午後1時以降のすべてのインフルエンザ予防接種の予約は、サイエンスホール109号室に変更されます。\n予約時間自体は変わりませんが、新しい場所で受付をする必要があります。\n予定通り進行できるよう、数分早めに到着してください。",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-announcement-lta-6-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the announcement?",
+    "options": [
+     "To cancel all flu shot appointments",
+     "To report a change in clinic hours",
+     "To announce a new vaccination program",
+     "To explain a temporary change of location"
+    ],
+    "answer": "To explain a temporary change of location",
+    "explanation": "このアナウンスの主な目的は、インフルエンザ予防接種の実施場所が一時的に変更されることを知らせることです。\n冒頭で an announcement about the student health center this Thursday と言い、続いて\n・理由：unexpected maintenance in the main building\n・変更内容：appointments … will be moved to Room 109 in the Science Hall\n・変わらない点：appointment times will stay the same\nと説明しています。\n時間変更（B）や中止（A）、新しいプログラムの告知（C）ではありません。",
+    "skillTag": "announcement"
+   },
+   {
+    "id": "toefl-l-announcement-lta-6-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What are students advised to do on Thursday?",
+    "options": [
+     "Go to Science Hall a bit early",
+     "Reschedule their appointments online",
+     "Wait in the health center lobby",
+     "Call to confirm a new time"
+    ],
+    "answer": "Go to Science Hall a bit early",
+    "explanation": "最後に\nPlease arrive a few minutes early so we can keep the schedule on time.\nとあります。\nこれは、新しい場所でスムーズに受付を行うため、少し早めにサイエンスホールに行くようにという指示です。\n予約を変更する（B）必要はなく、元のロビーで待つ（C）ことも適切ではありません。\n新しい時間を確認するために電話する（D）必要もありません。",
+    "skillTag": "announcement"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-three-1",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with three 1",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "transcript": "Man: I tried to print my lab report on the third-floor printer. It keeps jamming and says it’s out of toner.\nWoman: Yeah, I filed a maintenance ticket this morning. A technician should come this afternoon. If it’s urgent, the copy center across from the cafeteria can print from USB or email.\nMan: My deadline’s at two, so I can’t wait.\nWoman: Then go there now; they’ll finish in minutes.\nMan: Good idea. I’ll send the file from my phone and head over.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-three-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the man’s immediate concern?",
+    "options": [
+     "Submitting his lab report by a set time",
+     "Reserving a study room",
+     "Paying an outstanding printing fee",
+     "Finding a lost USB drive"
+    ],
+    "answer": "Submitting his lab report by a set time",
+    "explanation": "男性の台詞 “My deadline’s at two, so I can’t wait.” から、提出時刻が迫っていることが最優先の心配。B/C/Dは会話で言及なし（対象ズレ）。",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-three-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What does the woman suggest the man do?",
+    "options": [
+     "Wait for the technician to arrive",
+     "Try restarting the printer",
+     "Use the copy center near the cafeteria",
+     "Ask a classmate to print it later"
+    ],
+    "answer": "Use the copy center near the cafeteria",
+    "explanation": "女性は “the copy center across from the cafeteria” を提案。食堂向かいのコピーセンターを使うという具体的行動。Aは「待つ」だが、男性は待てないと言っている。B/Dは発話根拠なし。",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-three-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What reason does the woman give for her suggestion?",
+    "options": [
+     "It’s cheaper than the library",
+     "They can complete the job quickly",
+     "They offer only color printing",
+     "They’re open late at night"
+    ],
+    "answer": "They can complete the job quickly",
+    "explanation": "“they’ll finish in minutes” とあるので短時間で済むのが理由。A/C/Dは会話中に触れていない（根拠欠如）。",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-three-2",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with three 2",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "transcript": "Man: Did you see the alert about the campus shuttle?\nWoman: Yes, it says service is suspended on the east loop for an hour.\nMan: Seriously? My exam review starts in twenty minutes across campus.\nWoman: Then biking is faster. There are rental bikes outside the gym.\nMan: I haven’t used them before. Do I need to sign up?\nWoman: Just scan the code with your student app. Helmets are in the rack.\nMan: I could also walk, but that would be cutting it close.\nWoman: Grab a bike now, drop it at Science Gate, and you’ll be on time.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-three-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Why does the man need to get across campus?",
+    "options": [
+     "To pick up a package",
+     "To meet his advisor",
+     "To attend a review session for an exam",
+     "To go to a concert"
+    ],
+    "answer": "To attend a review session for an exam",
+    "explanation": "台詞 “My exam review starts in twenty minutes” \n→ 試験対策のレビュー参加が目的",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-three-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What does the woman suggest the man do next?",
+    "options": [
+     "Wait for the shuttle to resume",
+     "Take a taxi from the stadium",
+     "Walk quickly across campus",
+     "Use a shared bicycle near the gym"
+    ],
+    "answer": "Use a shared bicycle near the gym",
+    "explanation": "台詞 “There are rental bikes outside the gym… Just scan the code” \n→ ジム付近のシェア自転車利用",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-three-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Where does the woman say he should return the bike?",
+    "options": [
+     "By the science buildings’ gate",
+     "At the east loop stop",
+     "Near the library’s south entrance",
+     "In the stadium parking lot"
+    ],
+    "answer": "By the science buildings’ gate",
+    "explanation": "台詞 “drop it at Science Gate” \n→ パラフレーズして “science buildings’ gate”",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-three-3",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with three 3",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 420,
+  "transcript": "Man: I got a text that my prescription is ready. Are you still near the Oak Street pharmacy?\nWoman: Yes, but the line is wrapped around the aisle. The pharmacist said their payment terminal keeps freezing.\nMan: Ugh, I wanted to grab it before dinner.\nWoman: Try the River Mall location; they can transfer it in about five minutes if you call.\nMan: Do I call the Oak Street number or the mall one?\nWoman: Call Oak Street to release it, then the mall to confirm. I saved both numbers from last time.\nMan: Will they need anything from me when I pick it up?\nWoman: Just your ID and the last four digits of your phone number. Park by the grocery entrance—the pharmacy window is right there.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-three-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Why does the woman recommend the River Mall location?",
+    "options": [
+     "Oak Street closes early.",
+     "Oak Street’s checkout is down.",
+     "His insurance only works there.",
+     "Prices are lower there."
+    ],
+    "answer": "Oak Street’s checkout is down.",
+    "explanation": "Oak Street で「payment terminal keeps freezing」\n→支払いシステム不調＋行列が理由",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-three-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What should the man do before going to pick it up?",
+    "options": [
+     "Wait until tomorrow.",
+     "Email his doctor.",
+     "Just go without calling.",
+     "Call Oak, then the mall."
+    ],
+    "answer": "Call Oak, then the mall.",
+    "explanation": "「Call Oak Street to release it, then the mall to confirm」\n→受け渡し解放→転送確認の二段階",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-three-3-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What will the man need at pickup?",
+    "options": [
+     "Passport",
+     "ID and phone digits",
+     "Insurance card",
+     "Receipt"
+    ],
+    "answer": "ID and phone digits",
+    "explanation": "「Just your ID and the last four digits of your phone number」\n→必要持ち物が明示",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-two-1",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with two 1",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Man: I just got a text. My pickup code says it expires in 15 minutes.\nWoman: I’m outside the store now. The locker is down, so people are going to the counter instead.\nMan: Wait, can I still get my parcel without the locker?\nWoman: Yes. Show your ID and the tracking number at the counter. They’ll hand it over.\nMan: I was thinking of grabbing food first.\nWoman: I wouldn’t. Go now; once the code times out, they need extra verification and it takes longer.\nMan: Where exactly is the counter?\nWoman: Next to Returns, just inside the main doors.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-two-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What does the woman suggest the man do?",
+    "options": [
+     "Go now to the counter",
+     "Wait for the locker to restart",
+     "Eat first, then go",
+     "Come back tomorrow"
+    ],
+    "answer": "Go now to the counter",
+    "explanation": "カウンターで今すぐ受け取り（“Go now… at the counter”）",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-two-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does she give this advice?",
+    "options": [
+     "His code will expire soon",
+     "The store closes at noon",
+     "She can’t stay and help",
+     "The fee increases later"
+    ],
+    "answer": "His code will expire soon",
+    "explanation": "コードがまもなく失効（“expires in 15 minutes… once the code times out”）",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-two-2",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with two 2",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Man: The self-checkout screens are frozen.\nWoman: Yeah, staff said they’re rebooting. The express lane is open, though.\nMan: I only have a few items. Should I wait it out?\nWoman: I’d use the express. It’s moving faster right now.\nMan: Also, dinner: sushi box or hot soup? I need to eat on the train.\nWoman: Go with the sushi; it’s easier to eat on the go.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-two-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What does the woman suggest the man do about paying?",
+    "options": [
+     "Use the express lane",
+     "Wait for self-checkout",
+     "Pay at the returns counter",
+     "Come back later"
+    ],
+    "answer": "Use the express lane",
+    "explanation": "セルフレジがフリーズ→店員が再起動中。「express lane は空いてる／動いてる」→当面の支払い手段として勧めている。",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-two-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does she recommend the sushi?",
+    "options": [
+     "to save money",
+     "to eat more easily",
+     "to stay warm",
+     "to be healthier"
+    ],
+    "answer": "to eat more easily",
+    "explanation": "旅行中に食べる前提で「sushi は on the go で食べやすい」と理由提示。基準＝食べやすさ。",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-two-3",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with two 3",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Man: I’m choosing between noise-canceling earbuds and over-ear headphones for my commute.\nWoman: Where do you usually listen?\nMan: Mostly on crowded trains, and I carry a small bag.\nWoman: Then the earbuds make more sense, lighter and easy to stash.\nMan: Over-ears sound fuller and the battery lasts longer, though.\nWoman: True, but for packed trains, I’d still pick earbuds.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-two-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the man deciding between?",
+    "options": [
+     "A speaker and a soundbar",
+     "Earbuds and over-ear headphones",
+     "A radio and a headset",
+     "Wired and wireless chargers"
+    ],
+    "answer": "Earbuds and over-ear headphones",
+    "explanation": "冒頭で「noise-canceling earbuds と over-ear headphones の二択」。",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-two-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the woman recommend the earbuds?",
+    "options": [
+     "to save space",
+     "to get better sound",
+     "to stay warm",
+     "to spend less"
+    ],
+    "answer": "to save space",
+    "explanation": "「crowded trains／small bag」\n→ 携行性が基準。「lighter / easy to stash」＝省スペース。",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-two-4",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with two 4",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Man: I need something for this evening’s rain. Should I take a compact umbrella or a rain jacket?\nWoman: Where are you going?\nMan: I’ll be walking through the city center, and I’ll carry two shopping bags.\nWoman: In that case, the rain jacket makes more sense because you can keep both hands free.\nMan: An umbrella keeps my hair drier, though.\nWoman: It does, but it is windy today, so a small umbrella might flip and slow you down.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-two-4-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the man deciding between?",
+    "options": [
+     "A poncho and a scarf",
+     "An umbrella and a rain jacket",
+     "Rain boots and gloves",
+     "A hat and earmuffs"
+    ],
+    "answer": "An umbrella and a rain jacket",
+    "explanation": "冒頭で「compact umbrella か rain jacket か」の二択を明示。",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-two-4-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the woman recommend the rain jacket?",
+    "options": [
+     "to keep hands free",
+     "to save money",
+     "to stay warmer",
+     "to look better"
+    ],
+    "answer": "to keep hands free",
+    "explanation": "「shopping bags を持つ前提」なので、両手が空くことを理由に rain jacket を推奨。",
+    "skillTag": "conversation"
+   }
+  ]
+ },
+ {
+  "id": "toefl-l-conversation-ltc-with-two-5",
+  "exam": "toefl",
+  "skill": "listening",
+  "practiceType": "conversation",
+  "title": "LTC with two 5",
+  "description": "Listen to a conversation.",
+  "difficulty": "medium",
+  "timeLimitSec": 360,
+  "transcript": "Man: I want something for my evening runs. Should I get a smartwatch or a fitness band?\nWoman: How are you planning to use it?\nMan: Mostly for tracking distance and heart rate, and I don’t want to charge it every day.\nWoman: Then the fitness band makes more sense because it usually lasts a week and it’s lighter.\nMan: The smartwatch has a bigger screen and music controls, though.\nWoman: True, but for running, longer battery and less weight are more practical.",
+  "playLimitInTest": 1,
+  "questions": [
+   {
+    "id": "toefl-l-conversation-ltc-with-two-5-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the man deciding between?",
+    "options": [
+     "A GPS tracker and earbuds",
+     "A smartwatch and a fitness band",
+     "A phone and a camera",
+     "A tablet and a laptop"
+    ],
+    "answer": "A smartwatch and a fitness band",
+    "explanation": "冒頭で「smartwatch か fitness band か」の二択を明示。",
+    "skillTag": "conversation"
+   },
+   {
+    "id": "toefl-l-conversation-ltc-with-two-5-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "Why does the woman recommend the fitness band?",
+    "options": [
+     "to last longer between charges",
+     "to get better apps",
+     "to have a bigger screen",
+     "to spend less"
+    ],
+    "answer": "to last longer between charges",
+    "explanation": "「毎日充電は避けたい」→「長いバッテリー持ちと軽さ」を理由に band を推奨。他肢は基準ズレ（アプリ/画面/価格）。",
+    "skillTag": "conversation"
+   }
+  ]
+ }
+]

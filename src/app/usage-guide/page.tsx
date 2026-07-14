@@ -1,10 +1,13 @@
 "use client";
 
-import { GraduationCap, Users, FileText, Video, Play } from "lucide-react";
+import { GraduationCap, Users, FileText, Video, Play, Compass } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import PrepShell from "@/components/prep/PrepShell";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function UsageGuidePage() {
+  const router = useRouter();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [videoAspectRatio, setVideoAspectRatio] = useState<string>("56.25%"); // デフォルトは16:9
@@ -18,7 +21,7 @@ export default function UsageGuidePage() {
   const sections = [
     {
       id: 'introduction',
-      title: 'まずはじめに - Writing Master',
+      title: 'まずはじめに - Exavia',
       icon: Play,
       color: 'blue',
       video: '<div style="position: relative; padding-bottom: 49.11366006256517%; height: 0;"><iframe src="https://www.loom.com/embed/c82d1ccc18a04103a6693fc09488758b?sid=a838c7b6-0039-415f-92fc-f73e1b8dedf5" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>'
@@ -60,32 +63,47 @@ export default function UsageGuidePage() {
     }
   ];
 
+  const iconTint: Record<string, string> = {
+    blue: "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400",
+    emerald: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400",
+    violet: "bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400",
+    red: "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400",
+  };
+
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-5xl mx-auto px-6 py-20">
+    <PrepShell>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         {/* ヘッダー */}
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-light text-gray-900 mb-4 tracking-tight">
+        <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-3 duration-700">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50 mb-3">
             使い方ガイド
           </h1>
-          <p className="text-gray-500 text-sm font-light mb-2">
-            Writing Masterの各機能の使い方を動画で確認できます
+          <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">
+            Exaviaの各機能の使い方を動画で確認できます
           </p>
-          <p className="text-gray-400 text-xs">
+          <p className="text-gray-400 dark:text-gray-500 text-xs">
             カードのどこをクリックしても動画を確認できます
           </p>
+
+          {/* 初回ツアーの再表示 */}
+          <button
+            onClick={() => router.push("/home?tour=1")}
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-eg/40 bg-eg-soft px-4 py-2 text-sm font-semibold text-eg-deep hover:bg-eg/10 transition-colors dark:border-eg/40 dark:bg-eg/10 dark:text-eg"
+          >
+            <Compass className="w-4 h-4" />
+            使い方ツアーをもう一度見る
+          </button>
         </div>
 
         {/* セクション一覧 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sections.map((section) => {
+          {sections.map((section, i) => {
             const IconComponent = section.icon;
             return (
               <div
                 key={section.id}
-                className={`group relative border border-gray-200 rounded-xl p-5 hover:border-gray-300 hover:shadow-lg transition-all duration-300 cursor-pointer ${
-                  section.id === 'introduction' ? 'bg-gray-50' : 'bg-white'
-                }`}
+                style={{ animationDelay: `${i * 60}ms` }}
+                className="group relative rounded-2xl border border-gray-200/80 bg-white p-5 cursor-pointer transition-all duration-300 hover:border-gray-300 hover:shadow-lg hover:-translate-y-0.5 dark:border-gray-800 dark:bg-gray-900/60 dark:hover:border-gray-700 animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"
                 onClick={() => {
                   setSelectedVideo(section.video);
                   setVideoAspectRatio(extractAspectRatio(section.video));
@@ -95,33 +113,22 @@ export default function UsageGuidePage() {
                   }, 3000);
                 }}
               >
-
                 {/* アイコン */}
                 <div className="mb-4">
-                  <div className={`
-                    w-12 h-12 rounded-xl flex items-center justify-center mb-3
-                    ${section.color === 'blue' ? 'bg-blue-50' : ''}
-                    ${section.color === 'emerald' ? 'bg-emerald-50' : ''}
-                    ${section.color === 'violet' ? 'bg-violet-50' : ''}
-                    ${section.color === 'red' ? 'bg-red-50' : ''}
-                  `}>
-                    <IconComponent className={`
-                      w-6 h-6
-                      ${section.color === 'blue' ? 'text-blue-600' : ''}
-                      ${section.color === 'emerald' ? 'text-emerald-600' : ''}
-                      ${section.color === 'violet' ? 'text-violet-600' : ''}
-                      ${section.color === 'red' ? 'text-red-600' : ''}
-                    `} />
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${iconTint[section.color]}`}
+                  >
+                    <IconComponent className="w-6 h-6" />
                   </div>
                 </div>
 
                 {/* タイトル */}
-                <h3 className="text-lg font-medium text-gray-900 mb-4 leading-relaxed">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 leading-relaxed">
                   {section.title}
                 </h3>
 
                 {/* 動画を見るボタン */}
-                <div className="flex items-center text-gray-500 group-hover:text-gray-700 transition-colors duration-200">
+                <div className="flex items-center text-gray-500 dark:text-gray-400 group-hover:text-eg-deep dark:group-hover:text-eg transition-colors duration-200">
                   <Play className="w-3 h-3 mr-2" />
                   <span className="text-xs font-medium">動画を見る</span>
                 </div>
@@ -143,8 +150,8 @@ export default function UsageGuidePage() {
           {selectedVideo && (
             <div className="p-4">
               {isVideoLoading && (
-                <div 
-                  className="relative bg-gray-50 rounded-lg"
+                <div
+                  className="relative bg-gray-50 dark:bg-gray-800 rounded-lg"
                   style={{ paddingBottom: videoAspectRatio, height: 0 }}
                 >
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -152,13 +159,13 @@ export default function UsageGuidePage() {
                       <div className="mb-4">
                         <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full mx-auto animate-spin"></div>
                       </div>
-                      <p className="text-gray-600 text-lg">動画を読み込み中...</p>
+                      <p className="text-gray-600 dark:text-gray-300 text-lg">動画を読み込み中...</p>
                     </div>
                   </div>
                 </div>
               )}
-              <div 
-                className="border border-gray-200 rounded-lg overflow-hidden shadow-sm"
+              <div
+                className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm"
                 style={{ display: isVideoLoading ? 'none' : 'block' }}
                 dangerouslySetInnerHTML={{ __html: selectedVideo }}
               />
@@ -166,6 +173,6 @@ export default function UsageGuidePage() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </PrepShell>
   );
 }

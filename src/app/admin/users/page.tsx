@@ -81,6 +81,18 @@ export default function AdminUsersPage() {
   // ユーザー削除用の状態
   const [deleteUserDialogOpen, setDeleteUserDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<AdminUser | null>(null);
+  const adminFetch = async (url: string, init?: RequestInit) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error('認証が必要です。');
+    const token = await currentUser.getIdToken();
+    const response = await fetch(url, {
+      ...init,
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...init?.headers },
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || '処理に失敗しました。');
+    return result;
+  };
 
   useEffect(() => {
     checkAdminAccess();
@@ -107,25 +119,8 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const usersQuery = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(usersQuery);
-      const usersData = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          uid: doc.id,
-          ...data,
-          trainingPermissions: data.trainingPermissions || {
-            toefl: true,
-            toeflAcademicDiscussion: true,
-            ielts: true,
-            basic: false,
-            youtuber: false
-          },
-          role: data.role || 'user',
-          isActive: data.isActive !== false
-        } as AdminUser;
-      });
-      setUsers(usersData);
+      const result = await adminFetch('/api/admin/users');
+      setUsers(result.users as AdminUser[]);
     } catch (error) {
       console.error("Error fetching users:", error);
     }

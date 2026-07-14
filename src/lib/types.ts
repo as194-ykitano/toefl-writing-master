@@ -168,17 +168,49 @@ export interface Reminder {
   days: string[];
 }
 
+/** 学習者の属性（オンボーディングで取得） */
+export type LearnerStatus =
+  | "junior_high" // 中学生
+  | "high_school" // 高校生
+  | "university" // 大学生・専門学校生
+  | "working" // 社会人
+  | "other"; // その他
+
+/** オンボーディングで取得するプロフィール情報 */
+export interface OnboardingProfile {
+  /** 現在の学年・立場 */
+  learnerStatus: LearnerStatus;
+  /** 英語を学ぶ理由（自由記述） */
+  learningReason: string;
+  /** 対策する試験 */
+  targetExam: "toefl" | "ielts" | "toeic";
+  /** 目標スコア（試験基準の数値。IELTS は 6.5 等の小数もあり得る） */
+  targetScore?: number;
+  /** 目標達成の時期（yyyy-mm 目安。ISO 文字列） */
+  targetDate?: string;
+  /** オンボーディング完了フラグ */
+  completedAt?: string; // ISO string
+}
+
 export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
+  /** 名前のフリガナ（ローマ字・名字） 例: Yamada */
+  lastNameRomaji?: string;
+  /** 名前のフリガナ（ローマ字・名前） 例: Taro */
+  firstNameRomaji?: string;
   photoURL: string | null;
   createdAt: string; // ISO string
   learningGoals?: LearningGoals;
   progress?: Progress;
   studySessions: StudySession[];
   totalStudyTime: number;
+  /** 1日あたりの学習目標（分）。未設定時は60分。 */
+  dailyStudyGoalMinutes?: number;
   reminder?: Reminder;
+  /** オンボーディングで取得した属性・目標 */
+  onboarding?: OnboardingProfile;
 }
 
 // 単語・フレーズの型定義
@@ -211,6 +243,8 @@ export interface AdminUser {
   uid: string;
   email: string;
   displayName: string;
+  lastNameRomaji?: string;
+  firstNameRomaji?: string;
   photoURL: string | null;
   createdAt: string;
   lastLoginAt?: string;
@@ -391,3 +425,71 @@ export interface TOEFLAcademicDiscussionEssay {
   timeSpent?: number; // 秒単位
   wordCount?: number;
 } 
+// ─── Video courses (english-gym-admin から移植) ───
+// Firestore: videoCourses, videoCourseModules, videoCourseLessons, videoCourseProgress
+
+/** Firestore Timestamp 互換の最小型（移植元と同一形状） */
+export type FirebaseTimestamp = {
+  toDate: () => Date
+  seconds: number
+  nanoseconds: number
+}
+
+export type PracticeItemEmbeddedVideo = {
+  provider: "youtube" | "loom" | "riverside" | "spotify"
+  /** Embed URL or watch URL (will be normalized to embed when rendering) */
+  url: string
+}
+
+export const VIDEO_COURSES_COLLECTION = "videoCourses"
+export const VIDEO_COURSE_MODULES_COLLECTION = "videoCourseModules"
+export const VIDEO_COURSE_LESSONS_COLLECTION = "videoCourseLessons"
+export const VIDEO_COURSE_PROGRESS_COLLECTION = "videoCourseProgress"
+
+export type VideoCourseVisibility = "coach_clients" | "all_students"
+export type VideoCourseOwnerRole = "coach" | "admin"
+export type VideoCourseLessonContentType = "video" | "text"
+
+export type VideoCourse = {
+  id: string
+  title: string
+  description: string
+  thumbnailUrl: string
+  /** Firebase UID of the course creator (coach or admin). */
+  ownerId: string
+  ownerRole: VideoCourseOwnerRole
+  visibility: VideoCourseVisibility
+  published: boolean
+  order: number
+  /** Homeで選択中の試験・コース。未設定は全コース表示（既存データ互換）。 */
+  targetExams?: Array<"toefl" | "ielts" | "toeic" | "advanced">
+  createdAt: FirebaseTimestamp
+  updatedAt: FirebaseTimestamp
+}
+
+export type VideoCourseModule = {
+  id: string
+  courseId: string
+  title: string
+  order: number
+}
+
+export type VideoCourseLesson = {
+  id: string
+  courseId: string
+  moduleId: string
+  title: string
+  order: number
+  contentType: VideoCourseLessonContentType
+  /** Markdown body: description under video, or full text lesson */
+  body: string
+  embeddedVideo?: PracticeItemEmbeddedVideo
+}
+
+export type VideoCourseProgress = {
+  id: string
+  studentUid: string
+  courseId: string
+  completedLessonIds: string[]
+  updatedAt: FirebaseTimestamp
+}

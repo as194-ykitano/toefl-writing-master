@@ -1,0 +1,2054 @@
+[
+ {
+  "id": "toefl-r-academic-passage-academic-m1-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The String Test",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The String Test",
+  "paragraphs": [
+   {
+    "text": "For many years, tool use was considered a hallmark of human intelligence. That view began to change as scientists observed members of the crow family—crows, ravens, and rooks—solving problems that required planning rather than simple trial and error. To study this ability in a controlled way, researchers developed a series of “string tests,” in which a small basket of food was attached to the end of a string and placed just out of reach."
+   },
+   {
+    "text": "In a basic version, the string hung from a perch near the bird. To get the reward, the bird had to pull the string up, pin it with a foot, and repeat this sequence several times until the basket reached the perch. Many corvids succeeded on their first try, suggesting they understood the connection between their actions and the rising basket. In more complex variants, two or more strings were presented, but only one was connected to the food. Birds that inspected the layout before acting were more likely to choose the correct string."
+   },
+   {
+    "text": "Similar problem-solving has been reported in other species. New Caledonian crows have dropped stones into tubes of water to raise floating food, while Eurasian jays and even some pigeons have performed simplified versions of the string task after brief exposure. These findings indicate that sophisticated problem-solving may be more widespread in birds than previously assumed."
+   }
+  ],
+  "translationJa": "長い間、「道具を使うこと」は人間の知能の特徴だと考えられていました。しかしその考えは、カラス科の鳥――カラス、ワタリガラス、ミヤマガラス――が、単なる試行錯誤ではなく「計画性」を必要とする問題を解いているところが観察されるにつれ、変わり始めました。この能力を統制された環境で調べるために、研究者たちは「ストリング・テスト」と呼ばれる一連の実験を考案しました。これは、食べ物を入れた小さなかごを紐の先につなぎ、鳥の手が届かない場所に置くというものです。\n基本的なバージョンでは、紐は止まり木のそばに垂れ下がっています。餌を手に入れるには、鳥は紐を引き上げ、足で押さえ、その動作を何度も繰り返して、かごを止まり木まで引き寄せる必要があります。多くのカラス科の鳥は、最初の試行でこれに成功しました。これは、自分の行動がかごを持ち上げることとつながっていることを理解していたことを示しています。より複雑な型では、2本以上の紐が提示され、しかし餌につながっているのは1本だけです。行動する前に配置を観察した鳥ほど、正しい紐を選ぶ可能性が高いことがわかりました。\n似たような問題解決は、他の種でも報告されています。例えば、ニューカレドニアガラスは、水に浮かぶ餌を取るために、石を水の入った筒に落として水位を上げたことがあります。また、カケスや一部のハトも、短時間の練習後に簡略版のストリング・タスクを成功させています。これらの発見は、「高度な問題解決能力は、鳥類の中で以前考えられていたよりも広く見られる可能性がある」ということを示しています。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m1-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the passage mainly about?",
+    "options": [
+     "Stages of avian development",
+     "Research on animal problem-solving",
+     "Differences between crows, parrots, and ravens",
+     "Recent experiments on marine mammals"
+    ],
+    "answer": "Research on animal problem-solving",
+    "explanation": "文章全体は「鳥類（特にカラス科）の問題解決研究」の概要と実験結果を述べる。A/C/Dは話題逸脱。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "The word “hallmark” in the first paragraph is closest in meaning to",
+    "options": [
+     "accomplishment",
+     "characteristic",
+     "danger",
+     "diagram"
+    ],
+    "answer": "characteristic",
+    "explanation": "“hallmark of human intelligence”＝「人間の知性の特徴/しるし」。文脈的に“characteristic”が最適。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why did scientists use string-pulling tasks in their studies?",
+    "options": [
+     "To test whether birds recognized themselves in mirrors",
+     "To determine if birds understood how their actions produced a result",
+     "To measure the birds’ color vision",
+     "To track the birds’ movements over long distances"
+    ],
+    "answer": "To determine if birds understood how their actions produced a result",
+    "explanation": "文字通り「行為と結果の因果理解」を検証するために紐引き課題を使った（上昇するかごとの連関）。A/C/Dの要素は本文にない。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-1-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, all of the following are true about corvids EXCEPT",
+    "options": [
+     "Some solved multi-step string-pulling on the first attempt.",
+     "They sometimes dropped stones into water to raise food.",
+     "They inspected the setup before choosing among multiple strings.",
+     "They required months of training before any testing."
+    ],
+    "answer": "They required months of training before any testing.",
+    "explanation": "A/B/Cは本文で明示（初回成功・石落とし・事前観察）。D「何カ月も訓練が必要」は記述なし＝EXCEPT。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-1-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "Why does the author mention Eurasian jays and pigeons?",
+    "options": [
+     "To suggest that advanced problem-solving occurs in a wider range of birds",
+     "To argue that corvids are not especially intelligent",
+     "To demonstrate a flaw in the string-test method",
+     "To provide an example of species that failed the task"
+    ],
+    "answer": "To suggest that advanced problem-solving occurs in a wider range of birds",
+    "explanation": "カラス科以外（カケス・ハト）にも成功例がある→高度な問題解決がより広範に見られることを示唆。B/C/Dは本文の主張と逆。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-academic-passage-academic-m1-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The Detour Task",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The Detour Task",
+  "paragraphs": [
+   {
+    "text": "For decades, researchers have probed self-control in animals using a simple but revealing “detour task.” In the standard version, a piece of food is placed inside a clear cylinder that is open at both ends. The setup exploits a salient visual cue—the reward is plainly visible—while requiring the subject to inhibit a direct reach and instead approach from the side openings. Success on the first attempt is taken to indicate an ability to suppress impulse and map a short action sequence to an outcome."
+   },
+   {
+    "text": "When scientists compared species, they found notable differences. Pet dogs typically performed well, especially after a brief familiarization period, and often outscored hand-reared wolves. One interpretation is that experience with human-made objects gives dogs an advantage on this particular task. Corvids, such as crows and ravens, also excelled, frequently inspecting the apparatus before acting, whereas some pigeons persisted in pecking at the barrier. These contrasts suggest that both prior experience and species-typical strategies shape performance."
+   },
+   {
+    "text": "Related studies hint that such control is not confined to mammals and birds. In a separate delay-of-gratification paradigm, cuttlefish waited longer for a preferred reward when an immediate but less valuable option was available. Although the methods differ, the pattern strengthens a broader claim: forms of inhibitory control may be more widespread in the animal kingdom than once assumed."
+   }
+  ],
+  "translationJa": "何十年もの間、研究者たちは動物の自制心を、「迂回課題（デトア・タスク）」と呼ばれるシンプルながら示唆に富む実験で調べてきました。基本的な形では、両端が開いた透明な筒の中に餌を置きます。この仕掛けは、餌が「よく見える」という強い視覚的手がかりを利用しつつ、餌に向かって直接手を伸ばしたい衝動を抑え、代わりに筒の横から回り込んで取る必要があります。最初の試行で成功した場合、それは「衝動を抑え、短い行動の順序を結果につなげる能力がある」とみなされます。\n種を比較した研究では、興味深い違いが見られました。ペットの犬は、特に短い慣らしの時間が与えられた後は、この課題で良い成績を収め、飼育下で育てられたオオカミより良い結果を示すことが多いというのです。その一つの解釈として、「人間が作った道具や環境に慣れていることが、犬に有利に働く」という考えがあります。カラスやワタリガラスといったカラス科の鳥も優れた成績を見せ、行動する前に装置を観察する傾向がよく見られました。一方で、一部のハトは透明な壁をつつき続けてしまいました。これらの違いは、「過去の経験」と「その種に典型的な行動の傾向」が課題の結果に影響することを示しています。\nまた関連研究では、このような抑制能力が哺乳類や鳥類に限られない可能性が示唆されています。例えば別の実験では、コウイカが「すぐに手に入るが価値の低い餌」と「待つと手に入るが好ましい餌」の選択で、より良い餌が得られるまで長く待つことができました。方法は異なるものの、この結果はより大きな主張を後押しします。つまり、「抑制や自制といった能力は、従来考えられていたよりも広く動物界に存在する可能性がある」ということです。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m1-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the passage mainly about?",
+    "options": [
+     "Stages of domestication in wolves and dogs",
+     "Research on inhibitory control in animals",
+     "Differences between aquatic and terrestrial cognition",
+     "Recent discoveries about marine navigation"
+    ],
+    "answer": "Research on inhibitory control in animals",
+    "explanation": "文章全体は「デトア（回り込み）課題を用いた抑制／自己制御研究」の概説。A/C/Dは話題を限定・逸脱。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "The word “salient” in paragraph 1 is closest in meaning to",
+    "options": [
+     "noticeable",
+     "hidden",
+     "trivial",
+     "distant"
+    ],
+    "answer": "noticeable",
+    "explanation": "“salient visual cue”＝「目立つ／顕著な視覚手掛かり」。文脈的にnoticeableが最適。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why do researchers use a transparent cylinder with side openings?",
+    "options": [
+     "To measure color discrimination in birds",
+     "To see whether subjects can suppress a direct response to a visible reward",
+     "To track animals’ movements over long distances",
+     "To determine whether animals recognize their reflections"
+    ],
+    "answer": "To see whether subjects can suppress a direct response to a visible reward",
+    "explanation": "透明円筒＋側面開口は「見えている餌へ直進反応を抑えて側面から到達できるか」を試す設計。A/C/Dは本文にない目的。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-2-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, all of the following are true about dogs in the detour task EXCEPT",
+    "options": [
+     "Some improved after a short familiarization period.",
+     "They often outperformed hand-reared wolves.",
+     "Their success may relate to experience with human-made objects.",
+     "Puppies consistently matched the performance of adult dogs."
+    ],
+    "answer": "Puppies consistently matched the performance of adult dogs.",
+    "explanation": "A/B/Cは本文で明示・示唆（短い慣らしで改善／飼育オオカミより高得点／人工物経験の利点）。子犬が成犬と同等は本文に未言及（＝EXCEPT）。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-2-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "Why does the author mention cuttlefish?",
+    "options": [
+     "To suggest that self-control abilities may extend beyond mammals and birds",
+     "To argue that the detour task is flawed",
+     "To provide an example of a species that failed the task",
+     "To imply that ocean animals are generally more intelligent"
+    ],
+    "answer": "To suggest that self-control abilities may extend beyond mammals and birds",
+    "explanation": "別手法（遅延報酬課題）のコウイカを出して、自己制御が広範な分類群に及ぶ可能性を示すため。B/C/Dは筆者の主張と逆方向。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-academic-passage-academic-m1-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The Clear Box Task",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The Clear Box Task",
+  "paragraphs": [
+   {
+    "text": "Scientists often study self-control in animals with a simple “clear box task.” A small piece of food is placed inside a transparent box that has doors on the sides. The food can be seen through the front wall, but it cannot be reached from there. To get the reward, the animal must resist the urge to touch the food directly and walk to a side door instead. Succeeding on the first try suggests that the animal can stop a quick reaction and choose a better route."
+   },
+   {
+    "text": "When researchers tested different species, they noticed some patterns. Pet dogs usually did well, especially after a short practice round, and in many studies they scored higher than wolves that were raised by humans. One possible reason is that dogs live with people and often deal with boxes, doors, and other everyday objects. Crows and ravens also did well. They often looked around the box before moving, while some pigeons kept pecking at the front wall even though it never worked."
+   },
+   {
+    "text": "Other studies point to the same idea. In a waiting test, cuttlefish sometimes passed up a small treat so they could get a better one later. The method is not the same as the clear box, but the lesson is similar: some form of self-control may be common in many kinds of animals."
+   }
+  ],
+  "translationJa": "科学者たちは、動物の自制心を調べるために「クリアボックス課題」と呼ばれるシンプルな実験をよく利用します。透明な箱の中に小さな餌を入れます。餌は箱の正面から見えますが、そこから直接取ることはできません。餌を手に入れるためには、動物は「目の前の餌に直接触れたい」という衝動を抑え、箱の横にある扉の方へ回り込む必要があります。最初の試行で成功した場合、その動物はすぐに反応するのを止め、より適した方法を選べると考えられます。\n研究者がさまざまな種を調べたところ、いくつかの共通した傾向が見られました。ペットの犬は、特に少し練習した後では、よくこの課題をこなしました。多くの研究で、人に育てられたオオカミよりも高い成績を示すことが多かったのです。理由の一つとして、犬は人間と暮らし、箱や扉など日常的な物に触れる経験が豊富であることが挙げられます。カラスやワタリガラスなどのカラス科の鳥もよくできました。彼らは動く前に箱の周りを観察することが多かったのに対し、一部のハトは、正面の壁からは取れないにもかかわらず、ずっとつつき続ける様子が見られました。\n他の研究でも似た結論が示されています。例えば「待てるかどうか」を調べる実験では、コウイカが「すぐ食べられるが価値の低い餌」をあえて食べず、「待つと手に入るより良い餌」を選ぶことがありました。クリアボックス課題とは方法が違いますが、本質的な示唆は共通しています。つまり、「自制心のような能力は、実は多くの動物に広く見られる可能性がある」ということです。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m1-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the passage mainly about?",
+    "options": [
+     "How wolves became domesticated",
+     "Research on self-control in animals",
+     "Differences between sea and land animals",
+     "New ways to train pets at home"
+    ],
+    "answer": "Research on self-control in animals",
+    "explanation": "文章全体は「クリアボックス課題などを用いた動物の自己制御研究」の概説。A/C/Dは主題から逸脱。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "The word “resist” in paragraph 1 is closest in meaning to",
+    "options": [
+     "fight against",
+     "measure",
+     "copy",
+     "speed up"
+    ],
+    "answer": "fight against",
+    "explanation": "“resist the urge”＝「衝動に逆らう/こらえる」。最も近いのはfight against。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-3-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why do researchers use a transparent box with side doors?",
+    "options": [
+     "To test color vision in birds",
+     "To see whether animals can avoid a direct reach for visible food",
+     "To track long-distance movement",
+     "To find out if animals know their reflections"
+    ],
+    "answer": "To see whether animals can avoid a direct reach for visible food",
+    "explanation": "正面に見える餌へ直接手を出すのを避け、脇のドアから取れるかを見るため。A/C/Dは本文にない。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-3-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, all of the following are true about dogs in this task EXCEPT",
+    "options": [
+     "Some improved after a short practice round.",
+     "They often outscored wolves raised by humans.",
+     "Their daily experience with human objects may help them.",
+     "Puppies always performed as well as adult dogs."
+    ],
+    "answer": "Puppies always performed as well as adult dogs.",
+    "explanation": "子犬が成犬と同等という言及はなし。A/B/Cは本文で明示または示唆。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m1-3-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "Why does the author mention cuttlefish?",
+    "options": [
+     "To suggest that self-control may be found in a wide range of animals",
+     "To show that the clear box task is not useful",
+     "To give an example of a species that failed the task",
+     "To claim that ocean animals are more intelligent"
+    ],
+    "answer": "To suggest that self-control may be found in a wide range of animals",
+    "explanation": "別手法（待機テスト）のコウイカを出して、自己制御が広い分類群に及ぶ可能性を示すため。B/C/Dは主張と逆。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-academic-passage-academic-m2-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The Abundance Trap",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The Abundance Trap",
+  "paragraphs": [
+   {
+    "text": "Modern media platforms promise limitless choice, yet many users report feeling less satisfied the longer they browse. This pattern fits a broader paradox: as the abundance of options rises, so does decision fatigue—the mental drain that comes from evaluating near-endless possibilities. While variety can match niche tastes, it also shifts attention from “good enough” choices to the fear of missing a slightly better one. Consequently, the pleasure of discovering content is crowded out by the pressure to optimize every selection."
+   },
+   {
+    "text": "Empirical work supports this tension. In one study, participants were asked to pick a movie to watch that evening. When offered 30 trailers, they sampled more but finished fewer films and rated their experience lower than a group given a curated set of 8. The limited menu reduced search costs and the fear of choosing poorly, making the decision feel easier and the outcome more enjoyable. Similarly, users who accepted platform-generated default playlists—assembled from prior viewing—were more likely to complete what they started than users who faced the full catalog."
+   },
+   {
+    "text": "The paradox also varies across cultures. In individualistic settings, personal choice is strongly valued; thus, the burden of choosing among countless options can weigh heavily. By contrast, in more collectivist environments, people often prefer guided recommendations from trusted sources, and they tend to report greater satisfaction when platforms filter the catalog for them. Understanding these differences helps services design options that support well-being rather than erode it."
+   }
+  ],
+  "translationJa": "現代のメディアプラットフォームは「無限の選択肢」を約束します。しかし、多くの利用者は、閲覧時間が長くなるほど満足感が下がると報告しています。このパターンは、より大きなパラドックス（逆説）と一致します。つまり、選択肢の豊富さ（abundance）が増えるほど、決断の疲労（decision fatigue）も増えるということです。選択肢が多いことは、細かな好みに合うものを選べるという利点もありますが、「十分良いもの」よりも、「もっと良いものを逃すのではないか」という不安に注意が向いてしまいます。その結果、コンテンツを発見する楽しさは、「最適な選択をしなければならない」というプレッシャーに押しつぶされてしまいます。\n実証研究は、この緊張関係を裏付けています。ある研究では、参加者にその夜に観る映画を選んでもらいました。30本の予告編が提示されたグループは、多くを試聴したものの、最後まで観る映画は少なく、視聴体験の満足度も低いという結果になりました。一方、厳選された（curated）8本だけを提示されたグループは、選ぶのが容易になり、選択に対する不安も減り、体験の満足度も高かったのです。同様に、視聴履歴に基づいて自動生成された「おすすめリスト」をそのまま受け入れたユーザーは、全カタログから自分で選んだユーザーよりも、視聴した作品を最後まで観る傾向が高くなりました。\nこのパラドックスには文化による違いもあります。個人主義が強い文化では、「自分で選ぶこと」自体が価値とされるため、膨大な選択肢から選ぶ負担がより重く感じられることがあります。一方、より集団主義的な文化では、信頼できる人やサービスによる推薦が好まれることが多く、プラットフォームが選択肢を絞ってくれるほど満足度も高くなる傾向があります。こうした違いを理解することは、サービスが人々の幸福感を高める設計を行う上で重要です。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m2-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Which statement best captures the main idea of the passage?",
+    "options": [
+     "People enjoy browsing large catalogs because they reveal niche interests.",
+     "Default playlists reduce platform costs but not user stress.",
+     "Too many options can undermine satisfaction, and careful design can help.",
+     "Cultural beliefs have little effect on how people make choices."
+    ],
+    "answer": "Too many options can undermine satisfaction, and careful design can help.",
+    "explanation": "段落1で「選択肢過多→満足度低下」という主張、段落2で実験証拠、段落3で文化差の含意＝「過多は逆効果で、設計で緩和できる」。Aは部分的、B/Dは本文と逆。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, which is one effect of decision fatigue?",
+    "options": [
+     "Increased confidence about picking the best option",
+     "Fear of missing a slightly better choice",
+     "Preference for longer movies over shorter ones",
+     "Reduced interest in guided recommendations"
+    ],
+    "answer": "Fear of missing a slightly better choice",
+    "explanation": "段落1 “fear of missing a slightly better one” が decision fatigue の具体的結果。Aは逆、C/Dは非該当。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why does the author describe the experiment comparing 30 trailers with a curated set of 8?",
+    "options": [
+     "To argue that trailers are a poor way to advertise films",
+     "To provide evidence that limited options can improve the experience",
+     "To show that people usually finish movies they start",
+     "To criticize platform-generated default playlists"
+    ],
+    "answer": "To provide evidence that limited options can improve the experience",
+    "explanation": "30本 vs 8本の比較は「限定メニューが満足度を上げる」実証。A/Dは論点ずれ、Cは一部事実だが主目的ではない。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-1-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "The word “curated” in paragraph 2 is closest in meaning to",
+    "options": [
+     "organized and selected",
+     "replaced and deleted",
+     "copied and shared",
+     "rushed and simplified"
+    ],
+    "answer": "organized and selected",
+    "explanation": "“curated set of 8”＝選別・編成されたセット。B/C/Dは文脈に合わない。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-1-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about users in collectivist cultures?",
+    "options": [
+     "They typically report lower satisfaction with guided recommendations.",
+     "They prefer to make decisions entirely on their own.",
+     "They may feel more content when platforms filter choices for them.",
+     "They experience more decision fatigue than users in individualistic settings."
+    ],
+    "answer": "They may feel more content when platforms filter choices for them.",
+    "explanation": "段落3 “collectivist… report greater satisfaction when platforms filter the catalog” からの含意。A/Bは逆、Dは本文にない比較。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-academic-passage-academic-m2-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The Metrics Paradox",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The Metrics Paradox",
+  "paragraphs": [
+   {
+    "text": "Digital learning platforms promise that more feedback will drive better outcomes. Yet many learners report the opposite: as progress bars, streaks, badges, and percentile ranks multiply, motivation slips. This tension reflects a broader paradox—abundant metrics amplify self-monitoring and comparison, which can drain attention from the task itself. While fine-grained numbers seem informative, they also nudge users to optimize every micro-decision, increasing second-guessing and reducing satisfaction with perfectly adequate work."
+   },
+   {
+    "text": "Evidence supports this trade-off. In one study, students completed the same video lesson but saw different dashboards. One group viewed a granular display—minute-by-minute accuracy, speed, and rank; another saw a condensed summary with one progress bar and a short coach note. Learners using the condensed dashboard finished more lessons and rated the experience higher. Researchers argued that aggregation lowers “search costs” in decision-making and reduces fear of choosing the “wrong” study tactic. Similarly, participants who accepted platform-recommended study paths completed more modules than those browsing all options."
+   },
+   {
+    "text": "Cultural context also matters. In individualistic settings, achievement is often framed as personal optimization, so dense metrics can intensify pressure and self-comparison. By contrast, in more collectivist environments, learners frequently prefer guided routes or team-level feedback and report greater contentment when platforms filter information on their behalf. Recognizing these differences allows designers to present feedback that supports persistence rather than undermines it."
+   }
+  ],
+  "translationJa": "デジタル学習プラットフォームは、「より多くのフィードバックが、より良い成果につながる」と約束します。しかし実際には、多くの学習者がその逆を感じています。進捗バー、連続日数（ストリーク）、バッジ、偏差順位といった指標が増えるほど、やる気が下がってしまうというのです。この緊張は、より大きな逆説を示しています。すなわち、過剰な指標（abundant metrics）は自己監視や他者との比較を強め、学習そのものから注意を奪ってしまうということです。細かい数値は一見役に立つように見えますが、「すべてを最適化しなければならない」という意識を引き起こし、迷いや自信の低下を生み、十分良い出来でも満足できなくなります。\nこのトレードオフは研究でも確認されています。ある研究では、学生に同じビデオ授業を視聴してもらい、異なるダッシュボードを見せました。一方のグループには、1分ごとの正答率、速度、順位といった細分化された（granular）表示が示され、もう一方には、進捗バー1つと短いコーチコメントだけの簡潔な画面を見せました。すると、簡潔なダッシュボードを使った学習者の方が、より多くのレッスンを完了し、体験の満足度も高かったのです。研究者は、「情報をまとめることで、学習中の判断にかかる負担（search costs）が減り、間違った勉強法を選んでしまう不安が弱まった」と説明しました。また、プラットフォームが推奨する学習ルートに従った学習者は、全ての学習コンテンツから自分で選んだ学習者よりも、多くのモジュールを完了しました。\n文化的な背景も影響します。個人主義的な文化では、成果は「自分自身の最適化」として捉えられがちなので、細かすぎる指標はプレッシャーや自己比較をさらに強めます。一方、より集団主義的な文化では、ガイドされた学習ルートやチーム単位のフィードバックが好まれ、情報をプラットフォーム側が整理してくれる方が満足度が高くなることがよくあります。こうした文化差を理解することで、学習者の継続を支える、より適切なフィードバック設計が可能になります。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m2-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Which statement best expresses the main idea?",
+    "options": [
+     "More detailed metrics always improve learning.",
+     "Too many metrics can hurt motivation, and careful dashboard design can help.",
+     "Students prefer browsing all options to recommended study paths.",
+     "Cultural differences rarely affect how people respond to feedback."
+    ],
+    "answer": "Too many metrics can hurt motivation, and careful dashboard design can help.",
+    "explanation": "段落1で「指標の過多→動機低下」という主張、段落2で実験証拠、段落3で文化差の含意。設計（condensed / guided）が助ける点まで含めて要旨を要約。A/Dは本文と逆、Cは事実の一部を誇張。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, what is one effect of abundant metrics?",
+    "options": [
+     "Reduced self-comparison across learners",
+     "Increased second-guessing about study decisions",
+     "Faster completion of lessons for most students",
+     "Greater satisfaction with mediocre outcomes"
+    ],
+    "answer": "Increased second-guessing about study decisions",
+    "explanation": "段落1「optimize every micro-decision」「increasing second-guessing」より。A/C/Dは本文の述べる方向と不一致。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why does the author discuss the dashboard experiment?",
+    "options": [
+     "To show that condensed feedback can improve completion and satisfaction",
+     "To argue that video lessons are superior to text materials",
+     "To prove that rankings are the only useful metric",
+     "To criticize coach notes as unscientific"
+    ],
+    "answer": "To show that condensed feedback can improve completion and satisfaction",
+    "explanation": "30本vs8本に相当する比較として、凝縮ダッシュボードの方が完了率・満足度ともに高いことを実証。B/C/Dは論点ずれ。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-2-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "The word “granular” in paragraph 2 is closest in meaning to",
+    "options": [
+     "delayed",
+     "detailed",
+     "biased",
+     "random"
+    ],
+    "answer": "detailed",
+    "explanation": "“granular display”＝分解度の高い詳細表示。遅延/偏り/ランダム性は文脈不一致。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-2-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about learners in collectivist cultures?",
+    "options": [
+     "They prefer dense personal rankings to team-level summaries.",
+     "They are unaffected by how feedback is presented.",
+     "They may feel more satisfied when platforms filter information and guide routes.",
+     "They typically reject platform-recommended study paths."
+    ],
+    "answer": "They may feel more satisfied when platforms filter information and guide routes.",
+    "explanation": "段落3「collectivist… prefer guided routes / team-level feedback… report greater contentment when platforms filter information」からの含意。A/Dは逆、Bは一般化しすぎ。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-academic-passage-academic-m2-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The Filter Effect",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The Filter Effect",
+  "paragraphs": [
+   {
+    "text": "Many services now offer thousands of items, yet users often enjoy the experience more when they see less. The puzzle is straightforward: greater abundance raises the chance of a perfect match, but it also increases mental load. People spend longer comparing options, second-guess themselves, and feel they should keep searching. Platforms therefore present a streamlined view—small, rotating sets or a default bundle—so the choice feels manageable rather than overwhelming."
+   },
+   {
+    "text": "Evidence backs this approach. In one field study, shoppers browsing an online market received either a full catalog or a pre-filtered list based on their stated preferences. Those seeing the filtered set sampled fewer items, decided faster, and—crucially—reported higher satisfaction with what they bought. Follow-up data showed that the curated list also reduced “switching”: users were less likely to abandon carts or reopen comparisons after checkout. The result did not mean fewer good matches; instead, it reduced the feeling that a slightly better option was always one more click away."
+   },
+   {
+    "text": "Cultural context matters. In more individualistic settings, people value personal agency and may resist heavy-handed limits, but they still benefit when filters are transparent and easy to adjust. In more collectivist environments, guidance from trusted sources is welcomed, and users often prefer systems that actively narrow the field. Designing filters with these tendencies in mind can protect well-being while keeping real choice intact."
+   }
+  ],
+  "translationJa": "多くのサービスは、今や何千もの選択肢を提供しています。しかし、利用者は、表示される選択肢が「少ない」ほうが、体験をより楽しめることがよくあります。この状況は一見すると不思議ですが、仕組みは単純です。選択肢の豊富さ（abundance）は、自分にぴったりのものが見つかる可能性を高める一方で、比較や迷いによる「心の負担」も大きくします。人はより長く選び続け、「これでいいのか」と迷い、「まだもっと良い選択があるかも」と探し続けたくなってしまうのです。そこで、多くのプラットフォームは、選択肢を絞った（streamlined）表示――少数ずつのおすすめや、デフォルトで用意されたセット――を提示します。そうすることで、選択が「手に負える」ものとして感じられるようになります。\nこの考えはデータでも裏付けられています。ある実地研究では、オンライン市場の買い物客に、「全カタログ」または「好みに基づいて事前に絞り込んだ商品リスト」を提示しました。フィルターされたリストを見た利用者は、商品を試し見る数が少なく、決断までの時間が短く、そして何より「購入したものへの満足度が高かった」のです。追跡データによれば、絞り込まれたリストは「迷い直し」を減らし、購入後にカートを戻したり、比較画面に戻ったりする行動も少なくしていました。これは、良い選択肢が減ったという意味ではなく、「もう少しだけ良いものがあるかもしれない」という感覚が抑えられたことを意味します。\n文化的背景も影響します。より個人主義的な文化では、「自分で選ぶこと」に価値が置かれるため、強制的な制限には抵抗する傾向がありますが、それでも透明で調整しやすいフィルターは役に立ちます。一方、より集団主義的な文化では、信頼できる人やサービスによる案内が歓迎され、より積極的に選択肢を絞ってくれるシステムのほうが満足度が高くなることが多いです。こうした違いを踏まえてフィルターを設計することで、「選択の自由」を保ちながら、利用者の心理的負担を軽減することができます。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m2-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Which statement best expresses the passage’s main idea?",
+    "options": [
+     "Large catalogs always produce better matches for users.",
+     "Showing fewer, well-chosen options can raise satisfaction, especially when filters fit the context.",
+     "People dislike filters because they remove personal agency.",
+     "Curated lists mainly help platforms reduce server costs."
+    ],
+    "answer": "Showing fewer, well-chosen options can raise satisfaction, especially when filters fit the context.",
+    "explanation": "段落1で「過多→負荷↑、少数提示で可処理化」、段落2で実証、段落3で文化適合＝「文脈に合った絞り込みは満足度を上げる」。A/C/Dは本文の主張と不一致。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, which is one effect of too much abundance?",
+    "options": [
+     "Faster decisions with greater confidence",
+     "A stronger wish to keep searching for a slightly better option",
+     "A clear memory of all alternatives considered",
+     "Greater trust in platform recommendations"
+    ],
+    "answer": "A stronger wish to keep searching for a slightly better option",
+    "explanation": "段落1「keep searching for a slightly better one」＝わずかに良い選択を探し続けたくなる。A/C/Dは本文にない。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-3-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why does the author discuss the online-market field study?",
+    "options": [
+     "To prove that smaller catalogs always increase sales volume",
+     "To show that filtered sets can improve satisfaction and reduce post-decision switching",
+     "To argue that preference surveys are unreliable",
+     "To criticize shoppers who abandon their carts"
+    ],
+    "answer": "To show that filtered sets can improve satisfaction and reduce post-decision switching",
+    "explanation": "事前嗜好に基づくフィルタ提示→「満足度↑＆スイッチング↓」を示す実地研究の引用が目的。Aは「売上量」断定で過剰、C/Dは論点ずれ。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-3-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "The word “streamlined” in paragraph 1 is closest in meaning to",
+    "options": [
+     "limited but well organized",
+     "hidden from public view",
+     "copied from other sources",
+     "randomized without logic"
+    ],
+    "answer": "limited but well organized",
+    "explanation": "“streamlined view—small, rotating sets or a default bundle”＝数を絞り整理された提示。B/C/Dは文脈不一致。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-3-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "What can reasonably be inferred about users in collectivist environments?",
+    "options": [
+     "They are less satisfied when platforms filter choices for them.",
+     "They often prefer systems that provide guided narrowing from trusted sources.",
+     "They avoid using defaults because they reduce freedom.",
+     "They are unaffected by decision fatigue."
+    ],
+    "answer": "They often prefer systems that provide guided narrowing from trusted sources.",
+    "explanation": "段落3「collectivist… welcome guidance… prefer systems that actively narrow」からの含意。Aは逆、Cは個人主義側の傾向に近い解釈、Dは本文に反する。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-academic-passage-academic-m2-4",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "academic-passage",
+  "title": "The Shortlist Approach",
+  "description": "アカデミック読解",
+  "difficulty": "medium",
+  "timeLimitSec": 450,
+  "passageTitle": "The Shortlist Approach",
+  "paragraphs": [
+   {
+    "text": "Many apps and websites now show hundreds of items, but users often enjoy the process more when they see fewer. The reason is simple: more choices raise the chance of a perfect match, yet they also create mental workload. People compare for longer, switch between pages, and worry that a slightly better option is still out there. To help, some platforms present a simplified view—a small shortlist or a default set—so the decision feels clear and manageable."
+   },
+   {
+    "text": "A field test on a food-delivery app illustrates this effect. New users were randomly shown either the full menu of about 40 dishes or a shortlist of 6 based on their stated likes. Those who saw the shortlist decided faster, went back and forth less, and rated their meal higher the next day. Importantly, the match quality did not drop: the chosen dishes still fit the users’ preferences. The shortlist reduced the feeling of “maybe there’s something better,” which often leads to hesitation and late changes."
+   },
+   {
+    "text": "Culture shapes how filters should work. In more individualistic settings, people want control, so they respond well when the shortlist is easy to edit or turn off. In more collectivist settings, many users prefer guidance from trusted sources, such as store “recommended” labels or staff picks. Designing filters with these patterns in mind can protect well-being while keeping real choice."
+   }
+  ],
+  "translationJa": "多くのアプリやウェブサイトは、今では何百もの選択肢を表示しますが、実際には「選択肢が少ない」方が、利用者は選ぶ過程を楽しめることがよくあります。理由はシンプルです。選択肢が多いほど、自分にぴったりのものが見つかる可能性は高まりますが、その分、心の負担も大きくなります。人は比較に時間をかけ、ページを行き来し、「もっと良いものがまだあるのでは？」と悩み続けてしまうのです。そこで、一部のプラットフォームは、シンプルな（simplified）表示――少数の候補をまとめたショートリストや、デフォルトのおすすめセット――を提示します。そうすることで、選択がはっきりして、無理のないものに感じられます。\nこの効果は、フードデリバリーアプリでの実験でも確認されています。新規ユーザーに、約40種類のメニュー全てを見るグループと、好みに基づいて選ばれた6品だけのショートリストを見るグループをランダムに割り当てました。ショートリストを見た人は、より早く決め、画面を行き来する回数が少なく、翌日に食事を評価したときの満足度も高かったのです。重要なのは、「自分に合う料理を選べなくなるわけではない」という点です。ショートリストによって、「もっと良いものを見逃しているかも」という不安が減ったため、迷いや変更が少なくなったのです。\n文化によって、フィルターの設計の仕方も変わります。より個人主義的な文化では、「自分で選べる」ことが重視されるため、ショートリストが編集しやすいか、オフにできるかが重要になります。一方、より集団主義的な文化では、店の「おすすめ」表示やスタッフによる選抜など、「信頼できる人からの案内」が好まれ、選択肢を積極的に絞るしくみの方が満足度が高まることが多いです。こうした傾向を踏まえてフィルターを設計することで、「選択の自由」を守りながら、利用者の心理的負担を減らすことができます。",
+  "questions": [
+   {
+    "id": "toefl-r-academic-passage-academic-m2-4-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Which statement best captures the main idea?",
+    "options": [
+     "Large menus always produce better meals.",
+     "Showing a small, well-chosen set can improve the experience, if filters fit the context.",
+     "Users dislike shortlists because they remove freedom.",
+     "Shortlists mainly help companies cut costs."
+    ],
+    "answer": "Showing a small, well-chosen set can improve the experience, if filters fit the context.",
+    "explanation": "段落1で「過多→負荷↑、小規模で選別提示→可処理化」、段落2で実証、段落3で文化適合＝文脈に合ったショートリストが満足度を上げる。A/C/Dは本文と逆または論点外。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-4-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "According to the passage, what is one effect of too many choices?",
+    "options": [
+     "Quicker decisions with stronger confidence",
+     "More page switching and worry about missing a better option",
+     "Better memory of all items reviewed",
+     "Greater trust in default sets"
+    ],
+    "answer": "More page switching and worry about missing a better option",
+    "explanation": "段落1「compare for longer / switch between pages / worry about missing a better option」＝ページ往復と取りこぼし不安。A/C/Dは本文記載なし。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-4-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Why does the author describe the food-delivery field test?",
+    "options": [
+     "To prove that smaller menus always increase sales",
+     "To show that shortlists can raise satisfaction without hurting match quality",
+     "To argue that stated preferences are unreliable",
+     "To criticize users who change their minds"
+    ],
+    "answer": "To show that shortlists can raise satisfaction without hurting match quality",
+    "explanation": "フィールドテストは意思決定の速さ↑、満足度↑、適合度は維持を示すための証拠。Aは過剰な一般化、C/Dは論点ずれ。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-4-q4",
+    "number": 4,
+    "type": "multiple_choice",
+    "prompt": "The word “simplified” in paragraph 1 is closest in meaning to",
+    "options": [
+     "made easier and less complex",
+     "hidden from users",
+     "copied from other apps",
+     "randomized without order"
+    ],
+    "answer": "made easier and less complex",
+    "explanation": "“a simplified view—a small shortlist or a default set”＝数を絞り、分かりやすくした提示。B/C/Dは文脈不一致。",
+    "skillTag": "academic-passage"
+   },
+   {
+    "id": "toefl-r-academic-passage-academic-m2-4-q5",
+    "number": 5,
+    "type": "multiple_choice",
+    "prompt": "What can reasonably be inferred about users in collectivist settings?",
+    "options": [
+     "They are less satisfied when platforms filter choices.",
+     "They often prefer guided recommendations from trusted sources.",
+     "They usually avoid staff picks because they reduce freedom.",
+     "They are unaffected by decision fatigue."
+    ],
+    "answer": "They often prefer guided recommendations from trusted sources.",
+    "explanation": "段落3「collectivist… prefer guidance from trusted sources」からの含意。A/Cは逆、Dは本文にない。",
+    "skillTag": "academic-passage"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-complete-the-words-reading-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "complete-the-words",
+  "title": "Reading 穴埋め1",
+  "description": "Fill in the missing letters in the paragraph. The first sentence and the last sentence are complete.\nEach missing word has its second half deleted. Complete all 10 words.",
+  "difficulty": "medium",
+  "timeLimitSec": 300,
+  "passageTitle": "Reading 穴埋め1",
+  "paragraphs": [
+   {
+    "text": "Archaeologists often study ancient tools to understand how early humans lived."
+   },
+   {
+    "text": "They fo_ _ _ stone to_ _ _ th_ _ were us_ _ for cut_ _ _ _ wood a_ _ preparing fo_ _."
+   },
+   {
+    "text": "These disco_ _ _ _ _ _ show th_ _ early peo_ _ _ learned survival skills."
+   },
+   {
+    "text": "Over time, such tools became more advanced and useful."
+   }
+  ],
+  "questions": [
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q1",
+    "number": 1,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 1 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "found",
+    "explanation": "正解: found",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q2",
+    "number": 2,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 2 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "tools",
+    "explanation": "正解: tools",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q3",
+    "number": 3,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 3 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "that",
+    "explanation": "正解: that",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q4",
+    "number": 4,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 4 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "used",
+    "explanation": "正解: used",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q5",
+    "number": 5,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 5 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "cutting",
+    "explanation": "正解: cutting",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q6",
+    "number": 6,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 6 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "and",
+    "explanation": "正解: and",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q7",
+    "number": 7,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 7 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "food",
+    "explanation": "正解: food",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q8",
+    "number": 8,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 8 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "discoveries",
+    "explanation": "正解: discoveries",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q9",
+    "number": 9,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 9 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "that",
+    "explanation": "正解: that",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-1-q10",
+    "number": 10,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 10 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "people",
+    "explanation": "正解: people",
+    "skillTag": "complete-the-words"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-complete-the-words-reading-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "complete-the-words",
+  "title": "Reading 穴埋め2",
+  "description": "Fill in the missing letters in the paragraph. The first sentence and the last sentence are complete.\nEach missing word has its second half deleted. Complete all 10 words.",
+  "difficulty": "medium",
+  "timeLimitSec": 300,
+  "passageTitle": "Reading 穴埋め2",
+  "paragraphs": [
+   {
+    "text": "Many scientists study the ocean to examine how marine organisms adapt to life in deep environments."
+   },
+   {
+    "text": "The pres_ _ _ _ and tempe_ _ _ _ _ _ there are extr_ _ _ , yet creat_ _ _ _ still thr_ _ _."
+   },
+   {
+    "text": "These findi_ _ _ help resear_ _ _ _ _ underst_ _ _ Earth’s bio_ _ _ _ better."
+   },
+   {
+    "text": "The ocean rem_ _ _ _ one of the greatest frontiers of scientific inquiry."
+   },
+   {
+    "text": "Further exploration may reveal entirely new forms of life."
+   }
+  ],
+  "questions": [
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q1",
+    "number": 1,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 1 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "pressure",
+    "explanation": "正解: pressure",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q2",
+    "number": 2,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 2 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "temperature",
+    "explanation": "正解: temperature",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q3",
+    "number": 3,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 3 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "extreme",
+    "explanation": "正解: extreme",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q4",
+    "number": 4,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 4 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "creatures",
+    "explanation": "正解: creatures",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q5",
+    "number": 5,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 5 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "thrive",
+    "explanation": "正解: thrive",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q6",
+    "number": 6,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 6 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "findings",
+    "explanation": "正解: findings",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q7",
+    "number": 7,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 7 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "researchers",
+    "explanation": "正解: researchers",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q8",
+    "number": 8,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 8 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "understand",
+    "explanation": "正解: understand",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q9",
+    "number": 9,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 9 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "biology",
+    "explanation": "正解: biology",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-2-q10",
+    "number": 10,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 10 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "remains",
+    "explanation": "正解: remains",
+    "skillTag": "complete-the-words"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-complete-the-words-reading-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "complete-the-words",
+  "title": "Reading 穴埋め3",
+  "description": "Fill in the missing letters in the paragraph. The first sentence and the last sentence are complete.\nEach missing word has its second half deleted. Complete all 10 words.",
+  "difficulty": "medium",
+  "timeLimitSec": 300,
+  "passageTitle": "Reading 穴埋め3",
+  "paragraphs": [
+   {
+    "text": "In addition to its influence on the Renaissance and the Reformation, the printing press was instrumental in advancing the Scientific Revolution."
+   },
+   {
+    "text": "The ability to pro_ _ _ _ scientific tex_ _ quickly and accu_ _ _ _ _ _ enabled scho_ _ _ _ to sha_ _ their disco_ _ _ _ _ _ and bui_ _ upon each other’s wo_ _."
+   },
+   {
+    "text": "Scientific jour_ _ _ _ and books became ess_ _ _ _ _ _ tools for the exchange of knowledge, allowing for the rapid dissemination of new theories and findings."
+   },
+   {
+    "text": "This increased collaboration and communication among scientists contributed to the acceleration of scientific progress during the 16th and 17th centuries."
+   }
+  ],
+  "questions": [
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q1",
+    "number": 1,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 1 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "produce",
+    "explanation": "正解: produce",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q2",
+    "number": 2,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 2 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "texts",
+    "explanation": "正解: texts",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q3",
+    "number": 3,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 3 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "accurately",
+    "explanation": "正解: accurately",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q4",
+    "number": 4,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 4 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "scholars",
+    "explanation": "正解: scholars",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q5",
+    "number": 5,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 5 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "share",
+    "explanation": "正解: share",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q6",
+    "number": 6,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 6 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "discoveries",
+    "explanation": "正解: discoveries",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q7",
+    "number": 7,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 7 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "build",
+    "explanation": "正解: build",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q8",
+    "number": 8,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 8 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "work",
+    "explanation": "正解: work",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q9",
+    "number": 9,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 9 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "journals",
+    "explanation": "正解: journals",
+    "skillTag": "complete-the-words"
+   },
+   {
+    "id": "toefl-r-complete-the-words-reading-3-q10",
+    "number": 10,
+    "type": "gap_fill",
+    "prompt": "Passage 内で 10 番目に出てくる未完成の単語（例: fo_ _ _）を、完全な形で入力してください。",
+    "answer": "essential",
+    "explanation": "正解: essential",
+    "skillTag": "complete-the-words"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-easy-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email easy 1",
+  "description": "日常文書の読解",
+  "difficulty": "easy",
+  "timeLimitSec": 180,
+  "passageTitle": "Daily Life - Email easy 1",
+  "paragraphs": [
+   {
+    "text": "To: jliu3@uni-mail.com\nFrom: campusfitness@northvalley.edu\nDate: 03/11/2026\nSubject: Orientation Booking — North Valley Fitness Center\nDear Jason Liu,\nWe’re happy to confirm your booking for the Fitness Center orientation you scheduled on March 5.\nYour session is on March 15 at 7:30 a.m. Please check in at the Building B front desk ten minutes early.\nLockers and towels are available on site. For safety, participants must have indoor athletic shoes.\nAlso, please bring a photo ID to verify your student status. If you have questions, reply to this message.\nBest,\nMaya Ortiz\nMembership Services"
+   }
+  ],
+  "translationJa": "件名：オリエンテーション予約 — ノースバレー・フィットネスセンター\nジェイソン・リウ 様\n3月5日に予約されたフィットネスセンターのオリエンテーションについて、予約が確定しましたことをお知らせいたします。\nセッションは3月15日 午前7時30分からです。\n当日はビルディングBの受付に10分前までにチェックインしてください。\nロッカーとタオルは館内でご利用いただけます。\n安全のため、室内用の運動靴が必要です。\nまた、学生証明のため写真付きIDをご持参ください。\nご質問がある場合は、本メールにご返信ください。\nよろしくお願いいたします。\nマヤ・オルティス\nメンバーシップサービス",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-easy-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "When is Mr. Liu’s orientation session?",
+    "options": [
+     "March 5",
+     "March 11",
+     "March 15",
+     "March 25"
+    ],
+    "answer": "March 15",
+    "explanation": "本文 “Your session is on March 15 at 7:30 a.m.” が根拠。AのMarch 5は「予約を入れた日」（scheduled on March 5）、BのMarch 11はメールの送信日（Date行）、Dはダミー。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-easy-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What item should Mr. Liu bring to gain access to the facility?",
+    "options": [
+     "A payment receipt",
+     "A medical certificate",
+     "Identification",
+     "A personal towel"
+    ],
+    "answer": "Identification",
+    "explanation": "“please bring a photo ID to verify your student status.” より。Identificationはphoto IDの上位語パラフレーズ。タオルは “towels are available on site” で施設提供。支払い証明・診断書の指示もなし。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-easy-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email easy 2",
+  "description": "日常文書の読解",
+  "difficulty": "easy",
+  "timeLimitSec": 180,
+  "passageTitle": "Daily Life - Email easy 2",
+  "paragraphs": [
+   {
+    "text": "To: kei.yamada@outlook.jp\nFrom: leasing@maplecourt-apts.com\nDate: 05/04/2026\nSubject: Viewing Confirmation — Maple Court Apartments\nDear Mr. Yamada,\nThis is to confirm the apartment viewing you booked last week. Your showing is on May 9 at 6:15 p.m.\nPlease arrive a little early and check in at the leasing office via the parking-lot entrance; the lobby doors on Main Street close at 6:00.\nTo receive a visitor badge, please bring your 6-digit booking reference (confirmation code) shown at the top of your online reservation.\nParking is available and will be validated. If you plan to bring a child, note that strollers are not allowed inside the model unit.\nBest regards,\nLeasing Office\nMaple Court Apartments"
+   }
+  ],
+  "translationJa": "件名： 内見確認 — メープルコート・アパートメント\n山田様\n先週ご予約いただいたアパートの内見について、確認のご連絡です。\nご見学は5月9日 午後6時15分です。\n少し早めにお越しになり、駐車場側の入口から管理事務所で受付をお済ませください。\nメインストリート側のロビー入口は午後6時に施錠されます。\nビジターバッジの発行には、オンライン予約の上部に表示されている6桁の予約番号（確認コード）が必要です。ご提示ください。\n駐車場は利用可能で、駐車料金は当方で精算いたします。\nお子様連れの場合、モデルルーム内はベビーカーの持ち込み不可となっております。\nよろしくお願いいたします。\n管理事務所\nメープルコート・アパートメント",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-easy-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Which entrance should Mr. Yamada use to check in?",
+    "options": [
+     "The doors facing Main Street",
+     "The service entrance near the loading dock",
+     "The entrance next to the parking area",
+     "Any doorway is acceptable"
+    ],
+    "answer": "The entrance next to the parking area",
+    "explanation": "本文 “check in … via the parking-lot entrance; the lobby doors on Main Street close at 6:00.” 正解は「parking-lot entrance」をentrance next to the parking areaとパラフレーズ。Aは閉鎖と記述、B・Dは言及なし。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-easy-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What must he present to obtain a visitor badge?",
+    "options": [
+     "A printed floor plan",
+     "Official photo identification",
+     "A recent utility bill",
+     "The reservation number"
+    ],
+    "answer": "The reservation number",
+    "explanation": "本文 “bring your 6-digit booking reference (confirmation code)” が根拠。選択肢はreservation numberで言い換え。B（ID）、C（公共料金明細）、A（間取り図）は本文要件に該当せず。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-easy-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email easy 3",
+  "description": "日常文書の読解",
+  "difficulty": "easy",
+  "timeLimitSec": 180,
+  "passageTitle": "Daily Life - Email easy 3",
+  "paragraphs": [
+   {
+    "text": "To: nana.okada@uni-mail.jp\nFrom: workshops@rivergate-library.edu\nDate: 05/28/2026\nSubject: Registration Confirmed — Citation Manager Bootcamp\nDear Nana Okada,\nYour seat is confirmed for Wednesday, June 3 at 3:00 p.m.\nThe session takes place in the Research Commons, East Wing, Room E214. Please check in at the help desk on arrival.\nTo prepare, install Zotero on your laptop beforehand and bring your own device; campus Wi-Fi will be available.\nIf you cannot attend, use the “Change Booking” link on your confirmation page to switch times at least 24 hours in advance. Please do not reply-all to this message.\nElevators are located next to the East Wing entrance.\nBest,\nLibrary Workshops Team"
+   }
+  ],
+  "translationJa": "件名： 参加登録の確認 — 引用管理ツール 集中講座\n岡田奈々 様\n6月3日（水）午後3時のお席が確定しました。\n会場はリサーチコモンズ 東棟 E214室です。到着後は案内カウンターで受付をお済ませください。\n準備として、ノートパソコンにZoteroを事前インストールし、各自の端末をご持参ください。学内無線LANが利用できます。\n出席できない場合は、確認ページの「予約変更」リンクから24時間前までに別の時間へ変更してください。このメールに「全員に返信」はしないでください。\nエレベーターは東棟入口の隣にあります。\nよろしくお願いいたします。\n図書館講習チーム",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-easy-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What should Ms. Okada do before coming to the workshop?",
+    "options": [
+     "Print the slide deck in advance",
+     "Set up the reference manager on her laptop",
+     "Pay a materials fee online",
+     "Borrow a library computer for the class"
+    ],
+    "answer": "Set up the reference manager on her laptop",
+    "explanation": "本文「install Zotero on your laptop beforehand」を、選択肢では「Set up the reference manager」と上位語・機能語でパラフレーズ。A/C/Dは本文に指示なし（PCは“bring your own device”とあるためDも不可）。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-easy-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "If she has a schedule conflict, how is she expected to reschedule?",
+    "options": [
+     "Call the instructor directly",
+     "Submit a change through the self-service link",
+     "Reply-all to this email",
+     "Skip this one and join next week without notice"
+    ],
+    "answer": "Submit a change through the self-service link",
+    "explanation": "本文「use the “Change Booking” link… to switch times…」に対応。選択肢は「self-service link」と表現を変えており、C（reply-all禁止）、A（電話の指示なし）、D（無断欠席は不可）を排除。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-intermediate-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email intermediate 1",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Email intermediate 1",
+  "paragraphs": [
+   {
+    "text": "To: miho.kawamoto@umail.jp\nFrom: membership@rivermuseum.org\nSubject: Member Preview Night—Bring a Guest\nDear Ms. Kawamoto,\nWe’re delighted to invite you to our Member Preview Night for the new exhibition Tides & Time on Friday, 6:00–8:00 p.m. Enjoy light refreshments and a short curator talk starting at 6:30 p.m. Admission is free for members. Each member may bring one guest; guest passes will be available at the door for ¥500.\nPlease bring your membership card (digital or physical) for quick entry. No reservation is required, but doors to the auditorium will close at 6:55 p.m. for the talk. The exhibition opens to the general public on Saturday.\nWe look forward to seeing you!\nWarm regards,\nRiver City Museum Membership Office"
+   }
+  ],
+  "translationJa": "件名： 会員プレビュー・ナイト — 『Tides & Time』展（同伴1名可）\n川本様\n新企画展『Tides & Time』の会員プレビュー・ナイトにご招待申し上げます。金曜日 18:00〜20:00。軽食をご用意し、18:30から学芸員による短いトークを行います。会員の方は入場無料です。会員1名につき同伴1名までご入場いただけます。同伴者用パスは当日受付で500円にてお渡しします。\nスムーズな入場のため、会員証（デジタル版またはカード）をご持参ください。予約は不要ですが、トーク開始に伴い講堂の扉は18:55に閉まります。本展は土曜日から一般公開となります。\n皆さまにお会いできるのを楽しみにしております。\n敬具\nリバーシティ博物館　会員事務局",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the email?",
+    "options": [
+     "To ask members to donate to the museum’s renovation project",
+     "To recruit volunteers for the new exhibition",
+     "To invite members to an exclusive preview evening with a guest option",
+     "To inform members that the museum will be closed on Friday night"
+    ],
+    "answer": "To invite members to an exclusive preview evening with a guest option",
+    "explanation": "本文 “invite you to our Member Preview Night… Each member may bring one guest” → 「会員向けプレビューに招待＋同伴者可」。A寄付やD閉館通知の記述なし。Bは募集ではなくイベント案内。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about non-members attending on Friday?",
+    "options": [
+     "They may enter only if they come with a member and pay a small fee.",
+     "They can attend freely without any restrictions.",
+     "They are not allowed to attend under any circumstances.",
+     "Only museum staff may bring them in after 7:00 p.m."
+    ],
+    "answer": "They may enter only if they come with a member and pay a small fee.",
+    "explanation": "“Each member may bring one guest; guest passes… ¥500.” → 非会員は会員同伴かつ有料で参加可能という含意。B自由入場ではない、C完全不可でもない、Dスタッフ同行や「7時以降入場」等の条件は本文にない。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the email, what should Ms. Kawamoto bring?",
+    "options": [
+     "A printed ticket with a seat number",
+     "Proof of membership in either electronic or card form",
+     "A government-issued ID, which is mandatory for entry",
+     "A receipt showing she already purchased a guest pass online"
+    ],
+    "answer": "Proof of membership in either electronic or card form",
+    "explanation": "“bring your membership card (digital or physical)” → 「電子またはカードの会員証＝会員資格の提示」。Aチケット不要、C政府ID必須の記載なし、Dオンライン購入の言及なし。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-intermediate-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email intermediate 2",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Email intermediate 2",
+  "paragraphs": [
+   {
+    "text": "To: yuki.tanaka@mail.jp\nFrom: appointments@greenvalleyclinic.jp\nSubject: Appointment Confirmation – Dr. Sato (Wednesday, 10:30 a.m.)\nDear Ms. Tanaka,\nThis is a confirmation of your appointment with Dr. Sato on Wednesday at 10:30 a.m. Please arrive 10 minutes early for check-in at Internal Medicine, Main Building 3F.\nBring your health insurance card (digital or physical) and a photo ID. Fasting is not required. If you develop a fever or cold symptoms, please call us before coming.\nTo cancel or reschedule, contact us by 5:00 p.m. the day before by phone or through your patient portal. If you arrive more than 15 minutes late, you may be seen after other patients or asked to reschedule. Copay can be paid by cash or card. Parking is limited.\nThank you,\nGreen Valley Clinic – Appointment Desk"
+   }
+  ],
+  "translationJa": "件名： 受診予約の確認 — 佐藤医師（水曜・午前10時30分）\n田中様\n水曜日午前10時30分の佐藤医師の診察予約を確認いたします。\n本館3階 内科の受付での手続きのため、10分前までにお越しください。\n健康保険証（デジタルまたはカード）と写真付き身分証明書をご持参ください。\n事前の絶食は不要です。発熱や風邪症状がある場合は、来院前にお電話ください。\n予約の取消・変更は、前日17時までにお電話または患者ポータルからご連絡ください。\n15分以上の遅刻の場合、他の方の後のご案内になるか、再予約をお願いすることがあります。\n窓口負担分は現金またはカードでお支払いいただけます。駐車場には限りがあります。\nよろしくお願いいたします。\nグリーンバレークリニック　予約窓口",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the email?",
+    "options": [
+     "To advertise new services at the clinic",
+     "To confirm an upcoming visit and provide attendance instructions",
+     "To request Ms. Tanaka complete an online medical survey for research",
+     "To inform patients that the clinic will be closed on Wednesday"
+    ],
+    "answer": "To confirm an upcoming visit and provide attendance instructions",
+    "explanation": "“This is a confirmation… Please arrive 10 minutes early… bring…” → 予約確認＋来院手順の提示。A 広告、C 研究用調査、D 休診案内の記述は無し。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about the nature of Ms. Tanaka’s visit?",
+    "options": [
+     "It likely includes a fasting blood test in the morning.",
+     "It is probably not a fasting-required procedure.",
+     "It is an emergency appointment that must begin exactly on time.",
+     "It is a vaccination appointment that needs a referral letter."
+    ],
+    "answer": "It is probably not a fasting-required procedure.",
+    "explanation": "本文に “Fasting is not required.” → 断食不要＝空腹採血などを伴わない可能性が高いという含意。A と矛盾、C は“emergency”の言及なし（むしろ遅刻時の扱いが柔軟）、D ワクチンや紹介状必須の記載なし。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the email, what should Ms. Tanaka bring?",
+    "options": [
+     "A printed ticket showing a queue number",
+     "Her insurance information and some form of photo identification",
+     "A referral letter from another hospital, which is mandatory",
+     "Proof that she already paid the copay by bank transfer"
+    ],
+    "answer": "Her insurance information and some form of photo identification",
+    "explanation": "“Bring your health insurance card (digital or physical) and a photo ID.” → 保険証と身分証の提示。A 整理券の記載なし、C 紹介状は求められていない、D 事前振込の言及なし。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email intermediate 3-5 セット1",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Email intermediate 3-5 セット1",
+  "paragraphs": [
+   {
+    "text": "To: residents@sunnycourt.jp\nFrom: management@sunnycourt.jp\nSubject: Notice: Unit Access for Maintenance (Thu 9:00–11:30)\nDear Residents,\nOur maintenance team will conduct annual alarm checks and water meter readings on Thursday, 9:00–11:30 a.m. Technicians will need brief access to kitchens and hallways. If you cannot be home, please secure pets and leave the latch off.\nIf you must reschedule, contact the office by Wednesday, 5:00 p.m. at the latest. Note that delays may affect next month’s billing.\nThank you for your cooperation,\nSunny Court Management Office"
+   }
+  ],
+  "translationJa": "件名： 点検に伴う入室のお知らせ（木曜 9:00〜11:30）\n居住者各位\n木曜日の9:00〜11:30に、年次の警報点検および水道メーター検針を実施します。\n作業員が各戸のキッチンと廊下に短時間入室いたします。\nご在宅いただけない場合は、ペットの安全確保をお願いいたします。また、入室の妨げにならないよう、内側のドアチェーン（掛け金）を外しておいてください。\n日程変更が必要な場合は、水曜日17:00までに事務所へご連絡ください。\nなお、遅延が生じると翌月の請求に影響する場合があります。\nご協力のほど、よろしくお願いいたします。\nサニーコート 管理事務所",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the primary purpose of this email?",
+    "options": [
+     "To ask residents to attend a tenants’ meeting",
+     "To announce utility fee increases for next month",
+     "To inform residents about scheduled in-unit checks that require entry",
+     "To promote a home safety seminar"
+    ],
+    "answer": "To inform residents about scheduled in-unit checks that require entry",
+    "explanation": "本文 “annual alarm checks / meter readings… Technicians will need brief access”＝「各戸に入って点検」。A会合・B料金改定・Dセミナーの記述なし。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about access to units on Thursday?",
+    "options": [
+     "Staff will only enter if residents book an appointment in advance.",
+     "Technicians may proceed during the stated window even when residents are absent.",
+     "Entry will be limited to vacant apartments only.",
+     "Visits will happen after 6:00 p.m. to avoid disturbing residents."
+    ],
+    "answer": "Technicians may proceed during the stated window even when residents are absent.",
+    "explanation": "“If you cannot be home, please secure pets and leave the latch off.”＝不在でも入室前提 → 「時間帯内は不在でも作業継続可」という含意。A 予約必須ではない、C 空室限定の言及なし、D 18時以降ではない。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "By when should residents request a different time if needed?",
+    "options": [
+     "Wednesday, 5:00 p.m.",
+     "Thursday, 9:00 a.m.",
+     "Friday, 5:00 p.m.",
+     "Tuesday, 11:30 a.m."
+    ],
+    "answer": "Wednesday, 5:00 p.m.",
+    "explanation": "“reschedule… by Wednesday, 5:00 p.m.” と明記。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email intermediate 3-5 セット2",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Email intermediate 3-5 セット2",
+  "paragraphs": [
+   {
+    "text": "To: learners@northbridge-elearning.com\nFrom: support@northbridge-elearning.com\nSubject: Capstone Workshop—Register for Link (Fri 7:00–8:15 p.m.)\nHi everyone,\nOur live Capstone Workshop runs on Friday, 7:00–8:15 p.m. (JST). Please complete the short registration form to receive your join link—one link per participant. The session includes a Q&A; submitting a draft outline is optional but helps us tailor feedback.\nA recording will be available for 72 hours to registered participants. If you have conflicts, register anyway so you can watch later. Capacity is limited.\nBest,\nNorthbridge e-Learning Team"
+   }
+  ],
+  "translationJa": "件名： 最終課題ワークショップ — 参加用リンク取得の事前登録（金 19:00〜20:15）\n皆さまへ\n最終課題（Capstone）ワークショップは、金曜日 19:00〜20:15（日本時間）にライブ配信で実施します。\n参加用リンクを受け取るために、事前に短い登録フォームのご記入をお願いします（参加者お一人につきリンクは1つです）。\n当日は質疑応答の時間があります。アウトライン（構成案）の下書きの提出は任意ですが、事前にお送りいただくとより的確なフィードバックが可能になります。\n録画は登録者向けに72時間ご覧いただけます。ご都合が合わない場合でも、登録しておけば後から視聴できます。定員には限りがあります。\nよろしくお願いいたします。\nノースブリッジ eラーニングチーム",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main aim of this message?",
+    "options": [
+     "To collect tuition payments for the course",
+     "To invite learners to a live session and instruct them to register for access",
+     "To cancel this week’s class and postpone the capstone",
+     "To assign mandatory pre-reading with a quiz"
+    ],
+    "answer": "To invite learners to a live session and instruct them to register for access",
+    "explanation": "“Register to receive your join link… invite to live workshop”＝招待＋登録案内。A授業料徴収・C中止・D必須読書の指示はない。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "From the email, what is the most reasonable conclusion about learners who cannot join live?",
+    "options": [
+     "They will miss all content unless they email support after the event.",
+     "They can still view the session later if they complete the sign-up beforehand.",
+     "They will automatically receive the link without any action.",
+     "They can watch the replay indefinitely without time limits."
+    ],
+    "answer": "They can still view the session later if they complete the sign-up beforehand.",
+    "explanation": "“Recording… for 72 hours to registered participants. If you have conflicts, register anyway so you can watch later.”＝事前登録で視聴可という条件付き含意。Aサポートへの連絡は不要、C自動配布ではない、D期間は無制限ではない。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "Which of the following is stated about participation?",
+    "options": [
+     "Everyone shares one common link for the whole class.",
+     "Seats are unlimited for this event.",
+     "Each person needs to register to get their own link.",
+     "A draft outline must be uploaded to enter the session."
+    ],
+    "answer": "Each person needs to register to get their own link.",
+    "explanation": "“one link per participant”＋“complete… form to receive your join link”＝各自登録が必要。A共通リンクではない、B定員無制限ではない（“Capacity is limited”）、Dドラフトは任意。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Email intermediate 3-5 セット3",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Email intermediate 3-5 セット3",
+  "paragraphs": [
+   {
+    "text": "To: akira.mori@mail.jp\nFrom: no-reply@swiftparcel.co.jp\nSubject: Delivery Attempt Notice—Choose Redelivery or Pickup (Today)\nDear Akira Mori,\nWe attempted delivery today but could not reach you. Please choose one option by 8:00 p.m.:\nRedelivery tomorrow (time slots: 9–12 / 12–15 / 15–18)\nPickup at Parcel Locker 27 using your 6-digit code (sent after selection)\nLeave at door with your authorization (weather permitting)\nIf no option is selected by the deadline, we will schedule standard redelivery on the next business day (1–5 p.m.) automatically. Fragile items are not eligible for “leave at door.”\nSincerely,\nSwiftParcel Support"
+   }
+  ],
+  "translationJa": "件名： 配達不在のお知らせ — 再配達または受け取り方法の選択（本日）\n森 晃 様\n本日お届けに伺いましたが、ご不在のため配達できませんでした。本日20:00までに下記のいずれかをお選びください。\n明日の再配達（時間帯：9–12 ／ 12–15 ／ 15–18）\n宅配ボックス27での受け取り（選択後に6桁のコードをお送りします）\n置き配（玄関前）（お客さまの承認が必要・天候により不可の場合あり）\n期限までにご選択がない場合は、翌営業日の標準再配達（13:00–17:00）を自動で手配します。\nなお、壊れやすい品目は置き配の対象外です。\nよろしくお願いいたします。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Why was this email sent?",
+    "options": [
+     "To advertise discounted shipping labels",
+     "To confirm a package has been returned to the sender",
+     "To inform the recipient of a missed delivery and request a choice of next steps",
+     "To notify that customs fees are overdue"
+    ],
+    "answer": "To inform the recipient of a missed delivery and request a choice of next steps",
+    "explanation": "“missed delivery… choose one option”＝不在配達後の手続き案内。A広告・B返送確定・D関税延滞の記載なし。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What is the best inference if the recipient takes no action by 8:00 p.m.?",
+    "options": [
+     "The parcel will be destroyed immediately.",
+     "A default daytime visit will be arranged on the following working day.",
+     "The package will be held indefinitely at the locker.",
+     "The courier will attempt delivery again tonight after 10:00 p.m."
+    ],
+    "answer": "A default daytime visit will be arranged on the following working day.",
+    "explanation": "“If no option is selected… standard redelivery on the next business day (1–5 p.m.) automatically.”＝行動なし→翌営業日昼間の既定再配達という含意。A破棄・C無期限保管・D夜間再配達ではない。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-email-intermediate-3-5-3-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "According to the message, which option requires an access code?",
+    "options": [
+     "Authorizing the courier to leave the parcel at the door",
+     "Picking up the package from the designated locker",
+     "Scheduling the morning (9–12) redelivery slot",
+     "Paying an extra fee for fragile handling"
+    ],
+    "answer": "Picking up the package from the designated locker",
+    "explanation": "“Pickup at Parcel Locker 27 using your 6-digit code (sent after selection).” 他の選択肢にはコード不要。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-notice-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Notice 1",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 180,
+  "passageTitle": "Daily Life - Notice 1",
+  "paragraphs": [
+   {
+    "text": "Read a notice.\nRiverside Mutual\nGo paper-free with monthly e-statements.\nSave time and reduce clutter. Enroll to receive your monthly account statements as secure PDFs.\nTo join, sign in to your Riverside Mutual account on the mobile app, open Account Settings, and choose Documents & Delivery. You can change your delivery preferences anytime."
+   }
+  ],
+  "translationJa": "毎月の電子明細でペーパーレスに。\n時間を節約し、書類の散らかりを減らしましょう。毎月の口座明細を安全なPDFで受け取るよう登録できます。\n参加するには、Riverside Mutualのモバイルアプリでアカウントにサインインし、「アカウント設定」を開いて「書類・配信設定」を選んでください。配信方法はいつでも変更できます。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-notice-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What kind of organization most likely posted this notice?",
+    "options": [
+     "An online retailer",
+     "A financial institution",
+     "A software developer",
+     "A delivery company"
+    ],
+    "answer": "A financial institution",
+    "explanation": "本文は “monthly account statements（月次口座明細）” をPDFで受け取る案内。明細・口座という語は金融機関を示唆しており、本文中に “bank” は出ていないが、組織種は B と推論できる。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-notice-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What is the recommended way to enroll in e-statements?",
+    "options": [
+     "Visiting a local office to submit a form",
+     "Calling the general customer hotline",
+     "Using the mobile app to adjust account settings",
+     "Sending an email request to support"
+    ],
+    "answer": "Using the mobile app to adjust account settings",
+    "explanation": "“sign in … on the mobile app, open Account Settings, and choose Documents & Delivery” と、アプリの設定から手続きする手順が明示。Cが最も近いパラフレーズ。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-notice-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Notice 2",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 180,
+  "passageTitle": "Daily Life - Notice 2",
+  "paragraphs": [
+   {
+    "text": "Read a notice.\nMetroLink City\nTap & Go — move to contactless fares.\nSkip the ticket lines and keep your balance safe. Register your contactless card to see your recent trips, set up auto top-ups, and replace a lost card without losing money.\nTo begin, sign in to your MetroLink account on the website, open Cards & Payments, and update your delivery and security preferences anytime."
+   }
+  ],
+  "translationJa": "タップ＆ゴー — 運賃をキャッシュレスに。\n券売機の列に並ぶ必要はありません。残高も安全に管理できます。コンタクトレスカードを登録すると、最近の乗車履歴を確認したり、自動チャージを設定したり、カードを紛失した際に残高を失わずに再発行できます。\n始めるには、MetroLinkのウェブサイトでアカウントにサインインし、「カード＆支払い」を開いてください。配達方法やセキュリティ設定はいつでも変更できます。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-notice-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Who most likely posted this notice?",
+    "options": [
+     "A museum network",
+     "A public transit authority",
+     "A package delivery service",
+     "A cinema chain"
+    ],
+    "answer": "A public transit authority",
+    "explanation": "「contactless fares」「trips」などから、切符や運賃を扱う公共交通の掲示と推論。本文には “transit authority” とは書かれていないが、語彙手掛かりから判断。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-notice-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What is one advantage of registering the card?",
+    "options": [
+     "You’ll receive paper tickets by mail each month.",
+     "You can recover the remaining balance if the card goes missing.",
+     "You’ll earn airline miles for every trip taken.",
+     "You can ride for free during weekends."
+    ],
+    "answer": "You can recover the remaining balance if the card goes missing.",
+    "explanation": "本文の “replace a lost card without losing money” をパラフレーズ。登録すると紛失時に残高を保全できることが利点。A・C・Dはいずれも本文根拠なし。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-notice-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Notice 3",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 180,
+  "passageTitle": "Daily Life - Notice 3",
+  "paragraphs": [
+   {
+    "text": "Read a notice.\nHenderson Learning Commons\nGroup Spaces & Quiet Study Update\nNeed a place to work with classmates? Reserve a group room through the campus portal under Spaces & Bookings. Please arrive with your student ID and check in at the front counter. If no one from your group appears within 10 minutes after the start time, the room will be released for other students.\nQuiet zones are located on the upper floor; phones must be on silent. Study areas stay open until midnight during exam week."
+   }
+  ],
+  "translationJa": "グループスペース & 静かな学習エリアについてのお知らせ\nクラスメートと一緒に作業する場所が必要ですか？キャンパスポータルの 「スペース & 予約」 からグループルームを予約できます。来館の際は学生証を持参し、受付でチェックインしてください。開始時刻から10分以内にグループの誰も来ない場合、その部屋は他の学生に開放されます。\n静かな学習ゾーンは上階にあります。携帯電話はマナーモードに設定してください。試験期間中は学習エリアが深夜まで開放されています。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-notice-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Which campus unit most likely posted this notice?",
+    "options": [
+     "The athletics department",
+     "The student health center",
+     "The campus library service",
+     "The dining hall"
+    ],
+    "answer": "The campus library service",
+    "explanation": "“Spaces & Bookings”（自習室予約）、“Quiet zones”（静粛エリア）、“upper floor” などの手掛かりから図書館サービスが発信者と推論できる（本文に “library” の語は未出）。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-notice-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What happens if a group doesn’t show up soon after the booking begins?",
+    "options": [
+     "The reservation is automatically extended",
+     "The space becomes available to others",
+     "A late fee is added to the account",
+     "The booking is moved to the next day"
+    ],
+    "answer": "The space becomes available to others",
+    "explanation": "“If no one … within 10 minutes … the room will be released for other students” とあるため、他の利用者に開放が正答。A・C・Dは本文根拠なし。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-social-post-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Social Post 1",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Social Post 1",
+  "paragraphs": [
+   {
+    "text": "Campus Career Center"
+   }
+  ],
+  "translationJa": "キャンパス・キャリアセンター\n今夏のインターンやアルバイトを探していますか？\n「スプリング・キャリア・ポップアップ」 が 今週の水曜日 11:30〜14:00、学生会館ロビー で開催されます。\nテック、デザイン、教育、非営利団体など 35社が参加\n履歴書を10部 持参してください（その場での履歴書チェックも可能）\n30秒の自己紹介を試せる 「ピッチ練習」ブース あり\n先着150名 にネットワーキングランチチケットを配布\n服装は スマートカジュアル でOK。リュックも可。\n今夜中にオンライン登録 をすると、企業配置マップが事前に受け取れ、チェックインの列をスキップできます。\n参加できない場合は、当日のリクルーターのアドバイスをストーリーでチェックしてください。\nお待ちしています！",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the post?",
+    "options": [
+     "To review last year’s outcomes of the career fair",
+     "To announce and encourage attendance at a recruiting event",
+     "To explain how to write a strong résumé from scratch",
+     "To compare salaries across industries for summer jobs"
+    ],
+    "answer": "To announce and encourage attendance at a recruiting event",
+    "explanation": "投稿全体は「今週水曜のキャリアイベントに来てね」という告知＋参加促進。Aは過去の振り返り、C・Dはトピックが本文の目的とずれ。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "According to the post, what is one advantage of registering the night before?",
+    "options": [
+     "You can book one-on-one interviews in advance.",
+     "You will receive a floor layout and avoid the entry queue.",
+     "You will be guaranteed a lunch ticket.",
+     "You can access premium workshops after the event."
+    ],
+    "answer": "You will receive a floor layout and avoid the entry queue.",
+    "explanation": "“Register online tonight to receive the employer map and skip the check-in line.” と明記。A・Dは未記載、Cは「先着150名」なので登録=保証ではない。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about the expected dress code?",
+    "options": [
+     "Formal business suits are required for entry.",
+     "Athletic wear is preferred due to long lines.",
+     "Neat everyday clothing is acceptable.",
+     "Students must store bags off-site."
+    ],
+    "answer": "Neat everyday clothing is acceptable.",
+    "explanation": "“Dress is smart casual—backpacks welcome.”＝きれいめカジュアル可。Aは要求レベルが過剰、Bは根拠なし、Dは「バックパック可」なので逆。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-social-post-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Social Post 2",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Social Post 2",
+  "paragraphs": [
+   {
+    "text": "Riverstone Community Gym"
+   }
+  ],
+  "translationJa": "リバーストーン・コミュニティジム\nそろそろ運動習慣に戻りたいと考えていますか？\nリバーストーンでは、今週（月〜日）6:00〜22:00の期間中、無料体験ウィークを開催します。新規の方は、朝ヨガ、夕方のHIIT、初心者向けのやさしいモビリティクラスなど、どのクラスでも無料で参加できます。\n朝8:00より前に来館された方には、スムージーバーでプロテインサンプルを無料提供。また、館内には終日トレーナーが常駐しており、フォームチェックなどの簡単なアドバイスが受けられます。\nロッカーとタオルは無料貸し出し。予約は不要ですが、土曜日のスピンクラスのみ要予約（毎回すぐに満席になります）。\n18:00以降は駐車場が混み合うため、Elm駅から徒歩3分（Pine Street沿い）で来館されることをおすすめします。\n初めての方は、受付で身分証をお持ちください。\n来館にまだ迷っている方は、インスタのストーリーでクラスの様子や初心者向けのヒントもご覧いただけます。\n今週、お待ちしています！",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "Why was this message posted?",
+    "options": [
+     "To publish a critique of nearby fitness centers",
+     "To promote a weeklong open-access period and nudge newcomers to attend",
+     "To set out compulsory safety codes for intense training",
+     "To recruit part-time smoothie-bar staff"
+    ],
+    "answer": "To promote a weeklong open-access period and nudge newcomers to attend",
+    "explanation": "ポストは「Free Trial Week」「try any class without charge」「See you this week!」と、無料体験週間への参加を呼びかける内容。= “週にわたる自由参加期間を案内して来場を促す”",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What must a first-time guest present to activate a visitor pass?",
+    "options": [
+     "A printed liability waiver",
+     "Cash to cover towel use",
+     "Proof of identity with a photograph",
+     "A document confirming current residence"
+    ],
+    "answer": "Proof of identity with a photograph",
+    "explanation": "「First-time guests should bring a photo ID to activate the visitor pass.」= 初来館者は写真付き身分証が必要。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What is implied about the Saturday spin class?",
+    "options": [
+     "It is the only session that requires payment",
+     "Places tend to be gone unless you book ahead",
+     "It runs only at daybreak",
+     "It is cancelled whenever evening parking is crowded"
+    ],
+    "answer": "Places tend to be gone unless you book ahead",
+    "explanation": "「no reservation is required except for the Saturday spin class, which fills quickly」= 土曜スピンは満員になりやすい→事前予約が実質必要。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-social-post-3-6-1",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Social Post 3-6 セット1",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Social Post 3-6 セット1",
+  "paragraphs": [
+   {
+    "text": "Harborlight Indie Cinema"
+   }
+  ],
+  "translationJa": "ハーバーライト・インディー・シネマ\n週の真ん中に、ちょっと深く考えさせられる作品はいかがですか？\n今週の水曜日 19:30〜、ドキュメンタリー・ナイトを開催します。\n今回は、海洋保全と小さな町のジャーナリズムをテーマにした、受賞歴のある短編ドキュメンタリーを上映します。\n開場は19:00、座席は先着順です。\nメンバーの方は、上映前にカウンターで無料のティーをお受け取りいただけます。\n上映終了後には、監督2名による15分のQ&Aを予定しています。\n*チケット料金は「お気持ち制」**で、当日ボックスオフィスにてお支払いください。\nもし満席となった場合は、学生証提示の方が優先入場となります。\n夜遅くまでいられない方のために、\n翌朝、ストーリーにハイライト映像を投稿します。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-1-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the post mainly trying to do?",
+    "options": [
+     "Review last month’s film festival results",
+     "Invite people to attend a midweek nonfiction screening",
+     "Explain how to apply for a directing grant",
+     "Compare documentary and fiction box office trends"
+    ],
+    "answer": "Invite people to attend a midweek nonfiction screening",
+    "explanation": "「Documentary Night」「this Wednesday 7:30」「pay-what-you-can」など、参加を促す告知。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-1-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "According to the post, what benefit do members receive?",
+    "options": [
+     "Reserved seats in the front row",
+     "A complimentary hot drink at the venue",
+     "Discounted parking near the cinema",
+     "Early access to the next month’s schedule"
+    ],
+    "answer": "A complimentary hot drink at the venue",
+    "explanation": "「members can pick up a free tea at the counter」＝会員の特典。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-1-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about entry if many people show up?",
+    "options": [
+     "Only directors may enter after 7:30 p.m.",
+     "Students with ID are admitted before others.",
+     "Everyone must buy a full-price ticket online.",
+     "No one will be allowed to stand in the aisles."
+    ],
+    "answer": "Students with ID are admitted before others.",
+    "explanation": "「student IDs get priority entry if we hit capacity」＝混雑時は学生優先。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-social-post-3-6-2",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Social Post 3-6 セット2",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Social Post 3-6 セット2",
+  "paragraphs": [
+   {
+    "text": "Maple Street Animal Rescue"
+   }
+  ],
+  "translationJa": "メイプルストリート動物レスキュー\n里親に興味はあるけど、いきなりは不安……という方にぴったりの**「フォスター・ウィークエンド」を開催します。土曜日の10:00〜13:00の間に犬または猫を受け取り、日曜の夕方まで一緒に過ごしてください。その後、戻ってきた際に写真と様子のメモ**をいただければ、動物たちと新しい家族とのよりよいマッチングに役立てることができます。\nフード、移動用クレート、24時間対応のホットラインは当団体がご用意します。\n予約なしの来訪でも大丈夫ですが、事前にオンラインフォームを記入していただくと受け渡しがスムーズです。\n他のペットがいるご家庭でも、ワクチン接種が済んでいれば参加OKです。\n今回はホストできない方も、お散歩ボランティアに参加できます（予約不要）。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-2-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the chief aim of the message?",
+    "options": [
+     "To promote a short-term home-care trial for animals",
+     "To announce permanent closures at the shelter",
+     "To recruit paid weekend staff for the clinic",
+     "To advertise a pet-supply sale"
+    ],
+    "answer": "To promote a short-term home-care trial for animals",
+    "explanation": "「Foster Weekend… try it」「土日で短期お試し」＝短期預かりの体験を促進。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-2-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What is one convenience offered to participants?",
+    "options": [
+     "Free grooming at drop-off",
+     "A loaner carrier and food included",
+     "House-checking by staff beforehand",
+     "A stipend for transportation"
+    ],
+    "answer": "A loaner carrier and food included",
+    "explanation": "「We provide food and a travel crate and a hotline」＝参加者の負担軽減。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-2-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What is implied about the online form?",
+    "options": [
+     "It guarantees a specific breed.",
+     "It is mandatory for all volunteers.",
+     "It reduces waiting time on arrival.",
+     "It enrolls participants in weekly shifts."
+    ],
+    "answer": "It reduces waiting time on arrival.",
+    "explanation": "「Walk-ins are fine, but completing the online form tonight speeds up pickup」＝到着時の手続き短縮。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-social-post-3-6-3",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Social Post 3-6 セット3",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Social Post 3-6 セット3",
+  "paragraphs": [
+   {
+    "text": "Riverview City Museum"
+   }
+  ],
+  "translationJa": "リバービュー市立博物館\n今週日曜日は、毎月のコミュニティプログラムの一環として終日入館無料です。\n新しい「河川交易」展は10:00にオープンします。\nまたファミリースタジオでは、毎時ちょうどから短いアートアクティビティを行います。\nベビーカーでの来館も歓迎ですが、ロビーは昼食後に混雑しやすいため、\nゆっくり見たい場合は11:00より前のご来館がおすすめです。\n会員の方はオーディオガイドを無料で貸出、\n非会員の方も受付でレンタルできます。\nカフェは営業時間を18:00まで延長します。\n来館できない方向けには、おうちで楽しめる子ども向け制作アイデアをストーリーで公開します。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-3-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the main purpose of the post?",
+    "options": [
+     "To seek donations for a renovation",
+     "To encourage attendance on a no-fee day",
+     "To recruit artists for a residency",
+     "To report research findings about river trade"
+    ],
+    "answer": "To encourage attendance on a no-fee day",
+    "explanation": "「admission is free all day」「monthly community program」＝無料日への来館促進。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-3-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What advice does the post give to avoid crowds?",
+    "options": [
+     "Visit before late morning.",
+     "Use the side entrance.",
+     "Skip the lobby and go to the café.",
+     "Reserve timed tickets online."
+    ],
+    "answer": "Visit before late morning.",
+    "explanation": "「the lobby gets crowded after lunch; … come before 11」＝早い時間帯を推奨。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-3-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What can be inferred about audio guides?",
+    "options": [
+     "They are unavailable to visitors with strollers.",
+     "They are complimentary for everyone.",
+     "They are only in foreign languages.",
+     "Members pay nothing; others can rent them."
+    ],
+    "answer": "Members pay nothing; others can rent them.",
+    "explanation": "「Members can check out audio guides at no charge; non-members may rent」＝会員無料、非会員は有料レンタル。",
+    "skillTag": "daily-life"
+   }
+  ]
+ },
+ {
+  "id": "toefl-r-daily-life-daily-life-social-post-3-6-4",
+  "exam": "toefl",
+  "skill": "reading",
+  "practiceType": "daily-life",
+  "title": "Daily Life - Social Post 3-6 セット4",
+  "description": "日常文書の読解",
+  "difficulty": "medium",
+  "timeLimitSec": 270,
+  "passageTitle": "Daily Life - Social Post 3-6 セット4",
+  "paragraphs": [
+   {
+    "text": "Canal Yard Food Trucks"
+   }
+  ],
+  "translationJa": "キャナルヤード・フードトラック\n今週金曜日の17:00〜21:00、新しい照明と座席配置のテストを兼ねてソフトオープンを行います。\n日替わりのフードトラックが、タコス、ヴィーガンボウル、デザートポップを提供します。現在は機材調整中のため、メニューは通常より少なめです。\nカード・モバイル決済OK。\n早めに来ると、ヒーター付きのパティオ席を確保できることが多いです。\n18:00以降は周辺の路上駐車が混み合うため、\n近隣の方はBirch駅から徒歩約4分で歩いて来られることが多いです。\nもし風が強くなった場合は、ストーリーでお知らせし、一部のトラックを屋根付きエリアへ移動します。",
+  "questions": [
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-4-q1",
+    "number": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the principal goal of the announcement?",
+    "options": [
+     "To hire cooks for the new season",
+     "To invite the public to a limited-scale trial evening",
+     "To collect feedback on dessert recipes online only",
+     "To announce a price increase for all vendors"
+    ],
+    "answer": "To invite the public to a limited-scale trial evening",
+    "explanation": "「soft opening… test the new lighting and seating」＝限定規模の試運転に招待。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-4-q2",
+    "number": 2,
+    "type": "multiple_choice",
+    "prompt": "What is suggested about seating?",
+    "options": [
+     "Only VIPs can use patio tables.",
+     "Seats require a reservation fee.",
+     "Arriving early improves your chance of getting a spot.",
+     "Indoor dining is the only option in any weather."
+    ],
+    "answer": "Arriving early improves your chance of getting a spot.",
+    "explanation": "「early birds often land patio tables」＝早く来ると座れる確率↑。",
+    "skillTag": "daily-life"
+   },
+   {
+    "id": "toefl-r-daily-life-daily-life-social-post-3-6-4-q3",
+    "number": 3,
+    "type": "multiple_choice",
+    "prompt": "What arrangement is implied for transportation?",
+    "options": [
+     "Free valet service begins at 6.",
+     "A shuttle runs every four minutes.",
+     "Most locals walk from a nearby transit stop due to tight parking.",
+     "Bicycle parking is prohibited near the venue."
+    ],
+    "answer": "Most locals walk from a nearby transit stop due to tight parking.",
+    "explanation": "「Street parking is scarce after 6, so neighbors usually walk from Birch Station」＝駐車難→最寄り駅から徒歩が一般的。",
+    "skillTag": "daily-life"
+   }
+  ]
+ }
+]

@@ -5,6 +5,21 @@ rules_version = '2';
 //    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin == true;
 service firebase.storage {
   match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email in [
+        'info@english-gym.org',
+        'admin@gmail.com',
+        'admin@example.com',
+        'ykita@example.com'
+      ];
+    }
+
+    // 新仕様の使い方ガイドに挿入するスクリーンショット
+    match /guide-images/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+
     // 音声ファイルのルール
     match /audio/{taskId}/{fileName} {
       // 認証済みユーザーのみ読み取り可能
@@ -29,10 +44,17 @@ service firebase.storage {
       // 自分のプロフィール画像のみ読み取り・書き込み可能
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    // 4技能演習の教材アセット（IELTS リスニング音声・地図画像など）
+    // アップロードは管理者が gcloud / コンソール経由で行うため、アプリからの書き込みは禁止
+    match /prep/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
     
     // その他のファイルは拒否
     match /{allPaths=**} {
       allow read, write: if false;
     }
   }
-} 
+}

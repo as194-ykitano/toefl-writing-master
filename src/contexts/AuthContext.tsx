@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { setPrepUser } from '@/lib/prep/user-scope';
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      // 学習データの保存領域をこのユーザーに切り替え（Firestore からハイドレート）
+      setPrepUser(user?.uid ?? null);
       setUser(user);
       setLoading(false);
     });

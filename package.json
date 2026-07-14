@@ -7,10 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "guide:login": "node scripts/guide-automation/login.mjs",
+    "guide:capture": "node scripts/guide-automation/capture.mjs",
+    "guide:gifs": "node scripts/guide-automation/generate-gifs.mjs",
+    "guide:manual": "node scripts/guide-automation/build-manual.mjs",
+    "guide:apply": "node scripts/guide-automation/apply.mjs",
     "migrate-audio": "node scripts/migrate-audio.js",
     "gcp-build": "npm run build"
   },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.1.19",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.7",
@@ -25,6 +32,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "firebase": "^11.9.0",
+    "firebase-admin": "^13.10.0",
     "lucide-react": "^0.513.0",
     "next": "^15.5.9",
     "openai": "^4.28.0",
@@ -32,6 +40,10 @@
     "react-chartjs-2": "^5.3.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.1.2",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
     "youtube-transcript": "^1.2.1",
@@ -46,8 +58,10 @@
     "@types/react-dom": "^19.1.6",
     "eslint": "^9",
     "eslint-config-next": "^15.5.9",
+    "playwright": "^1.61.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.7"
   }
 }

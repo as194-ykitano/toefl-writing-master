@@ -7,5 +7,10 @@ app.yaml
 *.log
 output/plan/
 outputs/plans/
+outputs/guide-capture/
+.guide-browser-profile/
 out/
 tsconfig.tsbuildinfo
+
+# TOEFL 音声ステージング（Storage アップロード用の一時ファイル）
+scripts/.toefl-audio-staging/

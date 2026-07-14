@@ -1,0 +1,125 @@
+"use client";
+
+// 試験種別の切替（画面左上のドロップダウン）
+// 現在の試験名 + ▾ を押すと下に候補（TOEFL / IELTS / Advanced / …）が開き、
+// 選ぶとその試験の Home（Advanced はハブ）へ遷移する。
+// EXAM_OPTIONS に 1 行足すだけで候補が増える（TOEIC などは comingSoon）。
+
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Check, ChevronDown, Lock } from "lucide-react";
+import { useExam, EXAM_OPTIONS } from "@/contexts/ExamContext";
+import { CategoryId } from "@/lib/prep/types";
+import { useFeatureAvailability } from "@/lib/prep/use-feature-availability";
+
+interface ExamSwitcherProps {
+  className?: string;
+}
+
+function isCategoryId(value: string): value is CategoryId {
+  return (
+    value === "toefl" || value === "ielts" || value === "toeic" || value === "advanced"
+  );
+}
+
+export default function ExamSwitcher({ className = "" }: ExamSwitcherProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { exam, setExam } = useExam();
+  const availability = useFeatureAvailability();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const current = EXAM_OPTIONS.find((o) => o.id === exam) ?? EXAM_OPTIONS[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const handleSelect = (id: string, comingSoon?: boolean) => {
+    if (comingSoon || !isCategoryId(id)) return;
+    setExam(id);
+    setOpen(false);
+    // 切替でコンテンツ（Home / ダッシュボードなど）が連動するよう、
+    // 基本は現在のページに留まる。ただし試験⇄Advanced の往来だけは適切なトップへ移動する。
+    const onAdvanced = pathname?.startsWith("/advanced") ?? false;
+    if (id === "advanced") {
+      if (!onAdvanced) router.push("/advanced");
+    } else if (onAdvanced) {
+      // Advanced 領域から TOEFL / IELTS に切り替えたらホームへ
+      router.push("/home");
+    }
+    // それ以外（Home ⇄ ダッシュボードなど試験系ページ内）はそのまま留まり、内容だけ切り替わる
+  };
+
+  return (
+    <div ref={ref} className={`relative ${className}`}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm font-bold tracking-tight text-gray-900 hover:border-gray-300 transition-colors"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <span className="text-eg-dark">{current.label}</span>
+        <ChevronDown
+          className={`w-4 h-4 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div
+          className="absolute left-0 top-full mt-1.5 z-50 w-60 rounded-xl border border-gray-200 bg-white p-1.5 shadow-lg"
+          role="listbox"
+        >
+          <div className="px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+            試験を切り替える
+          </div>
+          {EXAM_OPTIONS.map((opt) => {
+            const active = opt.id === exam;
+            const comingSoon = availability.courses[opt.id] ?? opt.comingSoon ?? false;
+            return (
+              <button
+                key={opt.id}
+                role="option"
+                aria-selected={active}
+                disabled={comingSoon}
+                onClick={() => handleSelect(opt.id, comingSoon)}
+                className={`flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left transition-colors ${
+                  comingSoon
+                    ? "cursor-not-allowed opacity-50"
+                    : active
+                      ? "bg-eg-soft"
+                      : "hover:bg-gray-50"
+                }`}
+              >
+                <span className="min-w-0">
+                  <span className={`block text-sm font-semibold ${active ? "text-eg-deep" : "text-gray-900"}`}>
+                    {opt.label}
+                  </span>
+                  {opt.sublabel && (
+                    <span className="block text-[11px] text-gray-400 truncate">{opt.sublabel}</span>
+                  )}
+                </span>
+                {comingSoon ? (
+                  <Lock className="w-3.5 h-3.5 text-gray-300 flex-shrink-0" />
+                ) : active ? (
+                  <Check className="w-4 h-4 text-eg-dark flex-shrink-0" />
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

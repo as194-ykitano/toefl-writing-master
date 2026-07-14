@@ -143,6 +143,7 @@ export interface EssayFeedback {
       context: string;
       startIndex: number;
       endIndex: number;
+      category?: string;
     }>;
   };
   scaledScore?: number;
@@ -189,6 +190,7 @@ export interface IELTSEssayFeedback {
       context: string;
       startIndex: number;
       endIndex: number;
+      category?: string;
     }>;
   };
   scaledScore?: number;
@@ -230,6 +232,8 @@ Requirements:
 - "corrected" must be the improved replacement text.
 - "explanation" must be written in natural Japanese and should briefly explain why the original English is unnatural or incorrect.
 - "fullSentence" must be the full original sentence containing the mistake.
+- "category" must classify the error using EXACTLY ONE of the following Japanese labels (choose the most specific one):
+  動詞の時制 / 主述の一致 / 三単現 / 冠詞 / 前置詞 / 単数・複数 / 可算・不可算 / 代名詞 / 語順 / 語彙選択 / コロケーション / 語形 / スペリング / 句読点 / 大文字小文字 / 接続詞 / 関係詞 / 比較 / 態（受動・能動）/ 動名詞・不定詞 / 冗長・簡潔さ / その他
 - If there are no meaningful issues, return an empty array.
 - Return JSON only.
 
@@ -243,7 +247,8 @@ Output format:
       "original": "is go",
       "corrected": "goes",
       "explanation": "主語が三人称単数なので、動詞は goes にするのが自然です。",
-      "fullSentence": "She is go to school every day."
+      "fullSentence": "She is go to school every day.",
+      "category": "動詞の時制"
     }
   ]
 }
@@ -566,7 +571,8 @@ ${essayText}
         explanation: correction.explanation,
         context: correction.fullSentence || correction.context || '',
         startIndex: correction.startIndex,
-        endIndex: correction.endIndex
+        endIndex: correction.endIndex,
+        category: correction.category,
       })) || []
     };
 
@@ -899,7 +905,8 @@ Essay Info:
         explanation: correction.explanation,
         context: correction.fullSentence || correction.context || '',
         startIndex: correction.startIndex,
-        endIndex: correction.endIndex
+        endIndex: correction.endIndex,
+        category: correction.category,
       })) || []
     };
 
@@ -932,6 +939,7 @@ export interface BasicEssayFeedback {
       context: string;
       startIndex: number;
       endIndex: number;
+      category?: string;
     }>;
   };
   suggestions: string[];
@@ -1179,7 +1187,8 @@ Essay Info:
         explanation: correction.explanation,
         context: correction.fullSentence || correction.context || '',
         startIndex: correction.startIndex,
-        endIndex: correction.endIndex
+        endIndex: correction.endIndex,
+        category: correction.category,
       })) || []
     };
 

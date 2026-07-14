@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import Link from 'next/link';
 
 type ErrorWithMessage = { message?: string };
 
@@ -63,6 +64,15 @@ export default function ResetPasswordForm() {
         >
           {loading ? '送信中...' : 'リセットメールを送信'}
         </Button>
+
+        <div className="text-center">
+          <Link
+            href="/login"
+            className="text-sm text-blue-600 hover:underline block w-full"
+          >
+            ログイン画面に戻る
+          </Link>
+        </div>
       </form>
     </Card>
   );

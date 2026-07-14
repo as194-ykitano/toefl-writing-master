@@ -112,6 +112,126 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* English Gym ブランドカラー（english-gym-admin と同系色） */
+@theme {
+  --color-eg: #ff9100;
+  --color-eg-dark: #e07f00;
+  --color-eg-deep: #b45309;
+  --color-eg-soft: #fff4e5;
+  --color-eg-faint: #fffaf2;
+}
+
+/* =========================================================================
+   ダークモード用の中立色リマップ
+   -------------------------------------------------------------------------
+   アプリは全体が `bg-white` / `text-gray-*` / `border-gray-*` などの
+   ハードコード色（白・グレー基調 + アクセント色）で一貫して書かれている。
+   個々のコンポーネントに `dark:` を付けて回る代わりに、`.dark` スコープで
+   これらの中立ユーティリティをまとめてダーク値へ再マップし、全ページを
+   一括でダーク化する。アクセント色（eg オレンジ / blue など）は残す。
+
+   @layer の外に書くことで Tailwind のレイヤー付きユーティリティより
+   カスケード上で確実に優先される（unlayered > layered）。
+   ========================================================================= */
+.dark {
+  --d-page: #17171a; /* ページ背景 */
+  --d-surface: #212125; /* カード・white 面 */
+  --d-raised: #2b2b31; /* 一段持ち上げ・hover 面 */
+  --d-border: rgba(255, 255, 255, 0.1);
+  --d-border-soft: rgba(255, 255, 255, 0.06);
+}
+
+/* ---- 背景（面）---- */
+.dark .bg-white { background-color: var(--d-surface); }
+.dark .bg-\[\#f7f6f3\] { background-color: var(--d-page); }
+.dark .bg-gray-50 { background-color: var(--d-raised); }
+.dark .bg-gray-50\/70 { background-color: var(--d-raised); }
+.dark .bg-gray-100 { background-color: var(--d-raised); }
+.dark .bg-gray-200 { background-color: #35353c; }
+
+/* ---- hover 背景 ---- */
+.dark .hover\:bg-gray-50:hover { background-color: var(--d-raised); }
+.dark .hover\:bg-gray-100:hover { background-color: #34343a; }
+.dark .hover\:bg-white:hover { background-color: var(--d-raised); }
+
+/* ---- テキスト（text-black / 各アクセント色は変更しない）---- */
+.dark .text-gray-900 { color: #ededed; }
+.dark .text-gray-800 { color: #e2e2e2; }
+.dark .text-gray-700 { color: #d2d2d4; }
+.dark .text-gray-600 { color: #bdbdc0; }
+.dark .text-gray-500 { color: #9c9ca1; }
+.dark .text-gray-400 { color: #7e7e85; }
+
+/* ---- ボーダー ---- */
+.dark .border-gray-300 { border-color: var(--d-border); }
+.dark .border-gray-200 { border-color: var(--d-border); }
+.dark .border-gray-200\/80 { border-color: var(--d-border); }
+.dark .border-gray-200\/70 { border-color: var(--d-border); }
+.dark .border-gray-100 { border-color: var(--d-border-soft); }
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) { border-color: var(--d-border-soft); }
+
+/* ---- ブランドソフト面 / 選択状態（明るすぎる箇所を落ち着かせる）---- */
+.dark .bg-eg-soft { background-color: rgba(255, 145, 0, 0.14); }
+.dark .bg-eg-faint { background-color: rgba(255, 145, 0, 0.08); }
+.dark .text-eg-deep { color: #fbbf6f; }
+.dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.16); }
+.dark .bg-blue-50\/70 { background-color: rgba(59, 130, 246, 0.16); }
+
+/* =========================================================================
+   グラス（すりガラス）カード
+   -------------------------------------------------------------------------
+   半透明 + backdrop-blur で、背景がうっすら透ける質感を出す。
+   bg-white 等を使わずこのクラス単体で面の見た目を完結させる（ダーク再マップと
+   競合しないようにするため）。
+   ========================================================================= */
+.glass-card {
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 28px rgba(17, 24, 39, 0.06);
+}
+.dark .glass-card {
+  background: rgba(40, 40, 46, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.32);
+}
+/* グラスカード内で「一段沈んだ」ヘッダー等に使う薄い面 */
+.dark .glass-card :where(.glass-inner-border) { border-color: rgba(255, 255, 255, 0.08); }
+
+/* =========================================================================
+   数値カウントアップ完了時のグロー
+   ========================================================================= */
+@keyframes count-glow {
+  0% { text-shadow: 0 0 0 rgba(255, 145, 0, 0); }
+  35% { text-shadow: 0 0 20px rgba(255, 145, 0, 0.75); }
+  100% { text-shadow: 0 0 0 rgba(255, 145, 0, 0); }
+}
+.count-glow {
+  animation: count-glow 0.9s ease-out;
+}
+
+/* =========================================================================
+   積み上げ棒グラフ: 下からニュッと伸びる
+   ========================================================================= */
+@keyframes bar-grow-up {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+.bar-grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bar-grow-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow { animation: none; }
+}
+
+/* 色の切替を滑らかに */
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

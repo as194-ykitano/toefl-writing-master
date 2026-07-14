@@ -213,6 +213,7 @@ ${essayText}
             context: correction.context,
             startIndex: correction.startIndex,
             endIndex: correction.endIndex,
+            category: (correction as { category?: string }).category,
           })) || [],
         };
       } catch (grammarError) {
