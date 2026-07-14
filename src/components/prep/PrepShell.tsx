@@ -8,6 +8,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -25,8 +26,8 @@ import {
   Menu,
   Moon,
   PenLine,
-  Sparkles,
   ShieldCheck,
+  StickyNote,
   Sun,
   User,
   Video,
@@ -104,6 +105,7 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
       icon: Video,
       activeFor: ["/video-courses"],
     });
+    top.push({ href: "/notes", label: "ノート", icon: StickyNote, activeFor: ["/notes"] });
     top.push({ href: "/mock", label: "模試", icon: ClipboardCheck, activeFor: ["/mock"] });
   } else {
     top.push({
@@ -112,6 +114,7 @@ function buildNavGroups(exam: string, userIsAdmin = false): NavGroup[] {
       icon: Video,
       activeFor: ["/video-courses"],
     });
+    top.push({ href: "/notes", label: "ノート", icon: StickyNote, activeFor: ["/notes"] });
   }
   const groups: NavGroup[] = [
     { items: top },
@@ -172,13 +175,17 @@ function isActive(pathname: string | null, item: NavItem): boolean {
 function BrandMark({ collapsed = false }: { collapsed?: boolean }) {
   return (
     <Link href="/home" className="flex items-center gap-2.5 min-w-0">
-      <span className="w-8 h-8 rounded-lg bg-eg flex items-center justify-center flex-shrink-0">
-        <Sparkles className="w-4.5 h-4.5 text-black" />
-      </span>
+      <Image
+        src="/exavia-logo.png"
+        alt="Exavia logo"
+        width={32}
+        height={32}
+        className="h-8 w-8 flex-shrink-0 rounded-lg"
+      />
       {!collapsed && (
         <span className="min-w-0 leading-tight">
           <span className="block font-bold text-gray-900 text-[15px] tracking-tight truncate">
-            Prep Master
+            Exavia
           </span>
           <span className="block text-[10px] text-gray-400 truncate">
             Supported by English Gym

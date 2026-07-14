@@ -45,7 +45,7 @@ interface TourStep {
 
 const STEPS: TourStep[] = [
   {
-    title: "Prep Master へようこそ 👋",
+    title: "Exavia へようこそ 👋",
     body: "はじめに、基本の使い方をかんたんにご案内します。1 分ほどで終わります。",
   },
   {

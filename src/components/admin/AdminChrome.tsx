@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BookOpen, Database, ExternalLink, Home, LayoutDashboard, Moon, Settings, ShieldCheck, Sun, Users, Video } from "lucide-react";
+import { BookOpen, Database, ExternalLink, Home, LayoutDashboard, Moon, Settings, Sun, Users, Video } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { isAdmin } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -16,9 +17,9 @@ const legacyPrefixes = [
 const links = [
   { href: "/admin", label: "ダッシュボード", icon: LayoutDashboard },
   { href: "/admin/user-management", label: "ユーザー管理", icon: Users },
-  { href: "/admin/practice-sets", label: "Practice", icon: Database },
-  { href: "/admin/guides", label: "使い方ガイド", icon: BookOpen },
-  { href: "/admin/video-courses", label: "動画コース", icon: Video },
+  { href: "/admin/practice-sets", label: "問題管理", icon: Database },
+  { href: "/admin/guides", label: "使い方ガイド管理", icon: BookOpen },
+  { href: "/admin/video-courses", label: "動画コース管理", icon: Video },
   { href: "/admin/availability", label: "公開設定", icon: Settings },
 ];
 
@@ -45,8 +46,8 @@ export function AdminChrome({ children }: { children: React.ReactNode }) {
   return <div className="admin-console min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-slate-800 bg-slate-950 text-slate-100 lg:flex lg:flex-col">
       <div className="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
-        <div className="grid h-9 w-9 place-items-center rounded-lg bg-blue-600"><ShieldCheck className="h-5 w-5" /></div>
-        <div><p className="font-semibold">Prep Master</p><p className="text-xs text-slate-400">Admin Console</p></div>
+        <Image src="/exavia-logo.png" alt="Exavia logo" width={36} height={36} className="rounded-lg" />
+        <div><p className="font-semibold">Exavia</p><p className="text-xs text-slate-400">Admin Console</p></div>
       </div>
       <nav className="flex-1 space-y-1 p-3">
         <p className="px-3 pb-2 pt-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Management</p>

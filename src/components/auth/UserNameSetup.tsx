@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useExam } from '@/contexts/ExamContext';
 import { auth, db } from '@/lib/firebase';
 import AuthThemeToggle from '@/components/auth/AuthThemeToggle';
+import Image from 'next/image';
 import type { LearnerStatus, OnboardingProfile } from '@/lib/types';
 
 type ErrorWithMessage = {
@@ -149,10 +150,8 @@ export default function UserNameSetup() {
         {/* 見出し（大きめ・中央） */}
         <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="inline-flex items-center gap-2 mb-6">
-            <span className="w-9 h-9 rounded-full bg-eg-deep text-white flex items-center justify-center font-bold">
-              EG
-            </span>
-            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Prep Master</span>
+            <Image src="/exavia-logo.png" alt="Exavia logo" width={36} height={36} className="rounded-xl" />
+            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Exavia</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50 leading-tight">
             あなたについて

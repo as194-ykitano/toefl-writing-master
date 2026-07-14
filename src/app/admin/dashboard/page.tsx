@@ -254,7 +254,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">管理者ダッシュボード</h1>
-              <p className="text-gray-600 mt-2">Prep Masterの管理機能</p>
+              <p className="text-gray-600 mt-2">Exaviaの管理機能</p>
             </div>
             <div className="flex items-center gap-4">
               <Button 

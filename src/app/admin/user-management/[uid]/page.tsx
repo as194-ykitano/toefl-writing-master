@@ -3,9 +3,9 @@
 import { use, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ArrowLeft, Award, BarChart3, BookOpen, CalendarClock, CheckCircle2, ChevronDown,
+  ArrowLeft, Award, BarChart3, BookOpen, CalendarClock, CalendarDays, CheckCircle2, ChevronDown,
   ChevronLeft, ChevronRight, Circle, Clock, ExternalLink, FileText, GraduationCap,
-  KeyRound, ListChecks, Mail, Mic, PenLine, Target, Timer, TrendingUp, X,
+  KeyRound, ListChecks, Mail, Mic, PenLine, Target, Timer, TrendingUp, Trophy, X,
 } from "lucide-react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -58,6 +58,14 @@ interface DetailUser {
     targetScore?: number; targetDate?: string; weeklyGoal?: number;
     learningPlan?: string; focusAreas?: string[];
   } | null;
+  examPlans: Array<{
+    id: string; exam: string; date: string; targetScore: string; note: string;
+  }>;
+  examResults: Array<{
+    id: string; exam: string; date: string; score: string;
+    sectionScores?: Partial<Record<"reading" | "listening" | "speaking" | "writing", string>>;
+    note: string;
+  }>;
   progress: { currentScore?: number; essaysCompleted?: number; lastSubmission?: string | null } | null;
   studySessions: Array<{ date?: string; duration?: number; focus?: string }>;
   totalStudyTime: number;
@@ -139,6 +147,9 @@ const LEARNER_STATUS_LABELS: Record<string, string> = {
 };
 
 const EXAM_LABELS: Record<string, string> = { toefl: "TOEFL", ielts: "IELTS", toeic: "TOEIC" };
+const SECTION_LABELS: Record<string, string> = {
+  reading: "Reading", listening: "Listening", speaking: "Speaking", writing: "Writing",
+};
 
 const STATUS_LABELS: Record<string, string> = {
   completed: "完了", processing: "処理中", feedback_completed: "フィードバック完了",
@@ -283,6 +294,19 @@ export default function UserDetailPage({ params }: { params: Promise<{ uid: stri
     }));
   }, [data?.learning.contentProgress, data?.user.onboarding?.targetExam]);
 
+  const examPlans = useMemo(
+    () => [...(user?.examPlans ?? [])].sort((a, b) => {
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return Date.parse(a.date) - Date.parse(b.date);
+    }),
+    [user?.examPlans],
+  );
+  const examResults = useMemo(
+    () => [...(user?.examResults ?? [])].sort((a, b) => Date.parse(b.date || "") - Date.parse(a.date || "")),
+    [user?.examResults],
+  );
+
   const toggleProgressGroup = (key: string, defaultOpen: boolean) => {
     setOpenProgressGroups((current) => ({ ...current, [key]: !(current[key] ?? defaultOpen) }));
   };
@@ -405,27 +429,50 @@ export default function UserDetailPage({ params }: { params: Promise<{ uid: stri
           </Card>
 
           <Card>
-            <CardHeader><CardTitle className="flex items-center gap-2 text-base"><GraduationCap className="h-4 w-4" />学習目標</CardTitle></CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              {user.learningGoals ? (
-                <>
-                  <Field label="目標スコア" value={user.learningGoals.targetScore != null ? String(user.learningGoals.targetScore) : "—"} />
-                  <Field label="目標日" value={fmtDate(user.learningGoals.targetDate)} />
-                  <Field label="週間目標" value={user.learningGoals.weeklyGoal != null ? `${user.learningGoals.weeklyGoal} 本／週` : "—"} />
-                  {user.learningGoals.focusAreas?.length ? (
-                    <div>
-                      <p className="text-xs text-slate-500">重点分野</p>
-                      <div className="mt-1 flex flex-wrap gap-1.5">{user.learningGoals.focusAreas.map((a) => <Badge key={a} variant="secondary">{a}</Badge>)}</div>
-                    </div>
-                  ) : null}
-                  {user.learningGoals.learningPlan && (
-                    <div>
-                      <p className="text-xs text-slate-500">学習プラン</p>
-                      <p className="mt-1 whitespace-pre-wrap rounded-md bg-slate-50 p-3 dark:bg-slate-800">{user.learningGoals.learningPlan}</p>
-                    </div>
-                  )}
-                </>
-              ) : <p className="text-slate-500">学習目標が未設定です。</p>}
+            <CardHeader><CardTitle className="flex items-center gap-2 text-base"><CalendarDays className="h-4 w-4" />受験予定・データ</CardTitle></CardHeader>
+            <CardContent className="space-y-6 text-sm">
+              <section>
+                <h3 className="mb-3 flex items-center gap-2 font-semibold"><CalendarClock className="h-4 w-4 text-blue-600" />次回の受験予定</h3>
+                {examPlans.length ? (
+                  <div className="space-y-3">
+                    {examPlans.map((plan) => (
+                      <div key={plan.id} className="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <Badge variant="secondary">{EXAM_LABELS[plan.exam] ?? plan.exam.toUpperCase()}</Badge>
+                          <span className="font-semibold">{fmtDate(plan.date)}</span>
+                        </div>
+                        <p className="mt-2 text-xs text-slate-500">目標スコア <span className="font-semibold text-slate-900 dark:text-slate-100">{plan.targetScore || "—"}</span></p>
+                        {plan.note && <p className="mt-2 whitespace-pre-wrap rounded-md bg-slate-50 p-2 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">{plan.note}</p>}
+                      </div>
+                    ))}
+                  </div>
+                ) : <p className="rounded-lg border border-dashed py-6 text-center text-slate-400">受験予定はまだありません。</p>}
+              </section>
+
+              <section className="border-t border-slate-200 pt-5 dark:border-slate-700">
+                <h3 className="mb-3 flex items-center gap-2 font-semibold"><Trophy className="h-4 w-4 text-amber-500" />過去の受験結果</h3>
+                {examResults.length ? (
+                  <div className="space-y-3">
+                    {examResults.map((result) => {
+                      const sections = Object.entries(result.sectionScores ?? {}).filter(([, value]) => value !== "");
+                      return (
+                        <div key={result.id} className="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2"><Badge variant="secondary">{EXAM_LABELS[result.exam] ?? result.exam.toUpperCase()}</Badge><span className="text-xs text-slate-500">{fmtDate(result.date)}</span></div>
+                            <p className="font-bold">総合 {result.score || "—"}</p>
+                          </div>
+                          {sections.length > 0 && (
+                            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                              {sections.map(([section, value]) => <div key={section} className="rounded-md bg-slate-50 px-2 py-1.5 dark:bg-slate-800"><p className="text-[10px] text-slate-400">{SECTION_LABELS[section] ?? section}</p><p className="font-semibold">{value}</p></div>)}
+                            </div>
+                          )}
+                          {result.note && <p className="mt-3 whitespace-pre-wrap text-xs text-slate-600 dark:text-slate-300">{result.note}</p>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : <p className="rounded-lg border border-dashed py-6 text-center text-slate-400">受験結果はまだありません。</p>}
+              </section>
             </CardContent>
           </Card>
         </div>

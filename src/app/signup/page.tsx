@@ -5,6 +5,7 @@ import AuthThemeToggle from '@/components/auth/AuthThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 export default function SignUpPage() {
   const { user } = useAuth();
@@ -21,7 +22,8 @@ export default function SignUpPage() {
       <AuthThemeToggle />
       <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Prep Master</h1>
+          <Image src="/exavia-logo.png" alt="Exavia logo" width={64} height={64} className="mx-auto mb-4 rounded-2xl" priority />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Exavia</h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">無料でアカウントを作成して学習を始めましょう</p>
         </div>
         <SignUpForm />

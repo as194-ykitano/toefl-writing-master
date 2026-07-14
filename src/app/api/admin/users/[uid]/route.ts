@@ -193,6 +193,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ uid
       trainingPermissions: profile.trainingPermissions ?? null,
       onboarding: profile.onboarding ?? null,
       learningGoals: profile.learningGoals ?? null,
+      examPlans: Array.isArray(profile.examPlans) ? profile.examPlans : [],
+      examResults: Array.isArray(profile.examResults) ? profile.examResults : [],
       progress: profile.progress ?? null,
       studySessions: profile.studySessions ?? [],
       totalStudyTime: profile.totalStudyTime ?? 0,

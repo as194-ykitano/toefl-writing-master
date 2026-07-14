@@ -96,7 +96,7 @@ export default function HubPage({ title, subtitle, headerBadges = [], sections }
             {headerBadges.map((badge) => (
               <span
                 key={badge}
-                className="text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-100 rounded px-1.5 py-0.5"
+                className="text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-100 rounded px-1.5 py-0.5 dark:border-blue-700/70 dark:bg-blue-500/15 dark:text-blue-200"
               >
                 {badge}
               </span>

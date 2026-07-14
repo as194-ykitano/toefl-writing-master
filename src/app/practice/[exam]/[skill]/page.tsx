@@ -22,13 +22,23 @@ import {
 } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
   getListeningSets,
   getReadingSets,
   getSpeakingSets,
   getWritingSets,
 } from "@/lib/prep/data-source";
 import { getPracticeType, getPracticeTypes } from "@/lib/prep/question-types";
-import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId, WritingResult } from "@/lib/prep/types";
+import { EXAM_LABELS, ExamId, SKILL_LABELS, SkillId } from "@/lib/prep/types";
 import { loadWritingResultsByExam } from "@/lib/prep/writing-store";
 import { loadSessions } from "@/lib/prep/session-store";
 import { cleanReadingTitle } from "@/lib/prep/display-title";
@@ -40,6 +50,8 @@ interface SetSummary {
   difficulty: string;
   meta: string;
   practiceType?: string;
+  /** 本番モード既定の演習時間（秒）。セット単位で時間を持たない Speaking は 0 */
+  defaultLimitSec: number;
 }
 
 type ModeCounts = { practice: number; test: number };
@@ -70,6 +82,7 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
       difficulty: s.difficulty,
       meta: `${s.questions.length} 問 / ${Math.round(s.timeLimitSec / 60)} 分`,
       practiceType: s.practiceType,
+      defaultLimitSec: s.timeLimitSec,
     }));
   }
   if (skill === "listening") {
@@ -81,6 +94,7 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
       difficulty: s.difficulty,
       meta: `${s.questions.length} 問 / ${Math.round(s.timeLimitSec / 60)} 分`,
       practiceType: s.practiceType,
+      defaultLimitSec: s.timeLimitSec,
     }));
   }
   if (skill === "speaking") {
@@ -92,6 +106,7 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
       difficulty: s.difficulty,
       meta: `${s.tasks.length} タスク`,
       practiceType: s.practiceType,
+      defaultLimitSec: 0,
     }));
   }
   if (skill === "writing") {
@@ -106,9 +121,108 @@ async function loadSets(exam: ExamId, skill: SkillId): Promise<SetSummary[]> {
           ? `${s.items.length} 問 / ${Math.round(s.timeLimitSec / 60)} 分`
           : `${Math.round(s.timeLimitSec / 60)} 分`,
       practiceType: s.practiceType,
+      defaultLimitSec: s.timeLimitSec,
     }));
   }
   return [];
+}
+
+// ---- 本番モードの演習時間を選ぶダイアログ ----
+
+/** 標準時間を軸に、選択肢として提示する分数（重複は除外し昇順に整列） */
+function buildPresetMinutes(defaultMin: number): number[] {
+  const candidates = [10, 15, 20, 30, 45, 60, defaultMin];
+  return Array.from(new Set(candidates.filter((m) => m > 0))).sort((a, b) => a - b);
+}
+
+function TestModeDialog({
+  open,
+  onOpenChange,
+  set,
+  exam,
+  skill,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  set: SetSummary;
+  exam: ExamId;
+  skill: SkillId;
+}) {
+  const router = useRouter();
+  const defaultMin = Math.max(1, Math.round(set.defaultLimitSec / 60));
+  const [minutes, setMinutes] = useState<number>(defaultMin);
+
+  // ダイアログを開くたびに標準時間へリセット
+  useEffect(() => {
+    if (open) setMinutes(defaultMin);
+  }, [open, defaultMin]);
+
+  const presets = buildPresetMinutes(defaultMin);
+
+  const start = () => {
+    const clamped = Math.min(300, Math.max(1, Math.round(minutes) || defaultMin));
+    router.push(`/practice/${exam}/${skill}/${set.id}?mode=test&limit=${clamped}`);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 text-eg-dark" /> 本番モードの演習時間
+          </DialogTitle>
+          <DialogDescription>
+            制限時間を選んで開始します。標準は {defaultMin} 分です。
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4 py-1">
+          <div className="flex flex-wrap gap-2">
+            {presets.map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMinutes(m)}
+                className={`rounded-full px-3.5 py-1.5 text-sm font-semibold border transition-colors ${
+                  minutes === m
+                    ? "bg-eg-dark border-eg-dark text-white"
+                    : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                }`}
+              >
+                {m} 分{m === defaultMin ? "（標準）" : ""}
+              </button>
+            ))}
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-500">
+              自由に設定（1〜300 分）
+            </label>
+            <div className="mt-1.5 flex items-center gap-2">
+              <Input
+                type="number"
+                min={1}
+                max={300}
+                value={minutes}
+                onChange={(e) => setMinutes(Number(e.target.value))}
+                className="w-28"
+              />
+              <span className="text-sm text-gray-500">分</span>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            キャンセル
+          </Button>
+          <Button onClick={start} className="bg-eg-dark hover:bg-eg-deep text-white">
+            この時間で開始
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 // ---- 問題セットカード ----
@@ -125,6 +239,9 @@ function SetCard({
   counts: ModeCounts;
 }) {
   const difficulty = DIFFICULTY_LABELS[set.difficulty] ?? DIFFICULTY_LABELS.medium;
+  // Speaking はセット単位の制限時間を持たないため、時間選択ダイアログは出さず直接開始
+  const canChooseTime = set.defaultLimitSec > 0;
+  const [timeDialogOpen, setTimeDialogOpen] = useState(false);
   return (
     <div className="bg-white rounded-2xl border border-gray-200/70 p-6 shadow-sm">
       <div className="flex flex-wrap items-start gap-2 mb-2">
@@ -148,60 +265,37 @@ function SetCard({
         >
           <Play className="w-4 h-4" /> 練習モード
         </Link>
-        <Link
-          href={`/practice/${exam}/${skill}/${set.id}?mode=test`}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-4 py-2.5 transition-colors"
-        >
-          <GraduationCap className="w-4 h-4" /> 本番モード
-        </Link>
+        {canChooseTime ? (
+          <button
+            type="button"
+            onClick={() => setTimeDialogOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-4 py-2.5 transition-colors"
+          >
+            <GraduationCap className="w-4 h-4" /> 本番モード
+          </button>
+        ) : (
+          <Link
+            href={`/practice/${exam}/${skill}/${set.id}?mode=test`}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-semibold px-4 py-2.5 transition-colors"
+          >
+            <GraduationCap className="w-4 h-4" /> 本番モード
+          </Link>
+        )}
       </div>
       <p className="mt-3 text-[11px] text-gray-400">
         練習モード: 時間無制限{skill === "listening" ? "・音声繰り返し再生可" : ""} / 本番モード:
-        制限時間つき{skill === "listening" ? "・再生回数制限あり" : ""}
+        {canChooseTime ? "演習時間を自由に設定可" : "制限時間つき"}
+        {skill === "listening" ? "・再生回数制限あり" : ""}
       </p>
-    </div>
-  );
-}
-
-// ---- Writing 添削履歴（後から見返す導線） ----
-
-function WritingHistory({ exam }: { exam: ExamId }) {
-  const [results, setResults] = useState<WritingResult[]>([]);
-
-  useEffect(() => {
-    setResults(loadWritingResultsByExam(exam));
-  }, [exam]);
-
-  if (results.length === 0) return null;
-
-  return (
-    <div className="mt-10">
-      <h2 className="text-base font-bold text-gray-900">これまでの添削結果</h2>
-      <p className="mt-1 text-xs text-gray-500">
-        提出した Writing の添削結果です。クリックすると詳細を見返せます。
-      </p>
-      <div className="mt-4 space-y-2.5">
-        {results.slice(0, 10).map((r) => (
-          <Link
-            key={r.id}
-            href={`/writing-result/${r.id}`}
-            className="flex items-center justify-between gap-3 bg-white rounded-xl border border-gray-200/70 px-4 py-3 hover:border-gray-300 hover:shadow-sm transition-all"
-          >
-            <div className="min-w-0">
-              <div className="text-sm font-semibold text-gray-900 truncate">{r.title}</div>
-              <div className="text-xs text-gray-400 mt-0.5">
-                {new Date(r.finishedAt).toLocaleDateString("ja-JP")} ・ {r.wordCount} words
-              </div>
-            </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <span className="text-sm font-bold text-eg-dark">
-                {r.feedback.score.toFixed(r.feedback.scoreMax === 9 ? 1 : 2)}
-              </span>
-              <span className="text-[11px] text-gray-400">/ {r.feedback.scoreMax}</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {canChooseTime && (
+        <TestModeDialog
+          open={timeDialogOpen}
+          onOpenChange={setTimeDialogOpen}
+          set={set}
+          exam={exam}
+          skill={skill}
+        />
+      )}
     </div>
   );
 }
@@ -329,8 +423,6 @@ function SkillPageInner() {
         // タイプ未選択（Home と重複するため表示せず、上の useEffect で Home へリダイレクト）
         <div className="text-center py-12 text-gray-400 text-sm">読み込み中...</div>
       )}
-
-      {skillId === "writing" && <WritingHistory exam={examId} />}
     </div>
   );
 }

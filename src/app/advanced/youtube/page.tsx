@@ -8,6 +8,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -23,6 +24,7 @@ import PrepShell from "@/components/prep/PrepShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import SubmitQuiz from "@/components/prep/SubmitQuiz";
+import TranscriptHelpDialog from "@/components/prep/TranscriptHelpDialog";
 import YouTubeFeedbackView from "@/components/prep/YouTubeFeedbackView";
 import {
   loadYouTubeResults,
@@ -46,6 +48,7 @@ function extractVideoId(input: string): string | null {
 }
 
 export default function YouTubeWritingPage() {
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>("search");
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
@@ -164,7 +167,7 @@ export default function YouTubeWritingPage() {
       setHistory(loadYouTubeResults());
       setSavedId(id);
       setFeedback(json);
-      setPhase("result");
+      router.push(`/advanced/youtube/result/${id}`);
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "添削に失敗しました");
       setPhase("compose");
@@ -337,15 +340,18 @@ export default function YouTubeWritingPage() {
             </div>
 
             <div className="bg-white rounded-2xl border border-gray-200 p-4">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <div className="text-xs font-semibold text-gray-500">
-                  字幕・文字起こし（添削精度が上がります）
+                  字幕・文字起こし（以下は自動取得なので間違っている場合は右の方法でコピペし直してください）
                 </div>
-                {fetchingTranscript && (
-                  <span className="text-[11px] text-gray-400 inline-flex items-center gap-1">
-                    <Loader2 className="w-3 h-3 animate-spin" /> 自動取得中...
-                  </span>
-                )}
+                <div className="flex items-center gap-2">
+                  {fetchingTranscript && (
+                    <span className="text-[11px] text-gray-400 inline-flex items-center gap-1">
+                      <Loader2 className="w-3 h-3 animate-spin" /> 自動取得中...
+                    </span>
+                  )}
+                  <TranscriptHelpDialog />
+                </div>
               </div>
               <Textarea
                 value={transcript}

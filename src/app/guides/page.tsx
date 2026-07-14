@@ -57,7 +57,7 @@ export default function GuidesPage() {
   return (
     <PrepShell>
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
-        <header className="mb-8">
+        <header className="mb-8 animate-in fade-in slide-in-from-bottom-3 duration-700">
           <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-eg-soft text-eg-dark">
             <BookOpen className="h-6 w-6" />
           </div>
@@ -70,7 +70,8 @@ export default function GuidesPage() {
         </header>
         <Link
           href="/home?tour=1"
-          className="mb-8 flex items-center gap-4 rounded-2xl border border-orange-200 bg-orange-50 p-5 transition hover:border-orange-400 hover:shadow-sm dark:border-orange-800 dark:bg-orange-950/20"
+          className="mb-8 flex items-center gap-4 rounded-2xl border border-orange-200 bg-orange-50 p-5 transition hover:border-orange-400 hover:shadow-sm animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both dark:border-orange-800 dark:bg-orange-950/20"
+          style={{ animationDelay: "80ms" }}
         >
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-orange-500 text-white">
             <PlayCircle className="h-6 w-6" />
@@ -85,7 +86,10 @@ export default function GuidesPage() {
           </span>
           <ArrowRight className="h-5 w-5 shrink-0 text-orange-600" />
         </Link>
-        <div className="mb-8 flex flex-col gap-4 rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:flex-row md:items-center md:justify-between">
+        <div
+          className="mb-8 flex flex-col gap-4 rounded-2xl border bg-white p-4 shadow-sm animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both dark:border-slate-700 dark:bg-slate-900 md:flex-row md:items-center md:justify-between"
+          style={{ animationDelay: "140ms" }}
+        >
           <div className="flex flex-wrap gap-2">
             {(Object.keys(GUIDE_EXAM_LABELS) as GuideExam[]).map((id) => (
               <button
@@ -111,17 +115,22 @@ export default function GuidesPage() {
           <div className="py-20 text-center text-slate-500">Loading...</div>
         ) : (
           <div className="space-y-10">
-            {grouped.map((group) => (
-              <section key={group.id}>
+            {grouped.map((group, groupIndex) => (
+              <section
+                key={group.id}
+                className="animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"
+                style={{ animationDelay: `${180 + groupIndex * 80}ms` }}
+              >
                 <h2 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">
                   {group.label}
                 </h2>
                 <div className="grid gap-4 md:grid-cols-2">
-                  {group.guides.map((guide) => (
+                  {group.guides.map((guide, guideIndex) => (
                     <Link
                       key={guide.id}
                       href={`/guides/${guide.id}`}
-                      className="group flex min-h-40 flex-col rounded-2xl border bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-eg hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
+                      className="group flex min-h-40 flex-col rounded-2xl border bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-eg hover:shadow-md animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both dark:border-slate-700 dark:bg-slate-900"
+                      style={{ animationDelay: `${240 + groupIndex * 80 + guideIndex * 50}ms` }}
                     >
                       <div className="mb-3 flex flex-wrap gap-2">
                         <Badge variant="outline">

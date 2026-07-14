@@ -18,10 +18,11 @@ import { Badge } from "@/components/ui/badge";
 
 export default function GuideDetailPage() {
   const id = String(useParams<{ id: string }>().id);
-  const steps = getGuideManualSteps(id);
+  const defaultSteps = getGuideManualSteps(id);
   const screenshots = getGuideScreenshots(id);
   const [guide, setGuide] = useState<GuideArticle | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const steps = guide?.steps ?? defaultSteps;
 
   useEffect(() => {
     fetch(`/api/guides?id=${encodeURIComponent(id)}`)
@@ -37,7 +38,7 @@ export default function GuideDetailPage() {
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:py-10">
         <Link
           href="/guides"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-eg-dark"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-eg-dark animate-in fade-in slide-in-from-left-2 duration-500"
         >
           <ArrowLeft className="h-4 w-4" />
           ガイド一覧へ
@@ -54,7 +55,7 @@ export default function GuideDetailPage() {
         ) : !guide ? (
           <div className="py-20 text-center text-slate-500">Loading...</div>
         ) : (
-          <article className="overflow-hidden rounded-2xl border bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <article className="overflow-hidden rounded-2xl border bg-white shadow-sm animate-in fade-in slide-in-from-bottom-3 duration-700 dark:border-slate-700 dark:bg-slate-900">
             <header className="border-b bg-slate-50/70 px-6 py-6 dark:border-slate-700 dark:bg-slate-800/60">
               <div className="mb-3 flex flex-wrap gap-2">
                 <Badge variant="outline">{GUIDE_EXAM_LABELS[guide.exam]}</Badge>
@@ -79,15 +80,13 @@ export default function GuideDetailPage() {
                   <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
                     操作手順
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-500">
-                    GIF内のカーソルとオレンジ枠に沿って操作してください。
-                  </p>
                 </div>
                 <ol className="space-y-10">
                   {steps.map((step, index) => (
                     <li
                       key={step.key}
-                      className="relative border-l-2 border-orange-200 pl-6 sm:pl-8"
+                      className="relative border-l-2 border-orange-200 pl-6 animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both sm:pl-8"
+                      style={{ animationDelay: `${index * 80}ms` }}
                     >
                       <span className="absolute -left-4 top-0 grid h-8 w-8 place-items-center rounded-full bg-orange-500 text-sm font-black text-white shadow-sm">
                         {index + 1}
@@ -110,11 +109,6 @@ export default function GuideDetailPage() {
                             loading="lazy"
                             className="h-auto w-full rounded-xl border bg-white object-contain shadow-sm dark:border-slate-700"
                           />
-                          <figcaption className="mt-2 text-center text-xs text-slate-500">
-                            {step.mediaType === "image"
-                              ? "実際の画面例です。"
-                              : "オレンジ枠の中央へカーソルが移動します。"}
-                          </figcaption>
                           {step.details?.length ? (
                             <div className="mt-4 rounded-xl bg-slate-50 px-5 py-4 dark:bg-slate-800/70">
                               <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -142,8 +136,12 @@ export default function GuideDetailPage() {
                   画面の見方
                 </h2>
                 <div className="space-y-7">
-                  {screenshots.map((screenshot) => (
-                    <figure key={screenshot.src}>
+                  {screenshots.map((screenshot, index) => (
+                    <figure
+                      key={screenshot.src}
+                      className="animate-in fade-in slide-in-from-bottom-3 duration-700 fill-mode-both"
+                      style={{ animationDelay: `${index * 80}ms` }}
+                    >
                       <img
                         src={screenshot.src}
                         alt={screenshot.alt}

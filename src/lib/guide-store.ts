@@ -7,6 +7,7 @@ import {
   type GuideExam,
   type GuideSkill,
 } from "@/lib/guides";
+import { getGuideManualSteps, normalizeGuideSteps } from "@/lib/guide-manual";
 
 type StoredGuide = Partial<Omit<GuideArticle, "updatedAt">> & { updatedAt?: Timestamp };
 
@@ -19,6 +20,7 @@ function fromStored(id: string, data: StoredGuide, fallback?: GuideArticle): Gui
     skill: data.skill ?? fallback?.skill ?? "all",
     category: data.category ?? fallback?.category ?? "start",
     content: data.content ?? fallback?.content ?? "",
+    steps: data.steps ? normalizeGuideSteps(data.steps) : (fallback?.steps ?? getGuideManualSteps(id)),
     order: Number.isFinite(data.order) ? Number(data.order) : (fallback?.order ?? 9999),
     isPublished: data.isPublished ?? fallback?.isPublished ?? false,
     source: data.source ?? fallback?.source ?? "custom",
@@ -28,7 +30,7 @@ function fromStored(id: string, data: StoredGuide, fallback?: GuideArticle): Gui
 
 export async function listGuides(): Promise<GuideArticle[]> {
   const records = new Map<string, GuideArticle>();
-  for (const guide of SEEDED_GUIDES) records.set(guide.id, { ...guide, source: "seeded", updatedAt: null });
+  for (const guide of SEEDED_GUIDES) records.set(guide.id, { ...guide, steps: getGuideManualSteps(guide.id), source: "seeded", updatedAt: null });
   const snapshot = await adminDb.collection("guideArticles").get();
   for (const document of snapshot.docs) {
     const fallback = records.get(document.id);
@@ -39,7 +41,7 @@ export async function listGuides(): Promise<GuideArticle[]> {
 
 export async function getGuide(id: string): Promise<GuideArticle | null> {
   const seeded = SEEDED_GUIDES.find((guide) => guide.id === id);
-  const fallback = seeded ? ({ ...seeded, source: "seeded", updatedAt: null } satisfies GuideArticle) : undefined;
+  const fallback = seeded ? ({ ...seeded, steps: getGuideManualSteps(id), source: "seeded", updatedAt: null } satisfies GuideArticle) : undefined;
   const document = await adminDb.collection("guideArticles").doc(id).get();
   if (document.exists) return fromStored(id, document.data() as StoredGuide, fallback);
   return fallback ?? null;
@@ -47,7 +49,7 @@ export async function getGuide(id: string): Promise<GuideArticle | null> {
 
 const exams: GuideExam[] = ["all", "toefl", "ielts", "toeic"];
 const skills: GuideSkill[] = ["all", "reading", "listening", "speaking", "writing"];
-const categories: GuideCategory[] = ["start", "training", "mock-test", "learning-data", "content"];
+const categories: GuideCategory[] = ["start", "training", "mock-test"];
 
 export function normalizeGuide(value: unknown): Omit<GuideArticle, "updatedAt"> {
   if (!value || typeof value !== "object") throw new Error("ガイド情報が不正です。");
@@ -68,6 +70,7 @@ export function normalizeGuide(value: unknown): Omit<GuideArticle, "updatedAt"> 
     skill,
     category,
     content: String(data.content ?? ""),
+    steps: normalizeGuideSteps(data.steps),
     order: Number.isFinite(Number(data.order)) ? Number(data.order) : 9999,
     isPublished: data.isPublished === true,
     source: data.source === "seeded" ? "seeded" : "custom",

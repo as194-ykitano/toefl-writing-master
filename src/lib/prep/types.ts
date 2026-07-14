@@ -400,6 +400,8 @@ export interface PracticeSessionResult {
   results: QuestionResult[];
   /** 復習済みにした問題 ID */
   reviewedQuestionIds?: string[];
+  /** 演習中に「あとで見直す」フラグを付けた問題 ID */
+  flaggedQuestionIds?: string[];
   /** Speaking セッションの AI フィードバック（タスクごと） */
   speakingFeedback?: SpeakingTaskFeedback[];
 }

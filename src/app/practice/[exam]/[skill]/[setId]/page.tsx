@@ -36,6 +36,12 @@ function PracticePlayer() {
   const params = useParams<{ exam: string; skill: string; setId: string }>();
   const searchParams = useSearchParams();
   const mode: PracticeMode = searchParams.get("mode") === "test" ? "test" : "practice";
+  // 本番モードのみ: ?limit=<分> で演習時間を上書きできる（未指定なら各セット既定の時間）
+  const limitParam = searchParams.get("limit");
+  const customLimitSec =
+    mode === "test" && limitParam && Number.isFinite(Number(limitParam)) && Number(limitParam) > 0
+      ? Math.round(Number(limitParam) * 60)
+      : null;
 
   const [readingSet, setReadingSet] = useState<ReadingSet | null>(null);
   const [listeningSet, setListeningSet] = useState<ListeningSet | null>(null);
@@ -68,19 +74,26 @@ function PracticePlayer() {
     );
   }
 
-  if (skill === "reading" && readingSet) return <ReadingPractice set={readingSet} mode={mode} />;
-  if (skill === "listening" && listeningSet) return <ListeningPractice set={listeningSet} mode={mode} />;
+  if (skill === "reading" && readingSet) {
+    const set = customLimitSec ? { ...readingSet, timeLimitSec: customLimitSec } : readingSet;
+    return <ReadingPractice set={set} mode={mode} />;
+  }
+  if (skill === "listening" && listeningSet) {
+    const set = customLimitSec ? { ...listeningSet, timeLimitSec: customLimitSec } : listeningSet;
+    return <ListeningPractice set={set} mode={mode} />;
+  }
   if (skill === "speaking" && speakingSet) return <SpeakingPractice set={speakingSet} mode={mode} />;
   if (skill === "writing" && writingSet) {
-    if (writingSet.practiceType === "build-a-sentence") {
-      return <BuildSentencePractice set={writingSet} mode={mode} />;
+    const set = customLimitSec ? { ...writingSet, timeLimitSec: customLimitSec } : writingSet;
+    if (set.practiceType === "build-a-sentence") {
+      return <BuildSentencePractice set={set} mode={mode} />;
     }
     // Academic Discussion は本番 ETS 風レイアウト（Cut/Paste/Undo/Redo・Stance つき）
-    if (writingSet.practiceType === "academic-discussion") {
-      return <AcademicDiscussionPractice set={writingSet} mode={mode} />;
+    if (set.practiceType === "academic-discussion") {
+      return <AcademicDiscussionPractice set={set} mode={mode} />;
     }
     // Write an Email / IELTS Task 1・2 は深い添削フロー（EssayWritingPractice）へ
-    return <EssayWritingPractice set={writingSet} mode={mode} />;
+    return <EssayWritingPractice set={set} mode={mode} />;
   }
 
   return (

@@ -438,7 +438,7 @@ export default function HomePage() {
         )}
 
         <p className="mt-12 text-center text-[11px] text-gray-400 dark:text-gray-500">
-          Prep Master — Supported by <span className="font-semibold text-eg-dark dark:text-eg">English Gym</span>
+          Exavia — Supported by <span className="font-semibold text-eg-dark dark:text-eg">English Gym</span>
         </p>
       </div>
       <Dialog open={goalDialogOpen} onOpenChange={setGoalDialogOpen}>

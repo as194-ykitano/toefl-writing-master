@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { ArrowDown, ArrowUp, GripVertical, Plus, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { VideoCourseCatalogCard } from "@/components/video-courses/video-course-catalog-card"
 import { VideoCourseDetailsDialog } from "@/components/video-courses/video-course-details-dialog"
 import { useAuth } from "@/lib/auth-context"
@@ -251,15 +251,15 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
     <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Courses</h1>
-          <p className="text-sm text-muted-foreground">Explore courses</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{mode === "admin" ? "動画コース管理" : "Courses"}</h1>
+          <p className="text-sm text-muted-foreground">{mode === "admin" ? "動画コース、モジュール、レッスンを管理します。" : "Explore courses"}</p>
         </div>
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
           <div className="relative w-full sm:w-56">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search courses…"
+              placeholder={mode === "admin" ? "動画コースを検索…" : "Search courses…"}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-9"
@@ -272,7 +272,7 @@ export function VideoCourseList({ mode, editorBasePath }: VideoCourseListProps) 
             disabled={creating || !user?.uid}
           >
             <Plus className="mr-2 h-4 w-4" />
-            {creating ? "Creating…" : "Add course"}
+            {creating ? (mode === "admin" ? "作成中…" : "Creating…") : (mode === "admin" ? "コースを追加" : "Add course")}
           </Button>
         </div>
       </div>

@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Flag, Headphones, Pause, Play, StickyNote } from "lucide-react";
+import { ChevronLeft, ChevronRight, Flag, Headphones, Loader2, Pause, Play, StickyNote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -72,10 +72,11 @@ export default function ListeningPractice({ set, mode, onComplete }: ListeningPr
       correctCount: results.filter((r) => r.correct).length,
       totalCount: results.length,
       results,
+      flaggedQuestionIds: Array.from(flagged),
     };
     saveSession(session);
     if (onComplete) onComplete(session);
-    else router.push(`/results/${sessionId}`);
+    else requestAnimationFrame(() => router.push(`/results/${sessionId}`));
   };
 
   const { elapsedSec, remainingSec } = usePracticeTimer(
@@ -311,7 +312,7 @@ export default function ListeningPractice({ set, mode, onComplete }: ListeningPr
         </div>
       </div>
 
-      <Dialog open={submitDialogOpen} onOpenChange={setSubmitDialogOpen}>
+      <Dialog open={submitDialogOpen} onOpenChange={(open) => !submitted && setSubmitDialogOpen(open)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>回答を提出しますか？</DialogTitle>
@@ -320,11 +321,16 @@ export default function ListeningPractice({ set, mode, onComplete }: ListeningPr
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSubmitDialogOpen(false)}>
+            <Button variant="outline" disabled={submitted} onClick={() => setSubmitDialogOpen(false)}>
               戻って見直す
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => handleSubmit(elapsedSec)}>
-              提出する
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={submitted}
+              onClick={() => handleSubmit(elapsedSec)}
+            >
+              {submitted && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
+              {submitted ? "結果画面へ移動中..." : "提出する"}
             </Button>
           </DialogFooter>
         </DialogContent>

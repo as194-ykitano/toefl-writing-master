@@ -27,6 +27,9 @@ interface CatStyle {
   dot: string;
   chipBg: string;
   chipText: string;
+  darkBg: string;
+  darkBorder: string;
+  darkUnderline: string;
   mark: string; // ハイライト（下線+淡い背景）
   markActive: string; // 選択中
 }
@@ -34,15 +37,21 @@ const DEFAULT_STYLE: CatStyle = {
   dot: "bg-gray-400",
   chipBg: "bg-gray-100",
   chipText: "text-gray-600",
+  darkBg: "#111827",
+  darkBorder: "#4b5563",
+  darkUnderline: "#9ca3af",
   mark: "bg-gray-100 border-b-2 border-gray-400",
   markActive: "bg-gray-200 border-b-2 border-gray-500 ring-2 ring-gray-300",
 };
 
 // 16 色のパレット（種別ごとに固有色を割り当てる）
-const p = (c: string): CatStyle => ({
+const p = (c: string, darkBg: string, darkBorder: string, darkUnderline: string): CatStyle => ({
   dot: `bg-${c}-500`,
   chipBg: `bg-${c}-50`,
   chipText: `text-${c}-700`,
+  darkBg,
+  darkBorder,
+  darkUnderline,
   mark: `bg-${c}-100 border-b-2 border-${c}-400`,
   markActive: `bg-${c}-200 border-b-2 border-${c}-500 ring-2 ring-${c}-300`,
 });
@@ -64,9 +73,14 @@ const p = (c: string): CatStyle => ({
 // bg-purple-500 bg-purple-50 text-purple-700 bg-purple-100 border-purple-400 bg-purple-200 border-purple-500 ring-purple-300
 // bg-yellow-500 bg-yellow-50 text-yellow-700 bg-yellow-100 border-yellow-400 bg-yellow-200 border-yellow-500 ring-yellow-300
 const PALETTE: CatStyle[] = [
-  p("amber"), p("rose"), p("orange"), p("cyan"), p("emerald"), p("blue"),
-  p("violet"), p("fuchsia"), p("red"), p("teal"), p("indigo"), p("pink"),
-  p("lime"), p("sky"), p("purple"), p("yellow"),
+  p("amber", "#451a03", "#b45309", "#fbbf24"), p("rose", "#4c0519", "#be123c", "#fb7185"),
+  p("orange", "#431407", "#c2410c", "#fb923c"), p("cyan", "#083344", "#0e7490", "#22d3ee"),
+  p("emerald", "#022c22", "#047857", "#34d399"), p("blue", "#172554", "#1d4ed8", "#60a5fa"),
+  p("violet", "#2e1065", "#6d28d9", "#a78bfa"), p("fuchsia", "#4a044e", "#a21caf", "#e879f9"),
+  p("red", "#450a0a", "#b91c1c", "#f87171"), p("teal", "#042f2e", "#0f766e", "#2dd4bf"),
+  p("indigo", "#1e1b4b", "#4338ca", "#818cf8"), p("pink", "#500724", "#be185d", "#f472b6"),
+  p("lime", "#1a2e05", "#4d7c0f", "#a3e635"), p("sky", "#082f49", "#0369a1", "#38bdf8"),
+  p("purple", "#3b0764", "#7e22ce", "#c084fc"), p("yellow", "#422006", "#a16207", "#facc15"),
 ];
 
 // 既知の誤り種別（この順でパレットの色が安定して割り当たる）。API のプロンプトと揃える。
@@ -211,8 +225,13 @@ export default function GrammarCorrectionExercise({
         <button
           key={key++}
           onClick={() => setIndex(r.itemIndex)}
+          style={{
+            "--category-dark-bg": cs.darkBg,
+            "--category-dark-border": cs.darkBorder,
+            "--category-dark-underline": cs.darkUnderline,
+          } as React.CSSProperties}
           title={items[r.itemIndex].category || "文法エラー"}
-          className={`rounded px-0.5 mx-px align-baseline transition-colors text-black ${
+          className={`rounded px-0.5 mx-px align-baseline transition-colors text-black dark:bg-[var(--category-dark-bg)] dark:border-b-[var(--category-dark-underline)] dark:text-white dark:ring-white/30 dark:drop-shadow-[0_2px_3px_var(--category-dark-underline)] ${
             solved
               ? "bg-emerald-100 border-b-2 border-emerald-400"
               : active
@@ -232,11 +251,11 @@ export default function GrammarCorrectionExercise({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6">
+    <div className="bg-white rounded-2xl border border-gray-200 p-6 dark:border-slate-700 dark:bg-slate-900">
       {/* ヘッダー + 進捗 */}
       <div className="flex items-center justify-between gap-2 mb-4">
-        <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-          <Lightbulb className="w-4.5 h-4.5 text-eg-dark" /> {heading}
+        <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2 dark:text-white">
+          <Lightbulb className="w-4.5 h-4.5 text-eg-dark dark:text-eg" /> {heading}
         </h2>
         <span className="text-xs text-gray-400">
           {solvedCount} / {items.length} 修正済み
@@ -256,7 +275,7 @@ export default function GrammarCorrectionExercise({
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
           {categorySummary.map(([cat, n]) => (
-            <span key={cat} className="inline-flex items-center gap-1.5 text-xs text-gray-500">
+            <span key={cat} className="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-200">
               <span className={`w-2 h-2 rounded-full ${styleOf(cat).dot}`} />
               {cat} <span className="text-gray-400">{n}</span>
             </span>
@@ -272,11 +291,21 @@ export default function GrammarCorrectionExercise({
       )}
 
       {/* 修正パネル */}
-      <div className={`rounded-xl border p-4 ${done && state === "correct" ? "border-emerald-200 bg-emerald-50/40 dark:border-emerald-500/30 dark:bg-emerald-500/10" : "border-gray-200 bg-white dark:border-white/10"}`}>
+      <div
+        style={{
+          "--category-dark-bg": state === "correct" ? "#022c22" : st.darkBg,
+          "--category-dark-border": state === "correct" ? "#047857" : st.darkBorder,
+        } as React.CSSProperties}
+        className={`rounded-xl border p-4 dark:bg-[var(--category-dark-bg)] dark:border-[var(--category-dark-border)] ${
+          done && state === "correct"
+            ? "border-emerald-200 bg-emerald-50/40"
+            : "border-gray-200 bg-white"
+        }`}
+      >
         <div className="flex items-center justify-between gap-2 mb-2">
-          <span className="text-xs font-semibold text-eg-deep">ハイライトされたエラーを修正</span>
+          <span className="text-xs font-semibold text-eg-deep dark:text-white">ハイライトされたエラーを修正</span>
           {item.category && (
-            <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium ${st.chipBg} ${st.chipText}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium dark:bg-white/10 dark:text-white dark:ring-1 dark:ring-white/15 ${st.chipBg} ${st.chipText}`}>
               <span className={`w-2 h-2 rounded-full ${st.dot}`} />
               {item.category}
             </span>
@@ -285,14 +314,23 @@ export default function GrammarCorrectionExercise({
 
         {/* 文脈（sourceText が無い時のフォールバックでも文が見える） */}
         {!sourceText && (
-          <p className="mb-3 text-sm leading-relaxed text-gray-600">
+          <p className="mb-3 text-sm leading-relaxed text-gray-600 dark:text-white">
             {(() => {
               const idx = item.context.indexOf(item.mistake);
               if (idx < 0 || done) return item.context;
               return (
                 <>
                   {item.context.slice(0, idx)}
-                  <span className={`rounded px-0.5 text-black ${st.mark}`}>{item.mistake}</span>
+                  <span
+                    style={{
+                      "--category-dark-bg": st.darkBg,
+                      "--category-dark-border": st.darkBorder,
+                      "--category-dark-underline": st.darkUnderline,
+                    } as React.CSSProperties}
+                    className={`rounded px-0.5 text-black dark:bg-[var(--category-dark-bg)] dark:border-b-[var(--category-dark-underline)] dark:text-white dark:drop-shadow-[0_2px_3px_var(--category-dark-underline)] ${st.mark}`}
+                  >
+                    {item.mistake}
+                  </span>
                   {item.context.slice(idx + item.mistake.length)}
                 </>
               );
@@ -300,7 +338,7 @@ export default function GrammarCorrectionExercise({
           </p>
         )}
 
-        <label className="block text-xs text-gray-500 mb-1.5">
+        <label className="block text-xs text-gray-500 mb-1.5 dark:text-gray-200">
           ハイライトされた語句を正しく直して送信してください
         </label>
         <input
@@ -319,7 +357,7 @@ export default function GrammarCorrectionExercise({
         />
 
         {state === "correct" && (
-          <div className="mt-3 flex items-center gap-2 text-sm font-medium text-emerald-600">
+          <div className="mt-3 flex items-center gap-2 text-sm font-medium text-emerald-600 dark:text-emerald-300">
             <Check className="w-4 h-4" /> いいですね！ 正解です。
           </div>
         )}
@@ -336,7 +374,7 @@ export default function GrammarCorrectionExercise({
         )}
 
         {done && (
-          <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 dark:border-white/10">
+          <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 dark:border-white/15 dark:bg-black/20">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <div className="text-[11px] font-semibold text-rose-500 dark:text-rose-400 mb-0.5">MISTAKE</div>
@@ -348,7 +386,7 @@ export default function GrammarCorrectionExercise({
               </div>
             </div>
             {item.explanation && (
-              <p className="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-600 leading-relaxed dark:text-gray-400">
+              <p className="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-600 leading-relaxed dark:border-white/10 dark:text-gray-300">
                 {item.explanation}
               </p>
             )}
@@ -359,7 +397,7 @@ export default function GrammarCorrectionExercise({
           {!done && (
             <button
               onClick={() => setState("revealed")}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 hover:border-gray-300"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 hover:border-gray-300 dark:border-white/30 dark:bg-black/20 dark:text-white dark:hover:bg-white/10"
             >
               <Eye className="w-3.5 h-3.5" /> 答えを見る
             </button>
@@ -381,7 +419,7 @@ export default function GrammarCorrectionExercise({
             </button>
           )}
           {done && index === items.length - 1 && (
-            <span className="text-xs font-medium text-emerald-600">すべての修正が完了しました 🎉</span>
+            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-300">すべての修正が完了しました 🎉</span>
           )}
         </div>
       </div>
@@ -391,7 +429,7 @@ export default function GrammarCorrectionExercise({
         <button
           onClick={() => goTo(index - 1)}
           disabled={index === 0}
-          className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-800 disabled:opacity-30"
+          className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-800 disabled:opacity-30 dark:text-gray-300 dark:hover:text-white"
         >
           <ArrowLeft className="w-4 h-4" /> 前へ
         </button>
@@ -401,7 +439,7 @@ export default function GrammarCorrectionExercise({
         <button
           onClick={() => goTo(index + 1)}
           disabled={index === items.length - 1}
-          className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-800 disabled:opacity-30"
+          className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-800 disabled:opacity-30 dark:text-gray-300 dark:hover:text-white"
         >
           次へ <ArrowRight className="w-4 h-4" />
         </button>

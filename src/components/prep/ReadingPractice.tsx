@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Flag } from "lucide-react";
+import { ChevronLeft, ChevronRight, Flag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -61,12 +61,13 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
         correctCount: results.filter((r) => r.correct).length,
         totalCount: results.length,
         results,
+        flaggedQuestionIds: Array.from(flagged),
       };
       saveSession(session);
       if (onComplete) onComplete(session);
-      else router.push(`/results/${sessionId}`);
+      else requestAnimationFrame(() => router.push(`/results/${sessionId}`));
     },
-    [answers, mode, onComplete, questions, router, set, submitted]
+    [answers, flagged, mode, onComplete, questions, router, set, submitted]
   );
 
   const { elapsedSec, remainingSec } = usePracticeTimer(
@@ -103,7 +104,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
 
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* 本文ペイン */}
-        <div data-guide-target="reading-passage" className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-12rem)] lg:overflow-y-auto">
+        <div data-guide-target="reading-passage" className="bg-white rounded-2xl border border-gray-200 p-6 lg:h-[calc(100vh-8rem)] lg:overflow-y-auto">
           <h2 className="text-lg font-bold text-gray-900 mb-4">{set.passageTitle}</h2>
           <div className="space-y-4">
             {set.paragraphs.map((p, i) => (
@@ -116,7 +117,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
         </div>
 
         {/* 設問ペイン */}
-        <div data-guide-target="reading-question" className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col">
+        <div data-guide-target="reading-question" className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col lg:h-[calc(100vh-8rem)] lg:overflow-y-auto">
           <div className="flex items-center justify-between mb-4">
             <div className="text-sm font-semibold text-gray-500">
               Question {question.number} <span className="text-gray-300">/ {questions.length}</span>
@@ -187,7 +188,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
         </div>
       </div>
 
-      <Dialog open={submitDialogOpen} onOpenChange={setSubmitDialogOpen}>
+      <Dialog open={submitDialogOpen} onOpenChange={(open) => !submitted && setSubmitDialogOpen(open)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>回答を提出しますか？</DialogTitle>
@@ -198,11 +199,16 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSubmitDialogOpen(false)}>
+            <Button variant="outline" disabled={submitted} onClick={() => setSubmitDialogOpen(false)}>
               戻って見直す
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => handleSubmit(elapsedSec)}>
-              提出する
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={submitted}
+              onClick={() => handleSubmit(elapsedSec)}
+            >
+              {submitted && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
+              {submitted ? "結果画面へ移動中..." : "提出する"}
             </Button>
           </DialogFooter>
         </DialogContent>

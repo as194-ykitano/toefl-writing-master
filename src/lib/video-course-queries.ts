@@ -234,7 +234,7 @@ export const VIDEO_COURSE_PLATFORM_CREATOR_LABEL = "ENGLISH GYM"
 
 /**
  * Human-readable label for a course `ownerId`.
- * PrepMaster にはコーチ/ユーザーのプロフィール参照基盤が無く、移植した全コースは
+ * Exavia にはコーチ/ユーザーのプロフィール参照基盤が無く、移植した全コースは
  * admin 所有（ENGLISH GYM 制作）なので、コーチ所有コースは UID スタブで表示する。
  */
 export async function getVideoCourseOwnerDisplayLabel(ownerId: string): Promise<string> {

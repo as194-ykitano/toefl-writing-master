@@ -374,7 +374,7 @@ function ChatPanel({
     setAttachedSelections((prev) => prev.filter((a) => a.id !== id));
 
   return (
-    <div className="glass-card rounded-2xl flex flex-col lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] min-h-[520px] overflow-hidden">
+    <div className="glass-card rounded-2xl flex flex-col lg:h-[calc(100vh-6rem)] min-h-[520px] overflow-hidden">
       <div className="flex items-center gap-2.5 px-5 py-4 border-b border-gray-100 dark:border-white/10">
         <div className="w-8 h-8 rounded-lg bg-eg flex items-center justify-center flex-shrink-0">
           <Bot className="w-4.5 h-4.5 text-black" />
@@ -1213,7 +1213,7 @@ export default function ResultReportPage() {
               </section>
             </div>
 
-            <div data-guide-target="result-chat"><ChatPanel
+            <div data-guide-target="result-chat" className="lg:sticky lg:top-20"><ChatPanel
               context={chatContext}
               attachedSelections={attachedSelections}
               setAttachedSelections={setAttachedSelections}

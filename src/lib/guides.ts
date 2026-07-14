@@ -1,6 +1,8 @@
+import type { GuideManualStep } from "@/lib/guide-manual";
+
 export type GuideExam = "all" | "toefl" | "ielts" | "toeic";
 export type GuideSkill = "all" | "reading" | "listening" | "speaking" | "writing";
-export type GuideCategory = "start" | "training" | "mock-test" | "learning-data" | "content";
+export type GuideCategory = "start" | "training" | "mock-test";
 
 export type GuideArticle = {
   id: string;
@@ -10,13 +12,14 @@ export type GuideArticle = {
   skill: GuideSkill;
   category: GuideCategory;
   content: string;
+  steps: GuideManualStep[];
   order: number;
   isPublished: boolean;
   source: "seeded" | "custom";
   updatedAt: string | null;
 };
 
-type SeedGuide = Omit<GuideArticle, "source" | "updatedAt">;
+type SeedGuide = Omit<GuideArticle, "source" | "updatedAt" | "steps">;
 
 const commonFinish = `## 学習後に確認すること
 
@@ -53,7 +56,7 @@ export const SEEDED_GUIDES: SeedGuide[] = [
     isPublished: true,
     content: `# はじめに
 
-Prep Masterの新しい学習画面では、左上の試験切り替えから **TOEFL・IELTS・TOEIC** を選び、ホームから技能別の演習を開始します。
+Exaviaの新しい学習画面では、左上の試験切り替えから **TOEFL・IELTS・TOEIC** を選び、ホームから技能別の演習を開始します。
 
 ## 基本の流れ
 
@@ -202,13 +205,13 @@ Prep Masterの新しい学習画面では、左上の試験切り替えから **
 TOEIC Listeningの演習と使い方ガイドは現在準備中です。公開後、Part 1〜4の音声再生、回答操作、スクリプトを使った復習方法をこのページへ追加します。現在はTOEIC Readingをご利用ください。`,
   }),
   {
-    id: "mock-tests", title: "模試の受け方", summary: "模試の開始前確認、受験中の操作、結果確認を説明します。", exam: "all", skill: "all", category: "mock-test", order: 400, isPublished: true,
+    id: "mock-tests", title: "模試の受け方", summary: "模試の開始前確認、受験中の操作、結果確認を説明します。", exam: "all", skill: "all", category: "mock-test", order: 400, isPublished: false,
     content: `# Coming Soon
 
 模試機能は現在準備中です。公開後、開始前の音声・マイク確認、タイマーと未回答数の見方、セクション提出、結果レポートの確認方法をこのページへ追加します。現時点では技能別トレーニングをご利用ください。`,
   },
   {
-    id: "learning-data", title: "学習時間・学習履歴・データ推移", summary: "日々の学習記録とスコアの見方を説明します。", exam: "all", skill: "all", category: "learning-data", order: 500, isPublished: true,
+    id: "learning-data", title: "学習時間・学習履歴・データ推移", summary: "日々の学習記録とスコアの見方を説明します。", exam: "all", skill: "all", category: "start", order: 500, isPublished: true,
     content: `# 学習データの見方
 
 ## 学習時間
@@ -224,7 +227,7 @@ TOEIC Listeningの演習と使い方ガイドは現在準備中です。公開�
 試験・技能ごとのスコア推移や正答率を確認できます。試験切り替えと期間フィルターを使い、現在対策している試験の変化を確認してください。`,
   },
   {
-    id: "video-courses", title: "動画コース（コンテンツ）", summary: "コース、モジュール、レッスンの進め方を説明します。", exam: "all", skill: "all", category: "content", order: 600, isPublished: true,
+    id: "video-courses", title: "動画コース（コンテンツ）", summary: "コース、モジュール、レッスンの進め方を説明します。", exam: "all", skill: "all", category: "start", order: 600, isPublished: true,
     content: `# 動画コースの使い方
 
 1. サイドバーの「コンテンツ」を開きます。
@@ -240,7 +243,7 @@ TOEIC Listeningの演習と使い方ガイドは現在準備中です。公開�
 
 export const GUIDE_EXAM_LABELS: Record<GuideExam, string> = { all: "共通", toefl: "TOEFL", ielts: "IELTS", toeic: "TOEIC" };
 export const GUIDE_SKILL_LABELS: Record<GuideSkill, string> = { all: "全体", reading: "Reading", listening: "Listening", speaking: "Speaking", writing: "Writing" };
-export const GUIDE_CATEGORY_LABELS: Record<GuideCategory, string> = { start: "はじめに", training: "トレーニング", "mock-test": "模試", "learning-data": "学習データ", content: "コンテンツ" };
+export const GUIDE_CATEGORY_LABELS: Record<GuideCategory, string> = { start: "共通事項", training: "トレーニング", "mock-test": "模試" };
 
 export function getSeededGuide(id: string) {
   return SEEDED_GUIDES.find((guide) => guide.id === id);

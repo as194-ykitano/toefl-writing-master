@@ -1,7 +1,7 @@
 "use client";
 
 // コンテンツ（動画コース一覧）— english-gym-admin の学生向けコンテンツ画面を移植。
-// UI は PrepMaster の見た目（PrepShell 内・日本語）に合わせ、UX/機能はそのまま。
+// UI は Exavia の見た目（PrepShell 内・日本語）に合わせ、UX/機能はそのまま。
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";

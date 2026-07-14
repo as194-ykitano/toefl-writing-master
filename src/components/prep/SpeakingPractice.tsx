@@ -121,8 +121,11 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
   const [analyzingIndex, setAnalyzingIndex] = useState(0);
   const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
   const isIeltsPart1 = set.exam === "ielts" && (set.practiceType === "part-1" || set.practiceType === "full-practice");
-  // Part 1 / Part 3 / フルは面接形式なので、毎問「開始」せず連続で回答できるようにする
+  // 面接形式の本番モードでは、毎問「開始」を挟まず連続で回答できるようにする。
+  // IELTS Part 1 / Part 3 / フルは従来どおり練習モードでも連続進行する。
   const isIeltsContinuous = set.exam === "ielts" && ["part-1", "part-3", "full-practice"].includes(set.practiceType ?? "");
+  const isContinuousInterview =
+    isIeltsContinuous || (mode === "test" && set.practiceType === "take-an-interview");
   const supportsInterviewSettings = set.practiceType === "take-an-interview" || (set.exam === "ielts" && ["part-1","part-3","full-practice"].includes(set.practiceType ?? ""));
   const [configured,setConfigured]=useState(!supportsInterviewSettings);
   const [answerDuration,setAnswerDuration]=useState(isIeltsPart1?30:(set.tasks[0]?.speakSec??45));
@@ -252,7 +255,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
       }
     }
     cleanupStream();
-    if (isIeltsContinuous && !isLastTask) {
+    if (isContinuousInterview && !isLastTask) {
       autoStartNextRef.current = true;
       setTaskIndex((i) => i + 1);
       setPhase("ready");
@@ -365,6 +368,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
         elapsedSec={elapsedSec}
         remainingSec={0}
         exitHref={exitHref}
+        showTimer={false}
       />
 
       <div className="flex-1 max-w-3xl w-full mx-auto p-4 space-y-4">

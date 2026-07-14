@@ -31,6 +31,16 @@ export function markQuestionReviewed(sessionId: string, questionId: string): voi
   writeStore(STORAGE_KEY, sessions);
 }
 
+export function unflagQuestion(sessionId: string, questionId: string): void {
+  const sessions = loadSessions();
+  const session = sessions.find((s) => s.id === sessionId);
+  if (!session) return;
+  const flagged = new Set(session.flaggedQuestionIds ?? []);
+  flagged.delete(questionId);
+  session.flaggedQuestionIds = Array.from(flagged);
+  writeStore(STORAGE_KEY, sessions);
+}
+
 // ---- 採点 ----
 
 function normalize(value: string): string {

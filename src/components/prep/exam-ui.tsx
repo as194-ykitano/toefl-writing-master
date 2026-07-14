@@ -61,9 +61,18 @@ interface ExamTopBarProps {
   elapsedSec: number;
   remainingSec: number;
   exitHref: string;
+  showTimer?: boolean;
 }
 
-export function ExamTopBar({ examLabel, title, mode, elapsedSec, remainingSec, exitHref }: ExamTopBarProps) {
+export function ExamTopBar({
+  examLabel,
+  title,
+  mode,
+  elapsedSec,
+  remainingSec,
+  exitHref,
+  showTimer = true,
+}: ExamTopBarProps) {
   const router = useRouter();
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
   const timeText = mode === "test" ? formatTime(remainingSec) : formatTime(elapsedSec);
@@ -79,17 +88,19 @@ export function ExamTopBar({ examLabel, title, mode, elapsedSec, remainingSec, e
           <span className="text-sm text-white/90 truncate">{title}</span>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
-          <span
-            className={`flex items-center gap-1.5 text-sm font-mono rounded-lg px-3 py-1.5 ${
-              timeWarning ? "bg-red-500/90 animate-pulse" : "bg-white/10"
-            }`}
-          >
-            <Clock className="w-4 h-4" />
-            {timeText}
-            <span className="hidden sm:inline text-[10px] text-white/70 ml-1">
-              {mode === "test" ? "残り時間" : "経過時間"}
+          {showTimer && (
+            <span
+              className={`flex items-center gap-1.5 text-sm font-mono rounded-lg px-3 py-1.5 ${
+                timeWarning ? "bg-red-500/90 animate-pulse" : "bg-white/10"
+              }`}
+            >
+              <Clock className="w-4 h-4" />
+              {timeText}
+              <span className="hidden sm:inline text-[10px] text-white/70 ml-1">
+                {mode === "test" ? "残り時間" : "経過時間"}
+              </span>
             </span>
-          </span>
+          )}
           <button
             onClick={() => setExitDialogOpen(true)}
             className="p-2 rounded-lg hover:bg-white/10"

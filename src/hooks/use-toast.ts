@@ -1,6 +1,6 @@
 "use client";
 
-// english-gym-admin 由来の useToast API を PrepMaster の sonner に橋渡しするシム。
+// english-gym-admin 由来の useToast API を Exavia の sonner に橋渡しするシム。
 // 移植元は `toast({ title, description, variant })` の形で呼ぶので、
 // それを sonner の toast へマッピングする。
 import { toast as sonnerToast } from "sonner";

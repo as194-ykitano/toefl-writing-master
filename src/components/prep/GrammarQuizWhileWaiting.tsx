@@ -6,104 +6,9 @@
 
 import { useMemo, useState } from "react";
 import { Check, Loader2, Sparkles, X } from "lucide-react";
+import { GRAMMAR_QUIZ_QUESTIONS } from "@/lib/prep/grammar-quiz-questions";
 
-interface QuizQuestion {
-  sentence: string; // ___ を含む英文
-  choices: string[];
-  answer: number; // choices の正解インデックス
-  explanation: string;
-  category: string;
-}
-
-// 汎用の文法クイズ（TOEFL / IELTS 頻出ポイント）。出題順はシャッフルする。
-const QUESTION_BANK: QuizQuestion[] = [
-  {
-    sentence: "She ___ to the library every Sunday.",
-    choices: ["go", "goes", "going", "gone"],
-    answer: 1,
-    explanation: "主語が三人称単数（She）なので、現在形は goes になります。",
-    category: "三単現",
-  },
-  {
-    sentence: "I have lived here ___ 2015.",
-    choices: ["for", "since", "from", "during"],
-    answer: 1,
-    explanation: "「〜以来」と起点を示すときは since を使います（for は期間）。",
-    category: "前置詞",
-  },
-  {
-    sentence: "There ___ a lot of information in this article.",
-    choices: ["are", "is", "were", "have"],
-    answer: 1,
-    explanation: "information は不可算名詞なので単数扱い、is が正解です。",
-    category: "可算・不可算",
-  },
-  {
-    sentence: "If it ___ tomorrow, we will cancel the trip.",
-    choices: ["rains", "will rain", "rained", "would rain"],
-    answer: 0,
-    explanation: "条件を表す if 節では、未来のことでも現在形（rains）を使います。",
-    category: "動詞の時制",
-  },
-  {
-    sentence: "This book is ___ interesting than that one.",
-    choices: ["much", "more", "most", "very"],
-    answer: 1,
-    explanation: "than があるので比較級 more interesting が正解です。",
-    category: "比較",
-  },
-  {
-    sentence: "He is interested ___ learning Japanese.",
-    choices: ["on", "at", "in", "for"],
-    answer: 2,
-    explanation: "be interested in 〜 で「〜に興味がある」という定型表現です。",
-    category: "コロケーション",
-  },
-  {
-    sentence: "Each of the students ___ a laptop.",
-    choices: ["have", "has", "having", "are having"],
-    answer: 1,
-    explanation: "Each of ... は単数扱いなので has が正解です。",
-    category: "主述の一致",
-  },
-  {
-    sentence: "I look forward to ___ from you.",
-    choices: ["hear", "hearing", "heard", "be heard"],
-    answer: 1,
-    explanation: "look forward to の to は前置詞なので、動名詞 hearing が続きます。",
-    category: "動名詞・不定詞",
-  },
-  {
-    sentence: "The report ___ by the team last week.",
-    choices: ["wrote", "was written", "has written", "writing"],
-    answer: 1,
-    explanation: "レポートは「書かれた」側なので受動態 was written が正解です。",
-    category: "態（受動・能動）",
-  },
-  {
-    sentence: "She speaks English ___ than her brother.",
-    choices: ["good", "well", "better", "best"],
-    answer: 2,
-    explanation: "than があり、副詞 well の比較級 better が正解です。",
-    category: "比較",
-  },
-  {
-    sentence: "I want ___ a doctor in the future.",
-    choices: ["become", "becoming", "to become", "became"],
-    answer: 2,
-    explanation: "want の後は to 不定詞（to become）が続きます。",
-    category: "動名詞・不定詞",
-  },
-  {
-    sentence: "___ people think that exercise is important.",
-    choices: ["Much", "Many", "A little", "Almost"],
-    answer: 1,
-    explanation: "people は可算名詞の複数なので Many が正解です。",
-    category: "可算・不可算",
-  },
-];
-
-function shuffle<T>(arr: T[]): T[] {
+function shuffle<T>(arr: readonly T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -120,7 +25,7 @@ interface GrammarQuizWhileWaitingProps {
 }
 
 export default function GrammarQuizWhileWaiting({ completed, total }: GrammarQuizWhileWaitingProps = {}) {
-  const questions = useMemo(() => shuffle(QUESTION_BANK), []);
+  const questions = useMemo(() => shuffle(GRAMMAR_QUIZ_QUESTIONS), []);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
