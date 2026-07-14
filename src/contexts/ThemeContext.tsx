@@ -2,7 +2,7 @@
 
 // ライト / ダークテーマの管理。
 // - `documentElement`（<html>）に `dark` クラスを付け外しして切替（globals.css の `.dark` が効く）
-// - 選択は localStorage に永続化。未設定時は OS の配色設定に追従
+// - 選択は localStorage に永続化。未設定時はダークモードを使用
 // - 初回ロードのちらつき（FOUC）は layout.tsx の <head> インラインスクリプトで先回りして防ぐ
 
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
@@ -33,7 +33,7 @@ function applyTheme(theme: Theme) {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   // 初期値は layout の先読みスクリプトが付けた <html class="dark"> を尊重する。
   // SSR との不一致を避けるため、実際の同期は useEffect（マウント後）で行う。
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
@@ -63,8 +63,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
   if (!ctx) {
-    // Provider 外でも落とさない（既定はライト）
-    return { theme: "light", setTheme: () => {}, toggleTheme: () => {} };
+    // Provider 外でも落とさない（既定はダーク）
+    return { theme: "dark", setTheme: () => {}, toggleTheme: () => {} };
   }
   return ctx;
 }
