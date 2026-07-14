@@ -196,37 +196,16 @@ Prep Masterの新しい学習画面では、左上の試験切り替えから **
 - 長文問題は、根拠が書かれている箇所と設問の言い換えを確認します。`,
   }),
   trainingGuide({
-    id: "toeic-listening", title: "TOEIC Listening", summary: "Part別の音声演習とスクリプト復習の方法です。", exam: "toeic", skill: "listening", order: 310,
-    body: `## 演習を始める
+    id: "toeic-listening", title: "TOEIC Listening", summary: "TOEIC Listeningの演習は現在準備中です。", exam: "toeic", skill: "listening", order: 310,
+    body: `## Coming Soon
 
-1. 試験を「TOEIC」に切り替え、ホームのListeningを開きます。
-2. Partごとの一覧から演習セットを選びます。
-3. 音声を聞き、最も適切な選択肢を回答します。
-
-## 復習
-
-- 提出後にスクリプトを確認し、聞き取れなかった音や表現を特定します。
-- 正解の根拠だけでなく、誤答選択肢のひっかけ方も確認してください。`,
+TOEIC Listeningの演習と使い方ガイドは現在準備中です。公開後、Part 1〜4の音声再生、回答操作、スクリプトを使った復習方法をこのページへ追加します。現在はTOEIC Readingをご利用ください。`,
   }),
   {
     id: "mock-tests", title: "模試の受け方", summary: "模試の開始前確認、受験中の操作、結果確認を説明します。", exam: "all", skill: "all", category: "mock-test", order: 400, isPublished: true,
-    content: `# 模試の受け方
+    content: `# Coming Soon
 
-## 開始前
-
-1. サイドバーの「模試」を開き、受験する試験とセットを選びます。
-2. 所要時間を確保し、Listening・Speakingでは音声とマイクを確認します。
-3. 注意事項を読み、準備ができたら開始します。
-
-## 受験中
-
-- タイマーと未回答数を確認しながら進めます。
-- ブラウザの再読み込み、戻る操作、複数タブでの受験は避けてください。
-- セクションを提出すると、前の画面に戻れない場合があります。
-
-## 受験後
-
-採点済みの結果は結果画面と「学習履歴」「データ推移」から確認できます。Speaking・Writingはフィードバック完了まで時間がかかる場合があります。`,
+模試機能は現在準備中です。公開後、開始前の音声・マイク確認、タイマーと未回答数の見方、セクション提出、結果レポートの確認方法をこのページへ追加します。現時点では技能別トレーニングをご利用ください。`,
   },
   {
     id: "learning-data", title: "学習時間・学習履歴・データ推移", summary: "日々の学習記録とスコアの見方を説明します。", exam: "all", skill: "all", category: "learning-data", order: 500, isPublished: true,

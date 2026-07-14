@@ -36,6 +36,7 @@ import { loadSession } from "@/lib/prep/session-store";
 import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import { cleanReadingTitle } from "@/lib/prep/display-title";
 import { loadRecordings, pruneOldRecordings } from "@/lib/prep/recording-store";
+import { getGuidePracticeSession } from "@/lib/prep/guide-fixtures";
 import { auth } from "@/lib/firebase";
 import {
   EXAM_LABELS,
@@ -123,6 +124,7 @@ function QuestionReviewCard({
 
   return (
     <div
+      data-guide-target={index === 0 ? "answer-review-card" : undefined}
       style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
       className={`rounded-xl border p-5 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both ${
         correct
@@ -647,7 +649,7 @@ function SpeakingFeedbackCard({
           )}
 
           {feedback.transcript && (
-            <div className="mt-3">
+            <div className="mt-3" data-guide-target="grammar-drill">
               {feedback.grammarCorrections && feedback.grammarCorrections.length > 0 ? (
                 <GrammarCorrectionExercise
                   items={feedback.grammarCorrections}
@@ -875,6 +877,15 @@ export default function ResultReportPage() {
     }
     const urls: string[] = [];
     const load = async () => {
+      const guideFixture = getGuidePracticeSession(sessionId);
+      if (guideFixture) {
+        setSession(guideFixture.session);
+        if (guideFixture.session.skill === "reading") setReadingSet(guideFixture.set as ReadingSet);
+        if (guideFixture.session.skill === "listening") setListeningSet(guideFixture.set as ListeningSet);
+        if (guideFixture.session.skill === "speaking") setSpeakingSet(guideFixture.set as SpeakingSet);
+        setLoading(false);
+        return;
+      }
       let s = loadSession(sessionId);
       if (adminUid) {
         const currentUser = auth.currentUser;
@@ -1050,7 +1061,7 @@ export default function ResultReportPage() {
         </div>
 
         {/* ---- スコアサマリー ---- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-3 duration-500">
+        <div data-guide-target="result-score" className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-3 duration-500">
 
           <div className="glass-card rounded-2xl p-6 flex flex-col items-center justify-center">
             {isRepeat ? (
@@ -1116,7 +1127,7 @@ export default function ResultReportPage() {
 
         {/* ---- Speaking: タスク別フィードバック ---- */}
         {isSpeaking && speakingFeedback.length > 0 && (
-          <section>
+          <section data-guide-target="speaking-feedback">
             <div className="flex items-center gap-2 mt-6 mb-4">
               <Mic className="w-4 h-4 text-eg-dark" />
               <h2 className="text-lg font-bold text-gray-900">
@@ -1175,9 +1186,9 @@ export default function ResultReportPage() {
         {!isSpeaking && questions.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] gap-5 items-start">
             <div ref={selectionScopeRef} className="min-w-0 space-y-5 select-text">
-              <MaterialCard readingSet={readingSet} listeningSet={listeningSet} />
+              <div data-guide-target="result-material"><MaterialCard readingSet={readingSet} listeningSet={listeningSet} /></div>
 
-              <section>
+              <section data-guide-target="answer-review">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">解答結果</h2>
                   <span className="text-xs text-gray-400 dark:text-gray-500">
@@ -1202,11 +1213,11 @@ export default function ResultReportPage() {
               </section>
             </div>
 
-            <ChatPanel
+            <div data-guide-target="result-chat"><ChatPanel
               context={chatContext}
               attachedSelections={attachedSelections}
               setAttachedSelections={setAttachedSelections}
-            />
+            /></div>
           </div>
         )}
 

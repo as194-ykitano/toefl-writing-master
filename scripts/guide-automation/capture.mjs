@@ -34,41 +34,53 @@ function defaultHighlights(view) {
   return [];
 }
 
-async function addHighlights(page, definitions) {
+async function locateHighlights(page, definitions) {
   const boxes = [];
   for (const [index, definition] of definitions.entries()) {
-    const locator = definition.selector
+    let locator = definition.selector
       ? page.locator(definition.selector).first()
       : page.getByText(definition.text, { exact: true }).first();
+    if (definition.key === "settings" && !definition.selector) {
+      locator = locator.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')][1]");
+    }
     if (!await locator.isVisible().catch(() => false)) continue;
     const box = await locator.boundingBox();
-    if (box) boxes.push({ ...box, number: index + 1, label: definition.label });
+    if (box) boxes.push({ ...box, key: definition.key ?? `target-${index + 1}`, number: index + 1, label: definition.label });
   }
-  await page.evaluate((items) => {
-    document.querySelectorAll("[data-guide-highlight-overlay]").forEach((element) => element.remove());
-    for (const item of items) {
-      const overlay = document.createElement("div");
-      overlay.dataset.guideHighlightOverlay = "true";
-      Object.assign(overlay.style, {
-        position: "fixed", left: `${item.x - 5}px`, top: `${item.y - 5}px`,
-        width: `${item.width + 10}px`, height: `${item.height + 10}px`,
-        border: "4px solid #f97316", borderRadius: "12px", boxSizing: "border-box",
-        boxShadow: "0 0 0 3px rgba(255,255,255,.9), 0 8px 24px rgba(249,115,22,.22)",
-        pointerEvents: "none", zIndex: "2147483646",
-      });
-      const badge = document.createElement("div");
-      badge.textContent = `${item.number} ${item.label}`;
-      Object.assign(badge.style, {
-        position: "absolute", left: "-4px", top: item.y < 50 ? `${item.height + 8}px` : "-36px", maxWidth: "220px",
-        padding: "6px 10px", borderRadius: "8px", background: "#f97316", color: "white",
-        font: "700 13px/1.2 system-ui, sans-serif", whiteSpace: "nowrap",
-        boxShadow: "0 3px 10px rgba(0,0,0,.18)",
-      });
-      overlay.appendChild(badge);
-      document.body.appendChild(overlay);
+  return boxes;
+}
+
+async function waitForCaptureReady(page, view) {
+  const readySelector = view.clipSelector || view.waitForSelector;
+  if (readySelector) {
+    try {
+      await page.locator(readySelector).first().waitFor({ state: "attached", timeout: 25000 });
+    } catch {
+      await page.reload({ waitUntil: "domcontentloaded", timeout: 60000 });
+      await settlePage(page, view.waitFor || "main");
+      for (const action of view.actions ?? []) {
+        const locator = action.selector
+          ? page.locator(action.selector).first()
+          : page.getByText(action.text, { exact: action.exact !== false }).first();
+        await locator.waitFor({ state: "visible", timeout: 60000 });
+        await locator.click();
+        await page.waitForTimeout(action.waitMs ?? 500);
+      }
+      await page.locator(readySelector).first().waitFor({ state: "attached", timeout: 90000 });
     }
-  }, boxes);
-  return boxes.map(({ number, label }) => ({ number, label }));
+  }
+  if (view.clipSelector) {
+    const clip = page.locator(view.clipSelector).first();
+    await clip.waitFor({ state: "attached", timeout: 90000 });
+    await clip.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(800);
+  }
+  if (view.waitForTextGone) {
+    await page.getByText(view.waitForTextGone, { exact: true }).first().waitFor({ state: "hidden", timeout: 90000 });
+  }
+  await page.waitForFunction(() => Array.from(document.images).every((image) => image.complete), null, { timeout: 90000 });
+  await page.evaluate(async () => { await document.fonts?.ready; });
+  await page.waitForTimeout(view.settleMs ?? 1200);
 }
 
 await assertProfile();
@@ -91,36 +103,94 @@ const context = await chromium.launchPersistentContext(profileDir, {
   viewport: { width: 1440, height: 1000 },
   deviceScaleFactor: 1,
 });
-const manifest = { baseUrl, capturedAt: new Date().toISOString(), targets: [] };
+let manifest = { baseUrl, capturedAt: new Date().toISOString(), targets: [] };
+if (requested) {
+  try {
+    manifest = JSON.parse(await readFile(path.join(outputDir, "manifest.json"), "utf8"));
+    manifest.baseUrl = baseUrl;
+    manifest.capturedAt = new Date().toISOString();
+  } catch {}
+}
 try {
-  const page = context.pages()[0] ?? await context.newPage();
+  let availablePage = context.pages()[0] ?? null;
   for (const target of targets) {
     const targetDir = path.join(outputDir, "screenshots", target.guideId);
     await mkdir(targetDir, { recursive: true });
     const captured = { ...target, views: [] };
+    let page = null;
+    let currentUrl = "";
     for (const [index, view] of target.views.entries()) {
       const url = new URL(view.route, baseUrl).toString();
       console.log(`[${target.guideId}] ${url}`);
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
-      await settlePage(page, view.waitFor || "main");
-      const tourSkip = page.getByText("スキップ", { exact: true });
-      if (await tourSkip.isVisible().catch(() => false)) {
-        await tourSkip.click();
-        await page.waitForTimeout(400);
+      if (!page || currentUrl !== url) {
+        if (!page && availablePage) {
+          page = availablePage;
+          availablePage = null;
+        } else {
+          const nextPage = await context.newPage();
+          await page?.close();
+          page = nextPage;
+        }
+        currentUrl = url;
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+        await settlePage(page, view.waitFor || "main");
+        const tourSkip = page.getByText("スキップ", { exact: true });
+        if (await tourSkip.isVisible().catch(() => false)) {
+          await tourSkip.click();
+          await page.waitForTimeout(400);
+        }
       }
-      if (view.waitForTextGone) {
-        await page.getByText(view.waitForTextGone, { exact: true }).first().waitFor({ state: "hidden", timeout: 60000 });
-        await page.waitForTimeout(700);
+      for (const action of view.actions ?? []) {
+        const locator = action.selector
+          ? page.locator(action.selector).first()
+          : page.getByText(action.text, { exact: action.exact !== false }).first();
+        await locator.waitFor({ state: "visible", timeout: 60000 });
+        await locator.click();
+        await page.waitForTimeout(action.waitMs ?? 500);
       }
+      await waitForCaptureReady(page, view);
       await addCaptureStyles(page, [...(config.hideSelectors || []), ...(view.hideSelectors || [])]);
       const pageText = await page.locator("body").innerText().catch(() => "");
-      const highlights = await addHighlights(page, view.highlights || defaultHighlights(view));
+      const highlightBoxes = await locateHighlights(page, view.highlights || defaultHighlights(view));
       const name = `${String(index + 1).padStart(2, "0")}-${safeName(view.name)}`;
       const screenshotPath = path.join(targetDir, `${name}.png`);
       const textPath = path.join(targetDir, `${name}.txt`);
       await page.bringToFront();
       await page.waitForTimeout(300);
-      await page.screenshot({ path: screenshotPath, fullPage: view.fullPage === true, animations: "disabled" });
+      let captureBox = await page.evaluate(() => ({
+        x: 0,
+        y: 0,
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }));
+      if (view.clipSelector) {
+        const locator = page.locator(view.clipSelector).first();
+        await locator.waitFor({ state: "visible", timeout: 60000 });
+        if (view.clipSelector === "[data-guide-target=speaking-feedback]") {
+          await locator.evaluate((element) => {
+            element.style.paddingInline = "20px";
+          });
+        }
+        const box = await locator.boundingBox();
+        if (!box) throw new Error(`撮影範囲を取得できません: ${view.clipSelector}`);
+        captureBox = box;
+        await locator.screenshot({ path: screenshotPath, animations: "disabled" });
+      } else if (view.route.startsWith("/guide-demo/")) {
+        if (await page.locator("main").count() === 0) {
+          await page.waitForTimeout(3000);
+          await page.reload({ waitUntil: "domcontentloaded", timeout: 60000 });
+        }
+        await page.locator("main").first().waitFor({ state: "visible", timeout: 60000 });
+        const mainBox = await page.locator("main").first().boundingBox();
+        if (!mainBox) throw new Error(`デモ画面の撮影範囲を取得できません: ${view.route}`);
+        captureBox = mainBox;
+        await page.screenshot({ path: screenshotPath, clip: mainBox, animations: "disabled" });
+      } else {
+        await page.screenshot({ path: screenshotPath, fullPage: view.fullPage === true, animations: "disabled" });
+        if (view.fullPage === true) {
+          captureBox = await page.evaluate(() => ({ x: 0, y: 0, width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight }));
+        }
+      }
       await writeFile(textPath, pageText.slice(0, 30000), "utf8");
       captured.views.push({
         ...view,
@@ -128,10 +198,23 @@ try {
         screenshotPath,
         textPath,
         placeholder: `{{screenshot:${view.name}}}`,
-        highlights,
+        captureBox,
+        highlights: highlightBoxes.map((box) => ({
+          key: box.key,
+          number: box.number,
+          label: box.label,
+          x: box.x - captureBox.x,
+          y: box.y - captureBox.y,
+          width: box.width,
+          height: box.height,
+        })),
       });
     }
+    availablePage = page;
+    manifest.targets = manifest.targets.filter((item) => item.guideId !== target.guideId);
     manifest.targets.push(captured);
+    await mkdir(outputDir, { recursive: true });
+    await writeFile(path.join(outputDir, "manifest.json"), JSON.stringify(manifest, null, 2), "utf8");
   }
   await mkdir(outputDir, { recursive: true });
   await writeFile(path.join(outputDir, "manifest.json"), JSON.stringify(manifest, null, 2), "utf8");

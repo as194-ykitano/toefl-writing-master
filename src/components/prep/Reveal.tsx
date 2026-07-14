@@ -12,9 +12,10 @@ interface RevealProps {
   delay?: number;
   /** 立ち上がりの移動量 */
   y?: number;
+  "data-guide-target"?: string;
 }
 
-export default function Reveal({ children, className = "", delay = 0, y = 24 }: RevealProps) {
+export default function Reveal({ children, className = "", delay = 0, y = 24, "data-guide-target": guideTarget }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -38,6 +39,7 @@ export default function Reveal({ children, className = "", delay = 0, y = 24 }: 
   return (
     <div
       ref={ref}
+      data-guide-target={guideTarget}
       style={{
         transitionDelay: visible ? `${delay}ms` : "0ms",
         transform: visible ? "translateY(0)" : `translateY(${y}px)`,

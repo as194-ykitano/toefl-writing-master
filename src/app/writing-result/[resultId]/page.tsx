@@ -31,6 +31,7 @@ import GrammarCorrectionExercise from "@/components/prep/GrammarCorrectionExerci
 import Reveal from "@/components/prep/Reveal";
 import CountUp from "@/components/prep/CountUp";
 import { writingCorrectionsToItems } from "@/lib/prep/grammar";
+import { getGuideWritingResult } from "@/lib/prep/guide-fixtures";
 import {
   EXAM_LABELS,
   WritingResult,
@@ -161,6 +162,12 @@ export default function WritingResultPage() {
   const version = usePrepDataVersion();
 
   useEffect(() => {
+    const guideFixture = getGuideWritingResult(resultId);
+    if (guideFixture) {
+      setResult(guideFixture);
+      setLoaded(true);
+      return;
+    }
     if (!adminUid) {
       setResult(loadWritingResult(resultId));
       setLoaded(true);
@@ -254,7 +261,7 @@ export default function WritingResultPage() {
         )}
 
         {/* スコア */}
-        <Reveal className="mt-6 glass-card rounded-2xl p-6">
+        <Reveal data-guide-target="writing-score" className="mt-6 glass-card rounded-2xl p-6">
           <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
             <Target className="w-5 h-5 text-eg-dark" /> スコア
           </h2>
@@ -302,7 +309,7 @@ export default function WritingResultPage() {
         )}
 
         {/* 本文（文法ハイライト） */}
-        <div className="mt-4 bg-white rounded-2xl border border-gray-200 p-6">
+        <div data-guide-target="submitted-answer" className="mt-4 bg-white rounded-2xl border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-semibold text-gray-900">あなたの回答</h2>
             {fb.grammarCorrections.length > 0 && (
@@ -325,7 +332,7 @@ export default function WritingResultPage() {
         )}
 
         {/* 長所・改善点 */}
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div data-guide-target="strengths-improvements" className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           {fb.strengths.length > 0 && (
             <div className="glass-card rounded-2xl p-6 animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both">
               <h3 className="text-sm font-semibold text-emerald-700 mb-3">良かった点</h3>
@@ -380,7 +387,7 @@ export default function WritingResultPage() {
 
         {/* 具体的な改善提案 */}
         {fb.specificSuggestions && fb.specificSuggestions.length > 0 && (
-          <div className="mt-4 glass-card rounded-2xl p-6 animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both">
+          <div data-guide-target="specific-suggestions" className="mt-4 glass-card rounded-2xl p-6 animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both">
             <h2 className="text-base font-semibold text-gray-900 mb-3">具体的な改善提案</h2>
             <ul className="space-y-3">
               {fb.specificSuggestions.map((s, i) => {
@@ -401,7 +408,7 @@ export default function WritingResultPage() {
 
         {/* 文法修正エクササイズ（1問ずつタイピングで直す） */}
         {fb.grammarCorrections.length > 0 && (
-          <div className="mt-4">
+          <div className="mt-4" data-guide-target="grammar-drill">
             <GrammarCorrectionExercise
               items={writingCorrectionsToItems(fb.grammarCorrections)}
               sourceText={result.content}
@@ -412,7 +419,7 @@ export default function WritingResultPage() {
 
         {/* 改善版（Email） */}
         {fb.improvedVersion && (
-          <div className="mt-4 glass-card rounded-2xl p-6 animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both">
+          <div data-guide-target="improved-version" className="mt-4 glass-card rounded-2xl p-6 animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both">
             <h2 className="text-base font-semibold text-violet-700 dark:text-violet-300 mb-2 flex items-center gap-2">
               <Sparkles className="w-4.5 h-4.5" /> 1 ランク上の改善版
             </h2>

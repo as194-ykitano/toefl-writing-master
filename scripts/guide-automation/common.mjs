@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import net from "node:net";
 import { access } from "node:fs/promises";
 import path from "node:path";
 
@@ -18,16 +19,35 @@ export async function isReachable(url = baseUrl) {
   }
 }
 
+async function isPortOpen(host, port) {
+  return new Promise((resolve) => {
+    const socket = net.createConnection({ host, port });
+    const finish = (value) => { socket.destroy(); resolve(value); };
+    socket.setTimeout(1500);
+    socket.once("connect", () => finish(true));
+    socket.once("timeout", () => finish(false));
+    socket.once("error", () => finish(false));
+  });
+}
+
 export async function ensureApp() {
   if (await isReachable()) return { started: false, stop() {} };
   const parsed = new URL(baseUrl);
   if (!["localhost", "127.0.0.1"].includes(parsed.hostname)) {
     throw new Error(`${baseUrl} に接続できません。リモート環境は自動起動できません。`);
   }
+  const port = Number(parsed.port || "3000");
+  if (await isPortOpen(parsed.hostname, port)) {
+    for (let attempt = 0; attempt < 90; attempt += 1) {
+      if (await isReachable()) return { started: false, stop() {} };
+      await wait(1000);
+    }
+    throw new Error(`${baseUrl} のポートは使用中ですが、HTTP応答を確認できませんでした。`);
+  }
   // Windowsでは npm.cmd の直接 spawn が EINVAL になる環境があるため、
   // Next.js CLIを現在のNodeランタイムから直接起動する。
   const nextCli = path.join(projectRoot, "node_modules", "next", "dist", "bin", "next");
-  const child = spawn(process.execPath, [nextCli, "dev", "-p", parsed.port || "3000"], {
+  const child = spawn(process.execPath, [nextCli, "dev", "-p", String(port)], {
     cwd: projectRoot,
     stdio: "inherit",
     windowsHide: true,
@@ -73,6 +93,8 @@ export async function addCaptureStyles(page, hideSelectors = []) {
     "[data-guide-private]",
     ...hideSelectors,
   ].filter(Boolean);
-  if (!selectors.length) return;
-  await page.addStyleTag({ content: `${selectors.join(",")} { filter: blur(10px) !important; }` });
+  await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
+  await page.evaluate(() => document.documentElement.classList.remove("dark"));
+  const hidden = selectors.length ? `${selectors.join(",")} { filter: blur(10px) !important; }` : "";
+  await page.addStyleTag({ content: `${hidden}\n*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important}` });
 }

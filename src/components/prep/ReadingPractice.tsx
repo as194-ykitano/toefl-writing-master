@@ -103,7 +103,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
 
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* 本文ペイン */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-12rem)] lg:overflow-y-auto">
+        <div data-guide-target="reading-passage" className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-12rem)] lg:overflow-y-auto">
           <h2 className="text-lg font-bold text-gray-900 mb-4">{set.passageTitle}</h2>
           <div className="space-y-4">
             {set.paragraphs.map((p, i) => (
@@ -116,7 +116,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
         </div>
 
         {/* 設問ペイン */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col">
+        <div data-guide-target="reading-question" className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div className="text-sm font-semibold text-gray-500">
               Question {question.number} <span className="text-gray-300">/ {questions.length}</span>
@@ -126,7 +126,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
                 </span>
               )}
             </div>
-            <button
+            <button data-guide-target="review-flag"
               onClick={toggleFlag}
               className={`flex items-center gap-1.5 text-xs font-medium rounded-lg px-3 py-1.5 border transition-colors ${
                 flagged.has(question.id)
@@ -151,7 +151,7 @@ export default function ReadingPractice({ set, mode, onComplete }: ReadingPracti
             />
           </div>
 
-          <div className="mt-6 pt-4 border-t border-gray-100 space-y-4">
+          <div data-guide-target="question-navigation" className="mt-6 pt-4 border-t border-gray-100 space-y-4">
             <QuestionNav
               total={questions.length}
               currentIndex={currentIndex}

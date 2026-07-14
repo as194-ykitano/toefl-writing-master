@@ -380,7 +380,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
           ))}
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
+        <div data-guide-target="speaking-task" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="text-xs font-semibold tracking-wide text-eg-deep uppercase">
               Task {task.number} / {set.tasks.length} — {task.label}
@@ -441,7 +441,7 @@ export default function SpeakingPractice({ set, mode, onComplete }: SpeakingPrac
                     </>
                   )}
                 </div>
-                <Button size="lg" className="bg-eg hover:bg-eg-dark text-black" onClick={startPrep}>
+                <Button data-guide-target="speaking-start" size="lg" className="bg-eg hover:bg-eg-dark text-black" onClick={startPrep}>
                   開始する
                 </Button>
               </>

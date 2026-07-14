@@ -5,7 +5,7 @@
 // 「技能別（Reading/Listening/Speaking/Writing）」と「問題タイプ別」を切り替えられる。
 // 週は前後に移動でき、その週の各日・各カテゴリの学習時間を集計する。
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";
 import { StackedBarChart } from "@/components/prep/charts";
@@ -68,7 +68,12 @@ interface Category {
 
 export default function StudyTimePage() {
   const { exam } = useExam();
-  const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
+  const [guideExam, setGuideExam] = useState<ExamId | null>(null);
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("guideExam");
+    if (value === "toefl" || value === "ielts" || value === "toeic") setGuideExam(value);
+  }, []);
+  const activeExam: ExamId = guideExam ?? (exam === "advanced" ? "toefl" : exam);
   const { items, loading } = usePrepActivity(activeExam);
 
   const [mode, setMode] = useState<Mode>("skill");
@@ -177,7 +182,7 @@ export default function StudyTimePage() {
             </p>
           </div>
           {/* 技能別 / 問題タイプ別 切替 */}
-          <div className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 p-0.5 dark:bg-gray-800">
+          <div data-guide-target="study-mode" className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 p-0.5 dark:bg-gray-800">
             {(["skill", "type"] as Mode[]).map((m) => (
               <button
                 key={m}
@@ -195,7 +200,7 @@ export default function StudyTimePage() {
         </div>
 
         {/* チャートカード */}
-        <Reveal className="glass-card rounded-2xl p-5 sm:p-6">
+        <Reveal data-guide-target="study-chart" className="glass-card rounded-2xl p-5 sm:p-6">
           {/* 週ナビゲーション + 合計 */}
           <div className="flex items-center justify-between gap-3 mb-5">
             <div className="flex items-center gap-1">
@@ -276,7 +281,7 @@ export default function StudyTimePage() {
 
         {/* 内訳テーブル */}
         {categories.length > 0 && (
-          <Reveal delay={80} className="glass-card rounded-2xl overflow-hidden">
+          <Reveal data-guide-target="study-table" delay={80} className="glass-card rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>

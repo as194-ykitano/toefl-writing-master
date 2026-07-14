@@ -29,6 +29,7 @@ import { loadWritingResults } from "@/lib/prep/writing-store";
 import { getListeningSets, getReadingSets, getSpeakingSets } from "@/lib/prep/data-source";
 import { getPracticeTypes } from "@/lib/prep/question-types";
 import { formatActivityScore, usePrepActivity } from "@/lib/prep/use-activity";
+import { getGuidePracticeSession, getGuideWritingResult } from "@/lib/prep/guide-fixtures";
 import { usePrepDataVersion } from "@/lib/prep/use-prep-data";
 import Reveal from "@/components/prep/Reveal";
 import {
@@ -99,7 +100,12 @@ function formatMinutes(min: number): string {
 
 export default function OverviewPage() {
   const { exam } = useExam();
-  const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
+  const [guideExam, setGuideExam] = useState<ExamId | null>(null);
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("guideExam");
+    if (value === "toefl" || value === "ielts" || value === "toeic") setGuideExam(value);
+  }, []);
+  const activeExam: ExamId = guideExam ?? (exam === "advanced" ? "toefl" : exam);
 
   const [period, setPeriod] = useState<PeriodKey>("30d");
   const [skill, setSkill] = useState<SkillId>("reading");
@@ -129,12 +135,34 @@ export default function OverviewPage() {
   }, [activeExam, skill]);
 
   useEffect(() => {
+    const guideMode = new URLSearchParams(window.location.search).get("guide") === "1";
+    if (guideMode) {
+      const fixture = getGuideWritingResult("guide-ielts-writing");
+      setWritingResults(fixture ? [fixture] : []);
+      return;
+    }
     setWritingResults(loadWritingResults());
   }, [dataVersion]);
 
   // セッションを読み込み、practiceType が無い旧セッションはセット定義から補完する
   // （problem-type 別集計で「その他」に落ちてしまうのを防ぐ）
   useEffect(() => {
+    const guideMode = new URLSearchParams(window.location.search).get("guide") === "1";
+    if (guideMode) {
+      const now = new Date();
+      const reading = getGuidePracticeSession("guide-ielts-reading")?.session;
+      if (reading) {
+        setSessions([
+          { ...reading, id: "guide-overview-reading-1", practiceType: "multiple-choice", finishedAt: now.toISOString() },
+          { ...reading, id: "guide-overview-reading-2", practiceType: "multiple-choice", finishedAt: new Date(now.getTime() - 7 * 86400000).toISOString(), correctCount: Math.max(1, reading.correctCount - 1) },
+          { ...reading, id: "guide-overview-reading-3", practiceType: "multiple-choice", finishedAt: new Date(now.getTime() - 14 * 86400000).toISOString(), correctCount: Math.max(1, reading.correctCount - 2) },
+          { ...reading, id: "guide-overview-reading-4", practiceType: "multiple-choice", finishedAt: new Date(now.getTime() - 21 * 86400000).toISOString(), correctCount: Math.max(1, reading.correctCount - 1) },
+        ]);
+      } else {
+        setSessions([]);
+      }
+      return;
+    }
     const raw = loadSessions();
     setSessions(raw);
     let cancelled = false;
@@ -260,7 +288,7 @@ export default function OverviewPage() {
               {EXAM_LABELS[activeExam]} のスコア推移（このブラウザの演習・添削履歴から集計）
             </p>
           </div>
-          <div className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 p-0.5 dark:bg-gray-800">
+          <div data-guide-target="overview-period" className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 p-0.5 dark:bg-gray-800">
             {PERIODS.map((p) => (
               <button
                 key={p}
@@ -294,7 +322,7 @@ export default function OverviewPage() {
         )}
 
         {/* 技能タブ（試験ごとに対応技能のみ表示） */}
-        <div
+        <div data-guide-target="overview-skills"
           className="grid gap-2"
           style={{ gridTemplateColumns: `repeat(${visibleSkills.length}, minmax(0, 1fr))` }}
         >
@@ -345,7 +373,7 @@ export default function OverviewPage() {
         </div>
 
         {/* 平均スコア推移（選択中の問題タイプに応じて変化） */}
-        <Reveal className="glass-card rounded-2xl p-6">
+        <Reveal data-guide-target="overview-chart" className="glass-card rounded-2xl p-6">
           <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
             <div>
               <h2 className="font-semibold text-gray-900 dark:text-gray-100">
@@ -394,7 +422,7 @@ export default function OverviewPage() {
         </Reveal>
 
         {/* 問題タイプ別（クリックで上のグラフを切替） */}
-        <Reveal delay={80}>
+        <Reveal data-guide-target="overview-types" delay={80}>
           <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
             {skillMeta.label} の問題タイプ別
           </h2>

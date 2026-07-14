@@ -182,11 +182,25 @@ function HomeTour() {
 
 export default function HomePage() {
   const { user } = useAuth();
-  const { exam } = useExam();
+  const { exam, setExam } = useExam();
   const availability = useFeatureAvailability();
   const router = useRouter();
   const name = user?.displayName;
-  const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
+  const [guideSelection, setGuideSelection] = useState<{ exam: ExamId; skill: SkillId } | null>(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const guideExam = params.get("guideExam");
+    const guideSkill = params.get("guideSkill");
+    if (
+      (guideExam === "toefl" || guideExam === "ielts" || guideExam === "toeic") &&
+      (guideSkill === "reading" || guideSkill === "listening" || guideSkill === "speaking" || guideSkill === "writing") &&
+      EXAM_SKILLS[guideExam].includes(guideSkill)
+    ) {
+      setGuideSelection({ exam: guideExam, skill: guideSkill });
+      setExam(guideExam);
+    }
+  }, []);
+  const activeExam: ExamId = guideSelection?.exam ?? (exam === "advanced" ? "toefl" : exam);
   // 時間帯で変わる挨拶と当日の日付は、SSR とのズレを避けるためマウント後に確定する
   const [greeting, setGreeting] = useState("こんにちは");
   const [todayLabel, setTodayLabel] = useState("");
@@ -245,10 +259,14 @@ export default function HomePage() {
 
   // 試験を切り替えたとき、選択中の技能がその試験に無ければ先頭の技能へ戻す
   useEffect(() => {
+    if (guideSelection) {
+      setSkill(guideSelection.skill);
+      return;
+    }
     if (!EXAM_SKILLS[activeExam].includes(skill)) {
       setSkill(EXAM_SKILLS[activeExam][0]);
     }
-  }, [activeExam, skill]);
+  }, [activeExam, guideSelection, skill]);
 
   useEffect(() => {
     let cancelled = false;
@@ -288,7 +306,7 @@ export default function HomePage() {
     }
   }
 
-  if (availability.courses[activeExam]) {
+  if (!guideSelection && availability.courses[activeExam]) {
     return <PrepShell><div className="mx-auto max-w-3xl px-4 py-20 text-center"><div className="rounded-2xl border bg-white px-6 py-16 dark:border-gray-800 dark:bg-gray-900"><Clock className="mx-auto h-10 w-10 text-gray-400"/><h1 className="mt-5 text-2xl font-bold">{EXAM_LABELS[activeExam]}</h1><p className="mt-2 text-gray-500">このコースは現在準備中です。別のコースを選択してください。</p><span className="mt-5 inline-block rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Coming Soon</span></div></div></PrepShell>;
   }
 
@@ -398,10 +416,11 @@ export default function HomePage() {
             この技能の問題タイプは準備中です
           </div>
         ) : (
-          <div key={skill} data-tour="types" className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div key={skill} data-tour="types" data-guide-target="home-types" className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {types.map((type, i) => (
               <div
                 key={type.id}
+                data-guide-target={i === 0 ? "home-type-card" : undefined}
                 style={{ animationDelay: `${i * 45}ms` }}
                 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both"
               >

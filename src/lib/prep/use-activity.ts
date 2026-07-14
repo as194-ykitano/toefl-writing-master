@@ -18,6 +18,7 @@ import { getListeningSets, getReadingSets, getSpeakingSets } from "./data-source
 import { PRACTICE_TYPES } from "./question-types";
 import { ExamId, PracticeSessionResult, SkillId, WritingResult } from "./types";
 import { cleanReadingTitle } from "./display-title";
+import { getGuidePracticeSession, getGuideWritingResult } from "./guide-fixtures";
 
 export interface ActivityItem {
   id: string;
@@ -157,11 +158,42 @@ export function usePrepActivity(exam: ExamId): UseActivityResult {
   const version = usePrepDataVersion();
 
   useEffect(() => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("guide") === "1") {
+      const writing = getGuideWritingResult(`guide-${exam === "toeic" ? "toefl" : exam}-writing`);
+      setWritingResults(writing ? [writing] : []);
+      return;
+    }
     setWritingResults(loadWritingResults());
-  }, [version]);
+  }, [exam, version]);
 
   // セッションを読み込み、practiceType が欠けている旧セッションはセット定義から補完
   useEffect(() => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("guide") === "1") {
+      const now = new Date();
+      const ids = exam === "toeic" ? [] : (["reading", "listening", "speaking"] as const).map((skill) => `guide-${exam}-${skill}`);
+      const samples = ids.flatMap((id, index) => {
+        const fixture = getGuidePracticeSession(id);
+        if (!fixture) return [];
+        return [{
+          ...fixture.session,
+          practiceType: exam === "ielts" && id.endsWith("-reading") ? "multiple-choice" : fixture.session.practiceType,
+          finishedAt: new Date(now.getTime() - index * 86400000).toISOString(),
+        }];
+      });
+      if (exam === "ielts") {
+        const reading = getGuidePracticeSession("guide-ielts-reading")?.session;
+        if (reading) {
+          samples.push(
+            { ...reading, id: "guide-ielts-reading-2", practiceType: "multiple-choice", finishedAt: new Date(now.getTime() - 7 * 86400000).toISOString(), correctCount: Math.max(1, reading.correctCount - 1) },
+            { ...reading, id: "guide-ielts-reading-3", practiceType: "multiple-choice", finishedAt: new Date(now.getTime() - 14 * 86400000).toISOString(), correctCount: Math.max(1, reading.correctCount - 2) },
+            { ...reading, id: "guide-ielts-reading-4", practiceType: "multiple-choice", finishedAt: new Date(now.getTime() - 21 * 86400000).toISOString(), correctCount: Math.max(1, reading.correctCount - 1) },
+          );
+        }
+      }
+      setSessions(samples);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const raw = loadSessions();
     setSessions(raw);

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Check, ChevronLeft, ChevronRight, Link2 } from "lucide-react"
+import { Check, ChevronLeft, ChevronRight, Link2, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { PracticeQuestionMarkdown } from "@/components/practice/practice-question-markdown"
@@ -34,7 +34,20 @@ export type CourseLessonViewProps = {
   role: CourseLessonViewRole
   /** Opens course details (title, thumbnail, publish, …) for staff */
   onStaffOpenCourseDetails?: () => void
+  /** Safe in-memory lesson used only by the automated usage guide. */
+  guidePreview?: boolean
 }
+
+const GUIDE_MODULES: VideoCourseModule[] = [
+  { id: "guide-module-1", courseId: "guide-writing-course", title: "Module 1：添削結果の読み方", order: 1 },
+  { id: "guide-module-2", courseId: "guide-writing-course", title: "Module 2：答案を書き直す", order: 2 },
+]
+
+const GUIDE_LESSONS: VideoCourseLesson[] = [
+  { id: "guide-writing-lesson-1", courseId: "guide-writing-course", moduleId: "guide-module-1", title: "スコアと観点別評価を確認する", order: 1, contentType: "video", body: "総合スコアだけでなく、内容・構成・語彙・文法の各観点を確認します。" },
+  { id: "guide-writing-lesson-2", courseId: "guide-writing-course", moduleId: "guide-module-1", title: "改善ポイントを次の答案へ反映する", order: 2, contentType: "video", body: "このレッスンでは、フィードバックから優先課題を1つ選び、次の答案へ反映する流れを解説します。" },
+  { id: "guide-writing-lesson-3", courseId: "guide-writing-course", moduleId: "guide-module-2", title: "改善版と自分の答案を比較する", order: 1, contentType: "video", body: "改善版を丸写しせず、構成・接続表現・具体例の違いを見つけます。" },
+]
 
 type ModuleGroup = {
   module: VideoCourseModule
@@ -54,6 +67,7 @@ export function CourseLessonView({
   lessonPathPrefix,
   role,
   onStaffOpenCourseDetails,
+  guidePreview = false,
 }: CourseLessonViewProps) {
   const router = useRouter()
   const { toast } = useToast()
@@ -71,7 +85,7 @@ export function CourseLessonView({
   const [courseOwnerId, setCourseOwnerId] = useState<string | null>(null)
   const [markingComplete, setMarkingComplete] = useState(false)
 
-  const enableProgress = role === "student" && !!user?.uid
+  const enableProgress = guidePreview || (role === "student" && !!user?.uid)
 
   const isAdminLessonRoute = lessonPathPrefix.startsWith("/admin/")
   const canManageStructure =
@@ -80,6 +94,21 @@ export function CourseLessonView({
     ((isAdminLessonRoute && !!isAdmin) || (!isAdminLessonRoute && courseOwnerId === user.uid))
 
   const load = useCallback(async () => {
+    if (guidePreview) {
+      const groups: ModuleGroup[] = GUIDE_MODULES.map((module) => ({
+        module,
+        lessons: GUIDE_LESSONS.filter((item) => item.moduleId === module.id),
+      }))
+      setAllowed(true)
+      setCourseTitle("ライティング添削データベース")
+      setCourseOwnerId("guide")
+      setModules(groups)
+      setOrderedLessons(GUIDE_LESSONS)
+      setTotalLessons(GUIDE_LESSONS.length)
+      setCompletedIds(new Set(["guide-writing-lesson-1"]))
+      setLesson(GUIDE_LESSONS.find((item) => item.id === lessonId) ?? GUIDE_LESSONS[1])
+      return
+    }
     if (!courseId || !lessonId) {
       setAllowed(false)
       setLesson(null)
@@ -139,7 +168,7 @@ export function CourseLessonView({
       return
     }
     setLesson(l)
-  }, [courseId, lessonId, coachUid, role, user?.uid, isAdmin, enableProgress])
+  }, [courseId, lessonId, coachUid, role, user?.uid, isAdmin, enableProgress, guidePreview])
 
   useEffect(() => {
     let cancelled = false
@@ -179,11 +208,11 @@ export function CourseLessonView({
   }
 
   const markCurrentLessonComplete = async () => {
-    if (!lesson || !enableProgress || !user?.uid) return
+    if (!lesson || !enableProgress || (!user?.uid && !guidePreview)) return
     if (completedIds.has(lesson.id)) return
     setMarkingComplete(true)
     try {
-      await markVideoCourseLessonsComplete(user.uid, courseId, [lesson.id])
+      if (!guidePreview && user?.uid) await markVideoCourseLessonsComplete(user.uid, courseId, [lesson.id])
       setCompletedIds((prev) => new Set(prev).add(lesson.id))
     } finally {
       setMarkingComplete(false)
@@ -192,8 +221,8 @@ export function CourseLessonView({
 
   const goNext = async () => {
     if (!lesson) return
-    if (enableProgress && user?.uid && !completedIds.has(lesson.id)) {
-      await markVideoCourseLessonsComplete(user.uid, courseId, [lesson.id])
+    if (enableProgress && (user?.uid || guidePreview) && !completedIds.has(lesson.id)) {
+      if (!guidePreview && user?.uid) await markVideoCourseLessonsComplete(user.uid, courseId, [lesson.id])
       setCompletedIds((prev) => new Set(prev).add(lesson.id))
     }
     if (nextId) {
@@ -266,7 +295,13 @@ export function CourseLessonView({
         </nav>
 
         {(lesson.contentType === "video" || lesson.embeddedVideo?.url?.trim()) && (
-          <LessonVideoEmbed embeddedVideo={lesson.embeddedVideo} title={lesson.title} />
+          guidePreview ? (
+            <div data-guide-target="lesson-video" className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 via-amber-500 to-violet-600 shadow-sm">
+              <div className="absolute inset-0 grid place-items-center bg-black/10">
+                <div className="text-center text-white"><span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white/95 text-orange-500 shadow-lg"><Play className="ml-1 h-7 w-7 fill-current" /></span><p className="mt-4 text-lg font-bold">改善ポイントを次の答案へ反映する</p><p className="mt-1 text-sm text-white/80">Lesson video</p></div>
+              </div>
+            </div>
+          ) : <LessonVideoEmbed embeddedVideo={lesson.embeddedVideo} title={lesson.title} />
         )}
 
         <div className="flex flex-wrap items-start justify-between gap-3 gap-y-2">
@@ -294,6 +329,7 @@ export function CourseLessonView({
               </p>
             ) : (
               <Button
+                data-guide-target="lesson-complete"
                 type="button"
                 className="shrink-0"
                 disabled={markingComplete}
@@ -347,7 +383,7 @@ export function CourseLessonView({
           "lg:sticky lg:top-0 lg:h-[calc(100dvh)] lg:max-h-[calc(100dvh)] lg:min-h-0 lg:w-[min(100%,20rem)] lg:overflow-hidden lg:border-l lg:border-t-0 lg:px-5 lg:py-6 xl:w-96"
         )}
       >
-        {totalLessons > 0 && user?.uid && (enableProgress || role === "staff") ? (
+        {totalLessons > 0 && (user?.uid || guidePreview) && (enableProgress || role === "staff") ? (
           <div className="mb-5 shrink-0 rounded-xl border border-border bg-background/80 p-4">
             <div className="mb-2 flex items-center justify-between gap-2">
               <span className="text-sm font-medium text-foreground">Progress</span>
@@ -366,7 +402,7 @@ export function CourseLessonView({
           </div>
         ) : null}
 
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        <div data-guide-target="lesson-sidebar" className="flex min-h-0 min-w-0 flex-1 flex-col">
           {canManageStructure ? (
             <VideoCourseStructureEditor
               courseId={courseId}

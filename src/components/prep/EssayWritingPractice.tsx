@@ -156,7 +156,7 @@ export default function EssayWritingPractice({ set, mode }: EssayWritingPractice
       {(
         <div className="flex-1 max-w-6xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* 左: 問題 */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+          <div data-guide-target="writing-prompt" className="bg-white rounded-2xl border border-gray-200 p-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
             <PromptPanel set={set} isPractice={isPractice} />
           </div>
           {/* 右: 回答 */}
@@ -204,7 +204,7 @@ function ResponseEditor({
   label: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col lg:max-h-[calc(100vh-8rem)]">
+    <div data-guide-target="writing-response" className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col lg:max-h-[calc(100vh-8rem)]">
       <div className="flex items-center justify-between mb-3">
         <div className="text-sm font-semibold text-gray-700">{label}</div>
         <div className={`text-xs ${wordCount >= minWords ? "text-emerald-600" : "text-gray-400"}`}>
@@ -219,7 +219,7 @@ function ResponseEditor({
         className="min-h-[24rem] flex-1 text-sm leading-relaxed"
       />
       {error && <p className="mt-3 text-sm text-red-600">添削エラー: {error}</p>}
-      <Button
+      <Button data-guide-target="writing-submit"
         className="mt-4 bg-eg hover:bg-eg-dark text-black self-end"
         onClick={onSubmit}
         disabled={submitting || essay.trim().length === 0}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f97316"/><stop offset="1" stop-color="#fbbf24"/></linearGradient></defs>
+  <rect width="960" height="540" rx="36" fill="url(#g)"/><rect x="80" y="75" width="800" height="390" rx="28" fill="#fff" fill-opacity=".94"/>
+  <text x="130" y="210" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="#7c2d12">WRITING COURSE</text>
+  <text x="130" y="285" font-family="Arial,sans-serif" font-size="58" font-weight="800" fill="#111827">添削データベース</text>
+  <path d="M135 350h500M135 385h390" stroke="#fdba74" stroke-width="18" stroke-linecap="round"/>
+</svg>

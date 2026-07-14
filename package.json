@@ -10,6 +10,8 @@
     "test": "vitest run",
     "guide:login": "node scripts/guide-automation/login.mjs",
     "guide:capture": "node scripts/guide-automation/capture.mjs",
+    "guide:gifs": "node scripts/guide-automation/generate-gifs.mjs",
+    "guide:manual": "node scripts/guide-automation/build-manual.mjs",
     "guide:apply": "node scripts/guide-automation/apply.mjs",
     "migrate-audio": "node scripts/migrate-audio.js",
     "gcp-build": "npm run build"

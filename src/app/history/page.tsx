@@ -4,7 +4,7 @@
 // 選択中の試験の演習・添削履歴を、問題名 / スコア / 演習日 / 演習時間のリストで一覧表示する。
 // 技能でのフィルタとページングに対応。データは use-activity（localStorage 集計）から取得。
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Headphones, ListChecks, Mic, PenLine } from "lucide-react";
 import PrepShell from "@/components/prep/PrepShell";
@@ -28,7 +28,12 @@ const PAGE_SIZE = 8;
 
 export default function HistoryPage() {
   const { exam } = useExam();
-  const activeExam: ExamId = exam === "advanced" ? "toefl" : exam;
+  const [guideExam, setGuideExam] = useState<ExamId | null>(null);
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("guideExam");
+    if (value === "toefl" || value === "ielts" || value === "toeic") setGuideExam(value);
+  }, []);
+  const activeExam: ExamId = guideExam ?? (exam === "advanced" ? "toefl" : exam);
   const { items, loading } = usePrepActivity(activeExam);
 
   const [skillFilter, setSkillFilter] = useState<SkillId | "all">("all");
@@ -61,7 +66,7 @@ export default function HistoryPage() {
         </div>
 
         {/* 技能フィルタ */}
-        <div className="flex flex-wrap items-center gap-2 animate-in fade-in duration-700">
+        <div data-guide-target="history-filters" className="flex flex-wrap items-center gap-2 animate-in fade-in duration-700">
           <FilterChip active={skillFilter === "all"} onClick={() => changeFilter("all")}>
             すべて
           </FilterChip>
@@ -80,7 +85,7 @@ export default function HistoryPage() {
         </div>
 
         {/* リスト */}
-        <div className="glass-card rounded-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div data-guide-target="history-list" className="glass-card rounded-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
           {loading ? (
             <div className="py-16 text-center text-sm text-gray-400 dark:text-gray-500">
               読み込み中...

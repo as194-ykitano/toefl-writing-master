@@ -171,7 +171,7 @@ export default function AcademicDiscussionPractice({ set, mode }: Props) {
       <div className="flex-1 max-w-6xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* 左: インストラクション + 教授 */}
         <div className="lg:col-span-2 space-y-4 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <div data-guide-target="writing-prompt" className="bg-white rounded-2xl border border-gray-200 p-5">
             <h3 className="text-base font-bold text-gray-900 leading-snug">
               Your professor posted a question. Write a post responding to it.
             </h3>
@@ -215,7 +215,7 @@ export default function AcademicDiscussionPractice({ set, mode }: Props) {
         {/* 右: Student Responses + エディタ */}
         <div className="lg:col-span-3 space-y-4">
           {/* Student Responses */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <div data-guide-target="student-responses" className="bg-white rounded-2xl border border-gray-200 p-5">
             <h4 className="text-sm font-semibold text-gray-700 mb-3">Student Responses</h4>
 
             {/* Stance 選択 */}
@@ -262,7 +262,7 @@ export default function AcademicDiscussionPractice({ set, mode }: Props) {
           </div>
 
           {/* エディタ */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-5 flex flex-col">
+          <div data-guide-target="writing-response" className="bg-white rounded-2xl border border-gray-200 p-5 flex flex-col">
             <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
               <div className="flex items-center gap-1.5">
                 <ToolbarButton onClick={handleCut}>Cut</ToolbarButton>
@@ -300,7 +300,7 @@ export default function AcademicDiscussionPractice({ set, mode }: Props) {
 
             {error && <p className="mt-3 text-sm text-red-600">添削エラー: {error}</p>}
 
-            <Button
+            <Button data-guide-target="writing-submit"
               className="mt-4 bg-eg hover:bg-eg-dark text-black self-end"
               onClick={handleSubmit}
               disabled={submitting || essay.trim().length === 0}

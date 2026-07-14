@@ -24,6 +24,20 @@ export default function StudentVideoCoursesPage() {
   const [query, setQuery] = useState("");
 
   const load = useCallback(async () => {
+    if (new URLSearchParams(window.location.search).get("guide") === "1") {
+      const timestamp = { toDate: () => new Date("2026-07-14"), seconds: 1783987200, nanoseconds: 0 };
+      setRows([
+        {
+          course: { id: "guide-writing-course", title: "ライティング添削データベース", description: "Writingの答案・解説・改善例をモジュール順に学習します。", thumbnailUrl: "/guide-demo/course-thumbnail.svg", ownerId: "guide", ownerRole: "admin", visibility: "all_students", published: true, order: 1, targetExams: ["toefl", "ielts", "toeic"], createdAt: timestamp, updatedAt: timestamp },
+          totalLessons: 12, completedCount: 5, creatorLabel: "ENGLISH GYM",
+        },
+        {
+          course: { id: "guide-speaking-course", title: "Speaking 基礎トレーニング", description: "発音・流暢さ・回答構成を段階的に確認します。", thumbnailUrl: "/guide-demo/course-thumbnail-speaking.svg", ownerId: "guide", ownerRole: "admin", visibility: "all_students", published: true, order: 2, targetExams: ["toefl", "ielts", "toeic"], createdAt: timestamp, updatedAt: timestamp },
+          totalLessons: 8, completedCount: 2, creatorLabel: "ENGLISH GYM",
+        },
+      ]);
+      return;
+    }
     if (!user?.uid) return;
     const data = await fetchStudentVideoCourseCatalog(user.uid, coachUid);
     setRows(data);
@@ -62,7 +76,7 @@ export default function StudentVideoCoursesPage() {
             <h1 className="text-2xl font-semibold tracking-tight">コンテンツ</h1>
             <p className="text-sm text-muted-foreground">動画コースを探す</p>
           </div>
-          <div className="relative w-full sm:max-w-xs">
+          <div data-guide-target="course-search" className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
@@ -107,7 +121,7 @@ export default function StudentVideoCoursesPage() {
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map(({ course, totalLessons, completedCount, creatorLabel }, i) => (
-              <div
+              <div data-guide-target={i === 0 ? "course-card" : undefined}
                 key={course.id}
                 style={{ animationDelay: `${i * 60}ms` }}
                 className="animate-in fade-in slide-in-from-bottom-3 duration-500 fill-mode-both"
