@@ -119,22 +119,22 @@ function ListeningAudio({ set }: { set: ListeningSet }) {
 function ReviewMaterial({ set }: { set: ReadingSet | ListeningSet }) {
   if (set.skill === "reading") {
     return (
-      <div className="space-y-4 border-t border-gray-100 pt-5">
-        <section className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-          <h2 className="mb-3 text-sm font-bold text-gray-900">本文：{set.passageTitle}</h2>
+      <div className="space-y-4 border-t border-gray-100 pt-5 dark:border-gray-700">
+        <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+          <h2 className="mb-3 text-sm font-bold text-gray-900 dark:text-gray-100">本文：{set.passageTitle}</h2>
           <div className="space-y-3">
             {set.paragraphs.map((paragraph, index) => (
-              <p key={index} className="whitespace-pre-line text-sm leading-7 text-gray-700">
-                {paragraph.label && <span className="mr-2 font-bold text-gray-500">{paragraph.label}</span>}
+              <p key={index} className="whitespace-pre-line text-sm leading-7 text-gray-700 dark:text-gray-200">
+                {paragraph.label && <span className="mr-2 font-bold text-gray-500 dark:text-gray-400">{paragraph.label}</span>}
                 {paragraph.text}
               </p>
             ))}
           </div>
         </section>
         {set.translationJa && (
-          <section className="rounded-xl border border-blue-100 bg-blue-50/60 p-4">
-            <h2 className="mb-3 text-sm font-bold text-blue-900">本文の日本語訳</h2>
-            <p className="whitespace-pre-line text-sm leading-7 text-gray-700">{set.translationJa}</p>
+          <section className="rounded-xl border border-blue-100 bg-blue-50/60 p-4 dark:border-blue-800 dark:bg-blue-950/50">
+            <h2 className="mb-3 text-sm font-bold text-blue-900 dark:text-blue-200">本文の日本語訳</h2>
+            <p className="whitespace-pre-line text-sm leading-7 text-gray-700 dark:text-gray-100">{set.translationJa}</p>
           </section>
         )}
       </div>
@@ -142,7 +142,7 @@ function ReviewMaterial({ set }: { set: ReadingSet | ListeningSet }) {
   }
 
   return (
-    <div className="space-y-4 border-t border-gray-100 pt-5">
+    <div className="space-y-4 border-t border-gray-100 pt-5 dark:border-gray-700">
       <section className="rounded-xl border border-violet-200 bg-violet-50 p-4 dark:border-violet-700 dark:bg-violet-950/70">
         <h2 className="mb-3 flex items-center gap-1.5 text-sm font-bold text-violet-950 dark:text-violet-100">
           <Headphones className="h-4 w-4 text-violet-600 dark:text-violet-300" /> Listening音源
@@ -150,25 +150,25 @@ function ReviewMaterial({ set }: { set: ReadingSet | ListeningSet }) {
         <ListeningAudio set={set} />
       </section>
       {set.imageUrl && (
-        <section className="rounded-xl border border-gray-200 bg-gray-50 p-3">
+        <section className="rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-900">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={set.imageUrl} alt="設問の図・資料" className="max-h-[420px] w-full rounded-lg object-contain" />
         </section>
       )}
       {set.referenceText && (
-        <section className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-          <h2 className="mb-2 text-sm font-bold text-gray-900">参考資料</h2>
-          <MarkdownLite text={set.referenceText} />
+        <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+          <h2 className="mb-2 text-sm font-bold text-gray-900 dark:text-gray-100">参考資料</h2>
+          <MarkdownLite text={set.referenceText} className="dark:text-gray-200" />
         </section>
       )}
-      <section className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-        <h2 className="mb-3 text-sm font-bold text-gray-900">スクリプト</h2>
-        <p className="whitespace-pre-line text-sm leading-7 text-gray-700">{set.transcript}</p>
+      <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+        <h2 className="mb-3 text-sm font-bold text-gray-900 dark:text-gray-100">スクリプト</h2>
+        <p className="whitespace-pre-line text-sm leading-7 text-gray-700 dark:text-gray-200">{set.transcript}</p>
       </section>
       {set.transcriptJa && (
-        <section className="rounded-xl border border-blue-100 bg-blue-50/60 p-4">
-          <h2 className="mb-3 text-sm font-bold text-blue-900">スクリプトの日本語訳</h2>
-          <p className="whitespace-pre-line text-sm leading-7 text-gray-700">{set.transcriptJa}</p>
+        <section className="rounded-xl border border-blue-100 bg-blue-50/60 p-4 dark:border-blue-800 dark:bg-blue-950/50">
+          <h2 className="mb-3 text-sm font-bold text-blue-900 dark:text-blue-200">スクリプトの日本語訳</h2>
+          <p className="whitespace-pre-line text-sm leading-7 text-gray-700 dark:text-gray-100">{set.transcriptJa}</p>
         </section>
       )}
     </div>
@@ -257,8 +257,8 @@ export default function NotesPage() {
     <PrepShell>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">ノート — あとで見直す</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">ノート — あとで見直す</h1>
+          <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
             演習中に「あとで見直す」でフラグした問題をここから見返せます。
           </p>
         </div>
@@ -268,10 +268,10 @@ export default function NotesPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-300 border-t-blue-600" />
           </div>
         ) : items.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm">
-            <Flag className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h2 className="font-semibold text-gray-900">フラグ付きの問題はありません</h2>
-            <p className="text-sm text-gray-500 mt-1">
+          <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <Flag className="w-12 h-12 text-gray-300 mx-auto mb-4 dark:text-gray-600" />
+            <h2 className="font-semibold text-gray-900 dark:text-gray-100">フラグ付きの問題はありません</h2>
+            <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">
               演習中に設問右上の「あとで見直す」を押すと、ここに一覧表示されます。
             </p>
             <div className="mt-5 flex justify-center">
@@ -291,25 +291,25 @@ export default function NotesPage() {
                 <button
                   key={item.key}
                   onClick={() => setSelectedKey(item.key)}
-                  className={`w-full text-left bg-white rounded-xl border p-4 transition-colors ${
+                  className={`w-full text-left bg-white rounded-xl border p-4 transition-colors dark:bg-gray-900 ${
                     item.key === selectedKey
-                      ? "border-orange-400 ring-1 ring-orange-400"
-                      : "border-gray-100 hover:border-gray-200"
+                      ? "border-orange-400 ring-1 ring-orange-400 dark:border-orange-400"
+                      : "border-gray-100 hover:border-gray-200 dark:border-gray-700 dark:hover:border-gray-500"
                   }`}
                 >
-                  <div className="flex items-center gap-2 text-[11px] text-gray-400 mb-1.5">
-                    <span className="font-medium text-gray-500">
+                  <div className="flex items-center gap-2 text-[11px] text-gray-400 mb-1.5 dark:text-gray-400">
+                    <span className="font-medium text-gray-500 dark:text-gray-300">
                       {EXAM_LABELS[item.exam]} {SKILL_LABELS[item.skill]}
                     </span>
                     · Q{item.question.number}
                     {item.correct && (
-                      <span className="ml-auto inline-flex items-center gap-0.5 text-emerald-500">
+                      <span className="ml-auto inline-flex items-center gap-0.5 text-emerald-500 dark:text-emerald-300">
                         <CheckCircle2 className="w-3 h-3" /> 正解
                       </span>
                     )}
                   </div>
-                  <div className="text-sm text-gray-800 line-clamp-2">{item.question.prompt}</div>
-                  <div className="mt-2 flex items-center gap-1 text-[11px] text-gray-400 tabular-nums">
+                  <div className="text-sm text-gray-800 line-clamp-2 dark:text-gray-100">{item.question.prompt}</div>
+                  <div className="mt-2 flex items-center gap-1 text-[11px] text-gray-400 tabular-nums dark:text-gray-400">
                     <Clock3 className="h-3 w-3" />
                     演習日時 {formatPracticeDateTime(item.finishedAt)}
                   </div>
@@ -319,8 +319,8 @@ export default function NotesPage() {
 
             {/* 右: 詳細 */}
             {selected && (
-              <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-gray-400">
+              <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5 dark:border-gray-700 dark:bg-gray-900">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-gray-400 dark:text-gray-400">
                     <span>{selected.setTitle}</span>
                     <span className="inline-flex items-center gap-1 tabular-nums">
                       <Clock3 className="h-3 w-3" />
@@ -331,29 +331,29 @@ export default function NotesPage() {
                 <ReviewMaterial set={selected.practiceSet} />
 
                 <div>
-                  <div className="mb-1.5 text-xs font-semibold text-gray-500">
+                  <div className="mb-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">
                     Question {selected.question.number}
                   </div>
-                  <p className="text-sm font-medium text-gray-900 leading-relaxed whitespace-pre-line">{selected.question.prompt}</p>
+                  <p className="text-sm font-medium text-gray-900 leading-relaxed whitespace-pre-line dark:text-gray-100">{selected.question.prompt}</p>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-3.5">
-                    <div className="text-[11px] font-semibold text-gray-500 mb-1">あなたの回答</div>
-                    <div className="text-sm text-gray-800">{formatAnswer(selected.userAnswer)}</div>
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-3.5 dark:border-gray-700 dark:bg-gray-800">
+                    <div className="text-[11px] font-semibold text-gray-500 mb-1 dark:text-gray-400">あなたの回答</div>
+                    <div className="text-sm text-gray-800 dark:text-gray-100">{formatAnswer(selected.userAnswer)}</div>
                   </div>
-                  <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-3.5">
-                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 mb-1">
+                  <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-3.5 dark:border-emerald-800 dark:bg-emerald-950/50">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 mb-1 dark:text-emerald-300">
                       <CheckCircle2 className="w-3.5 h-3.5" /> 正解
                     </div>
-                    <div className="text-sm text-gray-800">{formatAnswer(selected.question.answer)}</div>
+                    <div className="text-sm text-gray-800 dark:text-gray-100">{formatAnswer(selected.question.answer)}</div>
                   </div>
                 </div>
 
                 {selected.question.explanation && (
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 mb-1.5">解説</div>
-                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{selected.question.explanation}</p>
+                    <div className="text-xs font-semibold text-gray-500 mb-1.5 dark:text-gray-300">解説</div>
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line dark:text-gray-200">{selected.question.explanation}</p>
                   </div>
                 )}
 
@@ -361,7 +361,7 @@ export default function NotesPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="border-orange-200 text-orange-600 hover:bg-orange-50"
+                    className="border-orange-200 text-orange-600 hover:bg-orange-50 dark:border-orange-700 dark:bg-transparent dark:text-orange-300 dark:hover:bg-orange-950/50"
                     onClick={() => handleUnflag(selected)}
                   >
                     <FlagOff className="w-3.5 h-3.5 mr-1.5" /> フラグを解除（見直し完了）
